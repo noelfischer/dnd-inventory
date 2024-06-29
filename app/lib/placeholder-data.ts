@@ -1,147 +1,142 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
+
 const users = [
   {
-    id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@nextmail.com',
-    password: '123456',
+    username: 'dungeonmaster',
+    password: 'dm_password',
+    email: 'dm@dungeons.com',
+  },
+  {
+    username: 'player1',
+    password: 'player1_password',
+    email: 'player1@dungeons.com',
   },
 ];
 
-const customers = [
+const campaigns = [
   {
-    id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
-    name: 'Evil Rabbit',
-    email: 'evil@rabbit.com',
-    image_url: '/customers/evil-rabbit.png',
-  },
-  {
-    id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
-    name: 'Delba de Oliveira',
-    email: 'delba@oliveira.com',
-    image_url: '/customers/delba-de-oliveira.png',
-  },
-  {
-    id: '3958dc9e-742f-4377-85e9-fec4b6a6442a',
-    name: 'Lee Robinson',
-    email: 'lee@robinson.com',
-    image_url: '/customers/lee-robinson.png',
-  },
-  {
-    id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
-    name: 'Michael Novotny',
-    email: 'michael@novotny.com',
-    image_url: '/customers/michael-novotny.png',
-  },
-  {
-    id: 'CC27C14A-0ACF-4F4A-A6C9-D45682C144B9',
-    name: 'Amy Burns',
-    email: 'amy@burns.com',
-    image_url: '/customers/amy-burns.png',
-  },
-  {
-    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
-    name: 'Balazs Orban',
-    email: 'balazs@orban.com',
-    image_url: '/customers/balazs-orban.png',
+    name: 'Epic Quest',
+    description: 'A grand adventure awaits!',
+    dm_id: 1, // assuming the first user is the DM
   },
 ];
 
-const invoices = [
+const characters = [
   {
-    customer_id: customers[0].id,
-    amount: 15795,
-    status: 'pending',
-    date: '2022-12-06',
-  },
-  {
-    customer_id: customers[1].id,
-    amount: 20348,
-    status: 'pending',
-    date: '2022-11-14',
-  },
-  {
-    customer_id: customers[4].id,
-    amount: 3040,
-    status: 'paid',
-    date: '2022-10-29',
-  },
-  {
-    customer_id: customers[3].id,
-    amount: 44800,
-    status: 'paid',
-    date: '2023-09-10',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 34577,
-    status: 'pending',
-    date: '2023-08-05',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 54246,
-    status: 'pending',
-    date: '2023-07-16',
-  },
-  {
-    customer_id: customers[0].id,
-    amount: 666,
-    status: 'pending',
-    date: '2023-06-27',
-  },
-  {
-    customer_id: customers[3].id,
-    amount: 32545,
-    status: 'paid',
-    date: '2023-06-09',
-  },
-  {
-    customer_id: customers[4].id,
-    amount: 1250,
-    status: 'paid',
-    date: '2023-06-17',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8546,
-    status: 'paid',
-    date: '2023-06-07',
-  },
-  {
-    customer_id: customers[1].id,
-    amount: 500,
-    status: 'paid',
-    date: '2023-08-19',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-06-03',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 1000,
-    status: 'paid',
-    date: '2022-06-05',
+    campaign_id: 1,
+    user_id: 2,
+    name: 'Aragorn',
+    character_type: 'player',
+    race: 'Human',
+    class: 'Ranger',
+    level: 5,
+    background: 'Noble',
+    alignment: 'Lawful Good',
+    portrait_url: '/characters/aragorn.png',
+    strength: 18,
+    dexterity: 16,
+    constitution: 14,
+    intelligence: 12,
+    wisdom: 14,
+    charisma: 16,
+    max_hit_points: 45,
+    current_hit_points: 45,
+    temp_hit_points: 0,
+    death_saves_success: 0,
+    death_saves_failure: 0,
+    experience_points: 5000,
   },
 ];
 
-const revenue = [
-  { month: 'Jan', revenue: 2000 },
-  { month: 'Feb', revenue: 1800 },
-  { month: 'Mar', revenue: 2200 },
-  { month: 'Apr', revenue: 2500 },
-  { month: 'May', revenue: 2300 },
-  { month: 'Jun', revenue: 3200 },
-  { month: 'Jul', revenue: 3500 },
-  { month: 'Aug', revenue: 3700 },
-  { month: 'Sep', revenue: 2500 },
-  { month: 'Oct', revenue: 2800 },
-  { month: 'Nov', revenue: 3000 },
-  { month: 'Dec', revenue: 4800 },
+const skills = [
+  {
+    character_id: 1,
+    skill_name: 'Stealth',
+    proficiency: true,
+  },
 ];
 
-export { users, customers, invoices, revenue };
+const inventory = [
+  {
+    character_id: 1,
+    inventory_name: 'Main',
+    item_name: 'Longsword',
+    description: 'A sharp blade.',
+    ability: 'None',
+    weight: 3.0,
+    category: 'Weapon',
+    magic: false,
+    quantity: 1,
+  },
+];
+
+const currency = [
+  {
+    character_id: 1,
+    platin: 0,
+    gold: 150,
+    silver: 50,
+    copper: 10,
+  },
+];
+
+const userSpells = [
+  {
+    character_id: 1,
+    spell_id: 1,
+    prepared: true,
+    slots_total: 3,
+    slots_used: 1,
+  },
+];
+
+const generalSpells = [
+  {
+    spell_name: 'Fireball',
+    description: 'A bright streak flashes from your pointing finger to a point you choose within range.',
+    spell_level: 3,
+  },
+];
+
+const abilities = [
+  {
+    character_id: 1,
+    ability_name: 'Second Wind',
+    description: 'Once per short rest, you can use a bonus action to regain 1d10 + 5 HP.',
+  },
+];
+
+const conditions = [
+  {
+    character_id: 1,
+    condition_name: 'Poisoned',
+    duration: 10,
+    impact: 'Disadvantage on attack rolls and ability checks.',
+  },
+];
+
+const dashboards = [
+  {
+    campaign_id: 1,
+    character_id: 1,
+    visibility: 'private',
+    name: 'Main Dashboard',
+    columns: 3,
+    rows: 5,
+  },
+];
+
+const dashboardElements = [
+  {
+    dashboard_id: 1,
+    element_type: 'status',
+    element_data: { status: 'Healthy' },
+    position_x: 0,
+    position_y: 0,
+    size_x: 1,
+    size_y: 1,
+  },
+];
+
+export { users, campaigns, characters, skills, inventory, currency, userSpells, generalSpells, abilities, conditions, dashboards, dashboardElements };

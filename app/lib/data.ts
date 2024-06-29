@@ -1,217 +1,147 @@
 import { sql } from '@vercel/postgres';
 import {
-  CustomerField,
-  CustomersTableType,
-  InvoiceForm,
-  InvoicesTable,
-  LatestInvoiceRaw,
-  Revenue,
+  User,
+  Campaign,
+  Character,
+  Skill,
+  InventoryItem,
+  Currency,
+  UserSpell,
+  GeneralSpell,
+  Ability,
+  Condition,
+  Dashboard,
+  DashboardElement,
 } from './definitions';
-import { formatCurrency } from './utils';
 
-export async function fetchRevenue() {
+// Fetch all users
+export async function fetchUsers() {
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    const data = await sql<Revenue>`SELECT * FROM revenue`;
-
-    // console.log('Data fetch completed after 3 seconds.');
-
+    const data = await sql<User>`SELECT * FROM Users`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
+    throw new Error('Failed to fetch users.');
   }
 }
 
-export async function fetchLatestInvoices() {
+// Fetch all campaigns
+export async function fetchCampaigns() {
   try {
-    const data = await sql<LatestInvoiceRaw>`
-      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
-      ORDER BY invoices.date DESC
-      LIMIT 5`;
-
-    const latestInvoices = data.rows.map((invoice) => ({
-      ...invoice,
-      amount: formatCurrency(invoice.amount),
-    }));
-    return latestInvoices;
+    const data = await sql<Campaign>`SELECT * FROM Campaigns`;
+    return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest invoices.');
+    throw new Error('Failed to fetch campaigns.');
   }
 }
 
-export async function fetchCardData() {
+// Fetch characters by campaign ID
+export async function fetchCharactersByCampaign(campaign_id: number) {
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
-    const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
-    const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
-    const invoiceStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
-         SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
-         FROM invoices`;
-
-    const data = await Promise.all([
-      invoiceCountPromise,
-      customerCountPromise,
-      invoiceStatusPromise,
-    ]);
-
-    const numberOfInvoices = Number(data[0].rows[0].count ?? '0');
-    const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
-    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
-    const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
-
-    return {
-      numberOfCustomers,
-      numberOfInvoices,
-      totalPaidInvoices,
-      totalPendingInvoices,
-    };
+    const data = await sql<Character>`SELECT * FROM Characters WHERE campaign_id = ${campaign_id}`;
+    return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch card data.');
+    throw new Error(`Failed to fetch characters for campaign ID ${campaign_id}.`);
   }
 }
 
-const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
-  query: string,
-  currentPage: number,
-) {
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
+// Fetch skills by character ID
+export async function fetchSkillsByCharacter(character_id: number) {
   try {
-    const invoices = await sql<InvoicesTable>`
-      SELECT
-        invoices.id,
-        invoices.amount,
-        invoices.date,
-        invoices.status,
-        customers.name,
-        customers.email,
-        customers.image_url
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
-      WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
-      ORDER BY invoices.date DESC
-      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `;
-
-    return invoices.rows;
+    const data = await sql<Skill>`SELECT * FROM Skills WHERE character_id = ${character_id}`;
+    return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoices.');
+    throw new Error(`Failed to fetch skills for character ID ${character_id}.`);
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
+// Fetch inventory by character ID
+export async function fetchInventoryByCharacter(character_id: number) {
   try {
-    const count = await sql`SELECT COUNT(*)
-    FROM invoices
-    JOIN customers ON invoices.customer_id = customers.id
-    WHERE
-      customers.name ILIKE ${`%${query}%`} OR
-      customers.email ILIKE ${`%${query}%`} OR
-      invoices.amount::text ILIKE ${`%${query}%`} OR
-      invoices.date::text ILIKE ${`%${query}%`} OR
-      invoices.status ILIKE ${`%${query}%`}
-  `;
-
-    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
+    const data = await sql<InventoryItem>`SELECT * FROM Inventory WHERE character_id = ${character_id}`;
+    return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of invoices.');
+    throw new Error(`Failed to fetch inventory for character ID ${character_id}.`);
   }
 }
 
-export async function fetchInvoiceById(id: string) {
+// Fetch currency by character ID
+export async function fetchCurrencyByCharacter(character_id: number) {
   try {
-    const data = await sql<InvoiceForm>`
-      SELECT
-        invoices.id,
-        invoices.customer_id,
-        invoices.amount,
-        invoices.status
-      FROM invoices
-      WHERE invoices.id = ${id};
-    `;
-
-    const invoice = data.rows.map((invoice) => ({
-      ...invoice,
-      // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
-    }));
-
-    return invoice[0];
+    const data = await sql<Currency>`SELECT * FROM Currency WHERE character_id = ${character_id}`;
+    return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoice.');
+    throw new Error(`Failed to fetch currency for character ID ${character_id}.`);
   }
 }
 
-export async function fetchCustomers() {
+// Fetch user spells by character ID
+export async function fetchUserSpellsByCharacter(character_id: number) {
   try {
-    const data = await sql<CustomerField>`
-      SELECT
-        id,
-        name
-      FROM customers
-      ORDER BY name ASC
-    `;
-
-    const customers = data.rows;
-    return customers;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
+    const data = await sql<UserSpell>`SELECT * FROM UserSpells WHERE character_id = ${character_id}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch user spells for character ID ${character_id}.`);
   }
 }
 
-export async function fetchFilteredCustomers(query: string) {
+// Fetch all general spells
+export async function fetchGeneralSpells() {
   try {
-    const data = await sql<CustomersTableType>`
-		SELECT
-		  customers.id,
-		  customers.name,
-		  customers.email,
-		  customers.image_url,
-		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
-		FROM customers
-		LEFT JOIN invoices ON customers.id = invoices.customer_id
-		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
-		GROUP BY customers.id, customers.name, customers.email, customers.image_url
-		ORDER BY customers.name ASC
-	  `;
+    const data = await sql<GeneralSpell>`SELECT * FROM GeneralSpells`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch general spells.');
+  }
+}
 
-    const customers = data.rows.map((customer) => ({
-      ...customer,
-      total_pending: formatCurrency(customer.total_pending),
-      total_paid: formatCurrency(customer.total_paid),
-    }));
+// Fetch abilities by character ID
+export async function fetchAbilitiesByCharacter(character_id: number) {
+  try {
+    const data = await sql<Ability>`SELECT * FROM Abilities WHERE character_id = ${character_id}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch abilities for character ID ${character_id}.`);
+  }
+}
 
-    return customers;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
+// Fetch conditions by character ID
+export async function fetchConditionsByCharacter(character_id: number) {
+  try {
+    const data = await sql<Condition>`SELECT * FROM Conditions WHERE character_id = ${character_id}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch conditions for character ID ${character_id}.`);
+  }
+}
+
+// Fetch dashboards by campaign ID
+export async function fetchDashboardsByCampaign(campaign_id: number) {
+  try {
+    const data = await sql<Dashboard>`SELECT * FROM Dashboards WHERE campaign_id = ${campaign_id}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch dashboards for campaign ID ${campaign_id}.`);
+  }
+}
+
+// Fetch dashboard elements by dashboard ID
+export async function fetchDashboardElementsByDashboard(dashboard_id: number) {
+  try {
+    const data = await sql<DashboardElement>`SELECT * FROM DashboardElements WHERE dashboard_id = ${dashboard_id}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch dashboard elements for dashboard ID ${dashboard_id}.`);
   }
 }

@@ -12,6 +12,7 @@ import {
   Condition,
   Dashboard,
   DashboardElement,
+  SimpleCharacter,
 } from './definitions';
 
 // Fetch all users
@@ -26,9 +27,9 @@ export async function fetchUsers() {
 }
 
 // Fetch all campaigns
-export async function fetchCampaigns() {
+export async function fetchCampaigns(user_id: number) {
   try {
-    const data = await sql<Campaign>`SELECT * FROM Campaigns`;
+    const data = await sql<Campaign>`SELECT * FROM Campaigns c JOIN CampaignUsers cu ON c.campaign_id = cu.campaign_id WHERE cu.user_id = ${user_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -36,14 +37,47 @@ export async function fetchCampaigns() {
   }
 }
 
+// Fetch campaign by campaign ID
+export async function fetchCampaign(campaign_id: number) {
+  try {
+    const data = await sql<Campaign>`SELECT * FROM Campaigns WHERE campaign_id = ${campaign_id}`;
+    return data.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch campaign ID ${campaign_id}.`);
+  }
+}
+
 // Fetch characters by campaign ID
 export async function fetchCharactersByCampaign(campaign_id: number) {
   try {
-    const data = await sql<Character>`SELECT * FROM Characters WHERE campaign_id = ${campaign_id}`;
+    const data = await sql<SimpleCharacter>`SELECT character_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error(`Failed to fetch characters for campaign ID ${campaign_id}.`);
+  }
+}
+
+// Fetch characters by campaign ID and user ID
+export async function fetchCharactersByCampaignAndUser(campaign_id: number, user_id: number) {
+  try {
+    const data = await sql<SimpleCharacter>`SELECT character_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id} AND user_id = ${user_id}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch characters for campaign ID ${campaign_id}.`);
+  }
+}
+
+// Fetch character by character ID
+export async function fetchCharacter(character_id: number) {
+  try {
+    const data = await sql<Character>`SELECT * FROM Characters WHERE character_id = ${character_id}`;
+    return data.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch character ID ${character_id}.`);
   }
 }
 

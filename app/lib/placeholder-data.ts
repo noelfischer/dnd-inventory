@@ -3,11 +3,13 @@
 
 const users = [
   {
+    id: 1,
     username: 'dungeonmaster',
     password: 'dm_password',
     email: 'dm@dungeons.com',
   },
   {
+    id: 2,
     username: 'player1',
     password: 'player1_password',
     email: 'player1@dungeons.com',
@@ -16,6 +18,7 @@ const users = [
 
 const campaigns = [
   {
+    id: 1,
     name: 'Epic Quest',
     description: 'A grand adventure awaits!',
     dm_id: 1, // assuming the first user is the DM
@@ -24,6 +27,7 @@ const campaigns = [
 
 const characters = [
   {
+    id: 1,
     campaign_id: 1,
     user_id: 2,
     name: 'Aragorn',
@@ -49,8 +53,24 @@ const characters = [
   },
 ];
 
+const campaignUsers = [
+  {
+    id: 1,
+    campaign_id: 1,
+    user_id: 2,
+    character_id: 1,
+  },
+  {
+    id: 2,
+    campaign_id: 1,
+    user_id: 1,
+    character_id: null,
+  }
+];
+
 const skills = [
   {
+    id: 1,
     character_id: 1,
     skill_name: 'Stealth',
     proficiency: true,
@@ -59,6 +79,7 @@ const skills = [
 
 const inventory = [
   {
+    id: 1,
     character_id: 1,
     inventory_name: 'Main',
     item_name: 'Longsword',
@@ -73,6 +94,7 @@ const inventory = [
 
 const currency = [
   {
+    id: 1,
     character_id: 1,
     platin: 0,
     gold: 150,
@@ -83,6 +105,7 @@ const currency = [
 
 const userSpells = [
   {
+    id: 1,
     character_id: 1,
     spell_id: 1,
     prepared: true,
@@ -93,6 +116,7 @@ const userSpells = [
 
 const generalSpells = [
   {
+    id: 1,
     spell_name: 'Fireball',
     description: 'A bright streak flashes from your pointing finger to a point you choose within range.',
     spell_level: 3,
@@ -101,6 +125,7 @@ const generalSpells = [
 
 const abilities = [
   {
+    id: 1,
     character_id: 1,
     ability_name: 'Second Wind',
     description: 'Once per short rest, you can use a bonus action to regain 1d10 + 5 HP.',
@@ -109,6 +134,7 @@ const abilities = [
 
 const conditions = [
   {
+    id: 1,
     character_id: 1,
     condition_name: 'Poisoned',
     duration: 10,
@@ -118,6 +144,7 @@ const conditions = [
 
 const dashboards = [
   {
+    id: 1,
     campaign_id: 1,
     character_id: 1,
     visibility: 'private',
@@ -129,9 +156,9 @@ const dashboards = [
 
 const dashboardElements = [
   {
+    id: 1,
     dashboard_id: 1,
     element_type: 'status',
-    element_data: { status: 'Healthy' },
     position_x: 0,
     position_y: 0,
     size_x: 1,
@@ -139,4 +166,4 @@ const dashboardElements = [
   },
 ];
 
-export { users, campaigns, characters, skills, inventory, currency, userSpells, generalSpells, abilities, conditions, dashboards, dashboardElements };
+export { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, abilities, conditions, dashboards, dashboardElements };

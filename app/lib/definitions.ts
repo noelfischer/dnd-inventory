@@ -46,6 +46,12 @@ export type Character = {
   updated_at: string;
 };
 
+export type SimpleCharacter = {
+  character_id: number;
+  name: string;
+  character_type: string;
+};
+
 export type Skill = {
   skill_id: number;
   character_id: number;
@@ -121,7 +127,6 @@ export type DashboardElement = {
   element_id: number;
   dashboard_id: number;
   element_type: string;
-  element_data: object;
   position_x: number;
   position_y: number;
   size_x: number;

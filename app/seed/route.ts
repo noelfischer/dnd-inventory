@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { db } from '@vercel/postgres';
-import { users, campaigns, characters, skills, inventory, currency, userSpells, generalSpells, abilities, conditions, dashboards, dashboardElements } from '../lib/placeholder-data';
+import { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, abilities, conditions, dashboards, dashboardElements } from '../lib/placeholder-data';
 
 const client = await db.connect();
 
@@ -19,8 +19,8 @@ async function seedUsers() {
     users.map(async (user) => {
       const hashedPassword = await bcrypt.hash(user.password, 10);
       return client.sql`
-        INSERT INTO Users (username, password_hash, email)
-        VALUES (${user.username}, ${hashedPassword}, ${user.email})
+        INSERT INTO Users (user_id, username, password_hash, email)
+        VALUES (${user.id}, ${user.username}, ${hashedPassword}, ${user.email})
         ON CONFLICT (user_id) DO NOTHING;
       `;
     }),
@@ -43,8 +43,8 @@ async function seedCampaigns() {
   const insertedCampaigns = await Promise.all(
     campaigns.map(
       (campaign) => client.sql`
-        INSERT INTO Campaigns (name, description, dm_id)
-        VALUES (${campaign.name}, ${campaign.description}, ${campaign.dm_id})
+        INSERT INTO Campaigns (campaign_id, name, description, dm_id)
+        VALUES (${campaign.id}, ${campaign.name}, ${campaign.description}, ${campaign.dm_id})
         ON CONFLICT (campaign_id) DO NOTHING;
       `,
     ),
@@ -88,13 +88,13 @@ async function seedCharacters() {
     characters.map(
       (character) => client.sql`
         INSERT INTO Characters (
-          campaign_id, user_id, name, character_type, race, class, level, background, alignment,
+          character_id, campaign_id, user_id, name, character_type, race, class, level, background, alignment,
           portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma,
           max_hit_points, current_hit_points, temp_hit_points, death_saves_success,
           death_saves_failure, experience_points
         )
         VALUES (
-          ${character.campaign_id}, ${character.user_id}, ${character.name}, ${character.character_type}, ${character.race},
+          ${character.id}, ${character.campaign_id}, ${character.user_id}, ${character.name}, ${character.character_type}, ${character.race},
           ${character.class}, ${character.level}, ${character.background}, ${character.alignment}, ${character.portrait_url},
           ${character.strength}, ${character.dexterity}, ${character.constitution}, ${character.intelligence}, ${character.wisdom},
           ${character.charisma}, ${character.max_hit_points}, ${character.current_hit_points}, ${character.temp_hit_points},
@@ -106,6 +106,29 @@ async function seedCharacters() {
   );
 
   return insertedCharacters;
+}
+
+async function seedCampaignUsers() {
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS CampaignUsers (
+      campaign_user_id SERIAL PRIMARY KEY,
+      campaign_id INT REFERENCES Campaigns(campaign_id),
+      user_id INT REFERENCES Users(user_id),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  const insertedCampaignUsers = await Promise.all(
+    campaignUsers.map(
+      (campaignUser) => client.sql`
+        INSERT INTO CampaignUsers (campaign_user_id, campaign_id, user_id)
+        VALUES (${campaignUser.id}, ${campaignUser.campaign_id}, ${campaignUser.user_id})
+        ON CONFLICT (campaign_user_id) DO NOTHING;
+      `,
+    ),
+  );
+
+  return insertedCampaignUsers;
 }
 
 async function seedSkills() {
@@ -121,8 +144,8 @@ async function seedSkills() {
   const insertedSkills = await Promise.all(
     skills.map(
       (skill) => client.sql`
-        INSERT INTO Skills (character_id, skill_name, proficiency)
-        VALUES (${skill.character_id}, ${skill.skill_name}, ${skill.proficiency})
+        INSERT INTO Skills (skill_id, character_id, skill_name, proficiency)
+        VALUES (${skill.id}, ${skill.character_id}, ${skill.skill_name}, ${skill.proficiency})
         ON CONFLICT (skill_id) DO NOTHING;
       `,
     ),
@@ -151,10 +174,10 @@ async function seedInventory() {
     inventory.map(
       (item) => client.sql`
         INSERT INTO Inventory (
-          character_id, inventory_name, item_name, description, ability, weight, category, magic, quantity
+          item_id, character_id, inventory_name, item_name, description, ability, weight, category, magic, quantity
         )
         VALUES (
-          ${item.character_id}, ${item.inventory_name}, ${item.item_name}, ${item.description}, ${item.ability},
+          ${item.id}, ${item.character_id}, ${item.inventory_name}, ${item.item_name}, ${item.description}, ${item.ability},
           ${item.weight}, ${item.category}, ${item.magic}, ${item.quantity}
         )
         ON CONFLICT (item_id) DO NOTHING;
@@ -180,8 +203,8 @@ async function seedCurrency() {
   const insertedCurrency = await Promise.all(
     currency.map(
       (cur) => client.sql`
-        INSERT INTO Currency (character_id, platin, gold, silver, copper)
-        VALUES (${cur.character_id}, ${cur.platin}, ${cur.gold}, ${cur.silver}, ${cur.copper})
+        INSERT INTO Currency (currency_id, character_id, platin, gold, silver, copper)
+        VALUES (${cur.id}, ${cur.character_id}, ${cur.platin}, ${cur.gold}, ${cur.silver}, ${cur.copper})
         ON CONFLICT (currency_id) DO NOTHING;
       `,
     ),
@@ -205,8 +228,8 @@ async function seedUserSpells() {
   const insertedUserSpells = await Promise.all(
     userSpells.map(
       (userSpell) => client.sql`
-        INSERT INTO UserSpells (character_id, spell_id, prepared, slots_total, slots_used)
-        VALUES (${userSpell.character_id}, ${userSpell.spell_id}, ${userSpell.prepared}, ${userSpell.slots_total}, ${userSpell.slots_used})
+        INSERT INTO UserSpells (user_spell_id, character_id, spell_id, prepared, slots_total, slots_used)
+        VALUES (${userSpell.id}, ${userSpell.character_id}, ${userSpell.spell_id}, ${userSpell.prepared}, ${userSpell.slots_total}, ${userSpell.slots_used})
         ON CONFLICT (user_spell_id) DO NOTHING;
       `,
     ),
@@ -228,8 +251,8 @@ async function seedGeneralSpells() {
   const insertedGeneralSpells = await Promise.all(
     generalSpells.map(
       (spell) => client.sql`
-        INSERT INTO GeneralSpells (spell_name, description, spell_level)
-        VALUES (${spell.spell_name}, ${spell.description}, ${spell.spell_level})
+        INSERT INTO GeneralSpells (spell_id, spell_name, description, spell_level)
+        VALUES (${spell.id}, ${spell.spell_name}, ${spell.description}, ${spell.spell_level})
         ON CONFLICT (spell_id) DO NOTHING;
       `,
     ),
@@ -251,8 +274,8 @@ async function seedAbilities() {
   const insertedAbilities = await Promise.all(
     abilities.map(
       (ability) => client.sql`
-        INSERT INTO Abilities (character_id, ability_name, description)
-        VALUES (${ability.character_id}, ${ability.ability_name}, ${ability.description})
+        INSERT INTO Abilities (ability_id, character_id, ability_name, description)
+        VALUES (${ability.id}, ${ability.character_id}, ${ability.ability_name}, ${ability.description})
         ON CONFLICT (ability_id) DO NOTHING;
       `,
     ),
@@ -275,8 +298,8 @@ async function seedConditions() {
   const insertedConditions = await Promise.all(
     conditions.map(
       (condition) => client.sql`
-        INSERT INTO Conditions (character_id, condition_name, duration, impact)
-        VALUES (${condition.character_id}, ${condition.condition_name}, ${condition.duration}, ${condition.impact})
+        INSERT INTO Conditions (condition_id, character_id, condition_name, duration, impact)
+        VALUES (${condition.id}, ${condition.character_id}, ${condition.condition_name}, ${condition.duration}, ${condition.impact})
         ON CONFLICT (condition_id) DO NOTHING;
       `,
     ),
@@ -302,8 +325,8 @@ async function seedDashboards() {
   const insertedDashboards = await Promise.all(
     dashboards.map(
       (dashboard) => client.sql`
-        INSERT INTO Dashboards (campaign_id, character_id, visibility, name, columns, rows)
-        VALUES (${dashboard.campaign_id}, ${dashboard.character_id}, ${dashboard.visibility}, ${dashboard.name}, ${dashboard.columns}, ${dashboard.rows})
+        INSERT INTO Dashboards (dashboard_id, campaign_id, character_id, visibility, name, columns, rows)
+        VALUES (${dashboard.id}, ${dashboard.campaign_id}, ${dashboard.character_id}, ${dashboard.visibility}, ${dashboard.name}, ${dashboard.columns}, ${dashboard.rows})
         ON CONFLICT (dashboard_id) DO NOTHING;
       `,
     ),
@@ -318,7 +341,6 @@ async function seedDashboardElements() {
       element_id SERIAL PRIMARY KEY,
       dashboard_id INT REFERENCES Dashboards(dashboard_id),
       element_type VARCHAR(50) NOT NULL,
-      element_data JSONB,
       position_x INT NOT NULL,
       position_y INT NOT NULL,
       size_x INT NOT NULL,
@@ -330,8 +352,8 @@ async function seedDashboardElements() {
   const insertedDashboardElements = await Promise.all(
     dashboardElements.map(
       (element) => client.sql`
-        INSERT INTO DashboardElements (dashboard_id, element_type, element_data, position_x, position_y, size_x, size_y)
-        VALUES (${element.dashboard_id}, ${element.element_type}, ${element.element_data}, ${element.position_x}, ${element.position_y}, ${element.size_x}, ${element.size_y})
+        INSERT INTO DashboardElements (element_id, dashboard_id, element_type, position_x, position_y, size_x, size_y)
+        VALUES (${element.id}, ${element.dashboard_id}, ${element.element_type}, ${element.position_x}, ${element.position_y}, ${element.size_x}, ${element.size_y})
         ON CONFLICT (element_id) DO NOTHING;
       `,
     ),
@@ -350,6 +372,8 @@ export async function GET() {
     console.log('Campaigns seeded');
     await seedCharacters();
     console.log('Characters seeded');
+    await seedCampaignUsers();
+    console.log('Campaign users seeded');
     await seedSkills();
     console.log('Skills seeded');
     await seedInventory();

@@ -5,6 +5,9 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { nanoid } from 'nanoid';
 
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
+
 // TODO replace uID with the actual user ID
 const dmIDPlaceholder = '1';
 
@@ -13,6 +16,29 @@ const FormSchema = z.object({
     name: z.string(),
     description: z.string(),
 });
+
+
+
+export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData,
+  ) {
+    try {
+      await signIn('credentials', formData);
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case 'CredentialsSignin':
+            return 'Invalid credentials.';
+          default:
+            return 'Something went wrong.';
+        }
+      }
+      throw error;
+    }
+  }
+
+
 
 export async function createCampaign(formData: FormData) {
     const { dmId, name, description } = FormSchema.parse({

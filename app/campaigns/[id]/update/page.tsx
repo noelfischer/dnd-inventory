@@ -6,6 +6,7 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import {
   BookOpenIcon, PlusCircleIcon
 } from '@heroicons/react/24/outline';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   //TODO replace user with actual user ID
@@ -15,11 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   const campaign: Campaign = await fetchCampaign(campaignID);
   if (!campaign) {
-    return (
-      <main>
-        <h1>404</h1>
-      </main>
-    );
+    notFound();
   }
 
   const updateCampaignWithId = updateCampaign.bind(null, campaignID);

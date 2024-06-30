@@ -20,12 +20,23 @@ export async function createCampaign(formData: FormData) {
         name: formData.get('name'),
         description: formData.get('description'),
     });
-    const campaignId = nanoid();
-    const campaignUserId = nanoid();
-    await sql`INSERT INTO campaigns (campaign_id, dm_id, name, description) VALUES (${campaignId}, ${dmId}, ${name}, ${description})`;
-    await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${dmId})`;
-    revalidatePath('/campaigns');
-    redirect('/campaigns');
+    try {
+        const campaignId = nanoid();
+        const campaignUserId = nanoid();
+        await sql`INSERT INTO campaigns (campaign_id, dm_id, name, description) VALUES (${campaignId}, ${dmId}, ${name}, ${description})`;
+        try { // if this fails, we need to rollback the campaign creation
+            await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${dmId})`;
+        }
+        catch (e) {
+            await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
+            throw e; // rethrow the error
+        }
+        revalidatePath('/campaigns');
+        redirect('/campaigns');
+    }
+    catch (e) {
+        return { message: 'Database Error: Failed to Create Campaign.' };
+    }
 }
 
 export async function updateCampaign(campaignId: string, formData: FormData) {
@@ -34,13 +45,22 @@ export async function updateCampaign(campaignId: string, formData: FormData) {
         name: formData.get('name'),
         description: formData.get('description'),
     });
-    await sql`UPDATE campaigns SET name = ${name}, description = ${description} WHERE campaign_id = ${campaignId}`;
-    revalidatePath(`/campaigns/${campaignId}`);
-    redirect('/campaigns');
+    try {
+        await sql`UPDATE campaigns SET name = ${name}, description = ${description} WHERE campaign_id = ${campaignId}`;
+        revalidatePath(`/campaigns/${campaignId}`);
+        redirect('/campaigns');
+    } catch (e) {
+        return { message: 'Database Error: Failed to Update Campaign.' };
+    }
 }
 
 export async function deleteCampaign(campaignId: string) {
-    await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
-    revalidatePath('/campaigns');
-    redirect('/campaigns');
+    // a check of the user ID == DM ID should be done here
+    try {
+        await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
+        revalidatePath('/campaigns');
+        redirect('/campaigns');
+    } catch (e) {
+        return { message: 'Database Error: Failed to Delete Campaign.' };
+    }
 }

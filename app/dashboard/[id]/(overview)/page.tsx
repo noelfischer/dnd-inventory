@@ -1,5 +1,6 @@
 import { fetchCharacter } from '@/app/lib/data';
 import { Character } from '../../../lib/definitions';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const characterID = params.id;
@@ -12,6 +13,10 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   const character: Character = await fetchCharacter(characterID);
+  if (!character) {
+    notFound();
+  }
+  
   return (
     <main>
       <h1>Dashboard</h1>

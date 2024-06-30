@@ -21,8 +21,14 @@ const config: Config = {
     },
     keyframes: {
       shimmer: {
+        '0%': {
+          opacity: '25%',
+        },
+        '60%': {
+          opacity: '100%',
+        },
         '100%': {
-          transform: 'translateX(100%)',
+          opacity: '25%',
         },
       },
     },

@@ -6,9 +6,6 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  //TODO replace user with actual user ID
-  const uID = "1DFWeGwWse";
-
   const campaignID = params.id;
 
   const campaign: Campaign = await fetchCampaign(campaignID);
@@ -16,7 +13,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
-  const deleteCampaignWithId = deleteCampaign.bind(null, campaignID);
+  const deleteCampaignWithId = deleteCampaign.bind(null, campaignID, campaign.dm_id);
 
   return (
     <main>

@@ -1,3 +1,5 @@
+'use server';
+
 import { sql } from '@vercel/postgres';
 import {
   User,
@@ -29,7 +31,7 @@ export async function fetchUsers() {
 // Fetch all campaigns
 export async function fetchCampaigns(user_id: string) {
   try {
-    const data = await sql<Campaign>`SELECT c.campaign_id, c.name FROM Campaigns c JOIN CampaignUsers cu ON c.campaign_id = cu.campaign_id WHERE cu.user_id = ${user_id}`;
+    const data = await sql<Campaign>`SELECT c.campaign_id, c.name, c.dm_id FROM Campaigns c JOIN CampaignUsers cu ON c.campaign_id = cu.campaign_id WHERE cu.user_id = ${user_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);

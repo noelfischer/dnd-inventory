@@ -2,10 +2,10 @@ import Link from "next/link";
 import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser } from "../../lib/data";
 import { Campaign, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
+import { getUIDFromSession } from "@/app/lib/actions";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  //TODO replace user with actual user ID
-  const uID = "1DFWeGwWse";
+  const uID = await getUIDFromSession();
 
   const campaignID = params.id;
   

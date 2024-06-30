@@ -6,9 +6,6 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default async function Page() {
-  //TODO replace user with actual user ID
-  const uID = "1DFWeGwWse";
-
   return (
     <main>
       <Breadcrumbs

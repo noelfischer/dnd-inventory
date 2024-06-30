@@ -9,7 +9,10 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       const isOnCampaigns = nextUrl.pathname.startsWith('/campaigns');
-      if (isOnDashboard || isOnCampaigns) {
+
+      // remove the /seed from the pathname when in production
+      const isOnSeed = nextUrl.pathname.startsWith('/seed');
+      if (isOnDashboard || isOnCampaigns || isOnSeed) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {

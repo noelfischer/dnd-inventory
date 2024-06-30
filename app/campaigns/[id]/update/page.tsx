@@ -9,9 +9,6 @@ import {
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  //TODO replace user with actual user ID
-  const uID = "1DFWeGwWse";
-
   const campaignID = params.id;
 
   const campaign: Campaign = await fetchCampaign(campaignID);

@@ -8,11 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://dnd-inventory.vercel.app/'),
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
        <body className={`${inter.className} antialiased`}>{children}</body>

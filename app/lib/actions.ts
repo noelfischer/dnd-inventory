@@ -85,22 +85,25 @@ export async function createCampaign(formData: FormData) {
     description: formData.get('description'),
   });
   try {
-    const campaignId = nanoid();
-    const campaignUserId = nanoid();
+    const campaignId = nanoid(10);
+    const campaignUserId = nanoid(10);
     await sql`INSERT INTO campaigns (campaign_id, dm_id, name, description) VALUES (${campaignId}, ${dmId}, ${name}, ${description})`;
     try { // if this fails, we need to rollback the campaign creation
       await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${dmId})`;
     }
     catch (e) {
       await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
+      console.error('Failed to create campaign:', e);
       throw e; // rethrow the error
     }
-    revalidatePath('/campaigns');
-    redirect('/campaigns');
   }
   catch (e) {
+    console.error('Failed to create campaign:', e);
     return { message: 'Database Error: Failed to Create Campaign.' };
   }
+
+  revalidatePath('/campaigns');
+  redirect('/campaigns');
 }
 
 export async function updateCampaign(campaignId: string, formData: FormData) {
@@ -111,23 +114,28 @@ export async function updateCampaign(campaignId: string, formData: FormData) {
   });
   try {
     await sql`UPDATE campaigns SET name = ${name}, description = ${description} WHERE campaign_id = ${campaignId}`;
-    revalidatePath(`/campaigns/${campaignId}`);
-    redirect('/campaigns');
+    console.log('Updated campaign:', campaignId);
   } catch (e) {
     return { message: 'Database Error: Failed to Update Campaign.' };
   }
+  revalidatePath(`/campaigns/${campaignId}`);
+  redirect('/campaigns');
+
 }
 
 export async function deleteCampaign(campaignId: string, dmId: string) {
   try {
-    if (dmId !== await getUIDFromSession()) {
+    if (dmId === await getUIDFromSession()) {
       await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
-      revalidatePath('/campaigns');
-      redirect('/campaigns');
     } else {
+      console.error('Only the DM can delete the campaign');
       return { message: 'Only the DM can delete the campaign' };
     }
   } catch (e) {
+    console.error('Failed to delete campaign:', e);
     return { message: 'Database Error: Failed to Delete Campaign.' };
   }
+
+  revalidatePath('/campaigns');
+  redirect('/campaigns');
 }

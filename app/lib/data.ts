@@ -53,7 +53,7 @@ export async function fetchCampaign(campaign_id: string) {
 // Fetch characters by campaign ID
 export async function fetchCharactersByCampaign(campaign_id: string) {
   try {
-    const data = await sql<SimpleCharacter>`SELECT character_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id}`;
+    const data = await sql<SimpleCharacter>`SELECT character_id, user_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);

@@ -3,7 +3,7 @@
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
 export type User = {
-  user_id: number;
+  user_id: string;
   username: string;
   password_hash: string;
   email: string;
@@ -11,17 +11,17 @@ export type User = {
 };
 
 export type Campaign = {
-  campaign_id: number;
+  campaign_id: string;
   name: string;
   description: string;
-  dm_id: number;
+  dm_id: string;
   created_at: string;
 };
 
 export type Character = {
-  character_id: number;
-  campaign_id: number;
-  user_id: number;
+  character_id: string;
+  campaign_id: string;
+  user_id: string;
   name: string;
   character_type: string;
   race: string;
@@ -47,21 +47,21 @@ export type Character = {
 };
 
 export type SimpleCharacter = {
-  character_id: number;
+  character_id: string;
   name: string;
   character_type: string;
 };
 
 export type Skill = {
-  skill_id: number;
-  character_id: number;
+  skill_id: string;
+  character_id: string;
   skill_name: string;
   proficiency: boolean;
 };
 
 export type InventoryItem = {
-  item_id: number;
-  character_id: number;
+  item_id: string;
+  character_id: string;
   inventory_name: string;
   item_name: string;
   description: string;
@@ -73,8 +73,8 @@ export type InventoryItem = {
 };
 
 export type Currency = {
-  currency_id: number;
-  character_id: number;
+  currency_id: string;
+  character_id: string;
   platin: number;
   gold: number;
   silver: number;
@@ -82,40 +82,40 @@ export type Currency = {
 };
 
 export type UserSpell = {
-  user_spell_id: number;
-  character_id: number;
-  spell_id: number;
+  user_spell_id: string;
+  character_id: string;
+  spell_id: string;
   prepared: boolean;
   slots_total: number;
   slots_used: number;
 };
 
 export type GeneralSpell = {
-  spell_id: number;
+  spell_id: string;
   spell_name: string;
   description: string;
   spell_level: number;
 };
 
 export type Ability = {
-  ability_id: number;
-  character_id: number;
+  ability_id: string;
+  character_id: string;
   ability_name: string;
   description: string;
 };
 
 export type Condition = {
-  condition_id: number;
-  character_id: number;
+  condition_id: string;
+  character_id: string;
   condition_name: string;
   duration: number;
   impact: string;
 };
 
 export type Dashboard = {
-  dashboard_id: number;
-  campaign_id: number;
-  character_id: number;
+  dashboard_id: string;
+  campaign_id: string;
+  character_id: string;
   visibility: string;
   name: string;
   columns: number;
@@ -124,8 +124,8 @@ export type Dashboard = {
 };
 
 export type DashboardElement = {
-  element_id: number;
-  dashboard_id: number;
+  element_id: string;
+  dashboard_id: string;
   element_type: string;
   position_x: number;
   position_y: number;

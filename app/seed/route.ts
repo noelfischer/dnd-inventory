@@ -7,7 +7,7 @@ const client = await db.connect();
 async function seedUsers() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Users (
-      user_id SERIAL PRIMARY KEY,
+      user_id VARCHAR(10) PRIMARY KEY,
       username VARCHAR(50) UNIQUE NOT NULL,
       password_hash VARCHAR(255) NOT NULL,
       email VARCHAR(100) UNIQUE NOT NULL,
@@ -32,10 +32,10 @@ async function seedUsers() {
 async function seedCampaigns() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Campaigns (
-      campaign_id SERIAL PRIMARY KEY,
+      campaign_id VARCHAR(10) PRIMARY KEY,
       name VARCHAR(100) NOT NULL,
       description TEXT,
-      dm_id INT REFERENCES Users(user_id),
+      dm_id VARCHAR(10) REFERENCES Users(user_id) ON DELETE CASCADE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
@@ -56,9 +56,9 @@ async function seedCampaigns() {
 async function seedCharacters() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Characters (
-      character_id SERIAL PRIMARY KEY,
-      campaign_id INT REFERENCES Campaigns(campaign_id),
-      user_id INT REFERENCES Users(user_id),
+      character_id VARCHAR(10) PRIMARY KEY,
+      campaign_id VARCHAR(10) REFERENCES Campaigns(campaign_id) ON DELETE CASCADE,
+      user_id VARCHAR(10) REFERENCES Users(user_id) ON DELETE CASCADE,
       name VARCHAR(100) NOT NULL,
       character_type VARCHAR(50) NOT NULL,
       race VARCHAR(50),
@@ -111,9 +111,9 @@ async function seedCharacters() {
 async function seedCampaignUsers() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS CampaignUsers (
-      campaign_user_id SERIAL PRIMARY KEY,
-      campaign_id INT REFERENCES Campaigns(campaign_id),
-      user_id INT REFERENCES Users(user_id),
+      campaign_user_id VARCHAR(10) PRIMARY KEY,
+      campaign_id VARCHAR(10) REFERENCES Campaigns(campaign_id) ON DELETE CASCADE,
+      user_id VARCHAR(10) REFERENCES Users(user_id) ON DELETE CASCADE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
@@ -134,8 +134,8 @@ async function seedCampaignUsers() {
 async function seedSkills() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Skills (
-      skill_id SERIAL PRIMARY KEY,
-      character_id INT REFERENCES Characters(character_id),
+      skill_id VARCHAR(10) PRIMARY KEY,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
       skill_name VARCHAR(100),
       proficiency BOOLEAN
     );
@@ -157,8 +157,8 @@ async function seedSkills() {
 async function seedInventory() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Inventory (
-      item_id SERIAL PRIMARY KEY,
-      character_id INT REFERENCES Characters(character_id),
+      item_id VARCHAR(10) PRIMARY KEY,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
       inventory_name VARCHAR(100),
       item_name VARCHAR(100),
       description TEXT,
@@ -191,8 +191,8 @@ async function seedInventory() {
 async function seedCurrency() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Currency (
-      currency_id SERIAL PRIMARY KEY,
-      character_id INT REFERENCES Characters(character_id),
+      currency_id VARCHAR(10) PRIMARY KEY,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
       platin INT DEFAULT 0,
       gold INT DEFAULT 0,
       silver INT DEFAULT 0,
@@ -216,9 +216,9 @@ async function seedCurrency() {
 async function seedUserSpells() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS UserSpells (
-      user_spell_id SERIAL PRIMARY KEY,
-      character_id INT REFERENCES Characters(character_id),
-      spell_id INT REFERENCES GeneralSpells(spell_id),
+      user_spell_id VARCHAR(10) PRIMARY KEY,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
+      spell_id VARCHAR(10) REFERENCES GeneralSpells(spell_id),
       prepared BOOLEAN,
       slots_total INT,
       slots_used INT
@@ -241,7 +241,7 @@ async function seedUserSpells() {
 async function seedGeneralSpells() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS GeneralSpells (
-      spell_id SERIAL PRIMARY KEY,
+      spell_id VARCHAR(10) PRIMARY KEY,
       spell_name VARCHAR(100) NOT NULL,
       description TEXT NOT NULL,
       spell_level INT NOT NULL
@@ -264,8 +264,8 @@ async function seedGeneralSpells() {
 async function seedAbilities() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Abilities (
-      ability_id SERIAL PRIMARY KEY,
-      character_id INT REFERENCES Characters(character_id),
+      ability_id VARCHAR(10) PRIMARY KEY,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
       ability_name VARCHAR(100),
       description TEXT
     );
@@ -287,8 +287,8 @@ async function seedAbilities() {
 async function seedConditions() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Conditions (
-      condition_id SERIAL PRIMARY KEY,
-      character_id INT REFERENCES Characters(character_id),
+      condition_id VARCHAR(10) PRIMARY KEY,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
       condition_name VARCHAR(100),
       duration INT,
       impact TEXT
@@ -311,9 +311,9 @@ async function seedConditions() {
 async function seedDashboards() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Dashboards (
-      dashboard_id SERIAL PRIMARY KEY,
-      campaign_id INT REFERENCES Campaigns(campaign_id),
-      character_id INT REFERENCES Characters(character_id),
+      dashboard_id VARCHAR(10) PRIMARY KEY,
+      campaign_id VARCHAR(10) REFERENCES Campaigns(campaign_id) ON DELETE CASCADE,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
       visibility VARCHAR(50) NOT NULL,
       name VARCHAR(100) NOT NULL,
       columns INT DEFAULT 3,
@@ -338,8 +338,8 @@ async function seedDashboards() {
 async function seedDashboardElements() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS DashboardElements (
-      element_id SERIAL PRIMARY KEY,
-      dashboard_id INT REFERENCES Dashboards(dashboard_id),
+      element_id VARCHAR(10) PRIMARY KEY,
+      dashboard_id VARCHAR(10) REFERENCES Dashboards(dashboard_id) ON DELETE CASCADE,
       element_type VARCHAR(50) NOT NULL,
       position_x INT NOT NULL,
       position_y INT NOT NULL,

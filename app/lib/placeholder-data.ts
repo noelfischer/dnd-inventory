@@ -1,15 +1,17 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
 
+// import { nanoid } from 'nanoid';
+
 const users = [
   {
-    id: 1,
+    id: "3b0Vm5iEFo",
     username: 'dungeonmaster',
     password: 'dm_password',
     email: 'dm@dungeons.com',
   },
   {
-    id: 2,
+    id: "1DFWeGwWse",
     username: 'player1',
     password: 'player1_password',
     email: 'player1@dungeons.com',
@@ -18,18 +20,18 @@ const users = [
 
 const campaigns = [
   {
-    id: 1,
+    id: "2mrprEMLbi",
     name: 'Epic Quest',
     description: 'A grand adventure awaits!',
-    dm_id: 1, // assuming the first user is the DM
+    dm_id: users[0].id, // assuming the first user is the DM
   },
 ];
 
 const characters = [
   {
-    id: 1,
-    campaign_id: 1,
-    user_id: 2,
+    id: "4GGwVH0dqx",
+    campaign_id: campaigns[0].id,
+    user_id: users[1].id,
     name: 'Aragorn',
     character_type: 'player',
     race: 'Human',
@@ -55,23 +57,23 @@ const characters = [
 
 const campaignUsers = [
   {
-    id: 1,
-    campaign_id: 1,
-    user_id: 2,
-    character_id: 1,
+    id: "x_9x1KlbJq",
+    campaign_id: campaigns[0].id,
+    user_id: users[1].id,
+    character_id: characters[0].id,
   },
   {
-    id: 2,
-    campaign_id: 1,
-    user_id: 1,
+    id: "f-InpIkKym",
+    campaign_id: campaigns[0].id,
+    user_id: users[0].id,
     character_id: null,
   }
 ];
 
 const skills = [
   {
-    id: 1,
-    character_id: 1,
+    id: "Y1aZICHbj3",
+    character_id: characters[0].id,
     skill_name: 'Stealth',
     proficiency: true,
   },
@@ -79,8 +81,8 @@ const skills = [
 
 const inventory = [
   {
-    id: 1,
-    character_id: 1,
+    id: "fNkZBYJixX",
+    character_id: characters[0].id,
     inventory_name: 'Main',
     item_name: 'Longsword',
     description: 'A sharp blade.',
@@ -94,8 +96,8 @@ const inventory = [
 
 const currency = [
   {
-    id: 1,
-    character_id: 1,
+    id: "nKPetzoEQf",
+    character_id: characters[0].id,
     platin: 0,
     gold: 150,
     silver: 50,
@@ -103,30 +105,30 @@ const currency = [
   },
 ];
 
-const userSpells = [
-  {
-    id: 1,
-    character_id: 1,
-    spell_id: 1,
-    prepared: true,
-    slots_total: 3,
-    slots_used: 1,
-  },
-];
-
 const generalSpells = [
   {
-    id: 1,
+    id: "P0pk6JosnJ",
     spell_name: 'Fireball',
     description: 'A bright streak flashes from your pointing finger to a point you choose within range.',
     spell_level: 3,
   },
 ];
 
+const userSpells = [
+  {
+    id: "0wmnbSMP2x",
+    character_id: characters[0].id,
+    spell_id: generalSpells[0].id,
+    prepared: true,
+    slots_total: 3,
+    slots_used: 1,
+  },
+];
+
 const abilities = [
   {
-    id: 1,
-    character_id: 1,
+    id: "UJ6leJdKGc",
+    character_id: characters[0].id,
     ability_name: 'Second Wind',
     description: 'Once per short rest, you can use a bonus action to regain 1d10 + 5 HP.',
   },
@@ -134,8 +136,8 @@ const abilities = [
 
 const conditions = [
   {
-    id: 1,
-    character_id: 1,
+    id: "FWZ0m_J-Dv",
+    character_id: characters[0].id,
     condition_name: 'Poisoned',
     duration: 10,
     impact: 'Disadvantage on attack rolls and ability checks.',
@@ -144,9 +146,9 @@ const conditions = [
 
 const dashboards = [
   {
-    id: 1,
-    campaign_id: 1,
-    character_id: 1,
+    id: "9UGvE_4eDW",
+    campaign_id: campaigns[0].id,
+    character_id: characters[0].id,
     visibility: 'private',
     name: 'Main Dashboard',
     columns: 3,
@@ -156,8 +158,8 @@ const dashboards = [
 
 const dashboardElements = [
   {
-    id: 1,
-    dashboard_id: 1,
+    id: "p9eaYCrTcX",
+    dashboard_id: dashboards[0].id,
     element_type: 'status',
     position_x: 0,
     position_y: 0,

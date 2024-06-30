@@ -1,14 +1,8 @@
 import { fetchCharacter } from '@/app/lib/data';
-import { Character } from '../../lib/definitions';
+import { Character } from '../../../lib/definitions';
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    character?: number;
-  };
-}) {
-  const characterID = searchParams?.character || '';
+export default async function Page({ params }: { params: { id: string } }) {
+  const characterID = params.id;
   if (!characterID) {
     return (
       <main>

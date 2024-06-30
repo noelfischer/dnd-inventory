@@ -27,9 +27,9 @@ export async function fetchUsers() {
 }
 
 // Fetch all campaigns
-export async function fetchCampaigns(user_id: number) {
+export async function fetchCampaigns(user_id: string) {
   try {
-    const data = await sql<Campaign>`SELECT * FROM Campaigns c JOIN CampaignUsers cu ON c.campaign_id = cu.campaign_id WHERE cu.user_id = ${user_id}`;
+    const data = await sql<Campaign>`SELECT c.campaign_id, c.name FROM Campaigns c JOIN CampaignUsers cu ON c.campaign_id = cu.campaign_id WHERE cu.user_id = ${user_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -38,7 +38,7 @@ export async function fetchCampaigns(user_id: number) {
 }
 
 // Fetch campaign by campaign ID
-export async function fetchCampaign(campaign_id: number) {
+export async function fetchCampaign(campaign_id: string) {
   try {
     const data = await sql<Campaign>`SELECT * FROM Campaigns WHERE campaign_id = ${campaign_id}`;
     return data.rows[0];
@@ -49,7 +49,7 @@ export async function fetchCampaign(campaign_id: number) {
 }
 
 // Fetch characters by campaign ID
-export async function fetchCharactersByCampaign(campaign_id: number) {
+export async function fetchCharactersByCampaign(campaign_id: string) {
   try {
     const data = await sql<SimpleCharacter>`SELECT character_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id}`;
     return data.rows;
@@ -60,7 +60,7 @@ export async function fetchCharactersByCampaign(campaign_id: number) {
 }
 
 // Fetch characters by campaign ID and user ID
-export async function fetchCharactersByCampaignAndUser(campaign_id: number, user_id: number) {
+export async function fetchCharactersByCampaignAndUser(campaign_id: string, user_id: string) {
   try {
     const data = await sql<SimpleCharacter>`SELECT character_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id} AND user_id = ${user_id}`;
     return data.rows;
@@ -71,7 +71,7 @@ export async function fetchCharactersByCampaignAndUser(campaign_id: number, user
 }
 
 // Fetch character by character ID
-export async function fetchCharacter(character_id: number) {
+export async function fetchCharacter(character_id: string) {
   try {
     const data = await sql<Character>`SELECT * FROM Characters WHERE character_id = ${character_id}`;
     return data.rows[0];
@@ -82,7 +82,7 @@ export async function fetchCharacter(character_id: number) {
 }
 
 // Fetch skills by character ID
-export async function fetchSkillsByCharacter(character_id: number) {
+export async function fetchSkillsByCharacter(character_id: string) {
   try {
     const data = await sql<Skill>`SELECT * FROM Skills WHERE character_id = ${character_id}`;
     return data.rows;
@@ -93,7 +93,7 @@ export async function fetchSkillsByCharacter(character_id: number) {
 }
 
 // Fetch inventory by character ID
-export async function fetchInventoryByCharacter(character_id: number) {
+export async function fetchInventoryByCharacter(character_id: string) {
   try {
     const data = await sql<InventoryItem>`SELECT * FROM Inventory WHERE character_id = ${character_id}`;
     return data.rows;
@@ -104,7 +104,7 @@ export async function fetchInventoryByCharacter(character_id: number) {
 }
 
 // Fetch currency by character ID
-export async function fetchCurrencyByCharacter(character_id: number) {
+export async function fetchCurrencyByCharacter(character_id: string) {
   try {
     const data = await sql<Currency>`SELECT * FROM Currency WHERE character_id = ${character_id}`;
     return data.rows;
@@ -115,7 +115,7 @@ export async function fetchCurrencyByCharacter(character_id: number) {
 }
 
 // Fetch user spells by character ID
-export async function fetchUserSpellsByCharacter(character_id: number) {
+export async function fetchUserSpellsByCharacter(character_id: string) {
   try {
     const data = await sql<UserSpell>`SELECT * FROM UserSpells WHERE character_id = ${character_id}`;
     return data.rows;
@@ -137,7 +137,7 @@ export async function fetchGeneralSpells() {
 }
 
 // Fetch abilities by character ID
-export async function fetchAbilitiesByCharacter(character_id: number) {
+export async function fetchAbilitiesByCharacter(character_id: string) {
   try {
     const data = await sql<Ability>`SELECT * FROM Abilities WHERE character_id = ${character_id}`;
     return data.rows;
@@ -148,7 +148,7 @@ export async function fetchAbilitiesByCharacter(character_id: number) {
 }
 
 // Fetch conditions by character ID
-export async function fetchConditionsByCharacter(character_id: number) {
+export async function fetchConditionsByCharacter(character_id: string) {
   try {
     const data = await sql<Condition>`SELECT * FROM Conditions WHERE character_id = ${character_id}`;
     return data.rows;
@@ -159,7 +159,7 @@ export async function fetchConditionsByCharacter(character_id: number) {
 }
 
 // Fetch dashboards by campaign ID
-export async function fetchDashboardsByCampaign(campaign_id: number) {
+export async function fetchDashboardsByCampaign(campaign_id: string) {
   try {
     const data = await sql<Dashboard>`SELECT * FROM Dashboards WHERE campaign_id = ${campaign_id}`;
     return data.rows;
@@ -170,7 +170,7 @@ export async function fetchDashboardsByCampaign(campaign_id: number) {
 }
 
 // Fetch dashboard elements by dashboard ID
-export async function fetchDashboardElementsByDashboard(dashboard_id: number) {
+export async function fetchDashboardElementsByDashboard(dashboard_id: string) {
   try {
     const data = await sql<DashboardElement>`SELECT * FROM DashboardElements WHERE dashboard_id = ${dashboard_id}`;
     return data.rows;

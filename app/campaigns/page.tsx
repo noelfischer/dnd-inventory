@@ -44,6 +44,7 @@ export default async function Page() {
         })}
       </ul>
       <LinkButton href={"/campaigns/create"} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Campaign</LinkButton>
+      <LinkButton href={"/campaigns/join"} icon={<PlusIcon className="w-5 md:w-6" />}>Join a Campaign</LinkButton>
     </main>
   );
 }

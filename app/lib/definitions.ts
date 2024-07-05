@@ -19,6 +19,14 @@ export type Campaign = {
   created_at: string;
 };
 
+export type CampaignUser = {
+  campaign_user_id: string;
+  campaign_id: string;
+  user_id: string;
+  username: string;
+  created_at: string;
+};
+
 export type Character = {
   character_id: string;
   campaign_id: string;

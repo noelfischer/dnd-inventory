@@ -15,6 +15,7 @@ import {
   Dashboard,
   DashboardElement,
   SimpleCharacter,
+  CampaignUser,
 } from './definitions';
 
 // Fetch all users
@@ -57,6 +58,17 @@ export async function fetchCampaign(campaign_id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error(`Failed to fetch campaign ID ${campaign_id}.`);
+  }
+}
+
+// Fetch campaign users by campaign ID
+export async function fetchCampaignUsers(campaign_id: string) {
+  try {
+    const data = await sql<CampaignUser>`SELECT cu.campaign_user_id, u.user_id, u.username FROM Users u JOIN CampaignUsers cu ON u.user_id = cu.user_id WHERE cu.campaign_id = ${campaign_id}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch campaign users for campaign ID ${campaign_id}.`);
   }
 }
 

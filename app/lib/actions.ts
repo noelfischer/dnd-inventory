@@ -166,3 +166,14 @@ export async function addUserToCampaign(campaignId: string, password: string) {
   revalidatePath(`/campaigns/${campaignId}`);
   redirect(`/campaigns/${campaignId}`);
 }
+
+export async function deleteCampaignUser(campaignUserId: string) {
+  try {
+    await sql`DELETE FROM campaignusers WHERE campaign_user_id = ${campaignUserId}`;
+  } catch (e) {
+    console.error('Failed to delete campaign user:', e);
+    return { message: 'Database Error: Failed to Delete Campaign User.' };
+  }
+  revalidatePath('/campaigns');
+  redirect('/campaigns');
+}

@@ -4,22 +4,20 @@ import { Campaign, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
 import { getUIDFromSession } from "@/app/lib/actions";
 import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
-import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PlusIcon, TrashIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 import { LinkButton } from "@/app/ui/campaigns/LinkButton";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const uID = await getUIDFromSession();
-
   const campaignID = params.id;
-
-
   const campaign: Campaign = await fetchCampaign(campaignID);
   if (!campaign) {
     notFound();
   }
   var characters;
-  if (campaign.dm_id === uID) {
+  const isDM = campaign.dm_id === uID;
+  if (isDM) {
     characters = await fetchCharactersByCampaign(campaignID);
   } else {
     characters = await fetchCharactersByCampaignAndUser(campaignID, uID);
@@ -44,7 +42,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         {characters.map((character: SimpleCharacter) => {
           return (
             <li key={campaign.campaign_id}>
-              <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between justify-between">
+              <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between">
                 <Link href={`/dashboard/${character.character_id}`} className="pb-1 text-blue-600 font-medium text-lg">
                   {character.name + ", " + character.character_type}
                 </Link>
@@ -66,8 +64,16 @@ export default async function Page({ params }: { params: { id: string } }) {
           )
         })}
       </ul>
-      <LinkButton href={`/campaigns/${campaign.campaign_id}/create`} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Character</LinkButton>
-      <InviteLink link={`/join${campaign.password ? `/${campaign.password}` : "/-"}`} />
+      <div className="flex gap-2 items-center justify-start">
+        <LinkButton href={`/campaigns/${campaign.campaign_id}/create`} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Character</LinkButton>
+        {isDM &&
+          <>
+            <LinkButton href={`/campaigns/${campaign.campaign_id}/update`} icon={<PencilIcon className="w-5 md:w-6" />}>Update Campaign</LinkButton>
+            <LinkButton href={`/campaigns/${campaign.campaign_id}/access`} icon={<ShieldCheckIcon className="w-5 md:w-6" />}>Handle Access</LinkButton>
+          </>
+        }
+      </div>
+      {isDM && <InviteLink link={`/join${campaign.password ? `/${campaign.password}` : "/-"}`} />}
     </main>
   );
 }

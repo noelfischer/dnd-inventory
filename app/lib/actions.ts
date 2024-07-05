@@ -10,6 +10,7 @@ import bcrypt from 'bcrypt';
 import { auth, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { fetchCampaign } from './data';
+import { Character } from './definitions';
 
 // TODO replace uID with the actual user ID
 const dmIDPlaceholder = '1';
@@ -22,6 +23,7 @@ const FormSchema = z.object({
 });
 
 const CharacterSchema = z.object({
+  userID: z.string(),
   name: z.string(),
   description: z.string(),
   character_type: z.string(),
@@ -239,8 +241,8 @@ export async function createCharacter(campaignId: string, formData: FormData) {
 
 // update character
 export async function updateCharacter(characterId: string, formData: FormData, campaignId: string) {
-  const uID = await getUIDFromSession();
-  const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
+  const { userID, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
+    userID: formData.get('user_id'),
     name: formData.get('name'),
     description: formData.get('description'),
     character_type: formData.get('character_type'),
@@ -262,8 +264,8 @@ export async function updateCharacter(characterId: string, formData: FormData, c
   });
 
   try {
-    await sql`UPDATE characters SET name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, class = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, speed = ${speed}
-      WHERE character_id = ${characterId} AND campaign_id = ${campaignId} AND user_id = ${uID}`;
+    await sql`UPDATE characters SET user_id = ${userID}, name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, class = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, speed = ${speed}
+      WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
   } catch (e) {
     console.error('Failed to update character:', e);
     return { message: 'Database Error: Failed to Update Character.' };
@@ -279,6 +281,24 @@ export async function deleteCharacter(characterId: string, campaignId: string) {
   } catch (e) {
     console.error('Failed to delete character:', e);
     return { message: 'Database Error: Failed to Delete Character.' };
+  }
+  revalidatePath(`/campaigns/${campaignId}`);
+  redirect(`/campaigns/${campaignId}`);
+}
+
+export async function duplicateCharacter(characterId: string, campaignId: string) {
+  const uID = await getUIDFromSession();
+  const newCharacterId = nanoid(10);
+  try {
+    await sql`
+      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, class, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
+      SELECT ${newCharacterId}, ${campaignId}, ${uID}, name, description, character_type, race, class, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed
+      FROM characters
+      WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
+    `;
+  } catch (e) {
+    console.error('Failed to create character:', e);
+    return { message: 'Database Error: Failed to Create Character.' };
   }
   revalidatePath(`/campaigns/${campaignId}`);
   redirect(`/campaigns/${campaignId}`);

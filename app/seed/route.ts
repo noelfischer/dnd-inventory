@@ -61,6 +61,7 @@ async function seedCharacters() {
       campaign_id VARCHAR(10) REFERENCES Campaigns(campaign_id) ON DELETE CASCADE,
       user_id VARCHAR(10) REFERENCES Users(user_id) ON DELETE CASCADE,
       name VARCHAR(100) NOT NULL,
+      description TEXT,
       character_type VARCHAR(50) NOT NULL,
       race VARCHAR(50),
       class VARCHAR(50),
@@ -77,6 +78,9 @@ async function seedCharacters() {
       max_hit_points INT,
       current_hit_points INT,
       temp_hit_points INT,
+      armor_class INT,
+      speed INT,
+      initiative INT DEFAULT 0,
       death_saves_success INT,
       death_saves_failure INT,
       experience_points INT DEFAULT 0,
@@ -89,16 +93,18 @@ async function seedCharacters() {
     characters.map(
       (character) => client.sql`
         INSERT INTO Characters (
-          character_id, campaign_id, user_id, name, character_type, race, class, level, background, alignment,
+          character_id, campaign_id, user_id, name, description, character_type, race, class, level, background, alignment,
           portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma,
-          max_hit_points, current_hit_points, temp_hit_points, death_saves_success,
-          death_saves_failure, experience_points
+          max_hit_points, current_hit_points, temp_hit_points, 
+          armor_class, speed, initiative,
+          death_saves_success, death_saves_failure, experience_points
         )
         VALUES (
-          ${character.id}, ${character.campaign_id}, ${character.user_id}, ${character.name}, ${character.character_type}, ${character.race},
+          ${character.id}, ${character.campaign_id}, ${character.user_id}, ${character.name}, ${character.description}, ${character.character_type}, ${character.race},
           ${character.class}, ${character.level}, ${character.background}, ${character.alignment}, ${character.portrait_url},
           ${character.strength}, ${character.dexterity}, ${character.constitution}, ${character.intelligence}, ${character.wisdom},
           ${character.charisma}, ${character.max_hit_points}, ${character.current_hit_points}, ${character.temp_hit_points},
+          ${character.armor_class}, ${character.speed}, ${character.initiative},
           ${character.death_saves_success}, ${character.death_saves_failure}, ${character.experience_points}
         )
         ON CONFLICT (character_id) DO NOTHING;

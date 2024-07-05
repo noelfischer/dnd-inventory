@@ -18,9 +18,10 @@ export default async function Page({ params }: { params: { id: string } }) {
             <Breadcrumbs
                 breadcrumbs={[
                     { label: 'Campaigns', href: '/campaigns' },
+                    { label: campaign.name, href: `/campaigns/${campaignID}` },
                     {
                         label: 'Access',
-                        href: '/campaigns/access',
+                        href: `/campaigns/${campaignID}/access`,
                         active: true,
                     },
                 ]}

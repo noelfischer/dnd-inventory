@@ -32,6 +32,7 @@ export type Character = {
   campaign_id: string;
   user_id: string;
   name: string;
+  description: string;
   character_type: string;
   race: string;
   class: string;
@@ -48,6 +49,9 @@ export type Character = {
   max_hit_points: number;
   current_hit_points: number;
   temp_hit_points: number;
+  armor_class: number;
+  speed: number;
+  initiative: number;
   death_saves_success: number;
   death_saves_failure: number;
   experience_points: number;

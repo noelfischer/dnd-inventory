@@ -21,6 +21,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     <main>
       <h1>Dashboard</h1>
       <h2>{character.name}</h2>
+      <p>{character.character_type}</p>
+      <p>{character.description}</p>
       <p>{character.background}</p>
       <p>{character.race}</p>
       <p>{character.class}</p>
@@ -40,6 +42,9 @@ export default async function Page({ params }: { params: { id: string } }) {
       <p>Current HP: {character.current_hit_points}</p>
       <p>Temp HP: {character.temp_hit_points}</p>
       <br />
+      <p>Armor Class: {character.armor_class}</p>
+      <p>Speed: {character.speed}</p>
+      <p>Initiative: {character.initiative}</p>
       <p>Death Saves: {character.death_saves_success} successes, {character.death_saves_failure} failures</p>
       <p>XP: {character.experience_points}</p>
 

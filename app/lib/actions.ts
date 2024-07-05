@@ -21,6 +21,28 @@ const FormSchema = z.object({
   password: z.string().optional(),
 });
 
+const CharacterSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  character_type: z.string(),
+  race: z.string(),
+  cclass: z.string(),
+  level: z.number(),
+  background: z.string(),
+  alignment: z.string(),
+  portrait_url: z.string().optional(),
+  strength: z.number(),
+  dexterity: z.number(),
+  constitution: z.number(),
+  intelligence: z.number(),
+  wisdom: z.number(),
+  charisma: z.number(),
+  max_hit_points: z.number(),
+  armor_class: z.number(),
+  speed: z.number(),
+
+});
+
 
 export async function getEmailFromSession() {
   const data = await auth();
@@ -111,7 +133,6 @@ export async function createCampaign(formData: FormData) {
 
 export async function updateCampaign(campaignId: string, formData: FormData) {
   const { name, description, password } = FormSchema.parse({
-    dmId: dmIDPlaceholder,
     name: formData.get('name'),
     description: formData.get('description'),
     password: formData.get('password'),
@@ -176,4 +197,89 @@ export async function deleteCampaignUser(campaignUserId: string) {
   }
   revalidatePath('/campaigns');
   redirect('/campaigns');
+}
+
+//create character
+export async function createCharacter(campaignId: string, formData: FormData) {
+  const uID = await getUIDFromSession();
+  const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+    character_type: formData.get('character_type'),
+    race: formData.get('race'),
+    class: formData.get('class'),
+    level: formData.get('level'),
+    background: formData.get('background'),
+    alignment: formData.get('alignment'),
+    portrait_url: formData.get('portrait_url'),
+    strength: formData.get('strength'),
+    dexterity: formData.get('dexterity'),
+    constitution: formData.get('constitution'),
+    intelligence: formData.get('intelligence'),
+    wisdom: formData.get('wisdom'),
+    charisma: formData.get('charisma'),
+    max_hit_points: formData.get('max_hit_points'),
+    armor_class: formData.get('armor_class'),
+    speed: formData.get('speed'),
+  });
+
+  const characterId = nanoid(10);
+
+  try {
+    await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, class, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
+      VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${speed})`;
+  } catch (e) {
+    console.error('Failed to create character:', e);
+    return { message: 'Database Error: Failed to Create Character.' };
+  }
+  revalidatePath(`/campaigns/${campaignId}`);
+  redirect(`/campaigns/${campaignId}`);
+}
+
+
+// update character
+export async function updateCharacter(characterId: string, formData: FormData, campaignId: string) {
+  const uID = await getUIDFromSession();
+  const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+    character_type: formData.get('character_type'),
+    race: formData.get('race'),
+    class: formData.get('class'),
+    level: formData.get('level'),
+    background: formData.get('background'),
+    alignment: formData.get('alignment'),
+    portrait_url: formData.get('portrait_url'),
+    strength: formData.get('strength'),
+    dexterity: formData.get('dexterity'),
+    constitution: formData.get('constitution'),
+    intelligence: formData.get('intelligence'),
+    wisdom: formData.get('wisdom'),
+    charisma: formData.get('charisma'),
+    max_hit_points: formData.get('max_hit_points'),
+    armor_class: formData.get('armor_class'),
+    speed: formData.get('speed'),
+  });
+
+  try {
+    await sql`UPDATE characters SET name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, class = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, speed = ${speed}
+      WHERE character_id = ${characterId} AND campaign_id = ${campaignId} AND user_id = ${uID}`;
+  } catch (e) {
+    console.error('Failed to update character:', e);
+    return { message: 'Database Error: Failed to Update Character.' };
+  }
+  revalidatePath(`/campaigns/${campaignId}`);
+  redirect(`/campaigns/${campaignId}`);
+}
+
+// delete character
+export async function deleteCharacter(characterId: string, campaignId: string) {
+  try {
+    await sql`DELETE FROM characters WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
+  } catch (e) {
+    console.error('Failed to delete character:', e);
+    return { message: 'Database Error: Failed to Delete Character.' };
+  }
+  revalidatePath(`/campaigns/${campaignId}`);
+  redirect(`/campaigns/${campaignId}`);
 }

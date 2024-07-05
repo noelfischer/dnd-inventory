@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         })}
       </ul>
       <div className="flex gap-2 items-center justify-start">
-        <LinkButton href={`/campaigns/${campaign.campaign_id}/create`} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Character</LinkButton>
+        <LinkButton href={`/campaigns/${campaign.campaign_id}/create-character`} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Character</LinkButton>
         {isDM &&
           <>
             <LinkButton href={`/campaigns/${campaign.campaign_id}/update`} icon={<PencilIcon className="w-5 md:w-6" />}>Update Campaign</LinkButton>

@@ -9,6 +9,7 @@ import bcrypt from 'bcrypt';
 
 import { auth, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import { fetchCampaign } from './data';
 
 // TODO replace uID with the actual user ID
 const dmIDPlaceholder = '1';
@@ -17,6 +18,7 @@ const FormSchema = z.object({
   dmId: z.string(),
   name: z.string(),
   description: z.string(),
+  password: z.string().optional(),
 });
 
 
@@ -79,15 +81,16 @@ export async function deleteUser(email: string) {
 }
 
 export async function createCampaign(formData: FormData) {
-  const { dmId, name, description } = FormSchema.parse({
+  const { dmId, name, description, password } = FormSchema.parse({
     dmId: await getUIDFromSession(),
     name: formData.get('name'),
     description: formData.get('description'),
+    password: formData.get('password'),
   });
   try {
     const campaignId = nanoid(10);
     const campaignUserId = nanoid(10);
-    await sql`INSERT INTO campaigns (campaign_id, dm_id, name, description) VALUES (${campaignId}, ${dmId}, ${name}, ${description})`;
+    await sql`INSERT INTO campaigns (campaign_id, dm_id, name, description, password) VALUES (${campaignId}, ${dmId}, ${name}, ${description}, ${password || null})`;
     try { // if this fails, we need to rollback the campaign creation
       await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${dmId})`;
     }
@@ -107,13 +110,14 @@ export async function createCampaign(formData: FormData) {
 }
 
 export async function updateCampaign(campaignId: string, formData: FormData) {
-  const { name, description } = FormSchema.parse({
+  const { name, description, password } = FormSchema.parse({
     dmId: dmIDPlaceholder,
     name: formData.get('name'),
     description: formData.get('description'),
+    password: formData.get('password'),
   });
   try {
-    await sql`UPDATE campaigns SET name = ${name}, description = ${description} WHERE campaign_id = ${campaignId}`;
+    await sql`UPDATE campaigns SET name = ${name}, description = ${description}, password = ${password} WHERE campaign_id = ${campaignId}`;
     console.log('Updated campaign:', campaignId);
   } catch (e) {
     return { message: 'Database Error: Failed to Update Campaign.' };
@@ -138,4 +142,27 @@ export async function deleteCampaign(campaignId: string, dmId: string) {
 
   revalidatePath('/campaigns');
   redirect('/campaigns');
+}
+
+export async function addUserToCampaign(campaignId: string, password: string) {
+  const uID = await getUIDFromSession();
+  try {
+    const campaignUserId = nanoid(10);
+    //check if user is already in campaign
+    const user = await sql`SELECT * FROM campaignusers WHERE campaign_id = ${campaignId} AND user_id = ${uID}`;
+    if (user.rows.length === 0) {
+      // if the campaign has a password, check if the password is correct
+      const campaign = await fetchCampaign(campaignId);
+      if (campaign.password && campaign.password !== password) {
+        console.error('Incorrect password');
+        return { message: 'Incorrect password' };
+      }
+      await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${uID})`;
+    }
+  } catch (e) {
+    console.error('Failed to add user to campaign:', e);
+    return { message: 'Database Error: Failed to Add User to Campaign.' };
+  }
+  revalidatePath(`/campaigns/${campaignId}`);
+  redirect(`/campaigns/${campaignId}`);
 }

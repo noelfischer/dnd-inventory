@@ -14,6 +14,7 @@ export type Campaign = {
   campaign_id: string;
   name: string;
   description: string;
+  password: string;
   dm_id: string;
   created_at: string;
 };

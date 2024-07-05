@@ -21,12 +21,12 @@ export default async function Page() {
         {campaigns.map((campaign: Campaign) => {
           return (
             <li key={campaign.campaign_id}>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between">
                 <Link href={`/campaigns/${campaign.campaign_id}`} className="pb-1 text-blue-600 font-medium text-lg">
                   {campaign.name}
                 </Link>
                 {campaign.dm_id === uID &&
-                  <>
+                  <div className="flex gap-2">
                     <Link href={`/campaigns/${campaign.campaign_id}/update`} className="rounded-md border p-2 hover:bg-gray-100">
                       <span className="sr-only">Update</span>
                       <PencilIcon className="w-5" />
@@ -36,7 +36,7 @@ export default async function Page() {
                       <span className="sr-only">Delete</span>
                       <TrashIcon className="w-5" />
                     </Link>
-                  </>
+                  </div>
                 }
               </div>
             </li>
@@ -44,7 +44,6 @@ export default async function Page() {
         })}
       </ul>
       <LinkButton href={"/campaigns/create"} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Campaign</LinkButton>
-      <LinkButton href={"/campaigns/join"} icon={<PlusIcon className="w-5 md:w-6" />}>Join a Campaign</LinkButton>
     </main>
   );
 }

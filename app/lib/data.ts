@@ -28,6 +28,16 @@ export async function fetchUsers() {
   }
 }
 
+export async function fetchUsername(user_id: string) {
+  try {
+    const data = await sql<User>`SELECT username FROM Users WHERE user_id = ${user_id}`;
+    return data.rows[0].username;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch username.');
+  }
+}
+
 // Fetch all campaigns
 export async function fetchCampaigns(user_id: string) {
   try {

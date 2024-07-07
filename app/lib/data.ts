@@ -75,7 +75,7 @@ export async function fetchCampaignUsers(campaign_id: string) {
 // Fetch characters by campaign ID
 export async function fetchCharactersByCampaign(campaign_id: string) {
   try {
-    const data = await sql<SimpleCharacter>`SELECT character_id, user_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id}`;
+    const data = await sql<SimpleCharacter>`SELECT character_id, name, current_hit_points, max_hit_points, character_type FROM Characters WHERE campaign_id = ${campaign_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -86,7 +86,7 @@ export async function fetchCharactersByCampaign(campaign_id: string) {
 // Fetch characters by campaign ID and user ID
 export async function fetchCharactersByCampaignAndUser(campaign_id: string, user_id: string) {
   try {
-    const data = await sql<SimpleCharacter>`SELECT character_id, name, character_type FROM Characters WHERE campaign_id = ${campaign_id} AND user_id = ${user_id}`;
+    const data = await sql<SimpleCharacter>`SELECT character_id, name, current_hit_points, max_hit_points, character_type FROM Characters WHERE campaign_id = ${campaign_id} AND user_id = ${user_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);

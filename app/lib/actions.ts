@@ -298,8 +298,8 @@ export async function duplicateCharacter(characterId: string, campaignId: string
   const newCharacterId = nanoid(10);
   try {
     await sql`
-      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
-      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed
+      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, speed, initiative, death_saves_success, death_saves_failure, experience_points)
+      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, speed, initiative, death_saves_success, death_saves_failure, experience_points
       FROM characters
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
     `;

@@ -63,6 +63,8 @@ export type SimpleCharacter = {
   character_id: string;
   user_id: string;
   name: string;
+  current_hit_points: number;
+  max_hit_points: number;
   character_type: string;
 };
 

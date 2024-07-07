@@ -1,8 +1,8 @@
 import { deleteCampaign } from '@/app/lib/actions';
 import { fetchCampaign } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+import { Button } from "@/components/ui/button"
 
 import {
   Breadcrumb,
@@ -12,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { Trash2 } from 'lucide-react';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const campaignID = params.id;
@@ -34,14 +35,15 @@ export default async function Page({ params }: { params: { id: string } }) {
           <BreadcrumbItem><BreadcrumbPage>Delete</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h2>Delete campaign: {campaign.name}</h2>
-      <p>{campaign.description}</p>
+      <h1 className="text-2xl mb-6">Delete Campaign</h1>
+      <h2>Name: {campaign.name}</h2>
+      <p>Description: {campaign.description}</p>
       <form action={deleteCampaignWithId}>
         <div className="flex items-center gap-5 self-start">
-          <button type="submit" className="flex gap-2 rounded-md border p-2 hover:bg-gray-100">
+          <Button type="submit" variant="destructive" className='mt-9'>
+            <Trash2 className="w-4 mr-3" />
             <span>Delete</span>
-            <TrashIcon className="w-4" />
-          </button>
+          </Button>
         </div>
       </form>
     </main>

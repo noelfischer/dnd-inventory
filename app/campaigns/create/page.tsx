@@ -1,21 +1,20 @@
 import { createCampaign } from '@/app/lib/actions';
-import { Button } from '@/app/ui/button';
+import { Form, FormItemInput, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
+import { Button } from "@/components/ui/button"
+import { ShieldPlus } from 'lucide-react';
 
 import {
-Breadcrumb,
-BreadcrumbItem,
-BreadcrumbLink,
-BreadcrumbList,
-BreadcrumbPage,
-BreadcrumbSeparator,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 
-import {
-  BookOpenIcon, PlusCircleIcon,
-  ShieldCheckIcon
-} from '@heroicons/react/24/outline';
 
 export default async function Page() {
+
   return (
     <main>
       <Breadcrumb>
@@ -25,69 +24,13 @@ export default async function Page() {
           <BreadcrumbItem><BreadcrumbPage>Create</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-
-      <form action={createCampaign}>
-        <div className="rounded-md bg-gray-50 p-4 md:p-6">
-          {/* Campaign name */}
-          <div className="mb-4">
-            <label htmlFor="name" className="mb-2 block text-sm font-medium">
-              Choose a campaign name
-            </label>
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                  id="name"
-                  name="name"
-                  maxLength={100}
-                  type="text"
-                  placeholder="Enter campaign name"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  required
-                />
-                <PlusCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-              </div>
-            </div>
-          </div>
-
-          {/* Campaign description */}
-          <div className="mb-4">
-            <label htmlFor="description" className="mb-2 block text-sm font-medium">
-              Choose a campaign description
-            </label>
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <textarea
-                  id="description"
-                  name="description"
-                  maxLength={300}
-                  placeholder="Enter a description"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                />
-                <BookOpenIcon className="pointer-events-none absolute left-3 top-1/4 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-              </div>
-            </div>
-          </div>
-          {/* Campaign password */}
-          <div className="mb-4">
-            <label htmlFor="password" className="mb-2 block text-sm font-medium">
-              Choose a campaign access password
-            </label>
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                  id="password"
-                  name="password"
-                  maxLength={100}
-                  type="text"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                />
-                <ShieldCheckIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-              </div>
-            </div>
-          </div>
-          <Button type="submit">Create Campaign</Button>
-        </div>
-      </form>
+      <Form action={createCampaign}>
+        <h1 className="text-2xl">Create Campaign</h1>
+        <FormItemInput name="name" label="Choose a campaign name" minLength={2} />
+        <FormItemTextArea name="description" label="Choose a campaign description" />
+        <FormItemInput name="password" label="Choose a campaign access password" Icon={ShieldPlus} />
+        <Button type="submit">Create Campaign</Button>
+      </Form>
     </main>
   );
 }

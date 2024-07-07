@@ -1,47 +1,42 @@
 import Link from "next/link";
 import { fetchCampaigns } from "../lib/data";
 import { Campaign } from "../lib/definitions";
-import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { LinkButton } from "../ui/campaigns/LinkButton";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { getUIDFromSession } from "../lib/data";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button"
+import { BadgePlus } from "lucide-react";
+
 
 export default async function Page() {
   const uID = await getUIDFromSession();
   const campaigns = await fetchCampaigns(uID);
   return (
     <main>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbPage>Campaigns</BreadcrumbPage></BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <ul className="pb-7">
+      <h1 className="text-2xl mb-6">Campaigns</h1>
+      <ul className="pb-3">
         {campaigns.map((campaign: Campaign) => {
           return (
-            <li key={campaign.campaign_id}>
+            <li key={campaign.campaign_id} className="mb-5">
               <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between">
-                <Link href={`/campaigns/${campaign.campaign_id}`} className="pb-1 text-blue-600 font-medium text-lg">
+              <Button variant="link" className="text-lg" asChild>
+                <Link href={`/campaigns/${campaign.campaign_id}`}>
                   {campaign.name}
                 </Link>
+                </Button>
                 {campaign.dm_id === uID &&
                   <div className="flex gap-2">
-                    <Link href={`/campaigns/${campaign.campaign_id}/update`} className="rounded-md border p-2 hover:bg-gray-100">
-                      <span className="sr-only">Update</span>
-                      <PencilIcon className="w-5" />
-                    </Link>
-
-                    <Link href={`/campaigns/${campaign.campaign_id}/delete`} className="rounded-md border p-2 hover:bg-gray-100">
-                      <span className="sr-only">Delete</span>
-                      <TrashIcon className="w-5" />
-                    </Link>
+                    <Button variant="outline" size="icon" asChild>
+                      <Link href={`/campaigns/${campaign.campaign_id}/update`}>
+                        <span className="sr-only">Update</span>
+                        <PencilIcon className="w-5" />
+                      </Link>
+                    </Button>
+                    <Button variant="outline" size="icon" asChild>
+                      <Link href={`/campaigns/${campaign.campaign_id}/delete`} >
+                        <span className="sr-only">Delete</span>
+                        <TrashIcon className="w-5" />
+                      </Link>
+                    </Button>
                   </div>
                 }
               </div>
@@ -49,7 +44,12 @@ export default async function Page() {
           )
         })}
       </ul>
-      <LinkButton href={"/campaigns/create"} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Campaign</LinkButton>
+      <Button asChild>
+        <Link href={"/campaigns/create"} className="w-full sm:w-min">
+          Create a new Campaign
+          <BadgePlus className="w-5 h-5 ml-3" />
+        </Link>
+      </Button>
     </main>
   );
 }

@@ -122,7 +122,8 @@ export async function createCampaign(formData: FormData) {
 }
 
 export async function updateCampaign(campaignId: string, formData: FormData) {
-  const { name, description, password } = FormSchema.parse({
+  const { dmId, name, description, password } = FormSchema.parse({
+    dmId: await getUIDFromSession(),
     name: formData.get('name'),
     description: formData.get('description'),
     password: formData.get('password'),

@@ -3,7 +3,6 @@ import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndU
 import { Campaign, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
 import { duplicateCharacter } from "@/app/lib/actions";
-import { LinkButton } from "@/app/ui/campaigns/LinkButton";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
 import { Button } from "@/components/ui/button"

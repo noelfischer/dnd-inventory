@@ -1,9 +1,17 @@
-import { createCampaign, deleteCampaign, updateCampaign } from '@/app/lib/actions';
+import { deleteCampaign } from '@/app/lib/actions';
 import { fetchCampaign } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const campaignID = params.id;
@@ -17,16 +25,15 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns' },
-          {
-            label: 'Delete Campaign',
-            href: '/campaigns/delete',
-            active: true,
-          },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Delete</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h2>Delete campaign: {campaign.name}</h2>
       <p>{campaign.description}</p>
       <form action={deleteCampaignWithId}>

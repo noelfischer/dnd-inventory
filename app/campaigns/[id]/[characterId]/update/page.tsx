@@ -2,12 +2,20 @@ import { getUIDFromSession, updateCharacter } from '@/app/lib/actions';
 import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
 import { Button } from '@/app/ui/button';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import {
   BookOpenIcon, PlusCircleIcon,
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function Page({ params }: { params: { id: string, characterId: string } }) {
   const campaignID = params.id;
@@ -31,20 +39,17 @@ export default async function Page({ params }: { params: { id: string, character
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns' },
-          {
-            label: campaign.name,
-            href: '/campaigns/' + campaignID,
-          },
-          {
-            label: 'Update Character',
-            href: '/campaigns/' + campaignID + '/' + characterID + '/update',
-            active: true,
-          },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{character.name}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Update</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <form action={updateCharacterWithId}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Character name */}
@@ -68,7 +73,7 @@ export default async function Page({ params }: { params: { id: string, character
             </div>
           </div>
           {/* Character Owner (only viewable by DM) */}
-          <div className={"mb-4 " + (user_id === campaign.dm_id ? "": "invisible max-h-0")} >
+          <div className={"mb-4 " + (user_id === campaign.dm_id ? "" : "invisible max-h-0")} >
             <label htmlFor="user_id" className="mb-2 block text-sm font-medium">
               Choose the character owner
             </label>
@@ -113,7 +118,7 @@ export default async function Page({ params }: { params: { id: string, character
           </div>
 
           {/* Character type */}
-          <div className={"mb-4"  + (user_id === campaign.dm_id ? "": "invisible max-h-0")}>
+          <div className={"mb-4" + (user_id === campaign.dm_id ? "" : "invisible max-h-0")}>
             <label htmlFor="character_type" className="mb-2 block text-sm font-medium">
               Choose a character type
             </label>

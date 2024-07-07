@@ -1,6 +1,15 @@
 import { createCampaign } from '@/app/lib/actions';
 import { Button } from '@/app/ui/button';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
+
+import {
+Breadcrumb,
+BreadcrumbItem,
+BreadcrumbLink,
+BreadcrumbList,
+BreadcrumbPage,
+BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+
 import {
   BookOpenIcon, PlusCircleIcon,
   ShieldCheckIcon
@@ -9,16 +18,14 @@ import {
 export default async function Page() {
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns' },
-          {
-            label: 'Create Campaign',
-            href: '/campaigns/create',
-            active: true,
-          },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Create</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <form action={createCampaign}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Campaign name */}

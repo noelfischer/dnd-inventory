@@ -1,7 +1,6 @@
-import { addUserToCampaign, getUIDFromSession } from '@/app/lib/actions';
+import { addUserToCampaign } from '@/app/lib/actions';
 import { fetchCampaign, fetchUsername } from '@/app/lib/data';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+
 
 export default async function Page({ params }: { params: { id: string, password: string } }) {
   const campaignID = params.id;

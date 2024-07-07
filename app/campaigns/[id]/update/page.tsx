@@ -2,11 +2,19 @@ import { createCampaign, updateCampaign } from '@/app/lib/actions';
 import { fetchCampaign } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
 import { Button } from '@/app/ui/button';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import {
   BookOpenIcon, PlusCircleIcon, ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const campaignID = params.id;
@@ -20,17 +28,16 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns' },
-          { label: campaign.name, href: `/campaigns/${campaignID}` },
-          {
-            label: 'Update Campaign',
-            href: `/campaigns/${campaignID}/update`,
-            active: true,
-          },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Update</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <form action={updateCampaignWithId}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Campaign name */}

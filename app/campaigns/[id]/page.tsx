@@ -3,10 +3,18 @@ import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndU
 import { Campaign, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
 import { duplicateCharacter, getUIDFromSession } from "@/app/lib/actions";
-import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
 import { PencilIcon, PlusIcon, TrashIcon, ShieldCheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { LinkButton } from "@/app/ui/campaigns/LinkButton";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const uID = await getUIDFromSession();
@@ -25,16 +33,13 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns' },
-          {
-            label: campaign.name,
-            href: '/campaigns/' + campaignID,
-            active: true,
-          },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>{campaign.name}</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="pb-3"><span className="text-2xl">Description</span></div>
       <p className="text-gray-600">{campaign.description || "descriptionless campaign"}</p>
       <h2 className="text-2xl mt-7 mb-3">Characters</h2>
@@ -55,7 +60,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         <DocumentDuplicateIcon className="w-5" />
                       </button>
                     </form>
-                    
+
                     <Link href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`} className="rounded-md border p-2 hover:bg-gray-100">
                       <span className="sr-only">Update</span>
                       <PencilIcon className="w-5" />

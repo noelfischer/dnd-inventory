@@ -1,9 +1,17 @@
-import { createCampaign, deleteCampaign, deleteCharacter, updateCampaign } from '@/app/lib/actions';
+import { deleteCharacter } from '@/app/lib/actions';
 import { fetchCampaign, fetchCharacterName } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function Page({ params }: { params: { id: string, characterId: string } }) {
   const campaignID = params.id;
@@ -22,20 +30,17 @@ export default async function Page({ params }: { params: { id: string, character
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns' },
-          {
-            label: campaign.name,
-            href: '/campaigns/' + campaignID,
-          },
-          {
-            label: 'Delete Character',
-            href: '/campaigns/' + campaignID + '/' + characterID + '/delete',
-            active: true,
-          },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{characterName}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Delete</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h2>Delete Character:</h2>
       <h1 className="text-3xl mt-3 mb-5">{characterName}</h1>
       <form action={deleteCharacterById}>

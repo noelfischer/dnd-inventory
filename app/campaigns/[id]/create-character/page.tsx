@@ -1,11 +1,18 @@
 import { createCharacter, getUIDFromSession } from '@/app/lib/actions';
 import { fetchCampaign } from '@/app/lib/data';
 import { Button } from '@/app/ui/button';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import {
-  BookOpenIcon, PlusCircleIcon,
-  ShieldCheckIcon
+  BookOpenIcon, PlusCircleIcon
 } from '@heroicons/react/24/outline';
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const campaignID = params.id;
@@ -16,17 +23,15 @@ export default async function Page({ params }: { params: { id: string } }) {
   const createCharacterByCampaignID = createCharacter.bind(null, campaignID);
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns' },
-          { label: campaign.name, href: `/campaigns/${campaignID}` },
-          {
-            label: 'Create Character',
-            href: `/campaigns/${campaignID}/create-character`,
-            active: true,
-          },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Create Character</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <form action={createCharacterByCampaignID}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Character name */}

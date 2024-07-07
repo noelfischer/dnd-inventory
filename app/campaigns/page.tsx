@@ -3,20 +3,26 @@ import { fetchCampaigns } from "../lib/data";
 import { Campaign } from "../lib/definitions";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { LinkButton } from "../ui/campaigns/LinkButton";
-import { getEmailFromSession, getUIDFromSession } from "../lib/actions";
-import Breadcrumbs from "../ui/invoices/breadcrumbs";
-
+import { getUIDFromSession } from "../lib/actions";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function Page() {
   const uID = await getUIDFromSession();
   const campaigns = await fetchCampaigns(uID);
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Campaigns', href: '/campaigns', active: true, },
-        ]}
-      />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbPage>Campaigns</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <ul className="pb-7">
         {campaigns.map((campaign: Campaign) => {
           return (

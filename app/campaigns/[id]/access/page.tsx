@@ -1,7 +1,15 @@
 import { deleteCampaignUser, getUIDFromSession } from "@/app/lib/actions";
 import { fetchCampaign, fetchCampaignUsers } from "@/app/lib/data";
-import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
+
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+  } from "@/components/ui/breadcrumb"
 
 export default async function Page({ params }: { params: { id: string } }) {
     const uID = await getUIDFromSession();
@@ -15,17 +23,15 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <main>
-            <Breadcrumbs
-                breadcrumbs={[
-                    { label: 'Campaigns', href: '/campaigns' },
-                    { label: campaign.name, href: `/campaigns/${campaignID}` },
-                    {
-                        label: 'Access',
-                        href: `/campaigns/${campaignID}/access`,
-                        active: true,
-                    },
-                ]}
-            />
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem><BreadcrumbPage>Access</BreadcrumbPage></BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <h1 className="text-2xl">Campaign Users</h1>
             <ul>
                 {campaignUsers.map((user) => {

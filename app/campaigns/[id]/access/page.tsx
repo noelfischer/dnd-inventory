@@ -9,7 +9,9 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator,
-  } from "@/components/ui/breadcrumb"
+} from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const uID = await getUIDFromSession();
@@ -32,20 +34,24 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <BreadcrumbItem><BreadcrumbPage>Access</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <h1 className="text-2xl">Campaign Users</h1>
+            <h1 className="text-2xl mb-8">Campaign Users</h1>
             <ul>
-                {campaignUsers.map((user) => {
+                {campaignUsers.sort((u1, u2) => {
+                    if (u1.user_id === uID) return -1;
+                    if (u2.user_id === uID) return 1;
+                    return u1.username.localeCompare(u2.username);
+                }).map((user) => {
                     const deleteUserById = deleteCampaignUser.bind(null, user.campaign_user_id)
                     return (
                         <li key={user.user_id}>
-                            <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between">
+                            <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between h-16 mb-3">
                                 {user.username} {uID === user.user_id && '(You)'}
                                 {uID !== user.user_id &&
                                     <form action={deleteUserById}>
-                                        <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+                                        <Button type="submit" variant="outline" size="icon">
                                             <span className="sr-only">Delete</span>
-                                            <TrashIcon className="w-5" />
-                                        </button>
+                                            <Trash2 className="h-5 w-5" />
+                                        </Button>
                                     </form>
                                 }
                             </div>

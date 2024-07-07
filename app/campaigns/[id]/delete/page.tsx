@@ -39,12 +39,10 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h2>Name: {campaign.name}</h2>
       <p>Description: {campaign.description}</p>
       <form action={deleteCampaignWithId}>
-        <div className="flex items-center gap-5 self-start">
           <Button type="submit" variant="destructive" className='mt-9'>
             <Trash2 className="w-4 mr-3" />
             <span>Delete</span>
           </Button>
-        </div>
       </form>
     </main>
   );

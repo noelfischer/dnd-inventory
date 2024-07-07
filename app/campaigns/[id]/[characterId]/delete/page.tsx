@@ -1,5 +1,5 @@
 import { deleteCharacter } from '@/app/lib/actions';
-import { fetchCampaign, fetchCharacterName } from '@/app/lib/data';
+import { fetchCampaign, fetchCharacter } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
@@ -12,6 +12,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
 
 export default async function Page({ params }: { params: { id: string, characterId: string } }) {
   const campaignID = params.id;
@@ -21,8 +23,8 @@ export default async function Page({ params }: { params: { id: string, character
   if (!campaign) {
     notFound();
   }
-  const characterName = await fetchCharacterName(characterID);
-  if (!characterName) {
+  const character = await fetchCharacter(characterID);
+  if (!character) {
     notFound();
   }
 
@@ -36,18 +38,21 @@ export default async function Page({ params }: { params: { id: string, character
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbPage>Delete {characterName}</BreadcrumbPage></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbPage>Delete {character.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h2>Delete Character:</h2>
-      <h1 className="text-3xl mt-3 mb-5">{characterName}</h1>
+      <h1 className="text-2xl mb-6">Delete Character</h1>
+      <p className='font-semibold'>{character.name}</p>
+      <p>{character.character_type}</p>
+      <p>{character.description}</p>
+      <p>HP: {character.current_hit_points} / {character.max_hit_points}</p>
+      <p>{character.race}</p>
+
       <form action={deleteCharacterById}>
-        <div className="flex items-center gap-5 self-start">
-          <button type="submit" className="flex gap-2 rounded-md border p-2 hover:bg-gray-100">
-            <span>Delete</span>
-            <TrashIcon className="w-4" />
-          </button>
-        </div>
+        <Button type="submit" variant="destructive" className='mt-9'>
+          <Trash2 className="w-4 mr-3" />
+          <span>Delete</span>
+        </Button>
       </form>
     </main>
   );

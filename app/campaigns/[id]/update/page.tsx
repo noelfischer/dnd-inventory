@@ -1,11 +1,10 @@
 import { updateCampaign } from '@/app/lib/actions';
 import { fetchCampaign } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
-import { Button } from '@/app/ui/button';
-import {
-  BookOpenIcon, PlusCircleIcon, ShieldCheckIcon
-} from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+import { Form, FormItemInput, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
+import { ShieldPlus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 import {
   Breadcrumb,
@@ -16,7 +15,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 
-import { Form, FormItemInput, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
+
 
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -45,7 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <h1 className="text-2xl">Update Campaign</h1>
         <FormItemInput name="name" label="Choose a campaign name" minLength={2} defaultValue={campaign.name} />
         <FormItemTextArea name="description" label="Choose a campaign description" defaultValue={campaign.description} />
-        <FormItemInput name="password" label="Choose a campaign access password" defaultValue={campaign.password} Icon={ShieldCheckIcon} />
+        <FormItemInput name="password" label="Choose a campaign access password" defaultValue={campaign.password} Icon={ShieldPlus} />
         <Button type="submit">Update Campaign</Button>
       </Form>
     </main>

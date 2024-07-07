@@ -1,4 +1,4 @@
-import { createCharacter } from '@/app/lib/actions';
+import { createCharacter, getUIDFromSession } from '@/app/lib/actions';
 import { fetchCampaign } from '@/app/lib/data';
 import { Button } from '@/app/ui/button';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
@@ -10,21 +10,23 @@ import {
 export default async function Page({ params }: { params: { id: string } }) {
   const campaignID = params.id;
   const campaign = await fetchCampaign(campaignID);
+  const user_id = await getUIDFromSession();
+
 
   const createCharacterByCampaignID = createCharacter.bind(null, campaignID);
   return (
     <main>
       <Breadcrumbs
-                breadcrumbs={[
-                    { label: 'Campaigns', href: '/campaigns' },
-                    { label: campaign.name, href: `/campaigns/${campaignID}` },
-                    {
-                        label: 'Create Character',
-                        href: `/campaigns/${campaignID}/create-character`,
-                        active: true,
-                    },
-                ]}
-            />
+        breadcrumbs={[
+          { label: 'Campaigns', href: '/campaigns' },
+          { label: campaign.name, href: `/campaigns/${campaignID}` },
+          {
+            label: 'Create Character',
+            href: `/campaigns/${campaignID}/create-character`,
+            active: true,
+          },
+        ]}
+      />
       <form action={createCharacterByCampaignID}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Character name */}
@@ -65,26 +67,26 @@ export default async function Page({ params }: { params: { id: string } }) {
               </div>
             </div>
             {/* Character type */}
-            <div className="mb-4">
+            <div className={"mb-4" + (user_id === campaign.dm_id ? "" : "invisible max-h-0")}>
               <label htmlFor="character_type" className="mb-2 block text-sm font-medium">
                 Choose a character type
               </label>
               <div className="relative mt-2 rounded-md">
-                <div className="relative">
-                  <input
-                    id="character_type"
-                    name="character_type"
-                    maxLength={100}
-                    type="text"
-                    placeholder="Enter character type"
-                    className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                    required
-                  />
-                  <PlusCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-                </div>
+                <select
+                  id="character_type"
+                  name="character_type"
+                  defaultValue="Player"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 pr-10 text-sm outline-2 placeholder:text-gray-500"
+                >
+                  <option value="Player">Player</option>
+                  <option value="Npc">NPC</option>
+                  <option value="Enemy">Enemy</option>
+                  {/* Add more character types as needed */}
+                </select>
+                <PlusCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+
               </div>
             </div>
-
             {/* Race */}
             <div className="mb-4">
               <label htmlFor="race" className="mb-2 block text-sm font-medium">

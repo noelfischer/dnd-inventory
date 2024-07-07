@@ -35,7 +35,7 @@ export type Character = {
   description: string;
   character_type: string;
   race: string;
-  class: string;
+  cclass: string;
   level: number;
   background: string;
   alignment: string;

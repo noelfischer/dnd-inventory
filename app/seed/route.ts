@@ -64,7 +64,7 @@ async function seedCharacters() {
       description TEXT,
       character_type VARCHAR(50) NOT NULL,
       race VARCHAR(50),
-      class VARCHAR(50),
+      cclass VARCHAR(50),
       level INT,
       background VARCHAR(100),
       alignment VARCHAR(50),
@@ -93,7 +93,7 @@ async function seedCharacters() {
     characters.map(
       (character) => client.sql`
         INSERT INTO Characters (
-          character_id, campaign_id, user_id, name, description, character_type, race, class, level, background, alignment,
+          character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment,
           portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma,
           max_hit_points, current_hit_points, temp_hit_points, 
           armor_class, speed, initiative,
@@ -101,7 +101,7 @@ async function seedCharacters() {
         )
         VALUES (
           ${character.id}, ${character.campaign_id}, ${character.user_id}, ${character.name}, ${character.description}, ${character.character_type}, ${character.race},
-          ${character.class}, ${character.level}, ${character.background}, ${character.alignment}, ${character.portrait_url},
+          ${character.cclass}, ${character.level}, ${character.background}, ${character.alignment}, ${character.portrait_url},
           ${character.strength}, ${character.dexterity}, ${character.constitution}, ${character.intelligence}, ${character.wisdom},
           ${character.charisma}, ${character.max_hit_points}, ${character.current_hit_points}, ${character.temp_hit_points},
           ${character.armor_class}, ${character.speed}, ${character.initiative},

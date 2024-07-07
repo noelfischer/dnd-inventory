@@ -2,9 +2,9 @@ import Link from "next/link";
 import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser } from "../../lib/data";
 import { Campaign, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
-import { getUIDFromSession } from "@/app/lib/actions";
+import { duplicateCharacter, getUIDFromSession } from "@/app/lib/actions";
 import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
-import { PencilIcon, PlusIcon, TrashIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PlusIcon, TrashIcon, ShieldCheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { LinkButton } from "@/app/ui/campaigns/LinkButton";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 
@@ -40,6 +40,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h2 className="text-2xl mt-7 mb-3">Characters</h2>
       <ul className="pb-5">
         {characters.map((character: SimpleCharacter) => {
+          const duplicateCharacterById = duplicateCharacter.bind(null, character.character_id, campaignID);
           return (
             <li key={campaign.campaign_id}>
               <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between">
@@ -48,6 +49,13 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </Link>
                 {(campaign.dm_id === uID || character.user_id == uID) &&
                   <div className="flex gap-2">
+                    <form action={duplicateCharacterById}>
+                      <button data-tooltip-target="tooltip-default" type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+                        <span className="sr-only">Duplicate</span>
+                        <DocumentDuplicateIcon className="w-5" />
+                      </button>
+                    </form>
+                    
                     <Link href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`} className="rounded-md border p-2 hover:bg-gray-100">
                       <span className="sr-only">Update</span>
                       <PencilIcon className="w-5" />

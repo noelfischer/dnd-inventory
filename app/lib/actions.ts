@@ -10,10 +10,6 @@ import bcrypt from 'bcrypt';
 import { auth, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { fetchCampaign } from './data';
-import { Character } from './definitions';
-
-// TODO replace uID with the actual user ID
-const dmIDPlaceholder = '1';
 
 const FormSchema = z.object({
   dmId: z.string(),
@@ -22,6 +18,15 @@ const FormSchema = z.object({
   password: z.string().optional(),
 });
 
+const parseNumber = (val: any) => {
+  if (typeof val === 'string') {
+    const parsed = parseInt(val);
+    if (isNaN(parsed)) throw new Error(`Invalid number: ${val}`);
+    return parsed;
+  }
+  return val;
+};
+
 const CharacterSchema = z.object({
   userID: z.string(),
   name: z.string(),
@@ -29,20 +34,19 @@ const CharacterSchema = z.object({
   character_type: z.string(),
   race: z.string(),
   cclass: z.string(),
-  level: z.number(),
+  level: z.preprocess(parseNumber, z.number()),
   background: z.string(),
   alignment: z.string(),
   portrait_url: z.string().optional(),
-  strength: z.number(),
-  dexterity: z.number(),
-  constitution: z.number(),
-  intelligence: z.number(),
-  wisdom: z.number(),
-  charisma: z.number(),
-  max_hit_points: z.number(),
-  armor_class: z.number(),
-  speed: z.number(),
-
+  strength: z.preprocess(parseNumber, z.number()),
+  dexterity: z.preprocess(parseNumber, z.number()),
+  constitution: z.preprocess(parseNumber, z.number()),
+  intelligence: z.preprocess(parseNumber, z.number()),
+  wisdom: z.preprocess(parseNumber, z.number()),
+  charisma: z.preprocess(parseNumber, z.number()),
+  max_hit_points: z.preprocess(parseNumber, z.number()),
+  armor_class: z.preprocess(parseNumber, z.number()),
+  speed: z.preprocess(parseNumber, z.number()),
 });
 
 
@@ -205,11 +209,12 @@ export async function deleteCampaignUser(campaignUserId: string) {
 export async function createCharacter(campaignId: string, formData: FormData) {
   const uID = await getUIDFromSession();
   const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
+    userID: uID,
     name: formData.get('name'),
     description: formData.get('description'),
     character_type: formData.get('character_type'),
     race: formData.get('race'),
-    class: formData.get('class'),
+    cclass: formData.get('cclass'),
     level: formData.get('level'),
     background: formData.get('background'),
     alignment: formData.get('alignment'),
@@ -228,7 +233,7 @@ export async function createCharacter(campaignId: string, formData: FormData) {
   const characterId = nanoid(10);
 
   try {
-    await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, class, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
+    await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
       VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${speed})`;
   } catch (e) {
     console.error('Failed to create character:', e);
@@ -240,14 +245,14 @@ export async function createCharacter(campaignId: string, formData: FormData) {
 
 
 // update character
-export async function updateCharacter(characterId: string, formData: FormData, campaignId: string) {
+export async function updateCharacter(characterId: string, campaignId: string, formData: FormData) {
   const { userID, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
     userID: formData.get('user_id'),
     name: formData.get('name'),
     description: formData.get('description'),
     character_type: formData.get('character_type'),
     race: formData.get('race'),
-    class: formData.get('class'),
+    cclass: formData.get('cclass'),
     level: formData.get('level'),
     background: formData.get('background'),
     alignment: formData.get('alignment'),
@@ -264,7 +269,7 @@ export async function updateCharacter(characterId: string, formData: FormData, c
   });
 
   try {
-    await sql`UPDATE characters SET user_id = ${userID}, name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, class = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, speed = ${speed}
+    await sql`UPDATE characters SET user_id = ${userID}, name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, cclass = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, speed = ${speed}
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
   } catch (e) {
     console.error('Failed to update character:', e);
@@ -286,13 +291,15 @@ export async function deleteCharacter(characterId: string, campaignId: string) {
   redirect(`/campaigns/${campaignId}`);
 }
 
+
+// duplicate character
 export async function duplicateCharacter(characterId: string, campaignId: string) {
   const uID = await getUIDFromSession();
   const newCharacterId = nanoid(10);
   try {
     await sql`
-      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, class, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
-      SELECT ${newCharacterId}, ${campaignId}, ${uID}, name, description, character_type, race, class, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed
+      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
+      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed
       FROM characters
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
     `;

@@ -19,9 +19,9 @@ import {
 } from './definitions';
 
 // Fetch all users
-export async function fetchUsers() {
+export async function fetchUsersByCampaign(campaign_id: string) {
   try {
-    const data = await sql<User>`SELECT * FROM Users`;
+    const data = await sql<User>`SELECT u.user_id, u.username FROM Users u JOIN CampaignUsers cu ON u.user_id = cu.user_id WHERE cu.campaign_id = ${campaign_id}`;
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -102,6 +102,17 @@ export async function fetchCharacter(character_id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error(`Failed to fetch character ID ${character_id}.`);
+  }
+}
+
+// Fetch character name by character ID
+export async function fetchCharacterName(character_id: string) {
+  try {
+    const data = await sql<Character>`SELECT name FROM Characters WHERE character_id = ${character_id}`;
+    return data.rows[0].name;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch character name for character ID ${character_id}.`);
   }
 }
 

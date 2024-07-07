@@ -36,7 +36,7 @@ const characters = [
     description: 'Son of Arathorn, heir to the throne of Gondor.',
     character_type: 'player',
     race: 'Human',
-    class: 'Ranger',
+    cclass: 'Ranger',
     level: 5,
     background: 'Noble',
     alignment: 'Lawful Good',

@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h2 className="text-2xl mt-7 mb-3">Players</h2>
       <div className="w-full flex flex-wrap gap-5">
         {characters.filter(character => character.character_type.toLowerCase() === "player").map((character: SimpleCharacter) =>
-          <CharacterCard character={character} campaign={campaign} uID={uID} />
+          <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id} />
         )}
       </div>
       {isDM &&
@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               <h2 className="text-2xl mt-7 mb-3">NPCs</h2>
               <div className="w-full flex flex-wrap gap-5">
                 {characters.filter(character => character.character_type.toLowerCase() === "npc").map((character: SimpleCharacter) =>
-                  <CharacterCard character={character} campaign={campaign} uID={uID} />
+                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id} />
                 )}
               </div>
             </>
@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               <h2 className="text-2xl mt-7 mb-3">Enemies</h2>
               <div className="w-full flex flex-wrap gap-5">
                 {characters.filter(character => character.character_type.toLowerCase() === "enemy").map((character: SimpleCharacter) =>
-                  <CharacterCard character={character} campaign={campaign} uID={uID} />
+                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id} />
                 )}
               </div>
             </>

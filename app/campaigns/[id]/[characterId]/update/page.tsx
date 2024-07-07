@@ -1,5 +1,5 @@
-import { getUIDFromSession, updateCharacter } from '@/app/lib/actions';
-import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign } from '@/app/lib/data';
+import { updateCharacter } from '@/app/lib/actions';
+import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign, getUIDFromSession } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
 import { Button } from '@/app/ui/button';
 import {
@@ -45,9 +45,7 @@ export default async function Page({ params }: { params: { id: string, character
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{character.name}</BreadcrumbLink></BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbPage>Update</BreadcrumbPage></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbPage>Update {character.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <form action={updateCharacterWithId}>

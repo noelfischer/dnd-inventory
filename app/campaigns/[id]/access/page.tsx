@@ -1,5 +1,5 @@
-import { deleteCampaignUser, getUIDFromSession } from "@/app/lib/actions";
-import { fetchCampaign, fetchCampaignUsers } from "@/app/lib/data";
+import { deleteCampaignUser } from "@/app/lib/actions";
+import { fetchCampaign, fetchCampaignUsers, getUIDFromSession } from "@/app/lib/data";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 
 import {

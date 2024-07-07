@@ -7,9 +7,9 @@ import { nanoid } from 'nanoid';
 import bcrypt from 'bcrypt';
 
 
-import { auth, signIn } from '@/auth';
+import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import { fetchCampaign } from './data';
+import { fetchCampaign, getUIDFromSession } from './data';
 
 const FormSchema = z.object({
   dmId: z.string(),
@@ -48,22 +48,6 @@ const CharacterSchema = z.object({
   armor_class: z.preprocess(parseNumber, z.number()),
   speed: z.preprocess(parseNumber, z.number()),
 });
-
-
-export async function getEmailFromSession() {
-  const data = await auth();
-  return data!.user!.email;
-}
-
-export async function getUIDFromSession() {
-  try {
-    const email = await getEmailFromSession();
-    const user = await sql`SELECT user_id FROM users WHERE email=${email}`;
-    return user.rows[0].user_id;
-  } catch (e) {
-    return { message: 'Failed to get user id' };
-  }
-}
 
 export async function authenticate(
   prevState: string | undefined,

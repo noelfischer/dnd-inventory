@@ -1,6 +1,8 @@
 'use server';
 
 import { sql } from '@vercel/postgres';
+import { auth } from '@/auth';
+
 import {
   User,
   Campaign,
@@ -17,6 +19,22 @@ import {
   SimpleCharacter,
   CampaignUser,
 } from './definitions';
+
+
+export async function getEmailFromSession() {
+  const data = await auth();
+  return data!.user!.email;
+}
+
+export async function getUIDFromSession() {
+  try {
+    const email = await getEmailFromSession();
+    const user = await sql`SELECT user_id FROM users WHERE email=${email}`;
+    return user.rows[0].user_id;
+  } catch (e) {
+    return { message: 'Failed to get user id' };
+  }
+}
 
 // Fetch all users
 export async function fetchUsersByCampaign(campaign_id: string) {

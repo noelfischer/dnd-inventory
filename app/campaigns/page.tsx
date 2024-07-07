@@ -3,7 +3,7 @@ import { fetchCampaigns } from "../lib/data";
 import { Campaign } from "../lib/definitions";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { LinkButton } from "../ui/campaigns/LinkButton";
-import { getUIDFromSession } from "../lib/actions";
+import { getUIDFromSession } from "../lib/data";
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser } from "../../lib/data";
+import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, getUIDFromSession } from "../../lib/data";
 import { Campaign, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
-import { duplicateCharacter, getUIDFromSession } from "@/app/lib/actions";
-import { PlusIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
+import { duplicateCharacter } from "@/app/lib/actions";
 import { LinkButton } from "@/app/ui/campaigns/LinkButton";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
-import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy } from "lucide-react";
+import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
 import { Button } from "@/components/ui/button"
 
 import {
@@ -58,8 +57,8 @@ export default async function Page({ params }: { params: { id: string } }) {
           <BreadcrumbItem><BreadcrumbPage>{campaign.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="pb-3"><span className="text-2xl">Description</span></div>
-      <p className="text-gray-600">{campaign.description || "descriptionless campaign"}</p>
+      <h1 className="text-2xl">{campaign.name}</h1>
+      <p className="text-gray-500">{campaign.description || "descriptionless campaign"}</p>
       <h2 className="text-2xl mt-7 mb-3">Players</h2>
       <div className="w-full flex flex-wrap gap-5">
         {characters.filter(character => character.character_type.toLowerCase() === "player").map((character: SimpleCharacter) =>
@@ -78,7 +77,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </div>
             </>
           }
-          {characters.filter(character => character.character_type.toLowerCase() === "ally").length > 0 &&
+          {characters.filter(character => character.character_type.toLowerCase() === "enemy").length > 0 &&
             <>
               <h2 className="text-2xl mt-7 mb-3">Enemies</h2>
               <div className="w-full flex flex-wrap gap-5">
@@ -91,12 +90,27 @@ export default async function Page({ params }: { params: { id: string } }) {
         </>
       }
       <h2 className="text-2xl mt-7 mb-3">Actions</h2>
-      <div className="flex gap-2 items-center justify-start">
-        <LinkButton href={`/campaigns/${campaign.campaign_id}/create-character`} icon={<PlusIcon className="w-5 md:w-6" />}>Create a new Character</LinkButton>
+      <div className="flex gap-2 items-center flex-wrap">
+        <Button className="w-full sm:w-min" asChild>
+          <Link href={`/campaigns/${campaign.campaign_id}/create-character`}>
+            Create a new Character
+            <DiamondPlus className="w-5 md:w-6 ml-3" />
+          </Link>
+        </Button>
         {isDM &&
           <>
-            <LinkButton href={`/campaigns/${campaign.campaign_id}/update`} icon={<Pencil className="w-5 md:w-6" />}>Update Campaign</LinkButton>
-            <LinkButton href={`/campaigns/${campaign.campaign_id}/access`} icon={<ShieldCheckIcon className="w-5 md:w-6" />}>Handle Access</LinkButton>
+            <Button className="w-full sm:w-min" variant="secondary" asChild>
+              <Link href={`/campaigns/${campaign.campaign_id}/update`}>
+                Update Campaign
+                <Pencil className="w-5 md:w-6 ml-3" />
+              </Link>
+            </Button>
+            <Button className="w-full sm:w-min" variant="secondary" asChild>
+              <Link href={`/campaigns/${campaign.campaign_id}/access`}>
+                Handle Access
+                <ShieldCheck className="w-5 md:w-6 ml-3" />
+              </Link>
+            </Button>
           </>
         }
       </div>

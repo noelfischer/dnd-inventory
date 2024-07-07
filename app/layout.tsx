@@ -3,6 +3,7 @@ import { inter } from '@/app/ui/fonts';
 import { Metadata } from 'next';
 import { ThemeProvider } from "next-themes";
 import ToggleDarkMode from './ui/darkmode-toggle';
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: 'dnd inventory',
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class">
           <ToggleDarkMode />
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
 

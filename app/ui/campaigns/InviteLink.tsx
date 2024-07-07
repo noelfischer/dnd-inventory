@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 
-export default async function InviteLink({ link }: { link: string }) {
+export default function InviteLink({ link }: { link: string }) {
     const [showLink, setShowLink] = useState(false);
     const [location, setLocation] = useState('');
 

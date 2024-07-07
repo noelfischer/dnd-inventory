@@ -16,3 +16,9 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+@layer base {
+  body {
+    @apply dark:bg-neutral-900 bg-white
+  }
+}

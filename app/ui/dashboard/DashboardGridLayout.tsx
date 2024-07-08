@@ -1,0 +1,85 @@
+'use client'
+
+import { ComponentLayout } from "@/app/dashboard/[id]/(overview)/page";
+import { useState } from "react";
+import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+import './styles.css';
+
+const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLayout }) => {
+    console.log("componentLayout", componentLayout);
+    const initialLayout: Layouts = {
+        lg: [
+            { i: 'a', x: 0, y: 0, w: 1, h: 2 },
+            { i: 'b', x: 1, y: 0, w: 3, h: 2 },
+            { i: 'c', x: 4, y: 0, w: 1, h: 2 },
+            componentLayout.components.map((component) => {
+                return {
+                    i: component.i,
+                    x: component.x_lg,
+                    y: component.y_lg,
+                    w: component.w_lg,
+                    h: component.h_lg
+                }
+            })
+        ]
+
+    };
+
+    const [layouts, setLayouts] = useState<Layouts>(initialLayout);
+
+    const cols: { [key: string]: number } = { lg: 12, md: 10, sm: 5, xs: 3, xxs: 1 };
+
+    const onLayoutChange = (layout: Layout[], allLayouts: Layouts) => {
+        const adjustedLayouts = adjustLayouts(allLayouts, cols);
+        setLayouts(adjustedLayouts);
+        console.log("adjustedLayouts", adjustedLayouts);
+    };
+
+    const onBreakpointChange = (breakpoint: string, cols: number) => {
+        // Handle breakpoint change if needed
+    };
+
+    const adjustLayouts = (layouts: Layouts, cols: { [key: string]: number }): Layouts => {
+        const adjusted: Layouts = {};
+        for (const [breakpoint, layout] of Object.entries(layouts)) {
+            const layout1: Layout = layout; //
+            adjusted[breakpoint] = layout1.map((item: any) => {
+                // Ensure x + w does not exceed the total number of columns
+                if (item.x + item.w > cols[breakpoint]) {
+                    item.x = Math.max(cols[breakpoint] - item.w, 0);
+                }
+                return item;
+            });
+        }
+        return adjusted;
+    };
+
+    return (
+        <div>
+            <ResponsiveReactGridLayout
+                className="layout border-2 border-zinc-500"
+                layouts={layouts}
+                cols={cols}
+                onLayoutChange={onLayoutChange}
+                onBreakpointChange={onBreakpointChange}
+                rowHeight={42}
+                measureBeforeMount={false}
+                useCSSTransforms={true}
+                compactType="vertical"
+                preventCollision={false}
+            >
+                <div key="a" className="border-2 border-zinc-500">a</div>
+                <div key="b" className="border-2 border-zinc-500">b</div>
+                <div key="c" className="border-2 border-zinc-500">c</div>
+                {componentLayout.components.map((component) => (
+                    <div key={component.i} className="border-2 border-zinc-500">
+                        {component.type}
+                    </div>
+                ))}
+            </ResponsiveReactGridLayout>
+        </div>
+    );
+};
+
+export default DashboardGridLayout;

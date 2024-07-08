@@ -1,53 +1,64 @@
 import { fetchCharacter } from '@/app/lib/data';
 import { Character } from '../../../lib/definitions';
 import { notFound } from 'next/navigation';
+import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
+import NameAndLevel from '@/app/ui/dashboard/elements/NameAndLevel';
+import { ReactNode } from 'react';
+
+
+export type Component = {
+  i: string;
+  type: ReactNode;
+  x_lg: number;
+  y_lg: number;
+  w_lg: number;
+  h_lg: number;
+  x_md?: number;
+  y_md?: number;
+  w_md?: number;
+  h_md?: number;
+  x_sm?: number;
+  y_sm?: number;
+  w_sm?: number;
+  h_sm?: number;
+  x_xs?: number;
+  y_xs?: number;
+  w_xs?: number;
+  h_xs?: number;
+  x_xxs?: number;
+  y_xxs?: number;
+  w_xxs?: number;
+  h_xxs?: number;
+}
+
+export type ComponentLayout = {
+  id: string;
+  components: Component[];
+}
 
 export default async function Page({ params }: { params: { id: string } }) {
   const characterID = params.id;
-  if (!characterID) {
-    return (
-      <main>
-        <h1>Please log in first</h1>
-      </main>
-    );
-  }
-
   const character: Character = await fetchCharacter(characterID);
-  if (!character) {
-    notFound();
+  if (!character) notFound();
+
+  const layout: ComponentLayout = {
+    id: "1",
+    components: [
+      {
+        i: 'name',
+        type: <NameAndLevel character_id={characterID} />,
+        x_lg: 0,
+        y_lg: 0,
+        w_lg: 1,
+        h_lg: 2,
+      }
+    ]
   }
-  
+
+
   return (
-    <main>
-      <h1>Dashboard</h1>
-      <h2>{character.name}</h2>
-      <p>{character.character_type}</p>
-      <p>{character.description}</p>
-      <p>{character.background}</p>
-      <p>{character.race}</p>
-      <p>{character.class}</p>
-      <p>Level: {character.level}</p>
-      <p>Alignment: {character.alignment}</p>
-
-      <h2>Stats</h2>
-      <p>Strength: {character.strength}</p>
-      <p>Dexterity: {character.dexterity}</p>
-      <p>Constitution: {character.constitution}</p>
-      <p>Intelligence: {character.intelligence}</p>
-      <p>Wisdom: {character.wisdom}</p>
-      <p>Charisma: {character.charisma}</p>
-
-      <h2>Hit Points</h2>
-      <p>Max HP: {character.max_hit_points}</p>
-      <p>Current HP: {character.current_hit_points}</p>
-      <p>Temp HP: {character.temp_hit_points}</p>
-      <br />
-      <p>Armor Class: {character.armor_class}</p>
-      <p>Speed: {character.speed}</p>
-      <p>Initiative: {character.initiative}</p>
-      <p>Death Saves: {character.death_saves_success} successes, {character.death_saves_failure} failures</p>
-      <p>XP: {character.experience_points}</p>
-
-    </main>
+    <>
+      <DashboardGridLayout componentLayout={layout} />
+    </>
   );
 }

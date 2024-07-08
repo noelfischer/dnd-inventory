@@ -321,10 +321,8 @@ async function seedDashboards() {
       dashboard_id VARCHAR(10) PRIMARY KEY,
       campaign_id VARCHAR(10) REFERENCES Campaigns(campaign_id) ON DELETE CASCADE,
       character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
-      visibility VARCHAR(50) NOT NULL,
-      name VARCHAR(100) NOT NULL,
-      columns INT DEFAULT 3,
-      rows INT DEFAULT 5,
+      visibility VARCHAR(20) NOT NULL,
+      name VARCHAR(50) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
@@ -332,8 +330,8 @@ async function seedDashboards() {
   const insertedDashboards = await Promise.all(
     dashboards.map(
       (dashboard) => client.sql`
-        INSERT INTO Dashboards (dashboard_id, campaign_id, character_id, visibility, name, columns, rows)
-        VALUES (${dashboard.id}, ${dashboard.campaign_id}, ${dashboard.character_id}, ${dashboard.visibility}, ${dashboard.name}, ${dashboard.columns}, ${dashboard.rows})
+        INSERT INTO Dashboards (dashboard_id, campaign_id, character_id, visibility, name)
+        VALUES (${dashboard.id}, ${dashboard.campaign_id}, ${dashboard.character_id}, ${dashboard.visibility}, ${dashboard.name})
         ON CONFLICT (dashboard_id) DO NOTHING;
       `,
     ),
@@ -345,21 +343,38 @@ async function seedDashboards() {
 async function seedDashboardElements() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS DashboardElements (
-      element_id VARCHAR(10) PRIMARY KEY,
-      dashboard_id VARCHAR(10) REFERENCES Dashboards(dashboard_id) ON DELETE CASCADE,
-      element_type VARCHAR(50) NOT NULL,
-      position_x INT NOT NULL,
-      position_y INT NOT NULL,
-      size_x INT NOT NULL,
-      size_y INT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+    element_id VARCHAR(10) PRIMARY KEY,
+    dashboard_id VARCHAR(10) REFERENCES Dashboards(dashboard_id) ON DELETE CASCADE,
+    element_type VARCHAR(50) NOT NULL, -- Type of element (e.g., 'status', 'inventory', 'spells')
+    -- Position and size for different breakpoints
+    x_lg INT NOT NULL DEFAULT 0,
+    y_lg INT NOT NULL DEFAULT 0,
+    w_lg INT NOT NULL DEFAULT 1,
+    h_lg INT NOT NULL DEFAULT 1,
+    x_md INT,
+    y_md INT,
+    w_md INT,
+    h_md INT,
+    x_sm INT,
+    y_sm INT,
+    w_sm INT,
+    h_sm INT,
+    x_xs INT,
+    y_xs INT,
+    w_xs INT,
+    h_xs INT,
+    x_xxs INT,
+    y_xxs INT,
+    w_xxs INT,
+    h_xxs INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
   `;
 
   const insertedDashboardElements = await Promise.all(
     dashboardElements.map(
       (element) => client.sql`
-        INSERT INTO DashboardElements (element_id, dashboard_id, element_type, position_x, position_y, size_x, size_y)
+        INSERT INTO DashboardElements (element_id, dashboard_id, element_type, x_lg, y_lg, w_lg, h_lg)
         VALUES (${element.id}, ${element.dashboard_id}, ${element.element_type}, ${element.position_x}, ${element.position_y}, ${element.size_x}, ${element.size_y})
         ON CONFLICT (element_id) DO NOTHING;
       `,

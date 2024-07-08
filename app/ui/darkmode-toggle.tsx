@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 
 const ToggleDarkMode = () => {
     const { systemTheme, theme, setTheme } = useTheme();
-    const [currentTheme, setCurrentTheme] = useState('light');
+    const [currentTheme, setCurrentTheme] = useState<string | undefined>('light');
     const [isSpinning, setIsSpinning] = useState(false);
 
     useEffect(() => {

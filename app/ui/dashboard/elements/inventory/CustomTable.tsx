@@ -179,10 +179,12 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
     table[4] = useCreateTable(4, true, 'Consumable');
     table[5] = useCreateTable(5, true, 'Body');
     table[6] = useCreateTable(6, true, 'Backpack');
-    for (let i = 7; i < dataSlices.length; i++) {
-        table[i] = useCreateTable(i, true, `Chest ${i - 6}`);
-    }
-
+    if (dataSlices.length > 7)
+        table[7] = useCreateTable(7, true, 'Chest 1');
+    if (dataSlices.length > 8)
+        table[8] = useCreateTable(8, true, 'Chest 2');
+    if (dataSlices.length > 9)
+        table[9] = useCreateTable(9, true, 'Chest 3');
 
 
     return (

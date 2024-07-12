@@ -35,6 +35,7 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
                 components: {
                     MuiTypography: {
                         styleOverrides: {
+                            //@ts-ignore
                             root: {
                                 padding: "0 0 0 5px!important",
                                 textAlign: "start!important",

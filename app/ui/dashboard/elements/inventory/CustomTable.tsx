@@ -130,6 +130,7 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
     };
 
     const useCreateTable = (index: number, singleItemTable: boolean, name: string) => {
+        if (dataSlices.length < index + 1) return null;
         const table_n = useMaterialReactTable({
             ...commonTableProps,
             data: dataSlices[index],
@@ -179,19 +180,17 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
     table[4] = useCreateTable(4, true, 'Consumable');
     table[5] = useCreateTable(5, true, 'Body');
     table[6] = useCreateTable(6, true, 'Backpack');
-    if (dataSlices.length > 7)
-        table[7] = useCreateTable(7, true, 'Chest 1');
-    if (dataSlices.length > 8)
-        table[8] = useCreateTable(8, true, 'Chest 2');
-    if (dataSlices.length > 9)
-        table[9] = useCreateTable(9, true, 'Chest 3');
+    table[7] = useCreateTable(7, true, 'Chest 1');
+    table[8] = useCreateTable(8, true, 'Chest 2');
+    table[9] = useCreateTable(9, true, 'Chest 3');
 
 
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ gap: '16px' }}>
                 {table.map((table_n, index) => (
-                    <div key={index} className='border-8'><MaterialReactTable key={index} table={table_n} /></div>
+                    table_n === null ? null :
+                        <div key={index} className='border-8'><MaterialReactTable key={index} table={table_n} /></div>
                 ))}
             </Box>
         </ThemeProvider>

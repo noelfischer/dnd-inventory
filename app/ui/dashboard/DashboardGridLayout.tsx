@@ -33,7 +33,7 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
     const adjustLayouts = (layouts: Layouts, cols: { [key: string]: number }): Layouts => {
         const adjusted: Layouts = {};
         for (const [breakpoint, layout] of Object.entries(layouts)) {
-            const layout1: Layout = layout; //
+            const layout1: any = layout; //
             adjusted[breakpoint] = layout1.map((item: any) => {
                 // Ensure x + w does not exceed the total number of columns
                 if (item.x + item.w > cols[breakpoint]) {

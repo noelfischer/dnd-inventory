@@ -129,7 +129,7 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
         state: { draggingRow },
     };
 
-    const createTable = (index: number, singleItemTable: boolean, name: string) => {
+    const useCreateTable = (index: number, singleItemTable: boolean, name: string) => {
         const table_n = useMaterialReactTable({
             ...commonTableProps,
             data: dataSlices[index],
@@ -172,15 +172,15 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
         return table_n;
     }
     const table = [];
-    table[0] = createTable(0, false, 'Hand');
-    table[1] = createTable(1, false, 'Head');
-    table[2] = createTable(2, true, 'Wear');
-    table[3] = createTable(3, true, 'Ring');
-    table[4] = createTable(4, true, 'Consumable');
-    table[5] = createTable(5, true, 'Body');
-    table[6] = createTable(6, true, 'Backpack');
+    table[0] = useCreateTable(0, false, 'Hand');
+    table[1] = useCreateTable(1, false, 'Head');
+    table[2] = useCreateTable(2, true, 'Wear');
+    table[3] = useCreateTable(3, true, 'Ring');
+    table[4] = useCreateTable(4, true, 'Consumable');
+    table[5] = useCreateTable(5, true, 'Body');
+    table[6] = useCreateTable(6, true, 'Backpack');
     for (let i = 7; i < dataSlices.length; i++) {
-        table[i] = createTable(i, true, `Chest ${i - 6}`);
+        table[i] = useCreateTable(i, true, `Chest ${i - 6}`);
     }
 
 
@@ -189,7 +189,7 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
         <ThemeProvider theme={theme}>
             <Box sx={{ gap: '16px' }}>
                 {table.map((table_n, index) => (
-                    <div className='border-8'><MaterialReactTable key={index} table={table_n} /></div>
+                    <div key={index} className='border-8'><MaterialReactTable key={index} table={table_n} /></div>
                 ))}
             </Box>
         </ThemeProvider>

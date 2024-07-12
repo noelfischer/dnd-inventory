@@ -89,7 +89,7 @@ const inventory = [
   {
     id: "fNkZBYJixX",
     character_id: characters[0].id,
-    slot: "hand r",
+    slot: "hand",
     item_name: 'Longsword',
     description: 'A sharp blade. 1d8 slashing damage.',
     ability: 'None',
@@ -100,7 +100,7 @@ const inventory = [
   },
   { id: "fNkZBYJixY",
     character_id: characters[0].id,
-    slot: "hand l",
+    slot: "hand",
     item_name: 'Shield',
     description: 'A sturdy shield. +2 AC.',
     ability: 'None',

@@ -9,48 +9,9 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import { Box, ThemeProvider, Typography, createTheme } from '@mui/material';
+import { InventoryItem } from '@/app/lib/definitions';
 
-type Person = {
-    name: string;
-    description: string;
-    weight: string;
-};
-
-const data = [
-    {
-        name: 'sowrd',
-        description: 'sharp sword',
-        weight: '7',
-        quantity: '1'
-    },
-    {
-        name: 'shield',
-        description: 'strong shield',
-        weight: '5',
-        quantity: '1'
-    },
-    {
-        name: 'armor',
-        description: 'heavy armor',
-        weight: '10',
-        quantity: '1'
-    },
-    {
-        name: 'bow',
-        description: 'long bow',
-        weight: '5',
-        quantity: '1'
-    },
-    {
-        name: 'arrow',
-        description: 'sharp arrow',
-        weight: '1',
-        quantity: '20'
-    },
-];
-
-
-const CustomTable = () => {
+const CustomTable = ({ items }: { items: InventoryItem[] }) => {
     const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
     useEffect(() => {
         window.addEventListener('storage', () => {
@@ -62,8 +23,6 @@ const CustomTable = () => {
         }
     }, []);
 
-    console.log(themeMode);
-
     const theme = useMemo(
         () =>
             createTheme({
@@ -73,43 +32,64 @@ const CustomTable = () => {
                         paper: themeMode === 'dark' ? '#111' : '#ffffff',
                     },
                 },
+                components: {
+                    MuiTypography: {
+                        styleOverrides: {
+                            root: {
+                                padding: "0 0 0 5px!important",
+                                textAlign: "start!important",
+                            },
+                        },
+                    },
+                },
             }),
         [themeMode]
     );
 
-    const columns = useMemo<MRT_ColumnDef<Person>[]>(
+    const columns = useMemo<MRT_ColumnDef<InventoryItem>[]>(
         //column definitions...
         () => [
-            {
-                accessorKey: 'name',
-                header: 'Name',
-            },
-            {
-                accessorKey: 'description',
-                header: 'Description',
-            },
-            {
-                accessorKey: 'weight',
-                header: 'Weight',
-            },
-            {
-                accessorKey: 'quantity',
-                header: 'Quantity',
-            },
+            { accessorKey: 'item_name', header: 'Name', },
+            { accessorKey: 'description', header: 'Description', },
+            { accessorKey: 'ability', header: 'Ability', },
+            { accessorKey: 'weight', header: 'Weight', },
+            { accessorKey: 'quantity', header: 'Quantity', },
+            { accessorKey: 'category', header: 'Category', },
+            { accessorKey: 'magic', header: 'Magic', }
         ],
         [],
         //end
     );
-    const [dataSlices, setDataSlices] = useState<Person[][]>([data.slice(0, 3), data.slice(3, 4), data.slice(4, 5)]);
-    const [data1, setData1] = useState<Person[]>(() => data.slice(0, 3));
-    const [data2, setData2] = useState<Person[]>(() => data.slice(3, 5));
 
-    const [draggingRow, setDraggingRow] = useState<MRT_Row<Person> | null>(null);
+    const splitData = (data: InventoryItem[]) => {
+        const hand: InventoryItem[] = data.filter((d) => d.slot === 'hand');
+        const head: InventoryItem[] = data.filter((d) => d.slot === 'head');
+        const wear: InventoryItem[] = data.filter((d) => d.slot === 'wear');
+        const ring: InventoryItem[] = data.filter((d) => d.slot === 'ring');
+        const consumable: InventoryItem[] = data.filter((d) => d.slot === 'consumable');
+        const body: InventoryItem[] = data.filter((d) => d.slot === 'body');
+        const backpack: InventoryItem[] = data.filter((d) => d.slot === 'backpack');
+        const chests: InventoryItem[][] = [];
+        data.filter((d) => d.slot.match('chest')).forEach((d) => {
+            const chestNumber = d.slot.split(' ')[1];
+            if (chestNumber) {
+                if (!chests[parseInt(chestNumber) - 1]) {
+                    chests[parseInt(chestNumber) - 1] = [];
+                }
+                chests[parseInt(chestNumber) - 1].push(d);
+            }
+        });
+        return [hand, head, wear, ring, consumable, body, backpack, ...chests];
+    }
+
+    const [dataSlices, setDataSlices] = useState<InventoryItem[][]>(splitData(items));
+
+    const [draggingRow, setDraggingRow] = useState<MRT_Row<InventoryItem> | null>(null);
     const [hoveredTable, setHoveredTable] = useState<string | null>(null);
     const [startHoveredTable, setStartHoveredTable] = useState<string | null>(null);
 
-    const commonTableProps: Partial<MRT_TableOptions<Person>> & {
-        columns: MRT_ColumnDef<Person>[];
+    const commonTableProps: Partial<MRT_TableOptions<InventoryItem>> & {
+        columns: MRT_ColumnDef<InventoryItem>[];
     } = {
         columns,
         enableRowDragging: true,
@@ -123,11 +103,11 @@ const CustomTable = () => {
         enableFilters: false,
         enableDensityToggle: false,
         enableHiding: false,
+        enableTableHead: false,
         initialState: { density: 'compact' },
         muiTopToolbarProps: {
             sx: {
                 backgroundColor: theme.palette.background.paper,
-                borderBottom: '1px solid lightgray',
             },
         },
         muiTableHeadCellProps: {
@@ -159,10 +139,10 @@ const CustomTable = () => {
             getRowId: (originalRow) => {
                 for (let i = 0; i < dataSlices.length; i++) {
                     if (i !== index && dataSlices[i].includes(originalRow)) {
-                        return `table-${i}-${originalRow.name}`;
+                        return `table-${i}-${originalRow.item_name}`;
                     }
                 }
-                return `table-${index}-${originalRow.name}`;
+                return `table-${index}-${originalRow.item_name}`;
             },
             muiRowDragHandleProps: {
                 onDragEnd: () => {
@@ -191,18 +171,26 @@ const CustomTable = () => {
         });
         return table_n;
     }
+    const table = [];
+    table[0] = createTable(0, false, 'Hand');
+    table[1] = createTable(1, false, 'Head');
+    table[2] = createTable(2, true, 'Wear');
+    table[3] = createTable(3, true, 'Ring');
+    table[4] = createTable(4, true, 'Consumable');
+    table[5] = createTable(5, true, 'Body');
+    table[6] = createTable(6, true, 'Backpack');
+    for (let i = 7; i < dataSlices.length; i++) {
+        table[i] = createTable(i, true, `Chest ${i - 6}`);
+    }
 
-    const table1 = createTable(0, false, 'Body');
-    const table2 = createTable(1, false, 'Backpack');
-    const table3 = createTable(2, true, 'Chest');
 
 
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ gap: '16px' }}>
-                <MaterialReactTable table={table1} />
-                <MaterialReactTable table={table2} />
-                <MaterialReactTable table={table3} />
+                {table.map((table_n, index) => (
+                    <div className='border-8'><MaterialReactTable key={index} table={table_n} /></div>
+                ))}
             </Box>
         </ThemeProvider>
     );

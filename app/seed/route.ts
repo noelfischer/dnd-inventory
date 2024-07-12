@@ -97,8 +97,8 @@ async function seedCharacters() {
         INSERT INTO Characters (
           character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment,
           portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma,
-          max_hit_points, current_hit_points, temp_hit_points, load_capacity
-          armor_class, speed, initiative,
+          max_hit_points, current_hit_points, temp_hit_points, load_capacity,
+          armor_class, speed, initiative, inspiration,
           death_saves_success, death_saves_failure, experience_points
         )
         VALUES (

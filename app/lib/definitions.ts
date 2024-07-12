@@ -49,9 +49,11 @@ export type Character = {
   max_hit_points: number;
   current_hit_points: number;
   temp_hit_points: number;
+  load_capacity: number;
   armor_class: number;
   speed: number;
   initiative: number;
+  inspiration: number;
   death_saves_success: number;
   death_saves_failure: number;
   experience_points: number;
@@ -78,7 +80,7 @@ export type Skill = {
 export type InventoryItem = {
   item_id: string;
   character_id: string;
-  inventory_name: string;
+  slot: string;
   item_name: string;
   description: string;
   ability: string;

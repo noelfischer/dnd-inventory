@@ -4,6 +4,14 @@ import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
 import NameAndLevel from '@/app/ui/dashboard/elements/NameAndLevel';
 import { ReactNode } from 'react';
+import HealthBar from '@/app/ui/dashboard/elements/HealthBar';
+import AbilitiesList from '@/app/ui/dashboard/elements/AbilitiesList';
+import CharacterAttributes from '@/app/ui/dashboard/elements/CharacterAttributes';
+import ConditionsList from '@/app/ui/dashboard/elements/ConditionsList';
+import CurrencyOverview from '@/app/ui/dashboard/elements/CurrencyOverview';
+import InventoryList from '@/app/ui/dashboard/elements/InventoryList';
+import SkillsList from '@/app/ui/dashboard/elements/SkillsList';
+import SpellList from '@/app/ui/dashboard/elements/SpellList';
 
 
 export type Component = {
@@ -49,9 +57,73 @@ export default async function Page({ params }: { params: { id: string } }) {
         type: <NameAndLevel character_id={characterID} />,
         x_lg: 0,
         y_lg: 0,
-        w_lg: 1,
+        w_lg: 7,
+        h_lg: 1,
+      },
+      {
+        i: 'health',
+        type: <HealthBar character_id={characterID} />,
+        x_lg: 0,
+        y_lg: 1,
+        w_lg: 7,
         h_lg: 2,
-      }
+      },
+      {
+        i: 'attributes',
+        type: <CharacterAttributes character_id={characterID} />,
+        x_lg: 9,
+        y_lg: 0,
+        w_lg: 3,
+        h_lg: 6,
+      },
+      {
+        i: 'skills',
+        type: <SkillsList character_id={characterID} />,
+        x_lg: 7,
+        y_lg: 3,
+        w_lg: 2,
+        h_lg: 5,
+      },
+      {
+        i: 'inventory',
+        type: <InventoryList character_id={characterID} />,
+        x_lg: 0,
+        y_lg: 3,
+        w_lg: 7,
+        h_lg: 6,
+      },
+      {
+        i: 'spells',
+        type: <SpellList character_id={characterID} />,
+        x_lg: 7,
+        y_lg: 5,
+        w_lg: 2,
+        h_lg: 6,
+      },
+      {
+        i: 'abilities',
+        type: <AbilitiesList character_id={characterID} />,
+        x_lg: 9,
+        y_lg: 6,
+        w_lg: 3,
+        h_lg: 5,
+      },
+      {
+        i: 'conditions',
+        type: <ConditionsList character_id={characterID} />,
+        x_lg: 1,
+        y_lg: 9,
+        w_lg: 6,
+        h_lg: 3,
+      },
+      {
+        i: 'currency',
+        type: <CurrencyOverview character_id={characterID} />,
+        x_lg: 0,
+        y_lg: 9,
+        w_lg: 1,
+        h_lg: 3,
+      },
     ]
   }
 

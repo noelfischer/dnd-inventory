@@ -9,23 +9,17 @@ import './styles.css';
 const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLayout }) => {
     console.log("componentLayout", componentLayout);
     const initialLayout: Layouts = {
-        lg: [
-            { i: 'a', x: 0, y: 0, w: 1, h: 2 },
-            { i: 'b', x: 1, y: 0, w: 3, h: 2 },
-            { i: 'c', x: 4, y: 0, w: 1, h: 2 },
-            componentLayout.components.map((component) => {
-                return {
-                    i: component.i,
-                    x: component.x_lg,
-                    y: component.y_lg,
-                    w: component.w_lg,
-                    h: component.h_lg
-                }
-            })
-        ]
+        lg: componentLayout.components.map((component) => {
+            return {
+                i: component.i,
+                x: component.x_lg,
+                y: component.y_lg,
+                w: component.w_lg,
+                h: component.h_lg
+            }
+        }),
 
     };
-
     const [layouts, setLayouts] = useState<Layouts>(initialLayout);
 
     const cols: { [key: string]: number } = { lg: 12, md: 10, sm: 5, xs: 3, xxs: 1 };
@@ -69,9 +63,6 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
                 compactType="vertical"
                 preventCollision={false}
             >
-                <div key="a" className="border-2 border-zinc-500">a</div>
-                <div key="b" className="border-2 border-zinc-500">b</div>
-                <div key="c" className="border-2 border-zinc-500">c</div>
                 {componentLayout.components.map((component) => (
                     <div key={component.i} className="border-2 border-zinc-500">
                         {component.type}

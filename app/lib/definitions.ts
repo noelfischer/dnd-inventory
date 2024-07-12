@@ -104,6 +104,7 @@ export type UserSpell = {
   prepared: boolean;
   slots_total: number;
   slots_used: number;
+  spell_name: string;
 };
 
 export type GeneralSpell = {

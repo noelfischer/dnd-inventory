@@ -129,8 +129,7 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
         state: { draggingRow },
     };
 
-    const useCreateTable = (index: number, singleItemTable: boolean, name: string) => {
-        if (dataSlices.length < index + 1) return null;
+    const TableComponent = (index: number, singleItemTable: boolean, name: string) => {
         const table_n = useMaterialReactTable({
             ...commonTableProps,
             data: dataSlices[index],
@@ -170,27 +169,27 @@ const CustomTable = ({ items }: { items: InventoryItem[] }) => {
                 </Typography>
             ),
         });
-        return table_n;
+        return <MaterialReactTable key={index} table={table_n} />;
     }
-    const table = [];
-    table[0] = useCreateTable(0, false, 'Hand');
-    table[1] = useCreateTable(1, false, 'Head');
-    table[2] = useCreateTable(2, true, 'Wear');
-    table[3] = useCreateTable(3, true, 'Ring');
-    table[4] = useCreateTable(4, true, 'Consumable');
-    table[5] = useCreateTable(5, true, 'Body');
-    table[6] = useCreateTable(6, true, 'Backpack');
-    table[7] = useCreateTable(7, true, 'Chest 1');
-    table[8] = useCreateTable(8, true, 'Chest 2');
-    table[9] = useCreateTable(9, true, 'Chest 3');
+    const table: any = [];
+    table[0] = TableComponent(0, false, 'Hand');
+    table[1] = TableComponent(1, false, 'Head');
+    table[2] = TableComponent(2, true, 'Wear');
+    table[3] = TableComponent(3, true, 'Ring');
+    table[4] = TableComponent(4, true, 'Consumable');
+    table[5] = TableComponent(5, true, 'Body');
+    table[6] = TableComponent(6, true, 'Backpack');
+    for (let i = 7; i < dataSlices.length; i++) {
+        table[i] = TableComponent(i, true, `Chest ${i - 6}`);
+    }
+
 
 
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ gap: '16px' }}>
-                {table.map((table_n, index) => (
-                    table_n === null ? null :
-                        <div key={index} className='border-8'><MaterialReactTable key={index} table={table_n} /></div>
+                {table.map((table_n: any, index: number) => (
+                    <div key={index} className='border-8'>{table[index]}</div>
                 ))}
             </Box>
         </ThemeProvider>

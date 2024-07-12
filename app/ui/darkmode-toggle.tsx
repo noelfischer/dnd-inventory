@@ -17,6 +17,7 @@ const ToggleDarkMode = () => {
     const setDarkmode = () => {
         setIsSpinning(true);
         setTheme(currentTheme === "dark" ? "light" : "dark");
+        window.dispatchEvent(new Event("storage"));
         setTimeout(() => {
             setIsSpinning(false);
         }, 300); // Duration should match the animation duration

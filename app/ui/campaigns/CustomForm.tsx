@@ -13,8 +13,11 @@ import {
 export const Form = ({ children, action }: { children: React.ReactNode, action: any }) => {
     return (
         <div className="flex justify-center items-center">
-            <form action={action} className="space-y-8 my-14" style={{ width: "1000px" }}>
-                {children}
+            <form action={action} className="space-y-8 my-8" style={{ width: "1000px" }}>
+                <div className='bg-main border-2 border-black rounded-lg shadow-light dark:shadow-dark overflow-hidden' 
+                style={{ margin: "-28px", padding: "28px" }}>
+                    {children}
+                </div>
             </form>
         </div>
     )
@@ -26,7 +29,7 @@ export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defa
 }) => {
     return (
         <div className={(visible ? "mb-4" : "invisible max-h-0")}>
-            <label htmlFor={name} className="mb-2 block text-sm font-medium">
+            <label htmlFor={name} className="text-text mb-2 block text-sm font-medium">
                 {label}
             </label>
             <div className="relative">
@@ -43,7 +46,7 @@ export const FormItemTextArea = ({ name, label, maxLength = 300, minLength = 0, 
 }) => {
     return (
         <div className={(visible ? "mb-4" : "invisible max-h-0")}>
-            <label htmlFor={name} className="mb-2 block text-sm font-medium">
+            <label htmlFor={name} className="text-text mb-2 block text-sm font-medium">
                 {label}
             </label>
             <div className="relative">

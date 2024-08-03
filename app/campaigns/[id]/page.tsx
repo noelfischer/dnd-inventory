@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <BreadcrumbItem><BreadcrumbPage>{campaign.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="bg-main border-y-4 border-black" style={{marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px"}}>
+      <div className="bg-main border-y-4 border-black" style={{ marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px" }}>
         <h1 className=" text-text text-2xl font-semibold">{campaign.name}</h1>
         <p className="text-text">{campaign.description || "descriptionless campaign"}</p>
       </div>
@@ -148,7 +148,7 @@ const CharacterCard = ({ character, campaign, uID }: { character: SimpleCharacte
                   <TooltipTrigger asChild>
                     <Button type="submit">
                       <span className="sr-only">Duplicate</span>
-                      <BookCopy className="w-5 h5" />
+                      <BookCopy className="w-5 h6" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -158,20 +158,25 @@ const CharacterCard = ({ character, campaign, uID }: { character: SimpleCharacte
               </TooltipProvider>
             </form>
 
-            <Button>
+            <span>
               <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`}>
-                <span className="sr-only">Update</span>
-                <Pencil className="w-5 h5" />
+                <Button>
+                  <span className="sr-only">Update</span>
+                  <Pencil className="w-5 h6" />
+                </Button>
               </Link>
-            </Button>
+            </span>
 
 
-            <Button>
+            <span>
               <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/delete`}>
-                <span className="sr-only">Delete</span>
-                <Trash2 className="h-5 w-5" />
+                <Button>
+                  <span className="sr-only">Delete</span>
+                  <Trash2 className="h-6 w-5" />
+                </Button>
               </Link>
-            </Button>
+            </span>
+
           </div>
         }
       </CardFooter>

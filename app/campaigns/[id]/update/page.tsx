@@ -4,7 +4,7 @@ import { Campaign } from '@/app/lib/definitions';
 import { notFound } from 'next/navigation';
 import { Form, FormItemInput, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
 import { ShieldPlus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import Button from '@/components/Button';
 
 import {
   Breadcrumb,

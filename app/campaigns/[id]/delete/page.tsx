@@ -35,12 +35,14 @@ export default async function Page({ params }: { params: { id: string } }) {
           <BreadcrumbItem><BreadcrumbPage>Delete</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-2xl mb-6">Delete Campaign</h1>
+      <h1 className="text-text text-2xl mb-6 bg-red-500 border-y-4 border-black font-semibold" style={{ marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px" }}>
+        Delete Campaign
+        </h1>
       <h2>Name: {campaign.name}</h2>
       <p>Description: {campaign.description}</p>
       <form action={deleteCampaignWithId}>
-          <Button type="submit" variant="destructive" className='mt-9'>
-            <Trash2 className="w-4 mr-3" />
+          <Button type="submit" className='mt-7 bg-red-500'>
+            <Trash2 className="w-5 mr-3" />
             <span>Delete</span>
           </Button>
       </form>

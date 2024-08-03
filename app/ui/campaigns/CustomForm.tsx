@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import Input from "@/components/Input"
+import Textarea from "@/components/Textarea"
 import {
     Select,
     SelectContent,
@@ -9,7 +9,6 @@ import {
     SelectLabel,
     SelectGroup,
 } from "@/components/ui/select"
-import { number } from "zod"
 
 export const Form = ({ children, action }: { children: React.ReactNode, action: any }) => {
     return (

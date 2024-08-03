@@ -3,7 +3,7 @@ import { fetchCampaigns } from "../lib/data";
 import { Campaign } from "../lib/definitions";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { getUIDFromSession } from "../lib/data";
-import { Button } from "@/components/ui/button"
+import Button from "@/components/Button"
 import { BadgePlus } from "lucide-react";
 
 
@@ -17,22 +17,22 @@ export default async function Page() {
         {campaigns.map((campaign: Campaign) => {
           return (
             <li key={campaign.campaign_id} className="mb-5">
-              <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between">
-              <Button variant="link" className="text-lg" asChild>
-                <Link href={`/campaigns/${campaign.campaign_id}`}>
+              <div className="flex gap-2 items-center rounded-lg border-2 border-black py-2 px-3 justify-between bg-main">
+              <Button className="text-lg">
+                <Link className="unset" href={`/campaigns/${campaign.campaign_id}`}>
                   {campaign.name}
                 </Link>
                 </Button>
                 {campaign.dm_id === uID &&
                   <div className="flex gap-2">
-                    <Button variant="outline" size="icon" asChild>
-                      <Link href={`/campaigns/${campaign.campaign_id}/update`}>
+                    <Button>
+                      <Link className="unset" href={`/campaigns/${campaign.campaign_id}/update`}>
                         <span className="sr-only">Update</span>
                         <PencilIcon className="w-5" />
                       </Link>
                     </Button>
-                    <Button variant="outline" size="icon" asChild>
-                      <Link href={`/campaigns/${campaign.campaign_id}/delete`} >
+                    <Button>
+                      <Link className="unset" href={`/campaigns/${campaign.campaign_id}/delete`} >
                         <span className="sr-only">Delete</span>
                         <TrashIcon className="w-5" />
                       </Link>
@@ -44,8 +44,8 @@ export default async function Page() {
           )
         })}
       </ul>
-      <Button asChild>
-        <Link href={"/campaigns/create"} className="w-full sm:w-min">
+      <Button className="w-full sm:w-64">
+        <Link className="unset" href={"/campaigns/create"}>
           Create a new Campaign
           <BadgePlus className="w-5 h-5 ml-3" />
         </Link>

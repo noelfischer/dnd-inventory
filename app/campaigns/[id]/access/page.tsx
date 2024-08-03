@@ -10,7 +10,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button";
+import Button from "@/components/Button";
 import { Trash2 } from "lucide-react";
 
 export default async function Page({ params }: { params: { id: string } }) {

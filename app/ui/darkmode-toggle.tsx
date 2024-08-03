@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useTheme } from "next-themes";
 import { Label } from "@/components/ui/label"
 import { MoonStar, Sun } from 'lucide-react';
-import { Button } from "@/components/ui/button"
+import Button from "@/components/Button"
 
 const ToggleDarkMode = () => {
     const { systemTheme, theme, setTheme } = useTheme();
@@ -24,11 +24,11 @@ const ToggleDarkMode = () => {
     };
 
     return (
-        <div className="flex items-center space-x-2 absolute top-7 right-7">
-            <Button variant="ghost" id="dark-mode" size="icon" onClick={setDarkmode} className={"rounded-full ease-out duration-100 " + (isSpinning ? 'animate-spin-once' : '')}>
-                <MoonStar className={"absolute w-7 h-7 py-0.5 ease-out duration-100" + (currentTheme == "dark" ? " opacity-100" : " opacity-0")} />
-                <Sun className={"absolute w-7 h-7 ease-out duration-100" + (currentTheme == "dark" ? " opacity-0" : " opacity-100")} />
-            </Button>
+        <div className="flex items-center space-x-2 absolute top-6 right-7">
+            <button id="dark-mode" onClick={setDarkmode} className={"w-7 h-7 rounded-full ease-out duration-100 " + (isSpinning ? 'animate-spin-once' : '')}>
+                <MoonStar className={"absolute top-0 w-7 h-7 py-0.5 ease-out duration-100" + (currentTheme == "dark" ? " opacity-100" : " opacity-0")} />
+                <Sun className={"absolute top-0 w-7 h-7 ease-out duration-100" + (currentTheme == "dark" ? " opacity-0" : " opacity-100")} />
+            </button>
             <Label className="sr-only" htmlFor="dark-mode">Dark Mode</Label>
         </div>
     )

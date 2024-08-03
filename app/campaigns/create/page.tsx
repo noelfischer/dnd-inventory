@@ -1,6 +1,6 @@
 import { createCampaign } from '@/app/lib/actions';
 import { Form, FormItemInput, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
-import { Button } from "@/components/ui/button"
+import Button from "@/components/Button"
 import { ShieldPlus } from 'lucide-react';
 
 import {

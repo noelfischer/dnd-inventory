@@ -2,7 +2,7 @@ import { deleteCampaign } from '@/app/lib/actions';
 import { fetchCampaign } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
 import { notFound } from 'next/navigation';
-import { Button } from "@/components/ui/button"
+import Button from "@/components/Button"
 
 import {
   Breadcrumb,

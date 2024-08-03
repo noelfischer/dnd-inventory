@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import Button from "@/components/Button";
 import { Dices } from "lucide-react";
-import { Input } from "@/components/ui/input"
+import Input from "@/components/Input"
 
 export default function InviteLink({ link }: { link: string }) {
     const [showLink, setShowLink] = useState(false);
@@ -19,12 +19,14 @@ export default function InviteLink({ link }: { link: string }) {
 
     return (
         <div className="my-5">
-            <Button variant="secondary" className={"w-full sm:w-min" + (showLink ? " hidden" : "")} onClick={() => setShowLink(true)}>
-                Invite People to Campaign
-                <Dices className="w-5 md:w-6 ml-3" />
+            <Button className={"w-full sm:max-w-80" + (showLink ? " hidden" : "")} onClick={() => setShowLink(true)}>
+                <span className="unset">
+                    Invite People to Campaign
+                    <Dices className="w-6" />
+                </span>
             </Button>
             <div className="mt-5"><label htmlFor="inviteLink" hidden={!showLink}>The Invite Link can now be copied!</label></div>
-            <Input id="inviteLink" type="text" value={location} readOnly className={showLink ? "" : "hidden"} />
+            <Input id="inviteLink" value={location} readOnly className={"w-full sm:max-w-lg" + (showLink ? "" : " hidden")} />
         </div>
     )
 }

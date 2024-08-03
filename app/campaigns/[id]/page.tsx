@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { duplicateCharacter } from "@/app/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
-import { Button } from "@/components/ui/button"
+import Button from "@/components/Button"
 
 import {
   Breadcrumb,
@@ -56,8 +56,10 @@ export default async function Page({ params }: { params: { id: string } }) {
           <BreadcrumbItem><BreadcrumbPage>{campaign.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-2xl">{campaign.name}</h1>
-      <p className="text-gray-500">{campaign.description || "descriptionless campaign"}</p>
+      <div className="bg-main border-y-4 border-black" style={{marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px"}}>
+        <h1 className=" text-text text-2xl font-semibold">{campaign.name}</h1>
+        <p className="text-text">{campaign.description || "descriptionless campaign"}</p>
+      </div>
       <h2 className="text-2xl mt-7 mb-3">Players</h2>
       <div className="w-full flex flex-wrap gap-5">
         {characters.filter(character => character.character_type.toLowerCase() === "player").map((character: SimpleCharacter) =>
@@ -88,26 +90,26 @@ export default async function Page({ params }: { params: { id: string } }) {
           }
         </>
       }
-      <h2 className="text-2xl mt-7 mb-3">Actions</h2>
+      <h2 className="text-2xl mt-10 pt-6 mb-3 border-t-2 border-neutral-500/20">Actions</h2>
       <div className="flex gap-2 items-center flex-wrap">
-        <Button className="w-full sm:w-min" asChild>
-          <Link href={`/campaigns/${campaign.campaign_id}/create-character`}>
+        <Button className="w-full sm:max-w-64">
+          <Link className="unset" href={`/campaigns/${campaign.campaign_id}/create-character`}>
             Create a new Character
-            <DiamondPlus className="w-5 md:w-6 ml-3" />
+            <DiamondPlus className="w-6 mr-1" />
           </Link>
         </Button>
         {isDM &&
           <>
-            <Button className="w-full sm:w-min" variant="secondary" asChild>
-              <Link href={`/campaigns/${campaign.campaign_id}/update`}>
+            <Button className="w-full sm:max-w-64">
+              <Link className="unset" href={`/campaigns/${campaign.campaign_id}/update`}>
                 Update Campaign
-                <Pencil className="w-5 md:w-6 ml-3" />
+                <Pencil className="w-6 mr-1" />
               </Link>
             </Button>
-            <Button className="w-full sm:w-min" variant="secondary" asChild>
-              <Link href={`/campaigns/${campaign.campaign_id}/access`}>
+            <Button className="w-full sm:max-w-64">
+              <Link className="unset text-base" href={`/campaigns/${campaign.campaign_id}/access`}>
                 Handle Access
-                <ShieldCheck className="w-5 md:w-6 ml-3" />
+                <ShieldCheck className="w-6 mr-1" />
               </Link>
             </Button>
           </>
@@ -130,21 +132,21 @@ const CharacterCard = ({ character, campaign, uID }: { character: SimpleCharacte
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Button className="w-full" asChild>
-          <Link href={`/dashboard/${character.character_id}`}>
+        <Button className="w-full">
+          <Link className="unset" href={`/dashboard/${character.character_id}`}>
             View Dashboard
-            <ChevronRight className="h-5 w-5 ml-1 sm:ml-14" />
+            <ChevronRight className="h-6 w-6 ml-1 sm:ml-3" />
           </Link>
         </Button>
       </CardContent>
-      <CardFooter className="w-full">
+      <CardFooter>
         {(campaign.dm_id === uID || character.user_id == uID) &&
           <div className="w-full flex gap-2 justify-between">
             <form action={duplicateCharacterById}>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="w-14" type="submit">
+                    <Button type="submit">
                       <span className="sr-only">Duplicate</span>
                       <BookCopy className="w-5 h5" />
                     </Button>
@@ -156,16 +158,16 @@ const CharacterCard = ({ character, campaign, uID }: { character: SimpleCharacte
               </TooltipProvider>
             </form>
 
-            <Button variant="outline" size="icon" className="w-14" asChild>
-              <Link href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`} >
+            <Button>
+              <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`}>
                 <span className="sr-only">Update</span>
                 <Pencil className="w-5 h5" />
               </Link>
             </Button>
 
 
-            <Button variant="outline" size="icon" className="w-14" asChild>
-              <Link href={`/campaigns/${campaign.campaign_id}/${character.character_id}/delete`}>
+            <Button>
+              <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/delete`}>
                 <span className="sr-only">Delete</span>
                 <Trash2 className="h-5 w-5" />
               </Link>

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
-import { set } from "zod";
 
 const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLayout }) => {
     const initialLayout: Layouts = {
@@ -63,7 +62,7 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
                 preventCollision={false}
             >
                 {componentLayout.components.map((component) => (
-                    <div key={component.i} className="border-2 border-zinc-500">
+                    <div key={component.i} className="border-2 border-zinc-500 bg-bg dark:bg-darkBg">
                         {component.type}
                     </div>
                 ))}

@@ -168,6 +168,7 @@ async function seedInventory() {
     CREATE TABLE IF NOT EXISTS Inventory (
       item_id VARCHAR(10) PRIMARY KEY,
       character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
+      i INT DEFAULT 0,
       slot VARCHAR(10),
       item_name VARCHAR(100),
       description TEXT,
@@ -183,10 +184,10 @@ async function seedInventory() {
     inventory.map(
       (item) => client.sql`
         INSERT INTO Inventory (
-          item_id, character_id, slot, item_name, description, ability, weight, category, magic, quantity
+          item_id, character_id, i, slot, item_name, description, ability, weight, category, magic, quantity
         )
         VALUES (
-          ${item.id}, ${item.character_id}, ${item.slot}, ${item.item_name}, ${item.description}, ${item.ability},
+          ${item.id}, ${item.character_id}, ${item.i}, ${item.slot}, ${item.item_name}, ${item.description}, ${item.ability},
           ${item.weight}, ${item.category}, ${item.magic}, ${item.quantity}
         )
         ON CONFLICT (item_id) DO NOTHING;

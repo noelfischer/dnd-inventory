@@ -80,6 +80,7 @@ export type Skill = {
 export type InventoryItem = {
   item_id: string;
   character_id: string;
+  i: number;
   slot: string;
   item_name: string;
   description: string;

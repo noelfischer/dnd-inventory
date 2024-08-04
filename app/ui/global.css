@@ -30,3 +30,13 @@ body {
   display: flex;
   align-items: center;
 }
+
+.landing-page-image {
+  height: calc(100vh - 370px)
+}
+
+@media (min-width: 768px) {
+  .landing-page-image {
+    height: calc(100vh - 70px);
+  }
+}

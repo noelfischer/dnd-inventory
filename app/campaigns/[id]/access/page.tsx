@@ -43,7 +43,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     if (u2.user_id === uID) return 1;
                     return u1.username.localeCompare(u2.username);
                 }).map((user) => {
-                    const deleteUserById = deleteCampaignUser.bind(null, user.campaign_user_id)
+                    const deleteUserById = deleteCampaignUser.bind(null, user.campaign_user_id, campaignID);
                     return (
                         <li key={user.user_id}>
                             <div className="flex gap-2 items-center rounded-lg py-2 px-3 justify-between h-16 mb-3 bg-bg dark:bg-darkBg border-2 border-black shadow-light dark:shadow-dark">

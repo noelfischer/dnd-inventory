@@ -36,6 +36,16 @@ export async function getUIDFromSession() {
   }
 }
 
+export async function getUsernameFromSession() {
+  try {
+    const email = await getEmailFromSession();
+    const user = await sql`SELECT username FROM users WHERE email=${email}`;
+    return user.rows[0].username;
+  } catch (e) {
+    return { message: 'Failed to get username' };
+  }
+}
+
 // Fetch all users
 export async function fetchUsersByCampaign(campaign_id: string) {
   try {

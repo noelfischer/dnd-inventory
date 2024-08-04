@@ -55,12 +55,12 @@ export default async function Page({ params }: { params: { id: string, character
         <FormItemSelect name="user_id" label="Choose the character owner" defaultValue={character.user_id}
           options={usersInCampaign.map(user => ({ key: user.user_id, value: user.username }))} visible={isDM} />
         <FormItemTextArea name="description" label="Choose a character description" defaultValue={character.description} />
-        <FormItemInput name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url} />
+        <FormItemInput name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url} maxLength={255}/>
         <FormItemSelect name="character_type" label="Select character type" options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }]} defaultValue={character.character_type} visible={isDM} />
         <FormItemInput name="race" label='Choose your race' minLength={2} defaultValue={character.race} />
         <FormItemInput name="cclass" label="Choose your class" placeholder='class' defaultValue={character.cclass} />
         <FormItemInput name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />
-        <FormItemInput name="background" label="Choose your background" defaultValue={character.background} />
+        <FormItemInput name="background" label="Choose your background" defaultValue={character.background} maxLength={100}/>
         <FormItemInput name="alignment" label="Choose your alignment" defaultValue={character.alignment} />
         <FormItemInput name="strength" label="Enter your strength" type="number" defaultValue={character.strength.toString()} />
         <FormItemInput name="dexterity" label="Enter your dexterity" type="number" defaultValue={character.dexterity.toString()} />

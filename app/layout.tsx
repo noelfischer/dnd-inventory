@@ -4,6 +4,8 @@ import { Metadata } from 'next';
 import { ThemeProvider } from "next-themes";
 import ToggleDarkMode from './ui/darkmode-toggle';
 import { Toaster } from "@/components/ui/toaster"
+import '@/app/ui/global.css';
+
 
 export const metadata: Metadata = {
   title: 'dnd inventory',
@@ -15,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
 
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased bg-bg/50 dark:bg-darkBg/70`}>
         <ThemeProvider attribute="class">
           <ToggleDarkMode />
           {children}

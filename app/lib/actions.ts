@@ -6,8 +6,7 @@ import { redirect } from 'next/navigation';
 import { nanoid } from 'nanoid';
 import bcrypt from 'bcrypt';
 
-
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 import { fetchCampaign, getUIDFromSession } from './data';
 
@@ -60,21 +59,42 @@ export async function authenticate(
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'Invalid credentials.';
+          return 'Invalid credentials';
         default:
-          return 'Something went wrong.';
+          return 'Invalid credentials.';
       }
     }
     throw error;
   }
 }
 
+export async function logOut() {
+  await signOut();
+}
 
-
-export async function createUser(email: string, password: string) {
-  const passwordHash = await bcrypt.hash(password, 10);
+export async function signUp(prevState: string | undefined, formData: FormData) {
   try {
-    const user = await sql`INSERT INTO users (email, password_hash) VALUES (${email}, ${passwordHash}) RETURNING *`;
+    await createUser(formData.get('email') as string, formData.get('password') as string, formData.get('username') as string);
+    console.log('Signed up');
+  }
+  catch (error) {
+    console.error('Failed to sign up)', error);
+    return 'Email already exists';
+  }
+  await authenticate(prevState, formData);
+}
+
+export async function createUser(email: string, password: string, username: string) {
+  const passwordHash = await bcrypt.hash(password, 10);
+  const userID = nanoid(10);
+  try {
+    // check if user already exists
+    const existingEmail = await sql`SELECT * FROM users WHERE email=${email}`;
+    if (existingEmail.rows.length > 0) {
+      console.error('Email already exists');
+      throw new Error('Email already exists');
+    }
+    const user = await sql`INSERT INTO users (user_id, username, password_hash, email) VALUES (${userID}, ${username}, ${passwordHash}, ${email}) RETURNING *`;
     return user.rows[0];
   }
   catch (error) {
@@ -179,15 +199,15 @@ export async function addUserToCampaign(campaignId: string, password: string) {
   redirect(`/campaigns/${campaignId}`);
 }
 
-export async function deleteCampaignUser(campaignUserId: string) {
+export async function deleteCampaignUser(campaignUserId: string, campaignId: string) {
   try {
     await sql`DELETE FROM campaignusers WHERE campaign_user_id = ${campaignUserId}`;
   } catch (e) {
     console.error('Failed to delete campaign user:', e);
     return { message: 'Database Error: Failed to Delete Campaign User.' };
   }
-  revalidatePath('/campaigns');
-  redirect('/campaigns');
+  revalidatePath(`/campaigns/${campaignId}/access`);
+  redirect(`/campaigns/${campaignId}/access`);
 }
 
 //create character

@@ -1,7 +1,6 @@
 import { deleteCharacter } from '@/app/lib/actions';
 import { fetchCampaign, fetchCharacter } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 
 import {
@@ -12,7 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Button } from '@/components/ui/button';
+import Button from '@/components/Button';
 import { Trash2 } from 'lucide-react';
 
 export default async function Page({ params }: { params: { id: string, characterId: string } }) {
@@ -41,7 +40,8 @@ export default async function Page({ params }: { params: { id: string, character
           <BreadcrumbItem><BreadcrumbPage>Delete {character.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-2xl mb-6">Delete Character</h1>
+      <h1 className="text-text text-2xl mb-6 bg-main border-y-4 border-black" style={{ marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px" }}>
+        Delete Character</h1>
       <p className='font-semibold'>{character.name}</p>
       <p>{character.character_type}</p>
       <p>{character.description}</p>
@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: { id: string, character
       <p>{character.race}</p>
 
       <form action={deleteCharacterById}>
-        <Button type="submit" variant="destructive" className='mt-9'>
+        <Button type="submit" className='mt-7 w-auto'>
           <Trash2 className="w-4 mr-3" />
           <span>Delete</span>
         </Button>

@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { id: string, password:
         <p>{campaign.description || "descriptionless campaign"}</p>
         <p className="mb-8">DM: {dmname}</p>
         <form action={addUserToCampaignWithId}>
-          <Button type='submit' className='text-lg'>
+          <Button type='submit' className='text-lg w-auto'>
             Join
             <Dices className='ml-3' />
           </Button>

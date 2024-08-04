@@ -30,7 +30,7 @@ export default function Page() {
           <FormItemInput name="name" label="Choose a campaign name" minLength={2} />
           <FormItemTextArea name="description" label="Choose a campaign description" />
           <FormItemInput name="password" label="Choose a campaign access password" Icon={ShieldPlus} />
-          <Button type="submit">Create Campaign</Button>
+          <Button type="submit" className="w-auto">Create Campaign</Button>
       </Form>
 
     </main>

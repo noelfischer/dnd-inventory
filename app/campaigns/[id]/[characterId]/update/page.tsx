@@ -1,14 +1,10 @@
 import { updateCharacter } from '@/app/lib/actions';
 import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign, getUIDFromSession } from '@/app/lib/data';
 import { Campaign } from '@/app/lib/definitions';
-import {
-  BookOpenIcon, PlusCircleIcon,
-  ShieldCheckIcon
-} from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import Button from '@/components/Button';
 import { Form, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
-import { Link, User2 } from 'lucide-react';
+import { Link } from 'lucide-react';
 
 
 import {
@@ -75,7 +71,7 @@ export default async function Page({ params }: { params: { id: string, character
         <FormItemInput name="max_hit_points" label="Enter your max hit points" type="number" max={9999} defaultValue={character.max_hit_points.toString()} />
         <FormItemInput name="armor_class" label="Enter your armor class" type="number" max={50} defaultValue={character.armor_class.toString()} />
         <FormItemInput name="speed" label="Enter your speed" type="number" max={9999} defaultValue={character.speed.toString()} />
-        <Button type="submit">Update Character</Button>
+        <Button type="submit" className="w-auto">Update Character</Button>
       </Form>
     </main>
   );

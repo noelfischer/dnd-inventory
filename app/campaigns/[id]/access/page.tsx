@@ -34,7 +34,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <BreadcrumbItem><BreadcrumbPage>Access</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <h1 className="text-2xl mb-8">Campaign Users</h1>
+            <h1 className="text-2xl mb-8 bg-main border-y-4 border-black"
+                style={{ marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px" }}
+            >Campaign Users</h1>
             <ul>
                 {campaignUsers.sort((u1, u2) => {
                     if (u1.user_id === uID) return -1;
@@ -44,11 +46,11 @@ export default async function Page({ params }: { params: { id: string } }) {
                     const deleteUserById = deleteCampaignUser.bind(null, user.campaign_user_id)
                     return (
                         <li key={user.user_id}>
-                            <div className="flex gap-2 items-center rounded-lg border py-2 px-3 justify-between h-16 mb-3">
+                            <div className="flex gap-2 items-center rounded-lg py-2 px-3 justify-between h-16 mb-3 bg-bg dark:bg-darkBg border-2 border-black shadow-light dark:shadow-dark">
                                 {user.username} {uID === user.user_id && '(You)'}
                                 {uID !== user.user_id &&
                                     <form action={deleteUserById}>
-                                        <Button type="submit" variant="outline" size="icon">
+                                        <Button type="submit">
                                             <span className="sr-only">Delete</span>
                                             <Trash2 className="h-5 w-5" />
                                         </Button>

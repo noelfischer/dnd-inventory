@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <FormItemInput name="name" label="Choose a campaign name" minLength={2} defaultValue={campaign.name} />
         <FormItemTextArea name="description" label="Choose a campaign description" defaultValue={campaign.description} />
         <FormItemInput name="password" label="Choose a campaign access password" defaultValue={campaign.password} Icon={ShieldPlus} />
-        <Button type="submit">Update Campaign</Button>
+        <Button type="submit" className="w-auto">Update Campaign</Button>
       </Form>
     </main>
   );

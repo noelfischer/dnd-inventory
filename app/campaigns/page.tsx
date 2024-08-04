@@ -18,11 +18,12 @@ export default async function Page() {
           return (
             <li key={campaign.campaign_id} className="mb-5">
               <div className="flex gap-2 items-center rounded-lg border-2 border-black py-2 px-3 justify-between bg-main">
-                <Button className="text-lg">
-                  <Link className="unset" href={`/campaigns/${campaign.campaign_id}`}>
+
+                <Link className="unset" href={`/campaigns/${campaign.campaign_id}`}>
+                  <Button className="text-lg">
                     {campaign.name}
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
                 {campaign.dm_id === uID &&
                   <div className="flex gap-2">
 
@@ -46,12 +47,12 @@ export default async function Page() {
           )
         })}
       </ul>
-      <Button className="w-full sm:w-64">
-        <Link className="unset" href={"/campaigns/create"}>
+      <Link className="unset" href={"/campaigns/create"}>
+        <Button className="w-full sm:w-64">
           Create a new Campaign
           <BadgePlus className="w-5 h-5 ml-3" />
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </main>
   );
 }

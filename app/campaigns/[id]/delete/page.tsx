@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h2>Name: {campaign.name}</h2>
       <p>Description: {campaign.description}</p>
       <form action={deleteCampaignWithId}>
-          <Button type="submit" className='mt-7 bg-red-500'>
+          <Button type="submit" className='mt-7 bg-red-500 w-auto'>
             <Trash2 className="w-5 mr-3" />
             <span>Delete</span>
           </Button>

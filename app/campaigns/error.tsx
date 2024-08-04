@@ -21,18 +21,20 @@ export default function Error({
             <div className="border-b-4 border-main mb-5 mt-7 "><h2 className="text-center text-xl mb-1">Something went wrong!</h2></div>
             <p>Error: {error.message}</p>
             <div className="flex mt-5">
-                <Button
+                <Button className="w-auto"
                     onClick={() => reset()}
                 >
                     Try again
                 </Button>
                 <span className="ml-4 flex items-center">
                     or
-                    <Button className="ml-3">
+
                     <Link href="/campaigns" className="unset">
-                        Go Back to Campaigns
+                        <Button className="ml-3 w-auto">
+                            Go Back to Campaigns
+                        </Button>
                     </Link>
-                    </Button>
+
                 </span>
             </div>
         </main>

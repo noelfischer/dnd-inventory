@@ -92,26 +92,26 @@ export default async function Page({ params }: { params: { id: string } }) {
       }
       <h2 className="text-2xl mt-10 pt-6 mb-3 border-t-2 border-neutral-500/20">Actions</h2>
       <div className="flex gap-2 items-center flex-wrap">
-        <Button className="w-full sm:max-w-64">
-          <Link className="unset" href={`/campaigns/${campaign.campaign_id}/create-character`}>
+        <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/create-character`}>
+          <Button>
             Create a new Character
             <DiamondPlus className="w-6 mr-1" />
-          </Link>
-        </Button>
+          </Button>
+        </Link>
         {isDM &&
           <>
-            <Button className="w-full sm:max-w-64">
-              <Link className="unset" href={`/campaigns/${campaign.campaign_id}/update`}>
+            <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/update`}>
+              <Button>
                 Update Campaign
                 <Pencil className="w-6 mr-1" />
-              </Link>
-            </Button>
-            <Button className="w-full sm:max-w-64">
-              <Link className="unset text-base" href={`/campaigns/${campaign.campaign_id}/access`}>
+              </Button>
+            </Link>
+            <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/access`}>
+              <Button>
                 Handle Access
                 <ShieldCheck className="w-6 mr-1" />
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </>
         }
       </div>
@@ -132,12 +132,12 @@ const CharacterCard = ({ character, campaign, uID }: { character: SimpleCharacte
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Button className="w-full">
-          <Link className="unset" href={`/dashboard/${character.character_id}`}>
+        <Link className="unset" href={`/dashboard/${character.character_id}`}>
+          <Button>
             View Dashboard
             <ChevronRight className="h-6 w-6 ml-1 sm:ml-3" />
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </CardContent>
       <CardFooter>
         {(campaign.dm_id === uID || character.user_id == uID) &&

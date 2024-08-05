@@ -9,13 +9,17 @@ import { logOut } from "../lib/actions";
 
 export default async function Page() {
   const uID = await getUIDFromSession();
-  const username = await getUsernameFromSession();
+  const username: string = await getUsernameFromSession();
   const campaigns = await fetchCampaigns(uID);
   return (
     <main>
       <div className="flex gap-2 text-zinc-700 dark:text-zinc-300">
-        <Milestone />
-        <p className="mb-6 font-semibold ">Logged in as {username}</p>
+        {(username && username.length > 0) &&
+          <>
+            <Milestone />
+            <p className="mb-6 font-semibold ">Logged in as {username}</p>
+          </>
+        }
       </div>
       <h1 className="text-text text-2xl mb-12 bg-banner banner">
         Campaigns</h1>
@@ -26,8 +30,8 @@ export default async function Page() {
               <div className="flex gap-2 items-center rounded-lg border-2 border-black py-2 px-3 justify-between bg-bg dark:bg-darkElevatedBg">
 
                 <Link className="unset w-full text-lg" href={`/campaigns/${campaign.campaign_id}`}>
-                    {campaign.name}
-                    <ArrowRight className="w-6 mx-3" />
+                  {campaign.name}
+                  <ArrowRight className="w-6 mx-3" />
                 </Link>
                 {campaign.dm_id === uID &&
                   <div className="flex gap-2">

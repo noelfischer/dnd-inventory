@@ -35,7 +35,7 @@ export default function LoginPage() {
               Log in <ArrowRight className="h-6 w-6" />
             </Button>
             <div className='flex items-center gap-4 mt-16 justify-between'>
-              <p className="text-text">Don't have an account?</p>
+              <p className="text-text">Don&apos;t have an account?</p>
               <Link href="/signup" className="text-primary">
                 <Button className="w-auto text-sm px-4 py-1.5">
                   Sign up

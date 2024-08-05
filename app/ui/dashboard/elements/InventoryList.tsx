@@ -65,8 +65,7 @@ const InventoryList = async ({ character_id }: { character_id: string }) => {
                             <TableCell>{item.description}</TableCell>
                             <TableCell>{item.ability}</TableCell>
                             <TableCell>{item.magic}</TableCell>
-                            <TableCell>{item.weight}</TableCell>
-                            <TableCell className="text-right">{item.quantity}</TableCell>
+                            <TableCell>{item.weight} kg</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell className="text-right flex flex-row-reverse cursor-pointer gap-2">
                                 <Button className="w-auto p-1 hover:text-black/30"><ArrowDownWideNarrow className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
@@ -97,8 +96,7 @@ const InventoryList = async ({ character_id }: { character_id: string }) => {
                             <TableCell>{item.description}</TableCell>
                             <TableCell>{item.ability}</TableCell>
                             <TableCell>{item.magic}</TableCell>
-                            <TableCell>{item.weight}</TableCell>
-                            <TableCell className="text-right">{item.quantity}</TableCell>
+                            <TableCell>{item.weight} kg</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell className="text-right flex flex-row-reverse cursor-pointer gap-2">
                                 <Button className="w-auto p-1 hover:text-black/30"><ArrowDownWideNarrow className='text-black/30' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
@@ -109,7 +107,7 @@ const InventoryList = async ({ character_id }: { character_id: string }) => {
                 </TableBody>
                 <TableFooter>
                     <TableRow>
-                        <TableCell colSpan={3}>Total Weight</TableCell>
+                        <TableCell colSpan={6}>Total Weight</TableCell>
                         <TableCell className="text-right">87%</TableCell>
                     </TableRow>
                 </TableFooter>

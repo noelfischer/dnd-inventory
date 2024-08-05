@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { id: string, character
           <BreadcrumbItem><BreadcrumbPage>Delete {character.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-text text-2xl mb-6 bg-main border-y-4 border-black" style={{ marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px" }}>
+      <h1 className="text-text text-2xl mb-6 bg-banner banner">
         Delete Character</h1>
       <p className='font-semibold'>{character.name}</p>
       <p>{character.character_type}</p>

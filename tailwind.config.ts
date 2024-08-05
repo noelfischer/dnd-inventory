@@ -23,6 +23,7 @@ const config = {
 
         // dark mode
         darkBg: '#1D1F27',
+        darkElevatedBg: '#292a32',
         darkText: '#eeefe9',
         darkBorder: '#000',
       },

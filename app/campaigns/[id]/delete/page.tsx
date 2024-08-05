@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <BreadcrumbItem><BreadcrumbPage>Delete</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-text text-2xl mb-6 bg-red-500 border-y-4 border-black font-semibold" style={{ marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px" }}>
+      <h1 className="text-text text-2xl mb-6 bg-red-500 banner font-semibold">
         Delete Campaign
         </h1>
       <h2>Name: {campaign.name}</h2>

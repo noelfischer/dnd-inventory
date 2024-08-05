@@ -17,13 +17,13 @@ export default async function Page() {
         <Milestone />
         <p className="mb-6 font-semibold ">Logged in as {username}</p>
       </div>
-      <h1 className="text-text text-2xl mb-12 bg-main p-3 border-y-4 border-black" style={{ marginInline: "-28px", paddingInline: "28px" }}>
+      <h1 className="text-text text-2xl mb-12 bg-banner banner">
         Campaigns</h1>
       <ul className="pb-3">
         {campaigns.map((campaign: Campaign) => {
           return (
             <li key={campaign.campaign_id} className="mb-5">
-              <div className="flex gap-2 items-center rounded-lg border-2 border-black py-2 px-3 justify-between bg-bg dark:bg-darkBg">
+              <div className="flex gap-2 items-center rounded-lg border-2 border-black py-2 px-3 justify-between bg-bg dark:bg-darkElevatedBg">
 
                 <Link className="unset w-full text-lg" href={`/campaigns/${campaign.campaign_id}`}>
                     {campaign.name}

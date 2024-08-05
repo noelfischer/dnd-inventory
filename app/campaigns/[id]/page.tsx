@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <BreadcrumbItem><BreadcrumbPage>{campaign.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="bg-main border-y-4 border-black" style={{ marginInline: "-28px", paddingInline: "28px", paddingBlock: "10px" }}>
+      <div className="bg-banner banner">
         <h1 className=" text-text text-2xl font-semibold">{campaign.name}</h1>
         <p className="text-text">{campaign.description || "descriptionless campaign"}</p>
       </div>

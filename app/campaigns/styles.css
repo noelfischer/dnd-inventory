@@ -1,0 +1,55 @@
+:root {
+    --loader-color: #0000;
+    --loader-shadow-color: #222;
+    --loader-bg-gradient: linear-gradient(#222 0 0);
+}
+
+.dark {
+    --loader-color: #fff0;
+    --loader-shadow-color: #d3d1d7;
+    --loader-bg-gradient: linear-gradient(#d3d1d7 0 0);
+}
+
+.light {
+    --loader-color: #0000;
+    --loader-shadow-color: #222;
+    --loader-bg-gradient: linear-gradient(#222 0 0);
+}
+
+.loader {
+    width: fit-content;
+    padding-bottom: 5px;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 30px;
+    overflow: hidden;
+    color: var(--loader-color);
+    text-shadow: 0 0 0 var(--loader-shadow-color), 30ch 0 0 var(--loader-shadow-color);
+    background: linear-gradient(#000 0 0) bottom left/0% 3px no-repeat;
+    ;
+    background: var(--loader-bg-gradient) bottom left / 0% 3px no-repeat;
+    animation: l14 1.5s infinite;
+}
+
+.loader:before {
+    content: "Getting the dice ready...";
+}
+
+@keyframes l14 {
+    80% {
+        text-shadow: 0 0 0 var(--loader-shadow-color), 30ch 0 0 var(--loader-shadow-color);
+        background-size: 100% 3px;
+    }
+
+    100% {
+        text-shadow: -30ch 0 0 var(--loader-shadow-color), 0 0 0 var(--loader-shadow-color);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .loader {
+        font-size: 20px;
+        margin-top: 200px;
+    }
+
+}

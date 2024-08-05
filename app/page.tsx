@@ -1,5 +1,5 @@
 import Button from '@/components/Button';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
             className="unset"
           >
             <Button>
-              <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
+              <span>Log in</span> <ArrowRight className="w-5 md:w-6" />
             </Button>
           </Link>
 
@@ -31,7 +31,7 @@ export default function Page() {
             className="unset"
           >
             <Button>
-              <span>Sign up</span> <ArrowRightIcon className="w-5 md:w-6" />
+              <span>Sign up</span> <ArrowRight className="w-5 md:w-6" />
             </Button>
           </Link>
         </div>

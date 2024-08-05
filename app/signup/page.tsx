@@ -1,10 +1,9 @@
 'use client'
 
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { useActionState } from 'react';
 import { signUp } from '@/app/lib/actions';
 import Button from '@/components/Button';
-import { AtSign, CircleAlert, CircleUserRound, KeyRound } from 'lucide-react';
+import { ArrowRight, AtSign, CircleAlert, CircleUserRound, KeyRound } from 'lucide-react';
 import { FormItemInput } from '../ui/campaigns/CustomForm';
 import Link from 'next/link';
 
@@ -34,7 +33,7 @@ export default function SignupPage() {
               </div>
             )}
             <Button className="mt-5 w-full" aria-disabled={isPending} type='submit' disabled={isPending}>
-              Sign Up <ArrowRightIcon className="h-6 w-6" />
+              Sign Up <ArrowRight className="h-6 w-6" />
             </Button>
             <div className='flex items-center gap-4 mt-16 justify-between'>
               <p className="text-text">Already have an account?</p>

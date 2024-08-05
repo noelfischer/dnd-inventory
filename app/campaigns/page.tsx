@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { fetchCampaigns, getUsernameFromSession } from "../lib/data";
 import { Campaign } from "../lib/definitions";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { getUIDFromSession } from "../lib/data";
 import Button from "@/components/Button"
-import { ArrowRight, BadgePlus, Dices, LogOut, Milestone } from "lucide-react";
+import { ArrowRight, Dices, LogOut, Milestone, PencilLine, Trash2 } from "lucide-react";
 import { logOut } from "../lib/actions";
 
 
@@ -36,13 +35,13 @@ export default async function Page() {
                     <Link className="unset" href={`/campaigns/${campaign.campaign_id}/update`}>
                       <Button>
                         <span className="sr-only">Update</span>
-                        <PencilIcon className="w-5" />
+                        <PencilLine className="w-5" />
                       </Button>
                     </Link>
                     <Link className="unset" href={`/campaigns/${campaign.campaign_id}/delete`} >
                       <Button>
                         <span className="sr-only">Delete</span>
-                        <TrashIcon className="w-5" />
+                        <Trash2 className="w-5" />
                       </Button>
                     </Link>
 

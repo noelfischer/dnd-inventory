@@ -48,7 +48,7 @@ body {
   padding-inline: 28px;
   border-block-color: black;
   border-block-width: 4px;
-  padding-block: 10px;
+  padding-block: 15px;
 }
 
 @media (min-width: 768px) {

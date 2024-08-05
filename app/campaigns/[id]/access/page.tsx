@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <BreadcrumbItem><BreadcrumbPage>Access</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <h1 className="text-2xl mb-8 bg-banner banner">Campaign Users</h1>
+            <h1 className="text-text text-2xl mb-8 bg-banner banner">Campaign Users</h1>
             <ul>
                 {campaignUsers.sort((u1, u2) => {
                     if (u1.user_id === uID) return -1;

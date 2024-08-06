@@ -48,7 +48,7 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
         <div>
             <button onClick={() => setEditMode(!editMode)}>Toggle Edit Mode</button>
             <ResponsiveReactGridLayout
-                className="layout border-2 border-zinc-500"
+                className="layout -mx-2"
                 layouts={layouts}
                 cols={cols}
                 onLayoutChange={onLayoutChange}
@@ -62,8 +62,10 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
                 preventCollision={false}
             >
                 {componentLayout.components.map((component) => (
-                    <div key={component.i} className="border-2 border-zinc-500 bg-bg dark:bg-darkBg">
-                        {component.type}
+                    <div key={component.i} className="border-2 border-black dark:border-black bg-bg dark:bg-darkElevatedBg shadow-light dark:shadow-dark">
+                        <div>
+                            {component.type}
+                        </div>
                     </div>
                 ))}
             </ResponsiveReactGridLayout>

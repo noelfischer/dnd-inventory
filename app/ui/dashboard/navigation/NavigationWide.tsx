@@ -8,8 +8,10 @@ import "./styles.css"
 import { useActionState, useEffect, useState } from "react"
 import { Layouts } from "react-grid-layout"
 
-export const NavigationWide = ({ editMode, setEditMode, layouts, updateLayout }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, updateLayout: any }) => {
+export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: any }) => {
   let updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
+
+  const noChange: boolean = compareLayouts(layouts, initialLayouts);
 
   const [errorMessage, formAction, isPending] = useActionState(
     updateLayoutWithData,
@@ -18,15 +20,18 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, updateLayout }:
 
   const [pendingClick, setPendingClick] = useState(false);
 
-
-  console.log("isPending", isPending);
-  console.log("errorMessage", errorMessage);
-
   useEffect(() => {
     if (pendingClick && isPending === false && errorMessage === undefined) {
       setEditMode(false);
     }
   }, [isPending, errorMessage]);
+
+  useEffect(() => {
+    if (noChange && pendingClick) {
+      setEditMode(false);
+      setPendingClick(false);
+    }
+  }, [pendingClick]);
 
   const items = [
     {
@@ -44,24 +49,26 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, updateLayout }:
   ]
 
   return (
-    <div className={(editMode && "edit") + " bg-main mt-[-19px] -mx-7 border-y-4 border-black pl-2 pr-5 py-1 flex place-items-center gap-6"}>
-      {editMode ?
-        <>
-          <div className="text-text flex text-lg opacity-50"><ChevronLeft className="w-7 h-7" />Campaigns</div>
-          <form action={formAction}>
-            <Button type="submit" className='w-[110px] h-10 mb-1' disabled={isPending} onClick={() => setPendingClick(true)}>
-              {isPending && <span className="animate-spin mr-2">
-                <LoaderCircle />
-              </span>}
-              Save
-            </Button>
-          </form>
-        </> :
-        <>
-          <Link href='/campaigns' className="text-text flex text-lg"><ChevronLeft className="w-7 h-7" />Campaigns</Link>
-          <Button className='w-[110px] h-10 mb-1' onClick={() => setEditMode(true)}>Edit Layout</Button>
-        </>
-      }
+    <div className={(editMode && "edit") + " bg-main  py-3 sm:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
+      <div className="flex place-items-center gap-6 flex-wrap content-between">
+        {editMode ?
+          <>
+            <div className="text-text flex text-lg opacity-50"><ChevronLeft className="w-7 h-7" />Campaigns</div>
+            <form action={formAction}>
+              <Button type={noChange ? "button" : "submit"} className='w-[110px] h-10 mb-1' disabled={isPending} onClick={() => setPendingClick(true)}>
+                {isPending && <span className="animate-spin mr-2">
+                  <LoaderCircle />
+                </span>}
+                Save
+              </Button>
+            </form>
+          </> :
+          <>
+            <Link href='/campaigns' className="text-text flex text-lg"><ChevronLeft className="w-7 h-7" />Campaigns</Link>
+            <Button className='w-[110px] h-10 mb-1' onClick={() => setEditMode(true)}>Edit Layout</Button>
+          </>
+        }
+      </div>
 
 
       <div className="flex gap-2 flex-wrap">
@@ -76,7 +83,6 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, updateLayout }:
   )
 }
 
-
 function cleanLayout(layouts: Layouts): Layouts {
   let newLayouts: Layouts = { lg: [] };
   for (const breakpoint in layouts) {
@@ -85,4 +91,34 @@ function cleanLayout(layouts: Layouts): Layouts {
     }
   }
   return newLayouts;
+}
+
+function compareLayouts(layouts: Layouts, initialLayouts: Layouts): boolean {
+  for (const breakpoint in layouts) {
+    if (initialLayouts.hasOwnProperty(breakpoint)) {
+      const currentLayout = layouts[breakpoint];
+      const initialLayout = initialLayouts[breakpoint];
+
+      if (currentLayout.length !== initialLayout.length) {
+        return false;
+      }
+
+      for (let i = 0; i < currentLayout.length; i++) {
+        const currentItem = currentLayout[i];
+        const initialItem = initialLayout[i];
+
+        if (
+          currentItem.i !== initialItem.i ||
+          currentItem.x !== initialItem.x ||
+          currentItem.y !== initialItem.y ||
+          currentItem.w !== initialItem.w ||
+          currentItem.h !== initialItem.h
+        ) {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }

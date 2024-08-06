@@ -151,7 +151,6 @@ export async function updateCampaign(campaignId: string, formData: FormData) {
   });
   try {
     await sql`UPDATE campaigns SET name = ${name}, description = ${description}, password = ${password} WHERE campaign_id = ${campaignId}`;
-    console.log('Updated campaign:', campaignId);
   } catch (e) {
     return { message: 'Database Error: Failed to Update Campaign.' };
   }

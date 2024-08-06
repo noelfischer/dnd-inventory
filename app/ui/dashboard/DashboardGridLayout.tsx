@@ -52,13 +52,12 @@ const DashboardGridLayout = ({ initialLayout, componentList, updateLayout }: {
             setEditMode(true);
             return
         };
-        console.log("saveLayout", layouts);
         setEditMode(false);
     };
 
     return (
         <div>
-            <NavigationWide editMode={editMode} setEditMode={saveLayout} layouts={layouts} updateLayout={updateLayout} />
+            <NavigationWide editMode={editMode} setEditMode={saveLayout} layouts={layouts} initialLayouts={initialLayout} updateLayout={updateLayout} />
             <ResponsiveReactGridLayout
                 className="layout -mx-2"
                 layouts={layouts}

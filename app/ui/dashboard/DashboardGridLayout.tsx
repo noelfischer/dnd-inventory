@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
+import { NavigationWide } from "./navigation/NavigationWide";
 
 const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLayout }) => {
     const initialLayout: Layouts = {
@@ -44,9 +45,18 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
         return adjusted;
     };
 
+    const saveLayout = () => {
+        if (editMode === false) {
+            setEditMode(true);
+            return
+        };
+        console.log("saveLayout", layouts);
+        setEditMode(false);
+    };
+
     return (
         <div>
-            <button onClick={() => setEditMode(!editMode)}>Toggle Edit Mode</button>
+            <NavigationWide editMode={editMode} setEditMode={saveLayout} />
             <ResponsiveReactGridLayout
                 className="layout -mx-2"
                 layouts={layouts}

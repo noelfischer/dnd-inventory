@@ -13,7 +13,6 @@ import InventoryList from '@/app/ui/dashboard/elements/InventoryList';
 import SkillsList from '@/app/ui/dashboard/elements/SkillsList';
 import SpellList from '@/app/ui/dashboard/elements/SpellList';
 
-
 export type Component = {
   i: string;
   type: ReactNode;

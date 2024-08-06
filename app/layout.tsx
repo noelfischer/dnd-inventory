@@ -2,7 +2,6 @@ import '@/app/ui/global.css';
 import { inter } from '@/app/ui/fonts';
 import { Metadata } from 'next';
 import { ThemeProvider } from "next-themes";
-import ToggleDarkMode from './ui/darkmode-toggle';
 import { Toaster } from "@/components/ui/toaster"
 import '@/app/ui/global.css';
 
@@ -19,7 +18,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
       <body className={`${inter.className} antialiased bg-bg/50 dark:bg-darkBg/70`}>
         <ThemeProvider attribute="class">
-          <ToggleDarkMode />
           {children}
           <Toaster />
         </ThemeProvider>

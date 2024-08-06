@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useTheme } from "next-themes";
 import { Label } from "@/components/ui/label"
 import { MoonStar, Sun } from 'lucide-react';
-import Button from "@/components/Button"
 
 const ToggleDarkMode = () => {
     const { systemTheme, theme, setTheme } = useTheme();

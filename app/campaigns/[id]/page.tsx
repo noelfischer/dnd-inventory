@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, getUIDFromSession } from "../../lib/data";
-import { Campaign, SimpleCharacter } from "../../lib/definitions";
+import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, getUIDFromSession } from "../../lib/data";
+import { Campaign, Dashboard, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
 import { duplicateCharacter } from "@/app/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
@@ -36,6 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const uID = await getUIDFromSession();
   const campaignID = params.id;
   const campaign: Campaign = await fetchCampaign(campaignID);
+  const dashboards: Dashboard[] = await fetchDashboardsByCampaign(campaignID);
   if (!campaign) {
     notFound();
   }
@@ -63,7 +64,8 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h2 className="text-2xl mt-7 mb-3">Players</h2>
       <div className="w-full flex flex-wrap gap-5">
         {characters.filter(character => character.character_type.toLowerCase() === "player").map((character: SimpleCharacter) =>
-          <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id} />
+          <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id}
+            dashboardID={dashboards.find(dashboard => dashboard.character_id === character.character_id)?.dashboard_id || ""} />
         )}
       </div>
       {isDM &&
@@ -73,7 +75,8 @@ export default async function Page({ params }: { params: { id: string } }) {
               <h2 className="text-2xl mt-7 mb-3">NPCs</h2>
               <div className="w-full flex flex-wrap gap-5">
                 {characters.filter(character => character.character_type.toLowerCase() === "npc").map((character: SimpleCharacter) =>
-                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id} />
+                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id}
+                    dashboardID={dashboards.find(dashboard => dashboard.character_id === character.character_id)?.dashboard_id || ""} />
                 )}
               </div>
             </>
@@ -83,7 +86,8 @@ export default async function Page({ params }: { params: { id: string } }) {
               <h2 className="text-2xl mt-7 mb-3">Enemies</h2>
               <div className="w-full flex flex-wrap gap-5">
                 {characters.filter(character => character.character_type.toLowerCase() === "enemy").map((character: SimpleCharacter) =>
-                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id} />
+                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id}
+                    dashboardID={dashboards.find(dashboard => dashboard.character_id === character.character_id)?.dashboard_id || ""} />
                 )}
               </div>
             </>
@@ -121,8 +125,9 @@ export default async function Page({ params }: { params: { id: string } }) {
 }
 
 
-const CharacterCard = ({ character, campaign, uID }: { character: SimpleCharacter, campaign: Campaign, uID: string }) => {
+const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: SimpleCharacter, campaign: Campaign, uID: string, dashboardID: string }) => {
   const duplicateCharacterById = duplicateCharacter.bind(null, character.character_id, campaign.campaign_id);
+
   return (
     <Card key={character.character_id} className="w-full sm:max-w-[270px]">
       <CardHeader>
@@ -132,7 +137,7 @@ const CharacterCard = ({ character, campaign, uID }: { character: SimpleCharacte
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Link className="unset" href={`/dashboard/${character.character_id}`}>
+        <Link className="unset" href={`/dashboard/${dashboardID}`}>
           <Button>
             View Dashboard
             <ChevronRight className="h-6 w-6 ml-1 sm:ml-3" />

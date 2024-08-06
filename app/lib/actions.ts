@@ -9,6 +9,7 @@ import bcrypt from 'bcrypt';
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 import { fetchCampaign, getUIDFromSession } from './data';
+import { DashboardElement } from './definitions';
 
 const FormSchema = z.object({
   dmId: z.string(),
@@ -314,4 +315,81 @@ export async function duplicateCharacter(characterId: string, campaignId: string
   }
   revalidatePath(`/campaigns/${campaignId}`);
   redirect(`/campaigns/${campaignId}`);
+}
+
+// update dashboard layout
+export async function updateDashboardLayout(dashboardId: string, layout: any) {
+  try {
+    var dashboardElement: DashboardElement[] = [];
+    for (const breakpoint in layout) {
+      if (layout.hasOwnProperty(breakpoint)) {
+        for (const element of layout[breakpoint]) {
+          const { w, h, x, y, i } = element;
+
+          let column: DashboardElement
+          const columnExists = dashboardElement.find((column) => column.element_id + "," + column.element_type === i);
+          if (columnExists !== undefined && columnExists) {
+            column = columnExists;
+          } else {
+            let id: string = i.split(",")[0];
+            if (id.substring(0, 8) === "00000000") {
+              id = nanoid(10);
+            }
+            column = { element_id: id, element_type: i.split(",")[1], dashboard_id: dashboardId };
+            dashboardElement.push(column);
+          }
+
+          switch (breakpoint) {
+            case 'lg':
+              column.x_lg = x;
+              column.y_lg = y;
+              column.w_lg = w;
+              column.h_lg = h;
+              break;
+            case 'md':
+              column.x_md = x;
+              column.y_md = y;
+              column.w_md = w;
+              column.h_md = h;
+              break;
+            case 'sm':
+              column.x_sm = x;
+              column.y_sm = y;
+              column.w_sm = w;
+              column.h_sm = h;
+              break;
+            case 'xs':
+              column.x_xs = x;
+              column.y_xs = y;
+              column.w_xs = w;
+              column.h_xs = h;
+              break;
+            case 'xxs':
+              column.x_xxs = x;
+              column.y_xxs = y;
+              column.w_xxs = w;
+              column.h_xxs = h;
+              break;
+          }
+        }
+      }
+    }
+
+    for (const element of dashboardElement) {
+      await sql`INSERT INTO dashboardelements (element_id, dashboard_id, element_type, x_lg, y_lg, w_lg, h_lg, x_md, y_md, w_md, h_md, x_sm, y_sm, w_sm, h_sm, x_xs, y_xs, w_xs, h_xs, x_xxs, y_xxs, w_xxs, h_xxs)
+        VALUES (${element.element_id}, ${element.dashboard_id}, ${element.element_type}, ${element.x_lg}, ${element.y_lg}, ${element.w_lg}, ${element.h_lg}, ${element.x_md}, ${element.y_md}, ${element.w_md}, ${element.h_md}, ${element.x_sm}, ${element.y_sm}, ${element.w_sm}, ${element.h_sm}, ${element.x_xs}, ${element.y_xs}, ${element.w_xs}, ${element.h_xs}, ${element.x_xxs}, ${element.y_xxs}, ${element.w_xxs}, ${element.h_xxs})
+        ON CONFLICT (element_id) DO UPDATE SET
+          x_lg = ${element.x_lg}, y_lg = ${element.y_lg}, w_lg = ${element.w_lg}, h_lg = ${element.h_lg},
+          x_md = ${element.x_md}, y_md = ${element.y_md}, w_md = ${element.w_md}, h_md = ${element.h_md},
+          x_sm = ${element.x_sm}, y_sm = ${element.y_sm}, w_sm = ${element.w_sm}, h_sm = ${element.h_sm},
+          x_xs = ${element.x_xs}, y_xs = ${element.y_xs}, w_xs = ${element.w_xs}, h_xs = ${element.h_xs},
+          x_xxs = ${element.x_xxs}, y_xxs = ${element.y_xxs}, w_xxs = ${element.w_xxs}, h_xxs = ${element.h_xxs}`;
+    }
+  } catch (e) {
+    console.error('Failed to update dashboard layout:', e);
+    return { message: 'Database Error: Failed to Update Dashboard Layout.' };
+  }
+
+  revalidatePath(`/dashboard/${dashboardId}`);
+  redirect(`/dashboard/${dashboardId}`);
 }

@@ -232,6 +232,17 @@ export async function fetchDashboardsByCampaign(campaign_id: string) {
   }
 }
 
+// Fetch character by dashboard ID
+export async function fetchCharacterByDashboard(dashboard_id: string) {
+  try {
+    const data = await sql<Dashboard>`SELECT character_id FROM Dashboards WHERE dashboard_id = ${dashboard_id}`;
+    return data.rows[0].character_id;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch character for dashboard ID ${dashboard_id}.`);
+  }
+}
+
 // Fetch dashboard elements by dashboard ID
 export async function fetchDashboardElementsByDashboard(dashboard_id: string) {
   try {

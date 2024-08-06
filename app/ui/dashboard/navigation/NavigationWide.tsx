@@ -2,13 +2,31 @@
 
 import { Button } from "@/components/ui/button"
 import Dropdown from "@/components/Dropdown"
-import { ChevronLeft, Plus } from "lucide-react"
+import { ChevronLeft, LoaderCircle, Plus } from "lucide-react"
 import Link from "next/link"
 import "./styles.css"
+import { useActionState, useEffect, useState } from "react"
+import { Layouts } from "react-grid-layout"
 
-export const NavigationWide = ({ editMode, setEditMode }:
-  { editMode: boolean, setEditMode: (editMode: boolean) => void }
-) => {
+export const NavigationWide = ({ editMode, setEditMode, layouts, updateLayout }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, updateLayout: any }) => {
+  let updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
+
+  const [errorMessage, formAction, isPending] = useActionState(
+    updateLayoutWithData,
+    undefined,
+  );
+
+  const [pendingClick, setPendingClick] = useState(false);
+
+
+  console.log("isPending", isPending);
+  console.log("errorMessage", errorMessage);
+
+  useEffect(() => {
+    if (pendingClick && isPending === false && errorMessage === undefined) {
+      setEditMode(false);
+    }
+  }, [isPending, errorMessage]);
 
   const items = [
     {
@@ -30,11 +48,18 @@ export const NavigationWide = ({ editMode, setEditMode }:
       {editMode ?
         <>
           <div className="text-text flex text-lg opacity-50"><ChevronLeft className="w-7 h-7" />Campaigns</div>
-          <Button className='w-[110px] h-10 mb-1' onClick={() => setEditMode(!editMode)}>Save</Button>
+          <form action={formAction}>
+            <Button type="submit" className='w-[110px] h-10 mb-1' disabled={isPending} onClick={() => setPendingClick(true)}>
+              {isPending && <span className="animate-spin mr-2">
+                <LoaderCircle />
+              </span>}
+              Save
+            </Button>
+          </form>
         </> :
         <>
           <Link href='/campaigns' className="text-text flex text-lg"><ChevronLeft className="w-7 h-7" />Campaigns</Link>
-          <Button className='w-[110px] h-10 mb-1' onClick={() => setEditMode(!editMode)}>Edit Layout</Button>
+          <Button className='w-[110px] h-10 mb-1' onClick={() => setEditMode(true)}>Edit Layout</Button>
         </>
       }
 
@@ -49,4 +74,15 @@ export const NavigationWide = ({ editMode, setEditMode }:
       <Button className='w-auto h-10 px-2 mb-1 ml-auto' disabled={editMode}><Plus /></Button>
     </div>
   )
+}
+
+
+function cleanLayout(layouts: Layouts): Layouts {
+  let newLayouts: Layouts = { lg: [] };
+  for (const breakpoint in layouts) {
+    if (layouts.hasOwnProperty(breakpoint)) {
+      newLayouts[breakpoint] = layouts[breakpoint].map(({ moved, static: staticProp, ...rest }) => rest);
+    }
+  }
+  return newLayouts;
 }

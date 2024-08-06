@@ -1,24 +1,23 @@
 'use client'
 
-import { ComponentLayout } from "@/app/dashboard/[id]/(overview)/page";
-import { useEffect, useState } from "react";
+import { Component } from "@/app/dashboard/[id]/(overview)/page";
+import { useState } from "react";
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
 import { NavigationWide } from "./navigation/NavigationWide";
 
-const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLayout }) => {
-    const initialLayout: Layouts = {
-        lg: componentLayout.components.map((component) => ({
-            i: component.i, x: component.x_lg, y: component.y_lg, w: component.w_lg, h: component.h_lg, static: false,
-        }))
-    };
+const DashboardGridLayout = ({ initialLayout, componentList, updateLayout }: {
+    initialLayout: Layouts,
+    componentList: Component[],
+    updateLayout: Function
+}) => {
+
 
     const [layouts, setLayouts] = useState<Layouts>(initialLayout);
     const [editMode, setEditMode] = useState<boolean>(false);
 
     const cols: { [key: string]: number } = { lg: 12, md: 10, sm: 5, xs: 3, xxs: 1 }
-
 
     const onLayoutChange = (layout: Layout[], allLayouts: Layouts) => {
         const adjustedLayouts = adjustLayouts(allLayouts, cols);
@@ -56,7 +55,7 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
 
     return (
         <div>
-            <NavigationWide editMode={editMode} setEditMode={saveLayout} />
+            <NavigationWide editMode={editMode} setEditMode={saveLayout} layouts={layouts} updateLayout={updateLayout} />
             <ResponsiveReactGridLayout
                 className="layout -mx-2"
                 layouts={layouts}
@@ -71,7 +70,7 @@ const DashboardGridLayout = ({ componentLayout }: { componentLayout: ComponentLa
                 compactType="vertical"
                 preventCollision={false}
             >
-                {componentLayout.components.map((component) => (
+                {componentList.map((component: Component) => (
                     <div key={component.i} className="border-2 border-black dark:border-black bg-bg dark:bg-darkElevatedBg shadow-light dark:shadow-dark">
                         <div>
                             {component.type}

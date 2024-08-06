@@ -1,7 +1,7 @@
 'use client'
 
 import { Component } from "@/app/dashboard/[id]/(overview)/page";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
@@ -13,6 +13,9 @@ const DashboardGridLayout = ({ initialLayout, componentList, updateLayout }: {
     updateLayout: Function
 }) => {
 
+    useEffect(() => {
+        setLayouts(initialLayout);
+    }, [componentList]);
 
     const [layouts, setLayouts] = useState<Layouts>(initialLayout);
     const [editMode, setEditMode] = useState<boolean>(false);

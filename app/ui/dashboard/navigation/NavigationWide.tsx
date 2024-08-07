@@ -10,9 +10,7 @@ import { Layouts } from "react-grid-layout"
 
 export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: any }) => {
   let updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
-
-  console.log("layouts", cleanLayout(layouts));
-
+  
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
 
   const [errorMessage, formAction, isPending] = useActionState(

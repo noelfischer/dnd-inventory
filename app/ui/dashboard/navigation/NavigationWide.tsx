@@ -72,7 +72,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
 
 
       <div className="flex gap-2 flex-wrap">
-        <Dropdown text={'Global'} items={items} disabled={editMode} />
+        <Dropdown text={'Party'} items={items} disabled={editMode} />
         <Dropdown text={'Players'} items={items} disabled={editMode} />
         <Dropdown text={'Pets'} items={items} disabled={editMode} />
         <Dropdown text={'NPCs'} items={items} disabled={editMode} />

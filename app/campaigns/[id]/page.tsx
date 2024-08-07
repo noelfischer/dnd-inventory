@@ -61,41 +61,21 @@ export default async function Page({ params }: { params: { id: string } }) {
         <h1 className=" text-text text-2xl font-semibold">{campaign.name}</h1>
         <p className="text-text">{campaign.description || "descriptionless campaign"}</p>
       </div>
-      <h2 className="text-2xl mt-7 mb-3">Players</h2>
-      <div className="w-full flex flex-wrap gap-5">
-        {characters.filter(character => character.character_type.toLowerCase() === "player").map((character: SimpleCharacter) =>
-          <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id}
-            dashboardID={dashboards.find(dashboard => dashboard.character_id === character.character_id)?.dashboard_id || ""} />
-        )}
-      </div>
-      {isDM &&
-        <>
-          {characters.filter(character => character.character_type.toLowerCase() === "npc").length > 0 &&
-            <>
-              <h2 className="text-2xl mt-7 mb-3">NPCs</h2>
-              <div className="w-full flex flex-wrap gap-5">
-                {characters.filter(character => character.character_type.toLowerCase() === "npc").map((character: SimpleCharacter) =>
-                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id}
-                    dashboardID={dashboards.find(dashboard => dashboard.character_id === character.character_id)?.dashboard_id || ""} />
-                )}
-              </div>
-            </>
-          }
-          {characters.filter(character => character.character_type.toLowerCase() === "enemy").length > 0 &&
-            <>
-              <h2 className="text-2xl mt-7 mb-3">Enemies</h2>
-              <div className="w-full flex flex-wrap gap-5">
-                {characters.filter(character => character.character_type.toLowerCase() === "enemy").map((character: SimpleCharacter) =>
-                  <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id}
-                    dashboardID={dashboards.find(dashboard => dashboard.character_id === character.character_id)?.dashboard_id || ""} />
-                )}
-              </div>
-            </>
-          }
-        </>
-      }
+      <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="player" typeShown="Players" dashboards={dashboards} />
+      {isDM && <>
+        <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="npc" typeShown="NPCs" dashboards={dashboards} />
+        <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="enemy" typeShown="Enemies" dashboards={dashboards} />
+      </>}
+      <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="pet" typeShown="Pets" dashboards={dashboards} />
+
       <h2 className="text-2xl mt-10 pt-6 mb-3 border-t-2 border-neutral-500/20">Actions</h2>
       <div className="flex gap-2 items-center flex-wrap">
+        <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/dashboard`}>
+          <Button>
+            View Party Dashboard
+            <ChevronRight className="w-6 mr-1" />
+          </Button>
+        </Link>
         <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/create-character`}>
           <Button>
             Create a new Character
@@ -124,9 +104,23 @@ export default async function Page({ params }: { params: { id: string } }) {
   );
 }
 
+const CharacterTypeGroup = ({ characters, campaign, uID, dashboards, type, typeShown }: { characters: SimpleCharacter[], campaign: Campaign, uID: string, dashboards: Dashboard[], type: string, typeShown: string }) => {
+  if (characters.filter(character => character.character_type.toLowerCase() === type).length === 0) return null;
+  return (
+    <>
+      <h2 className="text-2xl mt-7 mb-3">{typeShown}</h2>
+      <div className="w-full flex flex-wrap gap-5">
+        {characters.filter(character => character.character_type.toLowerCase() === type).map((character: SimpleCharacter) =>
+          <CharacterCard character={character} campaign={campaign} uID={uID} key={character.character_id}
+            dashboardID={dashboards.find(dashboard => dashboard.character_id === character.character_id)?.dashboard_id || ""} />
+        )}
+      </div>
+    </>
+  )
+}
 
 const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: SimpleCharacter, campaign: Campaign, uID: string, dashboardID: string }) => {
-  const duplicateCharacterById = duplicateCharacter.bind(null, character.character_id, campaign.campaign_id);
+  const duplicateCharacterById = duplicateCharacter.bind(null, character.character_id, campaign.campaign_id, character.name);
 
   return (
     <Card key={character.character_id} className="w-full sm:max-w-[270px]">

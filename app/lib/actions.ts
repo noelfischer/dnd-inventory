@@ -20,6 +20,7 @@ const FormSchema = z.object({
 
 const parseNumber = (val: any) => {
   if (typeof val === 'string') {
+    if (val === '') return 0;
     const parsed = parseInt(val);
     if (isNaN(parsed)) throw new Error(`Invalid number: ${val}`);
     return parsed;
@@ -239,10 +240,15 @@ export async function createCharacter(campaignId: string, formData: FormData) {
   });
 
   const characterId = nanoid(10);
+  const dashboardId = nanoid(10);
 
   try {
+    console.log('Creating character:');
     await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
       VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${speed})`;
+
+    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${characterId}, 'private', ${name + "-dashboard-1"})`;
+
   } catch (e) {
     console.error('Failed to create character:', e);
     return { message: 'Database Error: Failed to Create Character.' };
@@ -301,9 +307,10 @@ export async function deleteCharacter(characterId: string, campaignId: string) {
 
 
 // duplicate character
-export async function duplicateCharacter(characterId: string, campaignId: string) {
+export async function duplicateCharacter(characterId: string, campaignId: string, name: string) {
   const uID = await getUIDFromSession();
   const newCharacterId = nanoid(10);
+  const dashboardId = nanoid(10);
   try {
     await sql`
       INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, speed, initiative, death_saves_success, death_saves_failure, experience_points)
@@ -311,6 +318,9 @@ export async function duplicateCharacter(characterId: string, campaignId: string
       FROM characters
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
     `;
+
+    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${newCharacterId}, 'private', ${name + "-copy-dashboard-1"})`;
+
   } catch (e) {
     console.error('Failed to create character:', e);
     return { message: 'Database Error: Failed to Create Character.' };

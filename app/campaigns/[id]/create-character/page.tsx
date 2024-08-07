@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <FormItemInput name="name" label="Choose a character name" minLength={2} />
         <FormItemTextArea name="description" label="Choose a character description" />
         <FormItemInput name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} maxLength={255} />
-        <FormItemSelect name="character_type" label="Select character type" options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }]} defaultValue='Player' visible={isDM} />
+        <FormItemSelect name="character_type" label="Select character type" options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' visible={isDM} />
         <FormItemInput name="race" label="Choose your race" minLength={2} />
         <FormItemInput name="cclass" label="Choose your class" placeholder='class' />
         <FormItemInput name="level" label="Choose your level" type="number" defaultValue='1' />

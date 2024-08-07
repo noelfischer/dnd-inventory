@@ -71,6 +71,9 @@ export async function authenticate(
 
 export async function logOut() {
   await signOut();
+  revalidatePath('/campaigns');
+  redirect('/login');
+
 }
 
 export async function signUp(prevState: string | undefined, formData: FormData) {

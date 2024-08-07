@@ -9,13 +9,20 @@ import {
     SelectLabel,
     SelectGroup,
 } from "@/components/ui/select"
+import { X } from "lucide-react"
+import Link from "next/link"
 
-export const Form = ({ children, action }: { children: React.ReactNode, action: any }) => {
+export const Form = ({ children, action, close }: { children: React.ReactNode, action: any, close?: string }) => {
     return (
         <div className="flex justify-center items-center">
-            <form action={action} className="space-y-8 my-8" style={{ width: "1000px" }}>
-                <div className='bg-main border-2 border-black rounded-lg shadow-light dark:shadow-dark overflow-hidden' 
-                style={{ margin: "-28px", padding: "28px" }}>
+            <form action={action} className="relative space-y-8 my-8" style={{ width: "1000px" }}>
+                {close &&
+                    <Link href={close} className="absolute top-0 right-0 text-text">
+                        <X className="h-7 w-7" />
+                    </Link>
+                }
+                <div className='bg-main border-2 border-black rounded-lg shadow-light dark:shadow-dark overflow-hidden'
+                    style={{ margin: "-28px", padding: "28px" }}>
                     {children}
                 </div>
             </form>
@@ -67,7 +74,7 @@ export const FormItemSelect = ({ name, label, options, defaultValue = "", visibl
 }) => {
     return (
         <div className={(visible ? "mb-4" : "invisible max-h-0")}>
-            <label htmlFor={name} className="mb-2 block text-sm font-medium">
+            <label htmlFor={name} className="mb-2 block text-sm font-medium text-text">
                 {label}
             </label>
             <Select name={name} defaultValue={defaultValue}>

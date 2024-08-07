@@ -3,9 +3,10 @@
 import { useActionState } from 'react';
 import { signUp } from '@/app/lib/actions';
 import Button from '@/components/Button';
-import { ArrowRight, AtSign, CircleAlert, CircleUserRound, KeyRound } from 'lucide-react';
+import { ArrowRight, AtSign, CircleAlert, CircleUserRound, KeyRound, LoaderCircle } from 'lucide-react';
 import { FormItemInput } from '../ui/campaigns/CustomForm';
 import Link from 'next/link';
+import ToggleDarkMode from '../ui/darkmode-toggle';
 
 export default function SignupPage() {
   const [errorMessage, formAction, isPending] = useActionState(
@@ -15,6 +16,7 @@ export default function SignupPage() {
 
   return (
     <main className="flex items-center justify-center sm:h-screen">
+      <ToggleDarkMode />
       <div className="relative mx-auto flex w-full sm:max-w-[400px] flex-col mt-[75px] sm:-mt-32">
         <form action={formAction}>
           <div className="flex-1 sm:rounded-lg bg-main px-6 pb-4 pt-8">
@@ -33,14 +35,15 @@ export default function SignupPage() {
               </div>
             )}
             <Button className="mt-5 w-full" aria-disabled={isPending} type='submit' disabled={isPending}>
-              Sign Up <ArrowRight className="h-6 w-6" />
+              <p className='flex'>
+                Sign Up {isPending && <LoaderCircle className='animate-spin ml-2' />}
+              </p>
+              <ArrowRight className="h-6 w-6" />
             </Button>
             <div className='flex items-center gap-4 mt-16 justify-between'>
               <p className="text-text">Already have an account?</p>
-              <Link href="/login" className="text-primary">
-                <Button className="w-auto text-sm px-4 py-1.5">
-                  Login
-                </Button>
+              <Link href="/login" className="text-text font-semibold">
+                Login
               </Link>
             </div>
           </div>

@@ -1,10 +1,12 @@
 import Button from '@/components/Button';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import ToggleDarkMode from './ui/darkmode-toggle';
 
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col max-h-screen overflow-y-hidden">
+      <ToggleDarkMode singleBackground />
       <div className="flex h-[76px] bg-main" />
       <div className="flex grow flex-col md:flex-row h-full">
         <div className="flex flex-col justify-center gap-6 md:min-w-96 px-12 pt-10 pb-16 md:pb-32 md:w-2/5 md:px-20 md:bg-bg md:dark:bg-darkElevatedBg">

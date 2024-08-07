@@ -40,8 +40,8 @@ export default async function Page({ params }: { params: { id: string } }) {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Form action={updateCampaignWithId}>
-        <h1 className="text-2xl">Update Campaign</h1>
+      <Form action={updateCampaignWithId} close={'/campaigns/' + campaignID}>
+        <h1 className="text-text text-2xl">Update Campaign</h1>
         <FormItemInput name="name" label="Choose a campaign name" minLength={2} defaultValue={campaign.name} />
         <FormItemTextArea name="description" label="Choose a campaign description" defaultValue={campaign.description} />
         <FormItemInput name="password" label="Choose a campaign access password" defaultValue={campaign.password} Icon={ShieldPlus} />

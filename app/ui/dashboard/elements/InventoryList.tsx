@@ -3,14 +3,10 @@ import Button from '@/components/Button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { sql } from '@vercel/postgres';
 import { ArrowDown, ArrowDownWideNarrow, ArrowUp, ArrowUpNarrowWide, Ham, PencilRuler, Pickaxe, Shield, Sword } from 'lucide-react';
-import { notFound } from 'next/navigation';
 
 const InventoryList = async ({ character_id }: { character_id: string }) => {
     const data = await sql<InventoryItem>`SELECT item_id, character_id, i, slot, item_name, description, ability, weight, category, magic, quantity FROM Inventory WHERE character_id = ${character_id}`;
     const items: InventoryItem[] = data.rows;
-    if (items.length === 0) {
-        notFound();
-    }
 
     return (
         <div className="inventory -z-50">

@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const dashboardID = params.id;
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
   const characterID: string = await fetchCharacterByDashboard(dashboardID);
-  if (!dashboardLayout) notFound();
+  if (!characterID) notFound();
 
   const updateLayout = updateDashboardLayout.bind(null, dashboardID);
 

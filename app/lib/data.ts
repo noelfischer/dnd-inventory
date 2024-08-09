@@ -275,7 +275,6 @@ export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<Na
     const campaigndata = await fetchCampaignNavLinks(campaign_id, dashboard_id);
     const data = { rows: [...campaigndata.rows, ...characterdata.rows] };
 
-
     const navLinks: NavLink[] = [];
 
     for (const dashboard of data.rows) {

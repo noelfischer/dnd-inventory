@@ -1,4 +1,4 @@
-import DashboardSkeleton from "../../../ui/skeletons";
+import DashboardSkeleton from "../../../ui/dashboard/skeletons";
 
 
 export default function Page() {

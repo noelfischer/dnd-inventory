@@ -272,7 +272,7 @@ export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<Na
     const campaign_id = await fetchCampaignByDashboard(dashboard_id);
 
     const characterdata = await fetchCharacterNavLinks(campaign_id, dashboard_id);
-    const campaigndata = await fetchCampaignNavLinks(campaign_id);
+    const campaigndata = await fetchCampaignNavLinks(campaign_id, dashboard_id);
     const data = { rows: [...campaigndata.rows, ...characterdata.rows] };
 
 
@@ -305,6 +305,6 @@ async function fetchCharacterNavLinks(campaign_id: string, dashboard_id: string)
   WHERE d.campaign_id = ${campaign_id} AND d.dashboard_id != ${dashboard_id}`;
 }
 
-async function fetchCampaignNavLinks(campaign_id: string) {
-  return await sql`SELECT dashboard_id, name, 'Party' as character_type FROM Dashboards WHERE campaign_id = ${campaign_id} AND character_id IS NULL`;
+async function fetchCampaignNavLinks(campaign_id: string, dashboard_id: string) {
+  return await sql`SELECT dashboard_id, name, 'Party' as character_type FROM Dashboards WHERE campaign_id = ${campaign_id} AND character_id IS NULL AND dashboard_id != ${dashboard_id}`;
 }

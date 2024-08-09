@@ -38,8 +38,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   const updateLayout = updateDashboardLayout.bind(null, dashboardID);
 
-
-
   let layout;
   let componentList: Component[];
   if (dashboardLayout.length < 1 && characterID) {

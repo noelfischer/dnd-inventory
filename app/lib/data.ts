@@ -308,3 +308,21 @@ async function fetchCharacterNavLinks(campaign_id: string, dashboard_id: string)
 async function fetchCampaignNavLinks(campaign_id: string, dashboard_id: string) {
   return await sql`SELECT dashboard_id, name, 'Party' as character_type FROM Dashboards WHERE campaign_id = ${campaign_id} AND character_id IS NULL AND dashboard_id != ${dashboard_id}`;
 }
+
+// Fetch dashboard number
+export async function fetchDashboardNumber(campaignID: string, characterID: string | null) {
+  try {
+    let numDashboards: number;
+    if (characterID) {
+      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE character_id = ${characterID} AND campaign_id = ${campaignID}`;
+      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
+    } else {
+      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE campaign_id = ${campaignID} AND character_id IS NULL`;
+      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
+    }
+    return numDashboards;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch dashboard number for campaign ID ${campaignID} and character ID ${characterID}.`);
+  }
+}

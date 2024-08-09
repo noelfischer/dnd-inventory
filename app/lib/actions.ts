@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
-import { fetchCampaign, getUIDFromSession } from './data';
+import { fetchCampaign, fetchDashboardNumber, getUIDFromSession } from './data';
 import { DashboardElement } from './definitions';
 
 const FormSchema = z.object({
@@ -336,14 +336,7 @@ export async function duplicateCharacter(characterId: string, campaignId: string
 export async function createCharacterDashboard(dashboardID: string, campaignID: string, characterID: string | null, characterName: string) {
   const newDashboardId = nanoid(10);
   try {
-    let numDashboards: number;
-    if (characterID) {
-      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE character_id = ${characterID} AND campaign_id = ${campaignID}`;
-      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
-    } else {
-      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE campaign_id = ${campaignID} AND character_id IS NULL`;
-      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
-    }
+    let numDashboards = await fetchDashboardNumber(campaignID, characterID);
     numDashboards++;
     await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) SELECT ${newDashboardId}, campaign_id, character_id, visibility, ${characterName + "-Dashboard-" + (numDashboards)} FROM dashboards WHERE dashboard_id = ${dashboardID}`;
   } catch (e) {
@@ -352,6 +345,17 @@ export async function createCharacterDashboard(dashboardID: string, campaignID: 
   }
   revalidatePath(`/dashboard/${newDashboardId}`);
   redirect(`/dashboard/${newDashboardId}`);
+}
+
+export async function deleteDashboardByDashboardID(dashboardId: string, campaignId: string) {
+  try {
+    await sql`DELETE FROM dashboards WHERE dashboard_id = ${dashboardId}`;
+  } catch (e) {
+    console.error('Failed to delete dashboard:', e);
+    return { message: 'Database Error: Failed to Delete Dashboard.' };
+  }
+  revalidatePath('/campaigns/' + campaignId);
+  redirect('/campaigns/' + campaignId);
 }
 
 // update dashboard layout

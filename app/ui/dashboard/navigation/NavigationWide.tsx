@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import Dropdown from "@/components/Dropdown"
-import { ChevronLeft, LoaderCircle, Plus } from "lucide-react"
+import { ChevronLeft, LoaderCircle, PanelsLeftBottom, Plus, Trash2 } from "lucide-react"
 import Link from "next/link"
 import "./styles.css"
 import { useActionState, useEffect, useState } from "react"
@@ -18,12 +18,23 @@ export type NavLink = {
   links: LinkText[]
 }
 
-export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: Function, navLinks: NavLink[], newDashboard: any }) => {
+export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard }: {
+  editMode: boolean,
+  setEditMode: (editMode: boolean) => void,
+  layouts: Layouts,
+  initialLayouts: Layouts,
+  updateLayout: Function,
+  navLinks: NavLink[],
+  newDashboard: any,
+  ableToDeleteDashboard: boolean,
+  deleteDashboard: any
+}) => {
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
 
   const [errorMessageUpdateLayout, formActionUpdateLayout, isPendingUpdateLayout] = useActionState(updateLayoutWithData, undefined,);
   const [errorMessageNewDashboard, formActionNewDashboard, isPendingNewDashboard] = useActionState(newDashboard, undefined);
+  const [errorMessageDeleteDashboard, formActionDeleteDashboard, isPendingDeleteDashboard] = useActionState(deleteDashboard, undefined);
   const [pendingClick, setPendingClick] = useState(false);
 
   useEffect(() => {
@@ -38,41 +49,54 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   };
 
   return (
-    <div className={(editMode && "edit") + " bg-main  py-3 sm:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
-      <div className="flex place-items-center gap-6 flex-wrap content-between">
+    <div className={(editMode && "edit") + " bg-main  py-3 xl:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
+      <div className="flex gap-6 flex-wrap content-between">
         {editMode ?
-          <>
-            <div className="text-text flex text-lg opacity-50"><ChevronLeft className="w-7 h-7" />Campaigns</div>
-            <form action={formActionUpdateLayout}>
-              <Button type={noChange ? "button" : "submit"} className='w-[110px] h-10 mb-1' disabled={isPendingUpdateLayout} onClick={save}>
-                {isPendingUpdateLayout && <span className="animate-spin mr-2">
+          <div className="text-text flex text-lg opacity-50 mt-2"><ChevronLeft className="w-7 h-7" />Campaigns</div>
+          :
+          <Link href='/campaigns' className="text-text flex text-lg mt-2"><ChevronLeft className="w-7 h-7" />Campaigns</Link>
+        }
+        <div className="flex gap-2 flex-wrap">
+          {navLinks.map(({ name, links }) => (
+            <Dropdown key={name} text={name === "Party" ? name : name.charAt(0).toUpperCase() + name.slice(1) + "s"} items={links} disabled={editMode} />
+          ))}
+          <form action={formActionNewDashboard}>
+            <Button className='w-auto min-w-[180px] flex justify-between mb-1' type="submit" disabled={isPendingNewDashboard || editMode}>
+              {isPendingNewDashboard && <span className="animate-spin mr-2">
+                <LoaderCircle />
+              </span>}
+              New Dashboard <Plus /></Button>
+          </form>
+          {ableToDeleteDashboard &&
+            <form action={formActionDeleteDashboard}>
+              <Button className='w-auto min-w-[180px] flex justify-between px-3' disabled={editMode}>
+                {isPendingDeleteDashboard && <span className="animate-spin mr-2">
                   <LoaderCircle />
                 </span>}
-                Save
+                Delete Dashboard
+                <Trash2 />
               </Button>
             </form>
-          </> :
-          <>
-            <Link href='/campaigns' className="text-text flex text-lg"><ChevronLeft className="w-7 h-7" />Campaigns</Link>
-            <Button className='w-[110px] h-10 mb-1' onClick={() => setEditMode(true)}>Edit Layout</Button>
-          </>
+          }
+        </div>
+      </div>
+
+      <div className="ml-auto flex flex-wrap md:flex-nowrap items-start gap-2 h-min flex-row-reverse">
+        {editMode ?
+          <form action={formActionUpdateLayout}>
+            <Button type={noChange ? "button" : "submit"} className='min-w-[160px] flex justify-between bg-mainAccent' disabled={isPendingUpdateLayout} onClick={save}>
+              {isPendingUpdateLayout && <span className="animate-spin mr-2">
+                <LoaderCircle />
+              </span>}
+              Save
+              <PanelsLeftBottom />
+            </Button>
+          </form>
+          :
+          <Button className='min-w-[160px] flex justify-between bg-mainAccent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }
+        <Button className='min-w-[160px] flex justify-between bg-mainAccent' disabled={editMode}>Add Element<Plus /></Button>
       </div>
-
-
-      <div className="flex gap-2 flex-wrap">
-        {navLinks.map(({ name, links }) => (
-          <Dropdown key={name} text={name === "Party" ? name : name.charAt(0).toUpperCase() + name.slice(1) + "s"} items={links} disabled={editMode} />
-        ))}
-        <form action={formActionNewDashboard}>
-          <Button className='w-auto min-w-[180px] flex justify-between' type="submit" disabled={isPendingNewDashboard}>
-            {isPendingNewDashboard && <span className="animate-spin mr-2">
-              <LoaderCircle />
-            </span>}
-            New Dashboard <Plus /></Button>
-        </form>
-      </div>
-      <Button className='w-auto h-10 px-2 mb-1 ml-auto' disabled={editMode}><Plus /></Button>
     </div>
   )
 }

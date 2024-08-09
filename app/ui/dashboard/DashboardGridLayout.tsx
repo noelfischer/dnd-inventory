@@ -7,12 +7,14 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
 import { NavigationWide, NavLink } from "./navigation/NavigationWide";
 
-const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLinks, newDashboard }: {
+const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard }: {
     initialLayout: Layouts,
     componentList: Component[],
     updateLayout: Function,
     navLinks: NavLink[],
-    newDashboard: Function
+    newDashboard: Function,
+    ableToDeleteDashboard: boolean,
+    deleteDashboard: any
 }) => {
 
     useEffect(() => {
@@ -51,7 +53,7 @@ const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLi
 
     return (
         <div>
-            <NavigationWide editMode={editMode} setEditMode={setEditMode} layouts={layouts} initialLayouts={initialLayout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} />
+            <NavigationWide editMode={editMode} setEditMode={setEditMode} layouts={layouts} initialLayouts={initialLayout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} ableToDeleteDashboard={ableToDeleteDashboard} deleteDashboard={deleteDashboard} />
             <ResponsiveReactGridLayout
                 className="layout -mx-2"
                 layouts={layouts}

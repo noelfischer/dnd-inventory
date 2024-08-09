@@ -234,7 +234,7 @@ export async function fetchDashboardsByCampaign(campaign_id: string) {
 }
 
 // Fetch campaign ID by dashboard ID
-export async function fetchCampaignByDashboard(dashboard_id: string) {
+export async function fetchCampaignIDByDashboard(dashboard_id: string) {
   try {
     const data = await sql<Dashboard>`SELECT campaign_id FROM Dashboards WHERE dashboard_id = ${dashboard_id}`;
     return data.rows[0].campaign_id;
@@ -247,8 +247,8 @@ export async function fetchCampaignByDashboard(dashboard_id: string) {
 // Fetch character by dashboard ID
 export async function fetchCharacterByDashboard(dashboard_id: string) {
   try {
-    const data = await sql<Dashboard>`SELECT character_id FROM Dashboards WHERE dashboard_id = ${dashboard_id}`;
-    return data.rows[0].character_id;
+    const data = await sql<Character>`SELECT d.character_id, c.name FROM Dashboards d JOIN Characters c ON d.character_id = c.character_id WHERE d.dashboard_id = ${dashboard_id}`;
+    return data.rows[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error(`Failed to fetch character for dashboard ID ${dashboard_id}.`);
@@ -269,7 +269,7 @@ export async function fetchDashboardElementsByDashboard(dashboard_id: string) {
 // Fetch navigation links by dashboard ID
 export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<NavLink[]> {
   try {
-    const campaign_id = await fetchCampaignByDashboard(dashboard_id);
+    const campaign_id = await fetchCampaignIDByDashboard(dashboard_id);
 
     const characterdata = await fetchCharacterNavLinks(campaign_id, dashboard_id);
     const campaigndata = await fetchCampaignNavLinks(campaign_id, dashboard_id);

@@ -1,5 +1,5 @@
-import { fetchCharacterByDashboard, fetchDashboardElementsByDashboard, fetchNavLinksByDashboard } from '@/app/lib/data';
-import { DashboardElement } from '../../../lib/definitions';
+import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchDashboardElementsByDashboard, fetchNavLinksByDashboard } from '@/app/lib/data';
+import { Character, DashboardElement } from '../../../lib/definitions';
 import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
 import NameAndLevel from '@/app/ui/dashboard/elements/NameAndLevel';
@@ -12,7 +12,7 @@ import CurrencyOverview from '@/app/ui/dashboard/elements/CurrencyOverview';
 import InventoryList from '@/app/ui/dashboard/elements/InventoryList';
 import SkillsList from '@/app/ui/dashboard/elements/SkillsList';
 import SpellList from '@/app/ui/dashboard/elements/SpellList';
-import { updateDashboardLayout } from '@/app/lib/actions';
+import { createCharacterDashboard, updateDashboardLayout } from '@/app/lib/actions';
 import { Layouts } from 'react-grid-layout';
 import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
 
@@ -32,11 +32,16 @@ export type Component = {
 export default async function Page({ params }: { params: { id: string } }) {
   const dashboardID = params.id;
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
-  const characterID: string = await fetchCharacterByDashboard(dashboardID);
+  const character: Character = await fetchCharacterByDashboard(dashboardID);
+  const campaignID = await fetchCampaignIDByDashboard(dashboardID);
   const navLinks: NavLink[] = await fetchNavLinksByDashboard(dashboardID);
-  if (!navLinks) notFound();
+
+  const characterID = character ? character.character_id : null;
+  const characterName = character ? character.name : "Party";
+  if (!campaignID) notFound();
 
   const updateLayout = updateDashboardLayout.bind(null, dashboardID);
+  const newDashboard = createCharacterDashboard.bind(null, dashboardID, campaignID, characterID, characterName);
 
   let layout;
   let componentList: Component[];
@@ -52,7 +57,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <DashboardGridLayout componentList={componentList} initialLayout={layout} updateLayout={updateLayout} navLinks={navLinks} />
+      <DashboardGridLayout componentList={componentList} initialLayout={layout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} />
     </>
   );
 }

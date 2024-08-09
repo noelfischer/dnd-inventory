@@ -250,7 +250,7 @@ export async function createCharacter(campaignId: string, formData: FormData) {
     await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
       VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${speed})`;
 
-    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${characterId}, 'private', ${name + "-dashboard-1"})`;
+    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${characterId}, 'private', ${name + "-Dashboard-1"})`;
 
   } catch (e) {
     console.error('Failed to create character:', e);
@@ -322,7 +322,7 @@ export async function duplicateCharacter(characterId: string, campaignId: string
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
     `;
 
-    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${newCharacterId}, 'private', ${name + "-copy-dashboard-1"})`;
+    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${newCharacterId}, 'private', ${name + "-Copy-Dashboard-1"})`;
 
   } catch (e) {
     console.error('Failed to create character:', e);
@@ -330,6 +330,28 @@ export async function duplicateCharacter(characterId: string, campaignId: string
   }
   revalidatePath(`/campaigns/${campaignId}`);
   redirect(`/campaigns/${campaignId}`);
+}
+
+// create dashboard for character
+export async function createCharacterDashboard(dashboardID: string, campaignID: string, characterID: string | null, characterName: string) {
+  const newDashboardId = nanoid(10);
+  try {
+    let numDashboards: number;
+    if (characterID) {
+      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE character_id = ${characterID} AND campaign_id = ${campaignID}`;
+      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
+    } else {
+      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE campaign_id = ${campaignID} AND character_id IS NULL`;
+      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
+    }
+    numDashboards++;
+    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) SELECT ${newDashboardId}, campaign_id, character_id, visibility, ${characterName + "-Dashboard-" + (numDashboards)} FROM dashboards WHERE dashboard_id = ${dashboardID}`;
+  } catch (e) {
+    console.error('Failed to create dashboard:', e);
+    return { message: 'Database Error: Failed to Create Dashboard.' };
+  }
+  revalidatePath(`/dashboard/${newDashboardId}`);
+  redirect(`/dashboard/${newDashboardId}`);
 }
 
 // update dashboard layout

@@ -18,19 +18,19 @@ export type NavLink = {
   links: LinkText[]
 }
 
-export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: any, navLinks: NavLink[] }) => {
+export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: Function, navLinks: NavLink[], newDashboard: any }) => {
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
-  console.log(navLinks)
 
-  const [errorMessage, formAction, isPending] = useActionState(updateLayoutWithData, undefined,);
+  const [errorMessageUpdateLayout, formActionUpdateLayout, isPendingUpdateLayout] = useActionState(updateLayoutWithData, undefined,);
+  const [errorMessageNewDashboard, formActionNewDashboard, isPendingNewDashboard] = useActionState(newDashboard, undefined);
   const [pendingClick, setPendingClick] = useState(false);
 
   useEffect(() => {
-    if (pendingClick && isPending === false && errorMessage === undefined) {
+    if (pendingClick && isPendingUpdateLayout === false && errorMessageUpdateLayout === undefined) {
       setEditMode(false);
     }
-  }, [isPending, errorMessage]);
+  }, [isPendingUpdateLayout, errorMessageUpdateLayout]);
 
   function save() {
     if (noChange) { setEditMode(false); }
@@ -43,9 +43,9 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
         {editMode ?
           <>
             <div className="text-text flex text-lg opacity-50"><ChevronLeft className="w-7 h-7" />Campaigns</div>
-            <form action={formAction}>
-              <Button type={noChange ? "button" : "submit"} className='w-[110px] h-10 mb-1' disabled={isPending} onClick={save}>
-                {isPending && <span className="animate-spin mr-2">
+            <form action={formActionUpdateLayout}>
+              <Button type={noChange ? "button" : "submit"} className='w-[110px] h-10 mb-1' disabled={isPendingUpdateLayout} onClick={save}>
+                {isPendingUpdateLayout && <span className="animate-spin mr-2">
                   <LoaderCircle />
                 </span>}
                 Save
@@ -64,6 +64,13 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
         {navLinks.map(({ name, links }) => (
           <Dropdown key={name} text={name === "Party" ? name : name.charAt(0).toUpperCase() + name.slice(1) + "s"} items={links} disabled={editMode} />
         ))}
+        <form action={formActionNewDashboard}>
+          <Button className='w-auto min-w-[180px] flex justify-between' type="submit" disabled={isPendingNewDashboard}>
+            {isPendingNewDashboard && <span className="animate-spin mr-2">
+              <LoaderCircle />
+            </span>}
+            New Dashboard <Plus /></Button>
+        </form>
       </div>
       <Button className='w-auto h-10 px-2 mb-1 ml-auto' disabled={editMode}><Plus /></Button>
     </div>

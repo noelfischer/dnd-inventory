@@ -19,6 +19,7 @@ import {
   SimpleCharacter,
   CampaignUser,
 } from './definitions';
+import { NavLink } from '../ui/dashboard/navigation/NavigationWide';
 
 
 export async function getEmailFromSession() {
@@ -232,6 +233,17 @@ export async function fetchDashboardsByCampaign(campaign_id: string) {
   }
 }
 
+// Fetch campaign ID by dashboard ID
+export async function fetchCampaignByDashboard(dashboard_id: string) {
+  try {
+    const data = await sql<Dashboard>`SELECT campaign_id FROM Dashboards WHERE dashboard_id = ${dashboard_id}`;
+    return data.rows[0].campaign_id;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch campaign for dashboard ID ${dashboard_id}.`);
+  }
+}
+
 // Fetch character by dashboard ID
 export async function fetchCharacterByDashboard(dashboard_id: string) {
   try {
@@ -252,4 +264,47 @@ export async function fetchDashboardElementsByDashboard(dashboard_id: string) {
     console.error('Database Error:', error);
     throw new Error(`Failed to fetch dashboard elements for dashboard ID ${dashboard_id}.`);
   }
+}
+
+// Fetch navigation links by dashboard ID
+export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<NavLink[]> {
+  try {
+    const campaign_id = await fetchCampaignByDashboard(dashboard_id);
+
+    const characterdata = await fetchCharacterNavLinks(campaign_id, dashboard_id);
+    const campaigndata = await fetchCampaignNavLinks(campaign_id);
+    const data = { rows: [...campaigndata.rows, ...characterdata.rows] };
+
+
+    const navLinks: NavLink[] = [];
+
+    for (const dashboard of data.rows) {
+      const link = {
+        name: dashboard.name,
+        link: `/dashboard/${dashboard.dashboard_id}`
+      }
+      const index = navLinks.findIndex(navLink => navLink.name === dashboard.character_type);
+      if (index === -1) {
+        navLinks.push({ name: dashboard.character_type, links: [link] });
+      } else {
+        navLinks[index].links.push(link);
+      }
+    }
+
+    return navLinks;
+  }
+  catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch navigation links for dashboard ID ${dashboard_id}.`);
+  }
+}
+
+async function fetchCharacterNavLinks(campaign_id: string, dashboard_id: string) {
+  return await sql`SELECT d.dashboard_id, d.name, c.character_type FROM Dashboards d
+  JOIN Characters c ON d.character_id = c.character_id
+  WHERE d.campaign_id = ${campaign_id} AND d.dashboard_id != ${dashboard_id}`;
+}
+
+async function fetchCampaignNavLinks(campaign_id: string) {
+  return await sql`SELECT dashboard_id, name, 'Party' as character_type FROM Dashboards WHERE campaign_id = ${campaign_id} AND character_id IS NULL`;
 }

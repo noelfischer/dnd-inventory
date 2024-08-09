@@ -127,9 +127,12 @@ export async function createCampaign(formData: FormData) {
   try {
     const campaignId = nanoid(10);
     const campaignUserId = nanoid(10);
+    const dashboardId = nanoid(10);
+
     await sql`INSERT INTO campaigns (campaign_id, dm_id, name, description, password) VALUES (${campaignId}, ${dmId}, ${name}, ${description}, ${password || null})`;
     try { // if this fails, we need to rollback the campaign creation
       await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${dmId})`;
+      await sql`INSERT INTO dashboards (dashboard_id, campaign_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, 'public', 'Party Dashboard')`;
     }
     catch (e) {
       await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
@@ -347,7 +350,7 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
             if (id.substring(0, 8) === "00000000") {
               id = nanoid(10);
             }
-            column = { element_id: id, element_type: i.split(",")[1], dashboard_id: dashboardId };
+            column = { element_id: id, element_type: i.split(",")[1], character_id: i.split(",")[2], dashboard_id: dashboardId };
             dashboardElement.push(column);
           }
 
@@ -388,8 +391,8 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
     }
 
     for (const element of dashboardElement) {
-      await sql`INSERT INTO dashboardelements (element_id, dashboard_id, element_type, x_lg, y_lg, w_lg, h_lg, x_md, y_md, w_md, h_md, x_sm, y_sm, w_sm, h_sm, x_xs, y_xs, w_xs, h_xs, x_xxs, y_xxs, w_xxs, h_xxs)
-        VALUES (${element.element_id}, ${element.dashboard_id}, ${element.element_type}, ${element.x_lg}, ${element.y_lg}, ${element.w_lg}, ${element.h_lg}, ${element.x_md}, ${element.y_md}, ${element.w_md}, ${element.h_md}, ${element.x_sm}, ${element.y_sm}, ${element.w_sm}, ${element.h_sm}, ${element.x_xs}, ${element.y_xs}, ${element.w_xs}, ${element.h_xs}, ${element.x_xxs}, ${element.y_xxs}, ${element.w_xxs}, ${element.h_xxs})
+      await sql`INSERT INTO dashboardelements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg, x_md, y_md, w_md, h_md, x_sm, y_sm, w_sm, h_sm, x_xs, y_xs, w_xs, h_xs, x_xxs, y_xxs, w_xxs, h_xxs)
+        VALUES (${element.element_id}, ${element.dashboard_id}, ${element.character_id}, ${element.element_type}, ${element.x_lg}, ${element.y_lg}, ${element.w_lg}, ${element.h_lg}, ${element.x_md}, ${element.y_md}, ${element.w_md}, ${element.h_md}, ${element.x_sm}, ${element.y_sm}, ${element.w_sm}, ${element.h_sm}, ${element.x_xs}, ${element.y_xs}, ${element.w_xs}, ${element.h_xs}, ${element.x_xxs}, ${element.y_xxs}, ${element.w_xxs}, ${element.h_xxs})
         ON CONFLICT (element_id) DO UPDATE SET
           x_lg = ${element.x_lg}, y_lg = ${element.y_lg}, w_lg = ${element.w_lg}, h_lg = ${element.h_lg},
           x_md = ${element.x_md}, y_md = ${element.y_md}, w_md = ${element.w_md}, h_md = ${element.h_md},

@@ -348,6 +348,7 @@ async function seedDashboardElements() {
     CREATE TABLE IF NOT EXISTS DashboardElements (
     element_id VARCHAR(10) PRIMARY KEY,
     dashboard_id VARCHAR(10) REFERENCES Dashboards(dashboard_id) ON DELETE CASCADE,
+    character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
     element_type VARCHAR(50) NOT NULL, -- Type of element (e.g., 'status', 'inventory', 'spells')
     -- Position and size for different breakpoints
     x_lg INT NOT NULL DEFAULT 0,
@@ -377,8 +378,8 @@ async function seedDashboardElements() {
   const insertedDashboardElements = await Promise.all(
     dashboardElements.map(
       (element) => client.sql`
-        INSERT INTO DashboardElements (element_id, dashboard_id, element_type, x_lg, y_lg, w_lg, h_lg)
-        VALUES (${element.id}, ${element.dashboard_id}, ${element.element_type}, ${element.position_x}, ${element.position_y}, ${element.size_x}, ${element.size_y})
+        INSERT INTO DashboardElements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg)
+        VALUES (${element.id}, ${element.dashboard_id}, ${element.character_id}, ${element.element_type}, ${element.position_x}, ${element.position_y}, ${element.size_x}, ${element.size_y})
         ON CONFLICT (element_id) DO NOTHING;
       `,
     ),
@@ -422,6 +423,7 @@ export async function GET() {
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {
     await client.sql`ROLLBACK`;
+    console.error('Error seeding database:', error);
     return Response.json({ error }, { status: 500 });
   }
 }

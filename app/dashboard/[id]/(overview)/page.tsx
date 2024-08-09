@@ -1,4 +1,4 @@
-import { fetchCharacterByDashboard, fetchDashboardElementsByDashboard } from '@/app/lib/data';
+import { fetchCharacterByDashboard, fetchDashboardElementsByDashboard, fetchNavLinksByDashboard } from '@/app/lib/data';
 import { DashboardElement } from '../../../lib/definitions';
 import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
@@ -14,7 +14,7 @@ import SkillsList from '@/app/ui/dashboard/elements/SkillsList';
 import SpellList from '@/app/ui/dashboard/elements/SpellList';
 import { updateDashboardLayout } from '@/app/lib/actions';
 import { Layouts } from 'react-grid-layout';
-import { nanoid } from 'nanoid';
+import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
 
 export type GridElement = {
   i: string;
@@ -33,29 +33,28 @@ export default async function Page({ params }: { params: { id: string } }) {
   const dashboardID = params.id;
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
   const characterID: string = await fetchCharacterByDashboard(dashboardID);
-  if (!characterID) notFound();
+  const navLinks: NavLink[] = await fetchNavLinksByDashboard(dashboardID);
+  if (!navLinks) notFound();
 
   const updateLayout = updateDashboardLayout.bind(null, dashboardID);
 
-  const initial_layout: Layouts = {
-    lg: [{ i: '0000000000,name', x: 0, y: 0, w: 7, h: 1, }, { i: '0000000001,health', x: 0, y: 1, w: 7, h: 2, }, { i: '0000000002,attributes', x: 9, y: 0, w: 3, h: 6, }, { i: '0000000003,skills', x: 7, y: 3, w: 2, h: 5, }, { i: '0000000004,inventory', x: 0, y: 3, w: 7, h: 18, }, { i: '0000000005,spells', x: 7, y: 5, w: 2, h: 6, }, { i: '0000000006,abilities', x: 9, y: 6, w: 3, h: 5, }, { i: '0000000007,conditions', x: 8, y: 11, w: 4, h: 3, }, { i: '00000000008,currency', x: 7, y: 11, w: 1, h: 3, },]
-  }
+
 
   let layout;
   let componentList: Component[];
-  if (dashboardLayout.length < 1) {
-    layout = initial_layout;
-    componentList = [{ i: '0000000000,name', type: <NameAndLevel character_id={characterID} /> }, { i: '0000000001,health', type: <HealthBar character_id={characterID} /> }, { i: '0000000002,attributes', type: <CharacterAttributes character_id={characterID} /> }, { i: '0000000003,skills', type: <SkillsList character_id={characterID} /> }, { i: '0000000004,inventory', type: <InventoryList character_id={characterID} /> }, { i: '0000000005,spells', type: <SpellList character_id={characterID} /> }, { i: '0000000006,abilities', type: <AbilitiesList character_id={characterID} /> }, { i: '0000000007,conditions', type: <ConditionsList character_id={characterID} /> }, { i: '00000000008,currency', type: <CurrencyOverview character_id={characterID} /> }]
+  if (dashboardLayout.length < 1 && characterID) {
+    layout = getLayoutTemplate(characterID).layout;
+    componentList = getLayoutTemplate(characterID).list;
   } else {
     layout = transformToLayout(dashboardLayout);
-    componentList = dashboardLayout.map(element => { return { i: element.element_id + ',' + element.element_type, type: componentMap(element.element_type, characterID) } })
+    componentList = dashboardLayout.map(element => { return { i: element.element_id + ',' + element.element_type + ',' + element.character_id, type: componentMap(element.element_type, element.character_id) } })
 
   }
 
 
   return (
     <>
-      <DashboardGridLayout componentList={componentList} initialLayout={layout} updateLayout={updateLayout} />
+      <DashboardGridLayout componentList={componentList} initialLayout={layout} updateLayout={updateLayout} navLinks={navLinks} />
     </>
   );
 }
@@ -89,14 +88,14 @@ function transformToLayout(dashboardLayout: DashboardElement[]): Layouts {
   const layout: any = {};
 
   dashboardLayout.forEach(element => {
-    const { element_id, element_type, x_lg, y_lg, w_lg, h_lg, x_md, y_md, w_md, h_md, x_sm, y_sm, w_sm, h_sm, x_xs, y_xs, w_xs, h_xs, x_xxs, y_xxs, w_xxs, h_xxs } = element;
+    const { element_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg, x_md, y_md, w_md, h_md, x_sm, y_sm, w_sm, h_sm, x_xs, y_xs, w_xs, h_xs, x_xxs, y_xxs, w_xxs, h_xxs } = element;
 
     const breakpoints: any = {
-      lg: { x: x_lg, y: y_lg, w: w_lg, h: h_lg, i: element_id + ',' + element_type },
-      md: { x: x_md, y: y_md, w: w_md, h: h_md, i: element_id + ',' + element_type },
-      sm: { x: x_sm, y: y_sm, w: w_sm, h: h_sm, i: element_id + ',' + element_type },
-      xs: { x: x_xs, y: y_xs, w: w_xs, h: h_xs, i: element_id + ',' + element_type },
-      xxs: { x: x_xxs, y: y_xxs, w: w_xxs, h: h_xxs, i: element_id + ',' + element_type }
+      lg: { x: x_lg, y: y_lg, w: w_lg, h: h_lg, i: element_id + ',' + element_type + ',' + character_id },
+      md: { x: x_md, y: y_md, w: w_md, h: h_md, i: element_id + ',' + element_type + ',' + character_id },
+      sm: { x: x_sm, y: y_sm, w: w_sm, h: h_sm, i: element_id + ',' + element_type + ',' + character_id },
+      xs: { x: x_xs, y: y_xs, w: w_xs, h: h_xs, i: element_id + ',' + element_type + ',' + character_id },
+      xxs: { x: x_xxs, y: y_xxs, w: w_xxs, h: h_xxs, i: element_id + ',' + element_type + ',' + character_id }
     }
 
     Object.keys(breakpoints).forEach(bp => {
@@ -106,7 +105,7 @@ function transformToLayout(dashboardLayout: DashboardElement[]): Layouts {
           layout[bp] = [];
         }
         layout[bp].push({
-          i: element_id + ',' + element_type,
+          i: element_id + ',' + element_type + ',' + character_id,
           x,
           y,
           w,
@@ -117,4 +116,12 @@ function transformToLayout(dashboardLayout: DashboardElement[]): Layouts {
   });
 
   return layout;
+}
+
+function getLayoutTemplate(characterID: string) {
+  const initial_layout: Layouts = {
+    lg: [{ i: '0000000000,name,' + characterID, x: 0, y: 0, w: 7, h: 1, }, { i: '0000000001,health,' + characterID, x: 0, y: 1, w: 7, h: 2, }, { i: '0000000002,attributes,' + characterID, x: 9, y: 0, w: 3, h: 6, }, { i: '0000000003,skills,' + characterID, x: 7, y: 3, w: 2, h: 5, }, { i: '0000000004,inventory,' + characterID, x: 0, y: 3, w: 7, h: 18, }, { i: '0000000005,spells,' + characterID, x: 7, y: 5, w: 2, h: 6, }, { i: '0000000006,abilities,' + characterID, x: 9, y: 6, w: 3, h: 5, }, { i: '0000000007,conditions,' + characterID, x: 8, y: 11, w: 4, h: 3, }, { i: '00000000008,currency,' + characterID, x: 7, y: 11, w: 1, h: 3, },]
+  }
+  const initial_componentList = [{ i: '0000000000,name,' + characterID, type: <NameAndLevel character_id={characterID} /> }, { i: '0000000001,health,' + characterID, type: <HealthBar character_id={characterID} /> }, { i: '0000000002,attributes,' + characterID, type: <CharacterAttributes character_id={characterID} /> }, { i: '0000000003,skills,' + characterID, type: <SkillsList character_id={characterID} /> }, { i: '0000000004,inventory,' + characterID, type: <InventoryList character_id={characterID} /> }, { i: '0000000005,spells,' + characterID, type: <SpellList character_id={characterID} /> }, { i: '0000000006,abilities,' + characterID, type: <AbilitiesList character_id={characterID} /> }, { i: '0000000007,conditions,' + characterID, type: <ConditionsList character_id={characterID} /> }, { i: '00000000008,currency,' + characterID, type: <CurrencyOverview character_id={characterID} /> }]
+  return { layout: initial_layout, list: initial_componentList }
 }

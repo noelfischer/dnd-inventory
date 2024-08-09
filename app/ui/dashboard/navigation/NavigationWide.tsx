@@ -8,9 +8,20 @@ import "./styles.css"
 import { useActionState, useEffect, useState } from "react"
 import { Layouts } from "react-grid-layout"
 
-export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: any }) => {
+type LinkText = {
+  name: string
+  link: string
+}
+
+export type NavLink = {
+  name: string
+  links: LinkText[]
+}
+
+export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: any, navLinks: NavLink[] }) => {
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
+  console.log(navLinks)
 
   const [errorMessage, formAction, isPending] = useActionState(updateLayoutWithData, undefined,);
   const [pendingClick, setPendingClick] = useState(false);
@@ -25,21 +36,6 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
     if (noChange) { setEditMode(false); }
     else { setPendingClick(true); }
   };
-
-  const items = [
-    {
-      name: 'Player 1, Dashboard 1',
-      link: 'https://www.youtube.com',
-    },
-    {
-      name: 'Player 1, Dashboard 2',
-      link: 'https://www.facebook.com',
-    },
-    {
-      name: 'Player 2, Dashboard 1',
-      link: 'https://www.google.com',
-    },
-  ]
 
   return (
     <div className={(editMode && "edit") + " bg-main  py-3 sm:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
@@ -65,11 +61,9 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
 
 
       <div className="flex gap-2 flex-wrap">
-        <Dropdown text={'Party'} items={items} disabled={editMode} />
-        <Dropdown text={'Players'} items={items} disabled={editMode} />
-        <Dropdown text={'Pets'} items={items} disabled={editMode} />
-        <Dropdown text={'NPCs'} items={items} disabled={editMode} />
-        <Dropdown text={'Enemies'} items={items} disabled={editMode} />
+        {navLinks.map(({ name, links }) => (
+          <Dropdown key={name} text={name === "Party" ? name : name.charAt(0).toUpperCase() + name.slice(1) + "s"} items={links} disabled={editMode} />
+        ))}
       </div>
       <Button className='w-auto h-10 px-2 mb-1 ml-auto' disabled={editMode}><Plus /></Button>
     </div>

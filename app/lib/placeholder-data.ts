@@ -99,7 +99,8 @@ const inventory = [
     magic: false,
     quantity: 1,
   },
-  { id: "fNkZBYJixY",
+  {
+    id: "fNkZBYJixY",
     character_id: characters[0].id,
     i: 2,
     slot: "eq",
@@ -109,7 +110,7 @@ const inventory = [
     weight: 6.0,
     category: 'A',
     magic: false,
-    quantity: 1 
+    quantity: 1
   },
   {
     id: "fNkZBYJixZ",
@@ -222,9 +223,14 @@ const dashboards = [
     campaign_id: campaigns[0].id,
     character_id: characters[0].id,
     visibility: 'private',
-    name: 'Main Dashboard',
-    columns: 3,
-    rows: 5,
+    name: 'Aaragons Dashboard',
+  },
+  {
+    id: "9UGvE_4eDZ",
+    campaign_id: campaigns[0].id,
+    character_id: null,
+    visibility: 'public',
+    name: 'Party Dashboard',
   },
 ];
 
@@ -232,6 +238,7 @@ const dashboardElements = [
   {
     id: "p9eaYCrTcX",
     dashboard_id: dashboards[0].id,
+    character_id: characters[0].id,
     element_type: 'status',
     position_x: 0,
     position_y: 0,

@@ -146,6 +146,7 @@ export type Dashboard = {
 export type DashboardElement = {
   element_id: string;
   dashboard_id: string;
+  character_id: string;
   element_type: string;
   x_lg?: number;
   y_lg?: number;

@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
-import { NavigationWide } from "./navigation/NavigationWide";
+import { NavigationWide, NavLink } from "./navigation/NavigationWide";
 
-const DashboardGridLayout = ({ initialLayout, componentList, updateLayout }: {
+const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLinks }: {
     initialLayout: Layouts,
     componentList: Component[],
-    updateLayout: Function
+    updateLayout: Function,
+    navLinks: NavLink[]
 }) => {
 
     useEffect(() => {
@@ -49,7 +50,7 @@ const DashboardGridLayout = ({ initialLayout, componentList, updateLayout }: {
 
     return (
         <div>
-            <NavigationWide editMode={editMode} setEditMode={setEditMode} layouts={layouts} initialLayouts={initialLayout} updateLayout={updateLayout} />
+            <NavigationWide editMode={editMode} setEditMode={setEditMode} layouts={layouts} initialLayouts={initialLayout} updateLayout={updateLayout} navLinks={navLinks} />
             <ResponsiveReactGridLayout
                 className="layout -mx-2"
                 layouts={layouts}

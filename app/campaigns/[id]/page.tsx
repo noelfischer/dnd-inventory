@@ -70,7 +70,9 @@ export default async function Page({ params }: { params: { id: string } }) {
 
       <h2 className="text-2xl mt-10 pt-6 mb-3 border-t-2 border-neutral-500/20">Actions</h2>
       <div className="flex gap-2 items-center flex-wrap">
-        <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/dashboard`}>
+        <Link className="unset w-full sm:max-w-64" href={`/campaigns/${dashboards.filter
+          (dashboard => dashboard.character_id === null)[0]?.dashboard_id || "-"
+          }`}>
           <Button>
             View Party Dashboard
             <ChevronRight className="w-6 mr-1" />

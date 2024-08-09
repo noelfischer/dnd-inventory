@@ -9,15 +9,10 @@ import { useActionState, useEffect, useState } from "react"
 import { Layouts } from "react-grid-layout"
 
 export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout }: { editMode: boolean, setEditMode: (editMode: boolean) => void, layouts: Layouts, initialLayouts: Layouts, updateLayout: any }) => {
-  let updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
-  
+  const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
 
-  const [errorMessage, formAction, isPending] = useActionState(
-    updateLayoutWithData,
-    undefined,
-  );
-
+  const [errorMessage, formAction, isPending] = useActionState(updateLayoutWithData, undefined,);
   const [pendingClick, setPendingClick] = useState(false);
 
   useEffect(() => {
@@ -26,12 +21,10 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
     }
   }, [isPending, errorMessage]);
 
-  useEffect(() => {
-    if (noChange && pendingClick) {
-      setEditMode(false);
-      setPendingClick(false);
-    }
-  }, [pendingClick]);
+  function save() {
+    if (noChange) { setEditMode(false); }
+    else { setPendingClick(true); }
+  };
 
   const items = [
     {
@@ -55,7 +48,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
           <>
             <div className="text-text flex text-lg opacity-50"><ChevronLeft className="w-7 h-7" />Campaigns</div>
             <form action={formAction}>
-              <Button type={noChange ? "button" : "submit"} className='w-[110px] h-10 mb-1' disabled={isPending} onClick={() => setPendingClick(true)}>
+              <Button type={noChange ? "button" : "submit"} className='w-[110px] h-10 mb-1' disabled={isPending} onClick={save}>
                 {isPending && <span className="animate-spin mr-2">
                   <LoaderCircle />
                 </span>}

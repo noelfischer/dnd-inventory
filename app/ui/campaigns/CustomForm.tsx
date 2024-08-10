@@ -9,6 +9,7 @@ import {
     SelectLabel,
     SelectGroup,
 } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 import { X } from "lucide-react"
 import Link from "next/link"
 
@@ -64,21 +65,24 @@ export const FormItemTextArea = ({ name, label, maxLength = 300, minLength = 0, 
     )
 }
 
-type keyValuePair = {
+export type keyValuePair = {
     key: string,
     value: string
 }
 
-export const FormItemSelect = ({ name, label, options, defaultValue = "", visible = true }: {
-    name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean
+export const FormItemSelect = ({ name, label, options, defaultValue = "", visible = true, classNameLabel, classNameSelect }: {
+    name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean, classNameLabel?: string, classNameSelect?: string
 }) => {
     return (
         <div className={(visible ? "mb-4" : "invisible max-h-0")}>
-            <label htmlFor={name} className="mb-2 block text-sm font-medium text-text">
+            <label htmlFor={name} className={cn(
+                'mb-2 block text-sm font-medium',
+                classNameLabel,
+            )}>
                 {label}
             </label>
             <Select name={name} defaultValue={defaultValue}>
-                <SelectTrigger>
+                <SelectTrigger className={classNameSelect}>
                     <SelectValue placeholder={label} />
                 </SelectTrigger>
                 <SelectContent>

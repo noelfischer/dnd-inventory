@@ -7,6 +7,8 @@ import Link from "next/link"
 import "./styles.css"
 import { useActionState, useEffect, useState } from "react"
 import { Layouts } from "react-grid-layout"
+import AddElement from "./AddElement"
+import { keyValuePair } from "../../campaigns/CustomForm"
 
 type LinkText = {
   name: string
@@ -18,7 +20,7 @@ export type NavLink = {
   links: LinkText[]
 }
 
-export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard }: {
+type Props = {
   editMode: boolean,
   setEditMode: (editMode: boolean) => void,
   layouts: Layouts,
@@ -27,8 +29,12 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   navLinks: NavLink[],
   newDashboard: any,
   ableToDeleteDashboard: boolean,
-  deleteDashboard: any
-}) => {
+  deleteDashboard: any,
+  characters: keyValuePair[],
+  addElementHandler: (formData: FormData) => Promise<string>
+}
+
+export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, characters, addElementHandler }: Props) => {
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
 
@@ -91,7 +97,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
           :
           <Button className='min-w-[160px] flex justify-between bg-mainAccent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }
-        <Button className='min-w-[160px] flex justify-between bg-mainAccent' disabled={editMode}>Add Element<Plus /></Button>
+        <AddElement characters={characters} addElementHandler={addElementHandler} disabled={editMode}/>
       </div>
     </div>
   )

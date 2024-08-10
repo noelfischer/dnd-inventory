@@ -1,5 +1,5 @@
-import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchDashboardElementsByDashboard, fetchDashboardNumber, fetchNavLinksByDashboard } from '@/app/lib/data';
-import { Character, DashboardElement } from '../../../lib/definitions';
+import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardElementsByDashboard, fetchDashboardNumber, fetchNavLinksByDashboard, getUIDFromSession } from '@/app/lib/data';
+import { Character, DashboardElement, SimpleCharacter } from '../../../lib/definitions';
 import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
 import NameAndLevel from '@/app/ui/dashboard/elements/NameAndLevel';
@@ -12,9 +12,10 @@ import CurrencyOverview from '@/app/ui/dashboard/elements/CurrencyOverview';
 import InventoryList from '@/app/ui/dashboard/elements/InventoryList';
 import SkillsList from '@/app/ui/dashboard/elements/SkillsList';
 import SpellList from '@/app/ui/dashboard/elements/SpellList';
-import { createCharacterDashboard, deleteDashboardByDashboardID, updateDashboardLayout } from '@/app/lib/actions';
+import { checkDMStatus, createCharacterDashboard, createDashboardElement, deleteDashboardByDashboardID, updateDashboardLayout } from '@/app/lib/actions';
 import { Layouts } from 'react-grid-layout';
 import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
+import { keyValuePair } from '@/app/ui/campaigns/CustomForm';
 
 export type GridElement = {
   i: string;
@@ -31,21 +32,28 @@ export type Component = {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const dashboardID = params.id;
+  const uID = await getUIDFromSession();
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
   const character: Character = await fetchCharacterByDashboard(dashboardID);
   const characterID = character ? character.character_id : null;
   const characterName = character ? character.name : "Party";
-
   const campaignID = await fetchCampaignIDByDashboard(dashboardID);
   const navLinks: NavLink[] = await fetchNavLinksByDashboard(dashboardID);
-  console.log("number of dashboards", await fetchDashboardNumber(campaignID, characterID));
   const ableToDeleteDashboard = await fetchDashboardNumber(campaignID, characterID) > 1;
+  const isDM = await checkDMStatus(campaignID, uID);
+  let characters = [];
+  if (isDM) {
+    characters = await fetchCharactersByCampaign(campaignID);
+  } else {
+    characters = await fetchCharactersByCampaignAndUser(campaignID, uID);
+  }
 
   if (!campaignID) notFound();
 
   const updateLayout = updateDashboardLayout.bind(null, dashboardID);
   const newDashboard = createCharacterDashboard.bind(null, dashboardID, campaignID, characterID, characterName);
   const deleteDashboard = deleteDashboardByDashboardID.bind(null, dashboardID, campaignID);
+  const addDashBoardElement = createDashboardElement.bind(null, dashboardID);
 
   let layout;
   let componentList: Component[];
@@ -61,7 +69,16 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <DashboardGridLayout initialComponentList={componentList} initialLayout={layout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} ableToDeleteDashboard={ableToDeleteDashboard} deleteDashboard={deleteDashboard} />
+      <DashboardGridLayout
+        initialComponentList={componentList}
+        initialLayout={layout}
+        updateLayout={updateLayout}
+        navLinks={navLinks} newDashboard={newDashboard}
+        ableToDeleteDashboard={ableToDeleteDashboard}
+        deleteDashboard={deleteDashboard}
+        characters={formatCharactersData(characters)}
+        addElementHandler={addDashBoardElement}
+      />
     </>
   );
 }
@@ -131,4 +148,11 @@ function getLayoutTemplate(characterID: string) {
   }
   const initial_componentList = [{ i: '0000000000,name,' + characterID, type: <NameAndLevel character_id={characterID} /> }, { i: '0000000001,health,' + characterID, type: <HealthBar character_id={characterID} /> }, { i: '0000000002,attributes,' + characterID, type: <CharacterAttributes character_id={characterID} /> }, { i: '0000000003,skills,' + characterID, type: <SkillsList character_id={characterID} /> }, { i: '0000000004,inventory,' + characterID, type: <InventoryList character_id={characterID} /> }, { i: '0000000005,spells,' + characterID, type: <SpellList character_id={characterID} /> }, { i: '0000000006,abilities,' + characterID, type: <AbilitiesList character_id={characterID} /> }, { i: '0000000007,conditions,' + characterID, type: <ConditionsList character_id={characterID} /> }, { i: '00000000008,currency,' + characterID, type: <CurrencyOverview character_id={characterID} /> }]
   return { layout: initial_layout, list: initial_componentList }
+}
+
+
+function formatCharactersData(characters: SimpleCharacter[]): keyValuePair[] {
+  return characters.map(character => {
+    return { key: character.character_id, value: character.name }
+  })
 }

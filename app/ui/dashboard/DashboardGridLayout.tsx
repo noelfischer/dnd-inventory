@@ -7,16 +7,21 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
 import { NavigationWide, NavLink } from "./navigation/NavigationWide";
 import { X } from "lucide-react";
+import { keyValuePair } from "../campaigns/CustomForm";
 
-const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard }: {
+type Props = {
     initialLayout: Layouts,
     initialComponentList: Component[],
     updateLayout: Function,
     navLinks: NavLink[],
     newDashboard: Function,
     ableToDeleteDashboard: boolean,
-    deleteDashboard: any
-}) => {
+    deleteDashboard: any,
+    characters: keyValuePair[],
+    addElementHandler: (formData: FormData) => Promise<string>
+}
+
+const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, characters, addElementHandler }: Props) => {
 
     useEffect(() => {
         setLayouts(initialLayout);
@@ -67,7 +72,19 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
 
     return (
         <div>
-            <NavigationWide editMode={editMode} setEditMode={setEditMode} layouts={layouts} initialLayouts={initialLayout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} ableToDeleteDashboard={ableToDeleteDashboard} deleteDashboard={deleteDashboard} />
+            <NavigationWide
+                editMode={editMode}
+                setEditMode={setEditMode}
+                layouts={layouts}
+                initialLayouts={initialLayout}
+                updateLayout={updateLayout}
+                navLinks={navLinks}
+                newDashboard={newDashboard}
+                ableToDeleteDashboard={ableToDeleteDashboard}
+                deleteDashboard={deleteDashboard}
+                characters={characters}
+                addElementHandler={addElementHandler}
+            />
             <ResponsiveReactGridLayout
                 className="layout -mx-2"
                 layouts={layouts}

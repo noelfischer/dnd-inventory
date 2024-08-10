@@ -1,3 +1,5 @@
+'use server'
+
 import { Ability } from '@/app/lib/definitions';
 import { sql } from '@vercel/postgres';
 

@@ -1,3 +1,5 @@
+'use server'
+
 import { InventoryItem } from '@/app/lib/definitions';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';

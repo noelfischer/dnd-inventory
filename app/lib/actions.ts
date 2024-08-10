@@ -117,6 +117,11 @@ export async function deleteUser(email: string) {
   }
 }
 
+export async function checkDMStatus(campaign_id: string, uID: string) {
+  const campaign = await fetchCampaign(campaign_id);
+  return uID === campaign.dm_id;
+}
+
 export async function createCampaign(formData: FormData) {
   const { dmId, name, description, password } = FormSchema.parse({
     dmId: await getUIDFromSession(),
@@ -443,4 +448,21 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
 
   revalidatePath(`/dashboard/${dashboardId}`);
   redirect(`/dashboard/${dashboardId}`);
+}
+
+// create dashboard element
+export async function createDashboardElement(dashboard_id: string, formData: FormData) {
+  console.log('Creating dashboard element');
+  const elementId = nanoid(10);
+  const character_id: string = z.string().parse(formData.get('character'));
+  const element_type: string = z.string().parse(formData.get('element'));
+  try {
+    await sql`INSERT INTO dashboardelements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg)
+      VALUES (${elementId}, ${dashboard_id}, ${character_id}, ${element_type}, ${9}, ${9999}, ${3}, ${5})`;
+  } catch (e) {
+    console.error('Failed to create dashboard element:', e);
+    return 'Database Error: Failed to Create Dashboard Element.';
+  }
+  revalidatePath(`/dashboard/${dashboard_id}`);
+  redirect(`/dashboard/${dashboard_id}`);
 }

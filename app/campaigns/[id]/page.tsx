@@ -2,7 +2,7 @@ import Link from "next/link";
 import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, getUIDFromSession } from "../../lib/data";
 import { Campaign, Dashboard, SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
-import { duplicateCharacter } from "@/app/lib/actions";
+import { checkDMStatus, duplicateCharacter } from "@/app/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
 import Button, { LinkButton } from "@/components/Button"

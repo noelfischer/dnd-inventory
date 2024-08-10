@@ -1,3 +1,5 @@
+'use server'
+
 import { Character } from '@/app/lib/definitions';
 import { sql } from '@vercel/postgres';
 import { notFound } from 'next/navigation';

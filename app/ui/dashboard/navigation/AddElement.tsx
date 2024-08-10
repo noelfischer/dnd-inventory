@@ -28,8 +28,6 @@ export default function AddElement({ characters, addElementHandler, disabled = f
         { key: "abilities", value: "Abilities" },
     ];
 
-    console.log("loading", loading);
-
     return (
         <Sheet>
             <SheetTrigger asChild>

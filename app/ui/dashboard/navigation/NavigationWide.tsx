@@ -57,6 +57,11 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
     }
   };
 
+  async function addElementHandlerCustom(formData: FormData) {
+    await updateLayoutWithData();
+    return await addElementHandler(formData);
+  }
+
   return (
     <div className={(editMode && "edit") + " bg-main  py-3 xl:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
       <div className="flex gap-6 flex-wrap content-between">
@@ -97,7 +102,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
           :
           <Button className='min-w-[160px] flex justify-between bg-mainAccent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }
-        <AddElement characters={characters} addElementHandler={addElementHandler} disabled={editMode}/>
+        <AddElement characters={characters} addElementHandler={addElementHandlerCustom} disabled={isPendingUpdateLayout}/>
       </div>
     </div>
   )

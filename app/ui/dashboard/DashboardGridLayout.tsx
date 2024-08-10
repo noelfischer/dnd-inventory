@@ -26,7 +26,7 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
     useEffect(() => {
         setLayouts(initialLayout);
         setComponentList(initialComponentList);
-    }, [initialComponentList]);
+    }, [initialComponentList, initialLayout]);
 
     const [layouts, setLayouts] = useState<Layouts>(initialLayout);
     const [editMode, setEditMode] = useState<boolean>(false);

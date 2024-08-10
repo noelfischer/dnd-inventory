@@ -361,6 +361,11 @@ export async function deleteDashboardByDashboardID(dashboardId: string, campaign
 // update dashboard layout
 export async function updateDashboardLayout(dashboardId: string, layout: any) {
   try {
+    // used for deleting elements that are removed from the layout
+    const existingElementData = await sql`SELECT element_id FROM dashboardelements WHERE dashboard_id = ${dashboardId}`;
+    let existingElementIds: string[] = existingElementData.rows.map((row: any) => row.element_id);
+
+
     var dashboardElement: DashboardElement[] = [];
     for (const breakpoint in layout) {
       if (layout.hasOwnProperty(breakpoint)) {
@@ -386,6 +391,7 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
               column.y_lg = y;
               column.w_lg = w;
               column.h_lg = h;
+              existingElementIds = existingElementIds.filter((id) => id !== column.element_id);
               break;
             case 'md':
               column.x_md = x;
@@ -425,6 +431,10 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
           x_sm = ${element.x_sm}, y_sm = ${element.y_sm}, w_sm = ${element.w_sm}, h_sm = ${element.h_sm},
           x_xs = ${element.x_xs}, y_xs = ${element.y_xs}, w_xs = ${element.w_xs}, h_xs = ${element.h_xs},
           x_xxs = ${element.x_xxs}, y_xxs = ${element.y_xxs}, w_xxs = ${element.w_xxs}, h_xxs = ${element.h_xxs}`;
+    }
+
+    for (const elementId of existingElementIds) {
+      await sql`DELETE FROM dashboardelements WHERE element_id = ${elementId}`;
     }
   } catch (e) {
     console.error('Failed to update dashboard layout:', e);

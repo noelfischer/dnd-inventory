@@ -6,10 +6,11 @@ import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
 import { NavigationWide, NavLink } from "./navigation/NavigationWide";
+import { X } from "lucide-react";
 
-const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard }: {
+const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard }: {
     initialLayout: Layouts,
-    componentList: Component[],
+    initialComponentList: Component[],
     updateLayout: Function,
     navLinks: NavLink[],
     newDashboard: Function,
@@ -19,10 +20,12 @@ const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLi
 
     useEffect(() => {
         setLayouts(initialLayout);
-    }, [componentList]);
+        setComponentList(initialComponentList);
+    }, [initialComponentList]);
 
     const [layouts, setLayouts] = useState<Layouts>(initialLayout);
     const [editMode, setEditMode] = useState<boolean>(false);
+    const [componentList, setComponentList] = useState<Component[]>(initialComponentList);
 
     const cols: { [key: string]: number } = { lg: 12, md: 10, sm: 5, xs: 3, xxs: 1 }
 
@@ -51,6 +54,17 @@ const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLi
         return adjusted;
     };
 
+    const removeElement = (i: string) => {
+        const adjustedLayouts: Layouts = {};
+        for (const [breakpoint, layout] of Object.entries(layouts)) {
+            const layout1: any = layout; //
+            const newLayout = layout1.filter((item: any) => item.i !== i);
+            adjustedLayouts[breakpoint] = newLayout;
+        }
+        setLayouts(adjustedLayouts);
+        setComponentList(componentList.filter((component) => component.i !== i));
+    }
+
     return (
         <div>
             <NavigationWide editMode={editMode} setEditMode={setEditMode} layouts={layouts} initialLayouts={initialLayout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} ableToDeleteDashboard={ableToDeleteDashboard} deleteDashboard={deleteDashboard} />
@@ -70,6 +84,9 @@ const DashboardGridLayout = ({ initialLayout, componentList, updateLayout, navLi
             >
                 {componentList.map((component: Component) => (
                     <div key={component.i} className="border-2 border-black dark:border-black bg-bg dark:bg-darkElevatedBg shadow-light dark:shadow-dark">
+                        <div className={(editMode ? "remove" : "remove-hidden")} onClick={() => { removeElement(component.i) }}>
+                            <X className="h-5 -mr-[5px] -mt-[3px]" strokeWidth={3} />
+                        </div>
                         <div>
                             {component.type}
                         </div>

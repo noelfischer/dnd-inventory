@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/Button';
+import Button, { LinkButton } from '@/components/Button';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -30,9 +30,9 @@ export default function Error({
                     or
 
                     <Link href="/campaigns" className="unset">
-                        <Button className="ml-3 w-auto">
+                        <LinkButton className="ml-3 w-auto">
                             Go Back to Campaigns
-                        </Button>
+                        </LinkButton>
                     </Link>
 
                 </span>

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { duplicateCharacter } from "@/app/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
-import Button from "@/components/Button"
+import Button, { LinkButton } from "@/components/Button"
 
 import {
   Breadcrumb,
@@ -73,30 +73,30 @@ export default async function Page({ params }: { params: { id: string } }) {
         <Link className="unset w-full sm:max-w-64" href={`/dashboard/${dashboards.filter
           (dashboard => dashboard.character_id === null)[0]?.dashboard_id || "-"
           }`}>
-          <Button>
+          <LinkButton>
             View Party Dashboard
             <ChevronRight className="w-6 mr-1" />
-          </Button>
+          </LinkButton>
         </Link>
         <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/create-character`}>
-          <Button>
+          <LinkButton>
             Create a new Character
             <DiamondPlus className="w-6 mr-1" />
-          </Button>
+          </LinkButton>
         </Link>
         {isDM &&
           <>
             <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/update`}>
-              <Button>
+              <LinkButton>
                 Update Campaign
                 <Pencil className="w-6 mr-1" />
-              </Button>
+              </LinkButton>
             </Link>
             <Link className="unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/access`}>
-              <Button>
+              <LinkButton>
                 Handle Access
                 <ShieldCheck className="w-6 mr-1" />
-              </Button>
+              </LinkButton>
             </Link>
           </>
         }
@@ -134,10 +134,10 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
       </CardHeader>
       <CardContent>
         <Link className="unset" href={`/dashboard/${dashboardID}`}>
-          <Button>
+          <LinkButton>
             View Dashboard
             <ChevronRight className="h-6 w-6 ml-1 sm:ml-3" />
-          </Button>
+          </LinkButton>
         </Link>
       </CardContent>
       <CardFooter>
@@ -161,20 +161,20 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
 
             <span>
               <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`}>
-                <Button>
+                <LinkButton>
                   <span className="sr-only">Update</span>
                   <Pencil className="w-5 h6" />
-                </Button>
+                </LinkButton>
               </Link>
             </span>
 
 
             <span>
               <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/delete`}>
-                <Button>
+                <LinkButton>
                   <span className="sr-only">Delete</span>
                   <Trash2 className="h-6 w-5" />
-                </Button>
+                </LinkButton>
               </Link>
             </span>
 

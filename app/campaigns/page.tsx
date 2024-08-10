@@ -2,7 +2,7 @@ import Link from "next/link";
 import { fetchCampaigns, getUsernameFromSession } from "../lib/data";
 import { Campaign } from "../lib/definitions";
 import { getUIDFromSession } from "../lib/data";
-import Button from "@/components/Button"
+import Button, { LinkButton } from "@/components/Button"
 import { ArrowRight, Dices, LogOut, Milestone, PencilLine, Trash2 } from "lucide-react";
 import { logOut } from "../lib/actions";
 
@@ -37,16 +37,16 @@ export default async function Page() {
                   <div className="flex gap-2">
 
                     <Link className="unset" href={`/campaigns/${campaign.campaign_id}/update`}>
-                      <Button>
+                      <LinkButton>
                         <span className="sr-only">Update</span>
                         <PencilLine className="w-5" />
-                      </Button>
+                      </LinkButton>
                     </Link>
                     <Link className="unset" href={`/campaigns/${campaign.campaign_id}/delete`} >
-                      <Button>
+                      <LinkButton>
                         <span className="sr-only">Delete</span>
                         <Trash2 className="w-5" />
-                      </Button>
+                      </LinkButton>
                     </Link>
 
                   </div>

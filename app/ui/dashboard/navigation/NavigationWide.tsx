@@ -45,7 +45,10 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
 
   function save() {
     if (noChange) { setEditMode(false); }
-    else { setPendingClick(true); }
+    else {
+      formActionUpdateLayout();
+      setPendingClick(true);
+    }
   };
 
   return (
@@ -68,30 +71,23 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
               New Dashboard <Plus /></Button>
           </form>
           {ableToDeleteDashboard &&
-            <form action={formActionDeleteDashboard}>
-              <Button className='w-auto min-w-[180px] flex justify-between px-3' disabled={editMode}>
-                {isPendingDeleteDashboard && <span className="animate-spin mr-2">
-                  <LoaderCircle />
-                </span>}
-                Delete Dashboard
-                <Trash2 />
-              </Button>
-            </form>
+            <Button className='w-auto min-w-[180px] flex justify-between px-3' disabled={editMode} onClick={() => formActionDeleteDashboard()}>
+              {isPendingDeleteDashboard && <span className="animate-spin mr-2">
+                <LoaderCircle />
+              </span>}
+              Delete Dashboard
+              <Trash2 />
+            </Button>
           }
         </div>
       </div>
 
       <div className="ml-auto flex flex-wrap md:flex-nowrap items-start gap-2 h-min flex-row-reverse">
         {editMode ?
-          <form action={formActionUpdateLayout}>
-            <Button type={noChange ? "button" : "submit"} className='min-w-[160px] flex justify-between bg-mainAccent' disabled={isPendingUpdateLayout} onClick={save}>
-              {isPendingUpdateLayout && <span className="animate-spin mr-2">
-                <LoaderCircle />
-              </span>}
-              Save
-              <PanelsLeftBottom />
-            </Button>
-          </form>
+          <Button className='min-w-[160px] flex justify-between bg-mainAccent' disabled={isPendingUpdateLayout} onClick={save}>
+            {isPendingUpdateLayout && <span className="animate-spin mr-2"><LoaderCircle /></span>}
+            Save <PanelsLeftBottom />
+          </Button>
           :
           <Button className='min-w-[160px] flex justify-between bg-mainAccent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }

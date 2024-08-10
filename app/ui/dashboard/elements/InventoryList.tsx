@@ -1,5 +1,5 @@
 import { InventoryItem } from '@/app/lib/definitions';
-import Button from '@/components/Button';
+import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { sql } from '@vercel/postgres';
 import { ArrowDown, ArrowDownWideNarrow, ArrowUp, ArrowUpNarrowWide, Ham, PencilRuler, Pickaxe, Shield, Sword } from 'lucide-react';
@@ -33,8 +33,8 @@ const InventoryList = async ({ character_id }: { character_id: string }) => {
                             <TableCell>{item.weight} kg</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell className="text-right flex flex-row-reverse cursor-pointer gap-2">
-                                <Button className="w-auto p-1 hover:text-black/30"><ArrowDownWideNarrow className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='text-black/30' /></Button>
-                                <Button className="w-auto p-1 hover:text-black/30"><ArrowDown className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUp className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
+                                <Button className="w-auto p-1 hover:text-black/30 h-9"><ArrowDownWideNarrow className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='text-black/30' /></Button>
+                                <Button className="w-auto p-1 hover:text-black/30 h-9"><ArrowDown className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUp className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -64,8 +64,8 @@ const InventoryList = async ({ character_id }: { character_id: string }) => {
                             <TableCell>{item.weight} kg</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell className="text-right flex flex-row-reverse cursor-pointer gap-2">
-                                <Button className="w-auto p-1 hover:text-black/30"><ArrowDownWideNarrow className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
-                                <Button className="w-auto p-1 hover:text-black/30"><ArrowDown className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUp className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
+                                <Button className="w-auto p-1 hover:text-black/30 h-9"><ArrowDownWideNarrow className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
+                                <Button className="w-auto p-1 hover:text-black/30 h-9"><ArrowDown className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUp className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -95,8 +95,8 @@ const InventoryList = async ({ character_id }: { character_id: string }) => {
                             <TableCell>{item.weight} kg</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell className="text-right flex flex-row-reverse cursor-pointer gap-2">
-                                <Button className="w-auto p-1 hover:text-black/30"><ArrowDownWideNarrow className='text-black/30' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
-                                <Button className="w-auto p-1 hover:text-black/30"><ArrowDown className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUp className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
+                                <Button className="w-auto p-1 hover:text-black/30 h-9"><ArrowDownWideNarrow className='text-black/30' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUpNarrowWide className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
+                                <Button className="w-auto p-1 hover:text-black/30 h-9"><ArrowDown className='transition-all hover:translate-y-0.5 hover:text-black' /><div className='rounded h-6 w-0.5 bg-black' /><ArrowUp className='transition-all hover:-translate-y-0.5 hover:text-black' /></Button>
                             </TableCell>
                         </TableRow>
                     ))}

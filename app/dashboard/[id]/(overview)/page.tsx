@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <DashboardGridLayout componentList={componentList} initialLayout={layout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} ableToDeleteDashboard={ableToDeleteDashboard} deleteDashboard={deleteDashboard} />
+      <DashboardGridLayout initialComponentList={componentList} initialLayout={layout} updateLayout={updateLayout} navLinks={navLinks} newDashboard={newDashboard} ableToDeleteDashboard={ableToDeleteDashboard} deleteDashboard={deleteDashboard} />
     </>
   );
 }

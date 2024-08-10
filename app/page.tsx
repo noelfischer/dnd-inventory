@@ -1,4 +1,4 @@
-import Button from '@/components/Button';
+import { LinkButton } from '@/components/Button';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import ToggleDarkMode from './ui/darkmode-toggle';
@@ -17,9 +17,9 @@ export default function Page() {
             href="/login"
             className="unset"
           >
-            <Button>
+            <LinkButton>
               <span>Log in</span> <ArrowRight className="w-5 md:w-6" />
-            </Button>
+            </LinkButton>
           </Link>
 
           <div className="flex items-center w-full px-8" style={{ marginTop: "-3px", marginBottom: "-5px" }}>
@@ -32,9 +32,9 @@ export default function Page() {
             href="/signup"
             className="unset"
           >
-            <Button>
+            <LinkButton>
               <span>Sign up</span> <ArrowRight className="w-5 md:w-6" />
-            </Button>
+            </LinkButton>
           </Link>
         </div>
         <div className="flex items-center justify-center w-full max-h-full">

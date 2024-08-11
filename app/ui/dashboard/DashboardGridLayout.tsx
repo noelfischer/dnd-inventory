@@ -101,8 +101,10 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
             >
                 {componentList.map((component: Component) => (
                     <div key={component.i} className="border-2 border-black dark:border-black bg-bg dark:bg-darkElevatedBg shadow-light dark:shadow-dark">
-                        <div className={(editMode ? "remove" : "remove-hidden")} onClick={() => { removeElement(component.i) }}>
-                            <X className="h-5 -mr-[5px] -mt-[3px]" strokeWidth={3} />
+                        <div className={(editMode ? "edit-shown" : "edit-hidden")}>
+                            <div className="remove" onClick={() => { removeElement(component.i) }}>
+                                <X className="h-5 -mr-[5px] -mt-[3px]" strokeWidth={3} />
+                            </div>
                         </div>
                         <div>
                             {component.type}

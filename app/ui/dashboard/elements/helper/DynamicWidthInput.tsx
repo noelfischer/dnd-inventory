@@ -44,7 +44,7 @@ const DynamicWidthInput: React.FC<DynamicWidthInputProps> = ({ value = '', onCha
                 onChange={handleInputChange}
                 onKeyUp={(e) => { if (e.key === 'Enter' && onEnter) onEnter() }}
                 onBlur={() => { if (onEnter) onEnter() }}
-                className={cn("bg-transparent absolute top-0 left-0 w-auto min-w-[15px] max-w-[400px] mx-1 ring-offset-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-transparent focus-visible:ring-offset-2 outline-none", className)}
+                className={cn("bg-transparent absolute placeholder:text-white/[.6] placeholder:font-semibold top-0 left-0 w-auto min-w-[15px] max-w-[400px] mx-1 ring-offset-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-transparent focus-visible:ring-offset-2 outline-none", className)}
                 {...props}
             />
             <span ref={spanRef} className="invisible whitespace-pre mx-1"></span>

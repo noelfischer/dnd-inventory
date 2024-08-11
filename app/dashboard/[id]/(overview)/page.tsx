@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
 import NameAndLevel from '@/app/ui/dashboard/elements/NameAndLevel';
 import { ReactNode } from 'react';
-import HealthBar from '@/app/ui/dashboard/elements/HealthBar';
+import HealthBarServer from '@/app/ui/dashboard/elements/healthbar/HealthBarServer';
 import AbilitiesList from '@/app/ui/dashboard/elements/AbilitiesList';
 import CharacterAttributes from '@/app/ui/dashboard/elements/CharacterAttributes';
 import ConditionsList from '@/app/ui/dashboard/elements/ConditionsList';
@@ -88,7 +88,7 @@ function componentMap(type: string, character_id: string): ReactNode {
     case 'name':
       return <NameAndLevel character_id={character_id} />;
     case 'health':
-      return <HealthBar character_id={character_id} />;
+      return <HealthBarServer character_id={character_id} />;
     case 'attributes':
       return <CharacterAttributes character_id={character_id} />;
     case 'skills':
@@ -146,7 +146,7 @@ function getLayoutTemplate(characterID: string) {
   const initial_layout: Layouts = {
     lg: [{ i: '0000000000,name,' + characterID, x: 0, y: 0, w: 7, h: 1, }, { i: '0000000001,health,' + characterID, x: 0, y: 1, w: 7, h: 2, }, { i: '0000000002,attributes,' + characterID, x: 9, y: 0, w: 3, h: 6, }, { i: '0000000003,skills,' + characterID, x: 7, y: 3, w: 2, h: 5, }, { i: '0000000004,inventory,' + characterID, x: 0, y: 3, w: 7, h: 18, }, { i: '0000000005,spells,' + characterID, x: 7, y: 5, w: 2, h: 6, }, { i: '0000000006,abilities,' + characterID, x: 9, y: 6, w: 3, h: 5, }, { i: '0000000007,conditions,' + characterID, x: 8, y: 11, w: 4, h: 3, }, { i: '00000000008,currency,' + characterID, x: 7, y: 11, w: 1, h: 3, },]
   }
-  const initial_componentList = [{ i: '0000000000,name,' + characterID, type: <NameAndLevel character_id={characterID} /> }, { i: '0000000001,health,' + characterID, type: <HealthBar character_id={characterID} /> }, { i: '0000000002,attributes,' + characterID, type: <CharacterAttributes character_id={characterID} /> }, { i: '0000000003,skills,' + characterID, type: <SkillsList character_id={characterID} /> }, { i: '0000000004,inventory,' + characterID, type: <InventoryList character_id={characterID} /> }, { i: '0000000005,spells,' + characterID, type: <SpellList character_id={characterID} /> }, { i: '0000000006,abilities,' + characterID, type: <AbilitiesList character_id={characterID} /> }, { i: '0000000007,conditions,' + characterID, type: <ConditionsList character_id={characterID} /> }, { i: '00000000008,currency,' + characterID, type: <CurrencyOverview character_id={characterID} /> }]
+  const initial_componentList = [{ i: '0000000000,name,' + characterID, type: <NameAndLevel character_id={characterID} /> }, { i: '0000000001,health,' + characterID, type: <HealthBarServer character_id={characterID} /> }, { i: '0000000002,attributes,' + characterID, type: <CharacterAttributes character_id={characterID} /> }, { i: '0000000003,skills,' + characterID, type: <SkillsList character_id={characterID} /> }, { i: '0000000004,inventory,' + characterID, type: <InventoryList character_id={characterID} /> }, { i: '0000000005,spells,' + characterID, type: <SpellList character_id={characterID} /> }, { i: '0000000006,abilities,' + characterID, type: <AbilitiesList character_id={characterID} /> }, { i: '0000000007,conditions,' + characterID, type: <ConditionsList character_id={characterID} /> }, { i: '00000000008,currency,' + characterID, type: <CurrencyOverview character_id={characterID} /> }]
   return { layout: initial_layout, list: initial_componentList }
 }
 

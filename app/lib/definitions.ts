@@ -117,6 +117,14 @@ export type GeneralSpell = {
   spell_level: number;
 };
 
+export type SpellSlot = {
+  spell_slot_id: string;
+  character_id: string;
+  spell_level: number;
+  level_description: string;
+  casts_remaining: number;
+};
+
 export type Ability = {
   ability_id: string;
   character_id: string;

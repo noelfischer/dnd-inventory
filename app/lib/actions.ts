@@ -83,7 +83,7 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
     console.log('Signed up');
   }
   catch (error) {
-    console.error('Failed to sign up)', error);
+    console.error('Failed to sign up)', error, "Input: \n", "Email: ", formData.get('email'), "\n", "Username: ", formData.get('username'));
     return 'Email already exists';
   }
   await authenticate(prevState, formData);
@@ -103,7 +103,7 @@ export async function createUser(email: string, password: string, username: stri
     return user.rows[0];
   }
   catch (error) {
-    console.error('Failed to create user:', error);
+    console.error('Failed to create user:', error, "Input: \n", "Email: ", email, "\n", "Username: ", username);
     throw new Error('Failed to create user.');
   }
 }
@@ -112,7 +112,7 @@ export async function deleteUser(email: string) {
   try {
     await sql`DELETE FROM users WHERE email=${email}`;
   } catch (error) {
-    console.error('Failed to delete user:', error);
+    console.error('Failed to delete user:', error, "Input: \n", "Email: ", email);
     throw new Error('Failed to delete user.');
   }
 }
@@ -141,12 +141,12 @@ export async function createCampaign(formData: FormData) {
     }
     catch (e) {
       await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
-      console.error('Failed to create campaign:', e);
+      console.error('Failed to create campaign:', e, "Input: \n", "DM ID: ", dmId, "\n", "Name: ", name);
       throw e; // rethrow the error
     }
   }
   catch (e) {
-    console.error('Failed to create campaign:', e);
+    console.error('Failed to create campaign:', e, "Input: \n", "DM ID: ", dmId, "\n", "Name: ", name);
     return { message: 'Database Error: Failed to Create Campaign.' };
   }
 
@@ -164,6 +164,7 @@ export async function updateCampaign(campaignId: string, formData: FormData) {
   try {
     await sql`UPDATE campaigns SET name = ${name}, description = ${description}, password = ${password} WHERE campaign_id = ${campaignId}`;
   } catch (e) {
+    console.error('Failed to update campaign:', e, "Input: \n", "Campaign ID: ", campaignId);
     return { message: 'Database Error: Failed to Update Campaign.' };
   }
   revalidatePath(`/campaigns/${campaignId}`);
@@ -180,7 +181,7 @@ export async function deleteCampaign(campaignId: string, dmId: string) {
       return { message: 'Only the DM can delete the campaign' };
     }
   } catch (e) {
-    console.error('Failed to delete campaign:', e);
+    console.error('Failed to delete campaign:', e, "Input: \n", "Campaign ID: ", campaignId, "\n", "DM ID: ", dmId);
     return { message: 'Database Error: Failed to Delete Campaign.' };
   }
 
@@ -204,7 +205,7 @@ export async function addUserToCampaign(campaignId: string, password: string) {
       await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${uID})`;
     }
   } catch (e) {
-    console.error('Failed to add user to campaign:', e);
+    console.error('Failed to add user to campaign:', e, "Input: \n", "Campaign ID: ", campaignId, "\n", "User ID: ", uID);
     return { message: 'Database Error: Failed to Add User to Campaign.' };
   }
   revalidatePath(`/campaigns/${campaignId}`);
@@ -215,7 +216,7 @@ export async function deleteCampaignUser(campaignUserId: string, campaignId: str
   try {
     await sql`DELETE FROM campaignusers WHERE campaign_user_id = ${campaignUserId}`;
   } catch (e) {
-    console.error('Failed to delete campaign user:', e);
+    console.error('Failed to delete campaign user:', e, "Input: \n", "Campaign User ID: ", campaignUserId, "\n", "Campaign ID: ", campaignId);
     return { message: 'Database Error: Failed to Delete Campaign User.' };
   }
   revalidatePath(`/campaigns/${campaignId}/access`);
@@ -258,7 +259,7 @@ export async function createCharacter(campaignId: string, formData: FormData) {
     await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${characterId}, 'private', ${name + "-Dashboard-1"})`;
 
   } catch (e) {
-    console.error('Failed to create character:', e);
+    console.error('Failed to create character:', e, "Input: \n", "Campaign ID: ", campaignId, "\n", "Name: ", name);
     return { message: 'Database Error: Failed to Create Character.' };
   }
   revalidatePath(`/campaigns/${campaignId}`);
@@ -294,7 +295,7 @@ export async function updateCharacter(characterId: string, campaignId: string, f
     await sql`UPDATE characters SET user_id = ${userID}, name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, cclass = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, speed = ${speed}
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
   } catch (e) {
-    console.error('Failed to update character:', e);
+    console.error('Failed to update character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId);
     return { message: 'Database Error: Failed to Update Character.' };
   }
   revalidatePath(`/campaigns/${campaignId}`);
@@ -306,7 +307,7 @@ export async function deleteCharacter(characterId: string, campaignId: string) {
   try {
     await sql`DELETE FROM characters WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
   } catch (e) {
-    console.error('Failed to delete character:', e);
+    console.error('Failed to delete character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId);
     return { message: 'Database Error: Failed to Delete Character.' };
   }
   revalidatePath(`/campaigns/${campaignId}`);
@@ -330,7 +331,7 @@ export async function duplicateCharacter(characterId: string, campaignId: string
     await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${newCharacterId}, 'private', ${name + "-Copy-Dashboard-1"})`;
 
   } catch (e) {
-    console.error('Failed to create character:', e);
+    console.error('Failed to create character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId, "\n", "Name: ", name);
     return { message: 'Database Error: Failed to Create Character.' };
   }
   revalidatePath(`/campaigns/${campaignId}`);
@@ -345,7 +346,7 @@ export async function createCharacterDashboard(dashboardID: string, campaignID: 
     numDashboards++;
     await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) SELECT ${newDashboardId}, campaign_id, character_id, visibility, ${characterName + "-Dashboard-" + (numDashboards)} FROM dashboards WHERE dashboard_id = ${dashboardID}`;
   } catch (e) {
-    console.error('Failed to create dashboard:', e);
+    console.error('Failed to create dashboard:', e, "Input: \n", "Dashboard ID: ", dashboardID, "\n", "Campaign ID: ", campaignID, "\n", "Character ID: ", characterID, "\n", "Character Name: ", characterName);
     return { message: 'Database Error: Failed to Create Dashboard.' };
   }
   revalidatePath(`/dashboard/${newDashboardId}`);
@@ -356,7 +357,7 @@ export async function deleteDashboardByDashboardID(dashboardId: string, campaign
   try {
     await sql`DELETE FROM dashboards WHERE dashboard_id = ${dashboardId}`;
   } catch (e) {
-    console.error('Failed to delete dashboard:', e);
+    console.error('Failed to delete dashboard:', e, "Input: \n", "Dashboard ID: ", dashboardId, "\n", "Campaign ID: ", campaignId);
     return { message: 'Database Error: Failed to Delete Dashboard.' };
   }
   revalidatePath('/campaigns/' + campaignId);
@@ -442,7 +443,7 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
       await sql`DELETE FROM dashboardelements WHERE element_id = ${elementId}`;
     }
   } catch (e) {
-    console.error('Failed to update dashboard layout:', e);
+    console.error('Failed to update dashboard layout:', e, "Input: \n", "Dashboard ID: ", dashboardId, "\n", "Layout: ", layout);
     return { message: 'Database Error: Failed to Update Dashboard Layout.' };
   }
 
@@ -460,7 +461,7 @@ export async function createDashboardElement(dashboard_id: string, formData: For
     await sql`INSERT INTO dashboardelements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg)
       VALUES (${elementId}, ${dashboard_id}, ${character_id}, ${element_type}, ${9}, ${9999}, ${3}, ${5})`;
   } catch (e) {
-    console.error('Failed to create dashboard element:', e);
+    console.error('Failed to create dashboard element:', e, "Input: \n", "Dashboard ID: ", dashboard_id, "\n", "Character ID: ", character_id, "\n", "Element Type: ", element_type);
     return 'Database Error: Failed to Create Dashboard Element.';
   }
   revalidatePath(`/dashboard/${dashboard_id}`);

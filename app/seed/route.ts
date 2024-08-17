@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { db } from '@vercel/postgres';
-import { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, abilities, conditions, dashboards, dashboardElements } from '../lib/placeholder-data';
+import { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, spellSlots, abilities, conditions, dashboards, dashboardElements } from '../lib/placeholder-data';
 
 const client = await db.connect();
 
@@ -271,6 +271,30 @@ async function seedGeneralSpells() {
   return insertedGeneralSpells;
 }
 
+async function seedSpellSlots() {
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS SpellSlots (
+      spell_slot_id VARCHAR(10) PRIMARY KEY,
+      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
+      spell_level INT NOT NULL,
+      level_description VARCHAR(100) NOT NULL,
+      casts_remaining INT NOT NULL
+    );
+  `;
+
+  const insertedSpellSlots = await Promise.all(
+    spellSlots.map(
+      (spellSlot) => client.sql`
+        INSERT INTO SpellSlots (spell_slot_id, character_id, spell_level, level_description, casts_remaining)
+        VALUES (${spellSlot.id}, ${spellSlot.character_id}, ${spellSlot.spell_level}, ${spellSlot.level_description}, ${spellSlot.casts_remaining})
+        ON CONFLICT (spell_slot_id) DO NOTHING;
+      `,
+    ),
+  );
+
+  return insertedSpellSlots;
+}
+
 async function seedAbilities() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Abilities (
@@ -410,6 +434,8 @@ export async function GET() {
     console.log('General spells seeded');
     await seedUserSpells();
     console.log('User spells seeded');
+    await seedSpellSlots();
+    console.log('Spell slots seeded');
     await seedAbilities();
     console.log('Abilities seeded');
     await seedConditions();

@@ -198,6 +198,30 @@ const userSpells = [
   },
 ];
 
+const spellSlots = [
+  {
+    id: "0wmnbAEG2x",
+    character_id: characters[0].id,
+    spell_level: 0,
+    level_description: "Ability (3)",
+    casts_remaining: 2,
+  },
+  {
+    id: "0wmnbAEG2y",
+    character_id: characters[0].id,
+    spell_level: 1,
+    level_description: "1. (2)",
+    casts_remaining: 2,
+  },
+  {
+    id: "0wmnbAEG2z",
+    character_id: characters[0].id,
+    spell_level: 2,
+    level_description: "2. (0)",
+    casts_remaining: 0,
+  }
+];
+
 const abilities = [
   {
     id: "UJ6leJdKGc",
@@ -236,15 +260,15 @@ const dashboards = [
 
 const dashboardElements = [
   {
-    id: "p9eaYCrTcX",
-    dashboard_id: dashboards[0].id,
+    id: "9UGvE_4eDZ",
+    dashboard_id: dashboards[1].id,
     character_id: characters[0].id,
     element_type: 'status',
     position_x: 0,
     position_y: 0,
-    size_x: 1,
+    size_x: 2,
     size_y: 1,
   },
 ];
 
-export { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, abilities, conditions, dashboards, dashboardElements };
+export { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, spellSlots, abilities, conditions, dashboards, dashboardElements };

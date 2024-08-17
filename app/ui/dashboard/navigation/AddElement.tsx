@@ -26,6 +26,7 @@ export default function AddElement({ characters, addElementHandler, disabled = f
         { key: "attributes", value: "Attributes" },
         { key: "skills", value: "Skills" },
         { key: "abilities", value: "Abilities" },
+        { key: "spellslots", value: "Spell Slots" },
     ];
 
     return (

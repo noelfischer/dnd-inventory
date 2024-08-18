@@ -14,7 +14,6 @@ const HealthBarServer = async ({ character_id }: { character_id: string }) => {
 
     async function updateCurrentHealth(health: number) {
         'use server'
-        console.log(character_id, health);
         await sql`UPDATE Characters SET current_hit_points = ${health} WHERE character_id = ${character_id}`;
     }
 

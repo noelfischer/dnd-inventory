@@ -2,50 +2,61 @@
 
 import { SpellSlot } from "@/app/lib/definitions";
 import OnLeaveInput from "../helper/OnLeaveInput";
+import { useEffect, useState } from "react";
 
 interface Props {
-    spellSlots: SpellSlot[];
+    spell_slots: SpellSlot[];
     character_id: string;
-    updateRemainingCasts: (character_id: string, spellSlots: SpellSlot) => Promise<void>;
-    updateLevelDescription: (character_id: string, spellSlots: SpellSlot) => Promise<void>;
+    updateRemainingCasts: (character_id: string, spell_slots: SpellSlot) => Promise<void>;
+    updateLevelDescription: (character_id: string, spell_slots: SpellSlot) => Promise<void>;
 }
 
-const SpellSlotsClient = ({ spellSlots, character_id, updateRemainingCasts, updateLevelDescription }: Props) => {
+const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, updateLevelDescription }: Props) => {
 
-    function updateLevelDescriptionClient(spellSlotID: string, levelDescription: string) {
-        if (levelDescription.length > 100 || levelDescription.length < 1) {
-            return;
+    const [slots, setSlots] = useState<SpellSlot[]>(spell_slots);
+
+    useEffect(() => {
+        setSlots(spell_slots);
+    }, [spell_slots]);
+
+    function updateLevelDescriptionClient(spellSlotID: string, totalCasts: number) {
+        if (!(totalCasts >= 0 && totalCasts < 999)) {
+            totalCasts = 0;
         }
-        const existingSlot = spellSlots.find(slot => slot.spell_slot_id === spellSlotID);
+        const existingSlot = slots.find(slot => slot.spell_slot_id === spellSlotID);
         if (!existingSlot) {
             return;
         }
-        existingSlot.level_description = levelDescription;
+        existingSlot.total_casts = totalCasts;
         updateLevelDescription(character_id, existingSlot);
+        setSlots([...slots]);
     }
 
     function updateRemainingCastsClient(spellSlotID: string, castsRemaining: number) {
-        if (!(castsRemaining > 0 && castsRemaining < 999)) {
-            return;
+        if (!(castsRemaining >= 0 && castsRemaining < 999)) {
+            castsRemaining = 0;
         }
-        const existingSlot = spellSlots.find(slot => slot.spell_slot_id === spellSlotID);
+        const existingSlot = slots.find(slot => slot.spell_slot_id === spellSlotID);
         if (!existingSlot) {
             return;
         }
         existingSlot.casts_remaining = castsRemaining;
         updateRemainingCasts(character_id, existingSlot);
+        setSlots([...slots]);
     }
 
     return (
         <div>
             <ul className="flex flex-row gap-2 flex-wrap">
-                {spellSlots.sort((a, b) => a.spell_level - b.spell_level).map((spellslot: SpellSlot, index: number) => {
+                {slots.sort((a, b) => a.spell_level - b.spell_level).map((spellslot: SpellSlot, index: number) => {
                     return (
-                        <li key={index} className="w-max border-2 border-black rounded px-1.5 py-1.5 grow bg-main">
-                            <div className="text-lg text-text text-center border-b-2 border-black pb-1.5">
-                                <OnLeaveInput initialValue={spellslot.level_description} placeholder={spellslot.level_description}
+                        <li key={index} className={"w-max border-2 border-black rounded px-1.5 py-1.5 grow" + ((spellslot.casts_remaining / spellslot.total_casts) > 0 ? " bg-mainAccent" : " bg-main/20")}>
+                            <div className="text-lg text-text text-center border-b-2 border-black pb-1.5 z-10">
+                                {(spellslot.spell_level === 0 ? "Ability" : createRomanNumeralSpan(spellslot.spell_level))} {" ("}
+                                <OnLeaveInput initialValue={spellslot.total_casts.toString()} placeholder="Total"
                                     className="text-text ml-[3px] mt-0 text-center border-black placeholder:text-black/[.3] placeholder:font-medium placeholder:text-lg placeholder:text-center"
-                                    onLeave={(value) => { updateLevelDescriptionClient(spellslot.spell_slot_id, value) }} />
+                                    onLeave={(value) => { updateLevelDescriptionClient(spellslot.spell_slot_id, parseInt(value)) }} />
+                                {")"}
                             </div>
                             <div className="text-2xl text-text text-center">
                                 <OnLeaveInput initialValue={spellslot.casts_remaining.toString()} placeholder="Remaining"
@@ -60,5 +71,28 @@ const SpellSlotsClient = ({ spellSlots, character_id, updateRemainingCasts, upda
         </div>
     );
 };
+
+function createRomanNumeralSpan(number: number) {
+    // Helper function to convert an integer to a Roman numeral
+    function intToRoman(num: number): string {
+        const romanNumerals: [string, number][] = [
+            ['X', 10],
+            ['IX', 9],
+            ['V', 5],
+            ['IV', 4],
+            ['I', 1]
+        ];
+
+        let result = '';
+        for (const [roman, value] of romanNumerals) {
+            while (num >= value) {
+                result += roman;
+                num -= value;
+            }
+        }
+        return result;
+    }
+    return <span className="font-semibold underline underline-offset-2 decoration-2" style={{ textDecorationSkipInk: "none" }}>{intToRoman(number)}</span>;
+}
 
 export default SpellSlotsClient;

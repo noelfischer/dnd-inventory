@@ -277,7 +277,7 @@ async function seedSpellSlots() {
       spell_slot_id VARCHAR(10) PRIMARY KEY,
       character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
       spell_level INT NOT NULL,
-      level_description VARCHAR(100) NOT NULL,
+      total_casts INT NOT NULL,
       casts_remaining INT NOT NULL
     );
   `;
@@ -285,8 +285,8 @@ async function seedSpellSlots() {
   const insertedSpellSlots = await Promise.all(
     spellSlots.map(
       (spellSlot) => client.sql`
-        INSERT INTO SpellSlots (spell_slot_id, character_id, spell_level, level_description, casts_remaining)
-        VALUES (${spellSlot.id}, ${spellSlot.character_id}, ${spellSlot.spell_level}, ${spellSlot.level_description}, ${spellSlot.casts_remaining})
+        INSERT INTO SpellSlots (spell_slot_id, character_id, spell_level, total_casts, casts_remaining)
+        VALUES (${spellSlot.id}, ${spellSlot.character_id}, ${spellSlot.spell_level}, ${spellSlot.total_casts}, ${spellSlot.casts_remaining})
         ON CONFLICT (spell_slot_id) DO NOTHING;
       `,
     ),

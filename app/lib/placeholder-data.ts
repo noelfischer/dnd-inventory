@@ -203,21 +203,21 @@ const spellSlots = [
     id: "0wmnbAEG2x",
     character_id: characters[0].id,
     spell_level: 0,
-    level_description: "Ability (3)",
+    total_casts: 3,
     casts_remaining: 2,
   },
   {
     id: "0wmnbAEG2y",
     character_id: characters[0].id,
     spell_level: 1,
-    level_description: "1. (2)",
+    total_casts: 2,
     casts_remaining: 2,
   },
   {
     id: "0wmnbAEG2z",
     character_id: characters[0].id,
     spell_level: 2,
-    level_description: "2. (0)",
+    total_casts: 0,
     casts_remaining: 0,
   }
 ];

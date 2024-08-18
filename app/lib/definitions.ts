@@ -121,7 +121,7 @@ export type SpellSlot = {
   spell_slot_id: string;
   character_id: string;
   spell_level: number;
-  level_description: string;
+  total_casts: number;
   casts_remaining: number;
 };
 

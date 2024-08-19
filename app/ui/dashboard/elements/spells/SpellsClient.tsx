@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
+import { CornerDownLeft, CornerDownRight, Hand } from 'lucide-react';
 
 interface Props {
     userspells: GeneralSpell[];
@@ -43,6 +44,7 @@ const SpellsClient = ({ userspells, learnableSpells, learnSpell, forgetSpell }: 
         if (!spellName) return;
         const spell = await fetchSpell(spellName, lang);
         setDetailedSpells([...detailedSpells, spell]);
+        setSearch('');
     }
 
     function forgetSpellClient(name: string) {
@@ -60,7 +62,7 @@ const SpellsClient = ({ userspells, learnableSpells, learnSpell, forgetSpell }: 
                     <CarouselItem key={spell.id}>
                         <Card className='h-full'>
                             <CardHeader>
-                                <CardTitle>{spell.name}</CardTitle>
+                                <CardTitle className='flex justify-between'><span>{spell.name}</span><CornerDownRight className='h-7 w-7' /></CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <h3 className="text-xl font-semibold"></h3>

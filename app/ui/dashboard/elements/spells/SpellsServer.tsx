@@ -21,6 +21,11 @@ const SpellsServer = async ({ character_id }: { character_id: string }) => {
     async function learnSpell(spell_id: string) {
         'use server'
         const user_spell_id = nanoid(10);
+        // first check if spell is already learned
+        const spell = await sql`SELECT * FROM UserSpells WHERE character_id = ${character_id} AND spell_id = ${spell_id}`;
+        if (spell.rows.length > 0) {
+            return;
+        }
         await sql`INSERT INTO UserSpells (user_spell_id, character_id, spell_id) VALUES (${user_spell_id}, ${character_id}, ${spell_id})`;
     }
 

@@ -92,9 +92,9 @@ const SpellsClient = ({ userspells, learnableSpells, learnSpell, forgetSpell }: 
                                 <CommandList>
                                     <CommandEmpty>No results found.</CommandEmpty>
                                     {Array.from(learnableLevels).map(level =>
-                                        <CommandGroup heading={"Level " + level}>
+                                        <CommandGroup heading={"Level " + level} key={level}>
                                             {learnableSpells.filter(spell => spell.spell_level === level).map(spell =>
-                                                <button className="w-full empty:hidden" onClick={() => setSearch(spell.spell_id)}>
+                                                <button className="w-full empty:hidden" onClick={() => setSearch(spell.spell_id)} key={spell.spell_name_de}>
                                                     <CommandItem key={spell.spell_name_de}>
                                                         {lang === 'de' ? spell.spell_name_de : spell.spell_name_en}
                                                     </CommandItem></button>)}

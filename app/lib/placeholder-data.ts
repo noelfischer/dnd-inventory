@@ -1,6 +1,8 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
 
+import { spells } from "./spells";
+
 // import { nanoid } from 'nanoid';
 
 const users = [
@@ -36,7 +38,7 @@ const characters = [
     description: 'Son of Arathorn, heir to the throne of Gondor.',
     character_type: 'player',
     race: 'Human',
-    cclass: 'Ranger',
+    cclass: 'Zauberer',
     level: 5,
     background: 'Noble',
     alignment: 'Lawful Good',
@@ -178,23 +180,11 @@ const currency = [
   },
 ];
 
-const generalSpells = [
-  {
-    id: "P0pk6JosnJ",
-    spell_name: 'Fireball',
-    description: 'A bright streak flashes from your pointing finger to a point you choose within range.',
-    spell_level: 3,
-  },
-];
-
 const userSpells = [
   {
     id: "0wmnbSMP2x",
     character_id: characters[0].id,
-    spell_id: generalSpells[0].id,
-    prepared: true,
-    slots_total: 3,
-    slots_used: 1,
+    spell_id: spells[0].id,
   },
 ];
 
@@ -271,4 +261,4 @@ const dashboardElements = [
   },
 ];
 
-export { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, spellSlots, abilities, conditions, dashboards, dashboardElements };
+export { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, spellSlots, abilities, conditions, dashboards, dashboardElements };

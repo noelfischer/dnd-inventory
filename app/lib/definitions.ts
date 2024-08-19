@@ -104,16 +104,13 @@ export type UserSpell = {
   user_spell_id: string;
   character_id: string;
   spell_id: string;
-  prepared: boolean;
-  slots_total: number;
-  slots_used: number;
-  spell_name: string;
 };
 
 export type GeneralSpell = {
   spell_id: string;
-  spell_name: string;
-  description: string;
+  spell_name_de: string;
+  spell_name_en: string;
+  classes: string;
   spell_level: number;
 };
 

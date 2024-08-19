@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { db } from '@vercel/postgres';
-import { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, generalSpells, spellSlots, abilities, conditions, dashboards, dashboardElements } from '../lib/placeholder-data';
+import { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, spellSlots, abilities, conditions, dashboards, dashboardElements } from '../lib/placeholder-data';
+import { spells } from '../lib/spells';
 
 const client = await db.connect();
 
@@ -228,18 +229,15 @@ async function seedUserSpells() {
     CREATE TABLE IF NOT EXISTS UserSpells (
       user_spell_id VARCHAR(10) PRIMARY KEY,
       character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
-      spell_id VARCHAR(10) REFERENCES GeneralSpells(spell_id),
-      prepared BOOLEAN,
-      slots_total INT,
-      slots_used INT
+      spell_id VARCHAR(10) REFERENCES GeneralSpells(spell_id)
     );
   `;
 
   const insertedUserSpells = await Promise.all(
     userSpells.map(
       (userSpell) => client.sql`
-        INSERT INTO UserSpells (user_spell_id, character_id, spell_id, prepared, slots_total, slots_used)
-        VALUES (${userSpell.id}, ${userSpell.character_id}, ${userSpell.spell_id}, ${userSpell.prepared}, ${userSpell.slots_total}, ${userSpell.slots_used})
+        INSERT INTO UserSpells (user_spell_id, character_id, spell_id)
+        VALUES (${userSpell.id}, ${userSpell.character_id}, ${userSpell.spell_id})
         ON CONFLICT (user_spell_id) DO NOTHING;
       `,
     ),
@@ -252,17 +250,18 @@ async function seedGeneralSpells() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS GeneralSpells (
       spell_id VARCHAR(10) PRIMARY KEY,
-      spell_name VARCHAR(100) NOT NULL,
-      description TEXT NOT NULL,
+      spell_name_de VARCHAR(100) NOT NULL,
+      spell_name_en VARCHAR(100) NOT NULL,
+      classes VARCHAR(256) NOT NULL,
       spell_level INT NOT NULL
     );
   `;
 
   const insertedGeneralSpells = await Promise.all(
-    generalSpells.map(
+    spells.map(
       (spell) => client.sql`
-        INSERT INTO GeneralSpells (spell_id, spell_name, description, spell_level)
-        VALUES (${spell.id}, ${spell.spell_name}, ${spell.description}, ${spell.spell_level})
+        INSERT INTO GeneralSpells (spell_id, spell_name_de, spell_name_en, classes, spell_level)
+        VALUES (${spell.id}, ${spell.spell_name_de}, ${spell.spell_name_en}, ${spell.classes}, ${spell.spell_level})
         ON CONFLICT (spell_id) DO NOTHING;
       `,
     ),

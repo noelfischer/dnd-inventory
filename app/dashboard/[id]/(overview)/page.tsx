@@ -11,12 +11,12 @@ import ConditionsList from '@/app/ui/dashboard/elements/ConditionsList';
 import CurrencyOverview from '@/app/ui/dashboard/elements/CurrencyOverview';
 import InventoryList from '@/app/ui/dashboard/elements/InventoryList';
 import SkillsList from '@/app/ui/dashboard/elements/SkillsList';
-import SpellList from '@/app/ui/dashboard/elements/SpellList';
 import { checkDMStatus, createCharacterDashboard, createDashboardElement, deleteDashboardByDashboardID, updateDashboardLayout } from '@/app/lib/actions';
 import { Layouts } from 'react-grid-layout';
 import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
 import { keyValuePair } from '@/app/ui/campaigns/CustomForm';
 import SpellSlotsServer from '@/app/ui/dashboard/elements/spellslots/SpellSlotsServer';
+import SpellsServer from '@/app/ui/dashboard/elements/spells/SpellsServer';
 
 export type GridElement = {
   i: string;
@@ -97,7 +97,7 @@ function componentMap(type: string, character_id: string): ReactNode {
     case 'inventory':
       return <InventoryList character_id={character_id} />;
     case 'spells':
-      return <SpellList character_id={character_id} />;
+      return <SpellsServer character_id={character_id} />;
     case 'abilities':
       return <AbilitiesList character_id={character_id} />;
     case 'conditions':
@@ -167,7 +167,7 @@ function getLayoutTemplate(characterID: string) {
     { i: '0000000002,attributes,' + characterID, type: <CharacterAttributes character_id={characterID} /> },
     { i: '0000000003,skills,' + characterID, type: <SkillsList character_id={characterID} /> },
     { i: '0000000004,inventory,' + characterID, type: <InventoryList character_id={characterID} /> },
-    { i: '0000000005,spells,' + characterID, type: <SpellList character_id={characterID} /> },
+    { i: '0000000005,spells,' + characterID, type: <SpellsServer character_id={characterID} /> },
     { i: '0000000006,abilities,' + characterID, type: <AbilitiesList character_id={characterID} /> },
     { i: '0000000007,conditions,' + characterID, type: <ConditionsList character_id={characterID} /> },
     { i: '00000000008,currency,' + characterID, type: <CurrencyOverview character_id={characterID} /> },

@@ -139,12 +139,11 @@ const DraggableTables = ({ initialItems, updateIndex }: { initialItems: Inventor
   return (
     <div>
       {tables.map((table) => (
-        <div>
+        <div key={table.id}>
           <h3 className='text-text text-lg bg-main border-y-2 px-4 border-black font-medium'>{table.name}</h3>
           <Table
             className='table-auto'
             id='-1'
-            key={table.id}
             onDragOver={(e) => handleDragOver(e, table.id)}
             onDrop={(e) => handleDrop(e, table.id)}
           >

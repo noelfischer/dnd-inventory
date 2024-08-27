@@ -2,8 +2,9 @@
 
 import React, { useState, DragEvent } from 'react';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { GripVertical, Ham, PencilRuler, Pickaxe, Shield, Sword } from 'lucide-react';
+import { GripVertical, Ham, Pencil, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'lucide-react';
 import { InventoryItem } from '@/app/lib/definitions';
+import Button from '@/components/Button';
 
 
 // Define type for table and row structure
@@ -14,13 +15,13 @@ type TableProps = {
   rows: InventoryItem[];
 };
 
-const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) => {
+const DraggableTables = ({ initialItems, updateIndex }: { initialItems: InventoryItem[], updateIndex: (items: { item_id: string, i: number, slot: string }[]) => void }) => {
 
   function formatInitialItemstoTableData(initialItems: InventoryItem[]) {
     const tableData: TableProps[] = [];
-    tableData.push({ id: 1, name: "Equiped", rows: initialItems.filter(i => i.slot == "eq") });
-    tableData.push({ id: 2, name: "On Body", rows: initialItems.filter(i => i.slot == "bd") });
-    tableData.push({ id: 3, name: "Backpack", rows: initialItems.filter(i => i.slot == "bp") });
+    tableData.push({ id: 1, name: "Equiped", rows: initialItems.filter(i => i.slot == "eq").sort((a, b) => a.i - b.i) });
+    tableData.push({ id: 2, name: "On Body", rows: initialItems.filter(i => i.slot == "bd").sort((a, b) => a.i - b.i) });
+    tableData.push({ id: 3, name: "Backpack", rows: initialItems.filter(i => i.slot == "bp").sort((a, b) => a.i - b.i) });
     return tableData;
   }
 
@@ -46,7 +47,6 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
 
   const handleDragOver = (e: DragEvent<HTMLTableElement>, targetTableId: number) => {
     e.preventDefault();
-    console.log('Drag over', e.target);
     setDraggedOverTableId(targetTableId);
     setDraggedOverRowIndex(parseInt(((e.target as HTMLTableCellElement)).id));
   };
@@ -66,6 +66,11 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
 
     // If dropping within the same table
     if (sourceTableId === targetTableId) {
+      if (sourceRowIndex === targetIndex) {
+        setDraggedRow(null);
+        setDraggedOverTableId(null);
+        return;
+      };
       const table = tables.find((t) => t.id === sourceTableId);
       if (!table) return;
       // Calculate new position for the row
@@ -75,6 +80,7 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
       const [movedRow] = updatedRows.splice(sourceRowIndex, 1);
       updatedRows.splice(Math.max(0, targetIndex), 0, movedRow);
 
+
       const updatedTables = tables.map((t) => {
         if (t.id === sourceTableId) {
           return { ...t, rows: updatedRows };
@@ -82,6 +88,13 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
         return t;
       });
 
+      // insert the row into the target table at the specified index
+      // first get the keys from the updatedRows array
+      let serverItems: { item_id: string, i: number, slot: string }[] = [];
+      updatedRows.forEach((row, index) => {
+        serverItems.push({ item_id: row.item_id, i: index, slot: row.slot });
+      });
+      updateIndex(serverItems);
       setTables(updatedTables);
     } else {
 
@@ -89,12 +102,22 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
       const sourceTable = tables.find((table) => table.id === sourceTableId);
       if (!sourceTable) return;
 
-      const sourceRow = sourceTable.rows[sourceRowIndex];
+      let sourceRow = sourceTable.rows[sourceRowIndex];
+      sourceRow.slot = targetTable.name === 'Equiped' ? 'eq' : targetTable.name === 'On Body' ? 'bd' : 'bp';
       const updatedSourceRows = sourceTable.rows.filter((_, index) => index !== sourceRowIndex);
 
       // Insert the row into the target table at the specified index
       const updatedTargetRows = [...targetTable.rows];
       updatedTargetRows.splice(targetIndex + 1, 0, sourceRow);
+
+      let serverItems: { item_id: string, i: number, slot: string }[] = [];
+      updatedTargetRows.forEach((row, index) => {
+        serverItems.push({ item_id: row.item_id, i: index, slot: row.slot });
+      });
+      updatedSourceRows.forEach((row, index) => {
+        serverItems.push({ item_id: row.item_id, i: index, slot: row.slot });
+      });
+      updateIndex(serverItems);
 
       // Update the state with new tables data
       const updatedTables = tables.map((table) => {
@@ -119,19 +142,25 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
         <div>
           <h3 className='text-text text-lg bg-main border-y-2 px-4 border-black font-medium'>{table.name}</h3>
           <Table
+            className='table-auto'
             id='-1'
             key={table.id}
             onDragOver={(e) => handleDragOver(e, table.id)}
             onDrop={(e) => handleDrop(e, table.id)}
           >
+            <colgroup>
+              <col className="w-auto" />
+              <col className="w-auto" />
+              <col className="w-6 whitespace-nowrap" />
+              <col className="w-6 whitespace-nowrap" />
+              <col className="w-6 whitespace-nowrap" />
+            </colgroup>
             <TableHeader id='-1'>
               <TableRow id='-1' className={`${(draggedOverTableId === table.id && draggedOverRowIndex === -1) ? '!bg-main/20' : ''}`}>
-                <TableHead id='-1' className="w-[100px]">Name</TableHead>
-                <TableHead id='-1' >Description</TableHead>
-                <TableHead id='-1' >Ability</TableHead>
-                <TableHead id='-1' >Magic</TableHead>
-                <TableHead id='-1' >Weight</TableHead>
-                <TableHead id='-1' >Quantity</TableHead>
+                <TableHead id='-1' className="w-[180px]">Name</TableHead>
+                <TableHead id='-1'>Description</TableHead>
+                <TableHead id='-1'>Weight</TableHead>
+                <TableHead id='-1'>Quantity</TableHead>
                 <TableHead id='-1' className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -141,10 +170,8 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
                   key={index}
                   className={`p-2 transition-all ${(draggedOverTableId === table.id && (draggedOverRowIndex === index || draggedOverRowIndex === -1)) ? '!bg-main/20' : ''} ${draggedRow && draggedRow.tableId === table.id && draggedRow.rowIndex === index ? '!bg-mainAccent/30' : ''}`}
                 >
-                  <TableCell className="font-base flex gap-2">{selectIcon(row.category)} {row.item_name}</TableCell>
+                  <TableCell className="whitespace-nowrap font-base flex gap-2 items-center">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles />}</TableCell>
                   <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.ability}</TableCell>
-                  <TableCell>{row.magic}</TableCell>
                   <TableCell>{row.weight} kg</TableCell>
                   <TableCell>{row.quantity}</TableCell>
                   <TableCell id={index.toString()} className=' flex flex-row-reverse'>
@@ -155,6 +182,7 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
                         <GripVertical className='absolute top-0 z-0' />
                       </div>
                     </div>
+                    <Pencil id={index.toString()} className='cursor-pointer rounded-lg h-[28px] w-[28px] -my-0.5 mr-2  p-1 hover:bg-zinc-500/20' />
                   </TableCell>
                 </TableRow>
               ))}
@@ -162,7 +190,7 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
             {table.name === 'Backpack' &&
               <TableFooter id='-1'>
                 <TableRow id='-1'>
-                  <TableCell id='-1' colSpan={6}>Total Weight</TableCell>
+                  <TableCell id='-1' colSpan={4}>Total Weight</TableCell>
                   <TableCell id='-1' className="text-right">87%</TableCell>
                 </TableRow>
               </TableFooter>
@@ -170,6 +198,7 @@ const DraggableTables = ({ initialItems }: { initialItems: InventoryItem[] }) =>
           </Table>
         </div>
       ))}
+      <Button className='w-auto m-4'>Add Item</Button>
     </div>
   );
 };
@@ -178,19 +207,19 @@ export function selectIcon(category: string) {
   switch (category) {
     // Weapons
     case 'W':
-      return <Sword />;
+      return <Sword className='min-w-6 min-h-6' />;
     // Armor
     case 'A':
-      return <Shield />;
+      return <Shield className='min-w-6 min-h-6' />;
     // Consumables
     case 'C':
-      return <Ham />;
+      return <Ham className='min-w-6 min-h-6' />;
     // Tools
     case 'T':
-      return <Pickaxe />;
+      return <Pickaxe className='min-w-6 min-h-6' />;
     // Default
     default:
-      return <PencilRuler />;
+      return <PencilRuler className='min-w-6 min-h-6' />;
   }
 }
 

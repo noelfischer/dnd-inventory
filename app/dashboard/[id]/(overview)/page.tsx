@@ -9,7 +9,6 @@ import AbilitiesList from '@/app/ui/dashboard/elements/AbilitiesList';
 import CharacterAttributes from '@/app/ui/dashboard/elements/CharacterAttributes';
 import ConditionsList from '@/app/ui/dashboard/elements/ConditionsList';
 import CurrencyOverview from '@/app/ui/dashboard/elements/CurrencyOverview';
-import InventoryList from '@/app/ui/dashboard/elements/InventoryList';
 import SkillsList from '@/app/ui/dashboard/elements/SkillsList';
 import { checkDMStatus, createCharacterDashboard, createDashboardElement, deleteDashboardByDashboardID, updateDashboardLayout } from '@/app/lib/actions';
 import { Layouts } from 'react-grid-layout';
@@ -17,6 +16,7 @@ import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
 import { keyValuePair } from '@/app/ui/campaigns/CustomForm';
 import SpellSlotsServer from '@/app/ui/dashboard/elements/spellslots/SpellSlotsServer';
 import SpellsServer from '@/app/ui/dashboard/elements/spells/SpellsServer';
+import InventoryServer from '@/app/ui/dashboard/elements/inventory/InventoryServer';
 
 export type GridElement = {
   i: string;
@@ -95,7 +95,7 @@ function componentMap(type: string, character_id: string): ReactNode {
     case 'skills':
       return <SkillsList character_id={character_id} />;
     case 'inventory':
-      return <InventoryList character_id={character_id} />;
+      return <InventoryServer character_id={character_id} />;
     case 'spells':
       return <SpellsServer character_id={character_id} />;
     case 'abilities':
@@ -166,7 +166,7 @@ function getLayoutTemplate(characterID: string) {
     { i: '0000000009,spellslots,' + characterID, type: <SpellSlotsServer character_id={characterID} /> },
     { i: '0000000002,attributes,' + characterID, type: <CharacterAttributes character_id={characterID} /> },
     { i: '0000000003,skills,' + characterID, type: <SkillsList character_id={characterID} /> },
-    { i: '0000000004,inventory,' + characterID, type: <InventoryList character_id={characterID} /> },
+    { i: '0000000004,inventory,' + characterID, type: <InventoryServer character_id={characterID} /> },
     { i: '0000000005,spells,' + characterID, type: <SpellsServer character_id={characterID} /> },
     { i: '0000000006,abilities,' + characterID, type: <AbilitiesList character_id={characterID} /> },
     { i: '0000000007,conditions,' + characterID, type: <ConditionsList character_id={characterID} /> },

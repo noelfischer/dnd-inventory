@@ -2,9 +2,9 @@
 
 import { InventoryItem } from '@/app/lib/definitions';
 import { sql } from '@vercel/postgres';
-import DraggableTables from './helper/DraggableTables';
+import InventoryClient from './InventoryClient';
 
-const InventoryList = async ({ character_id }: { character_id: string }) => {
+const InventoryServer = async ({ character_id }: { character_id: string }) => {
     const data = await sql<InventoryItem>`SELECT item_id, character_id, i, slot, item_name, description, ability, weight, category, magic, quantity FROM Inventory WHERE character_id = ${character_id}`;
     const items: InventoryItem[] = data.rows;
 
@@ -17,9 +17,9 @@ const InventoryList = async ({ character_id }: { character_id: string }) => {
 
     return (
         <div className="inventory -z-50">
-            <DraggableTables initialItems={items} updateIndex={updateIndex} />
+            <InventoryClient initialItems={items} updateIndex={updateIndex} />
         </div>
     );
 };
 
-export default InventoryList;
+export default InventoryServer;

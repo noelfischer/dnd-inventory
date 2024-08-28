@@ -4,6 +4,7 @@
 import React, { useState, DragEvent } from 'react';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { InventoryItem } from '@/app/lib/definitions';
+import { GripVertical } from 'lucide-react';
 
 type TableProps = {
   id: number;
@@ -15,8 +16,7 @@ type DraggableTablesProps = {
   tableData: TableProps[];
   updateIndex: (items: { item_id: string; i: number; slot: string }[]) => void;
   headerContent: () => React.ReactNode;
-  renderRow: (row: InventoryItem, index: number, tableId: number, handleDragStart: Function,
-    draggedOverTableId: number | null, draggedOverRowIndex: number | null, draggedRow: { tableId: number, rowIndex: number } | null) => React.ReactNode;
+  renderRow: (row: InventoryItem, index: number, dragHandler: React.ReactNode) => React.ReactNode;
   footerContent?: (table: TableProps) => React.ReactNode;
 };
 
@@ -135,11 +135,33 @@ const DraggableTables: React.FC<DraggableTablesProps> = ({
           >
             {headerContent()}
             <TableBody>
-              {table.rows.map((row, index) => renderRow(row, index, table.id, handleDragStart, draggedOverTableId, draggedOverRowIndex, draggedRow))}
+              {table.rows.map((row, index) => {
+
+                function dragHandler() {
+                  return (
+                    <div id={index.toString()} onDragStart={(e) => handleDragStart(e, table.id, index)}
+                      className='cursor-move h-6 w-6' draggable>
+                      <div className='absolute'>
+                        <div className='absolute top-0 h-7 w-6 z-10' id={index.toString()} />
+                        <GripVertical className='absolute top-0 z-0' />
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <TableRow
+                    key={index}
+                    className={`p-2 transition-all ${(draggedOverTableId === table.id && (draggedOverRowIndex === index || draggedOverRowIndex === -1)) ? '!bg-main/20' : ''} ${draggedRow && draggedRow.tableId === table.id && draggedRow.rowIndex === index ? '!bg-mainAccent/30' : ''}`}>
+                    {renderRow(row, index, dragHandler())}
+                  </TableRow>)
+              })}
             </TableBody>
             {footerContent && (
               <TableFooter id='-1'>
-                {footerContent(table)}
+                <TableRow id='-1'>
+                  {footerContent(table)}
+                </TableRow>
               </TableFooter>
             )}
           </Table>

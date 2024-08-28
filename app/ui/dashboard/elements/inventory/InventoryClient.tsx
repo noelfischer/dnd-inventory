@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { InventoryItem } from '@/app/lib/definitions';
-import { GripVertical, Ham, Pencil, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'lucide-react';
+import { Ham, Pencil, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'lucide-react';
 import Button from '@/components/Button';
 import DraggableTables from '../helper/DraggableTables';
 import { TableRow, TableCell, TableHead, TableHeader } from '@/components/ui/table';
@@ -49,38 +49,28 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
         )
     };
 
-    const renderRow = (row: InventoryItem, index: number, tableId: number, handleDragStart: Function,
-        draggedOverTableId: number | null, draggedOverRowIndex: number | null, draggedRow: { tableId: number, rowIndex: number } | null) => {
+    const renderRow = (row: InventoryItem, index: number, dragHandler: React.ReactNode) => {
         return (
-            <TableRow
-                key={index}
-                className={`p-2 transition-all ${(draggedOverTableId === tableId && (draggedOverRowIndex === index || draggedOverRowIndex === -1)) ? '!bg-main/20' : ''} ${draggedRow && draggedRow.tableId === tableId && draggedRow.rowIndex === index ? '!bg-mainAccent/30' : ''}`}
-            >
+            <>
                 <TableCell className="whitespace-nowrap font-base flex gap-2 items-center">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles />}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>{row.weight} kg</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell id={index.toString()} className=' flex flex-row-reverse'>
-                    <div id={index.toString()} onDragStart={(e) => handleDragStart(e, tableId, index)}
-                        className='cursor-move h-6 w-6' draggable>
-                        <div className='absolute'>
-                            <div className='absolute top-0 h-7 w-6 z-10' id={index.toString()} />
-                            <GripVertical className='absolute top-0 z-0' />
-                        </div>
-                    </div>
+                    {dragHandler}
                     <Pencil id={index.toString()} className='cursor-pointer rounded-lg h-[28px] w-[28px] -my-0.5 mr-2  p-1 hover:bg-zinc-500/20' />
                 </TableCell>
-            </TableRow>
+            </>
         )
     };
 
     const footerContent = (table: TableProps) => {
         if (table.name === 'Backpack') {
             return (
-                <TableRow id='-1'>
+                <>
                     <TableCell id='-1' colSpan={4}>Total Weight</TableCell>
                     <TableCell id='-1' className="text-right">87%</TableCell>
-                </TableRow>
+                </>
             );
         }
         return null;
@@ -102,12 +92,19 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
 
 export function selectIcon(category: string) {
     switch (category) {
+        // Weapons
         case 'W':
             return <Sword className='min-w-6 min-h-6' />;
+        // Armor
         case 'A':
             return <Shield className='min-w-6 min-h-6' />;
+        // Consumables
         case 'C':
             return <Ham className='min-w-6 min-h-6' />;
+        // Tools
+        case 'T':
+            return <Pickaxe className='min-w-6 min-h-6' />;
+        // Default
         default:
             return <PencilRuler className='min-w-6 min-h-6' />;
     }

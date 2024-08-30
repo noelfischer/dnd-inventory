@@ -1,4 +1,3 @@
-// Inventory.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -18,7 +17,7 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
 
     function formatInitialItemstoTableData(initialItems: InventoryItem[]): TableProps[] {
         return [
-            { id: 1, name: "Equiped", rows: initialItems.filter(i => i.slot == "eq").sort((a, b) => a.i - b.i) },
+            { id: 1, name: "Equipped", rows: initialItems.filter(i => i.slot == "eq").sort((a, b) => a.i - b.i) },
             { id: 2, name: "On Body", rows: initialItems.filter(i => i.slot == "bd").sort((a, b) => a.i - b.i) },
             { id: 3, name: "Backpack", rows: initialItems.filter(i => i.slot == "bp").sort((a, b) => a.i - b.i) },
         ];
@@ -49,11 +48,11 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
         )
     };
 
-    const renderRow = (row: InventoryItem, index: number, dragHandler: React.ReactNode) => {
+    const renderRow = (row: InventoryItem, index: number, isDragging: boolean, dragHandler: React.ReactNode) => {
         return (
             <>
                 <TableCell className="whitespace-nowrap font-base flex gap-2 items-center">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles />}</TableCell>
-                <TableCell>{row.description}</TableCell>
+                <TableCell className={isDragging ? 'grow' : ''}>{row.description}</TableCell>
                 <TableCell>{row.weight} kg</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell id={index.toString()} className=' flex flex-row-reverse'>

@@ -44,10 +44,13 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   const [pendingClick, setPendingClick] = useState(false);
 
   useEffect(() => {
-    if (pendingClick && isPendingUpdateLayout === false && errorMessageUpdateLayout === undefined) {
+    if (pendingClick && isPendingUpdateLayout === false) {
+      if (errorMessageUpdateLayout !== undefined) {
+        console.error("Error saving layout: ", errorMessageUpdateLayout);
+      }
       setEditMode(false);
     }
-  }, [isPendingUpdateLayout, errorMessageUpdateLayout]);
+  }, [initialLayouts, isPendingUpdateLayout, errorMessageUpdateLayout]);
 
   function save() {
     if (noChange) { setEditMode(false); }
@@ -102,7 +105,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
           :
           <Button className='min-w-[160px] flex justify-between bg-mainAccent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }
-        <AddElement characters={characters} addElementHandler={addElementHandlerCustom} disabled={isPendingUpdateLayout}/>
+        <AddElement characters={characters} addElementHandler={addElementHandlerCustom} disabled={isPendingUpdateLayout} />
       </div>
     </div>
   )
@@ -142,6 +145,8 @@ function compareLayouts(layouts: Layouts, initialLayouts: Layouts): boolean {
           return false;
         }
       }
+    } else {
+      return false;
     }
   }
 

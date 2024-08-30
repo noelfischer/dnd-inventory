@@ -379,7 +379,7 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
           const { w, h, x, y, i } = element;
 
           let column: DashboardElement
-          const columnExists = dashboardElement.find((column) => column.element_id + "," + column.element_type === i);
+          const columnExists = dashboardElement.find((column) => column.element_id + "," + column.element_type + "," + column.character_id === i);
           if (columnExists !== undefined && columnExists) {
             column = columnExists;
           } else {

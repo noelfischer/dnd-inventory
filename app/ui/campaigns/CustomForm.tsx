@@ -106,7 +106,7 @@ export const FormItemCheckbox = ({ name, label, defaultChecked, visible = true, 
 }) => {
     return (
         <div className={cn((visible ? "ml-1 mb-8" : "invisible max-h-0"), className)}>
-            <label htmlFor={name} className="text-text mb-5 block text-sm font-medium">
+            <label className="text-text mb-5 block text-sm font-medium">
                 {label}
             </label>
             <div className="flex">

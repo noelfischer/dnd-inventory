@@ -40,7 +40,7 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
             item_name: formData.get('item_name') as string,
             description: formData.get('description') as string,
             ability: '',
-            weight: parseInt(formData.get('weight') as string),
+            weight: parseFloat(formData.get('weight') as string),
             category: formData.get('category') as string,
             magic: formData.get('magic') === 'on',
             quantity: parseInt(formData.get('quantity') as string)
@@ -62,7 +62,7 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
             item_name: formData.get('item_name') as string,
             description: formData.get('description') as string,
             ability: item.ability,
-            weight: parseInt(formData.get('weight') as string),
+            weight: parseFloat(formData.get('weight') as string),
             category: formData.get('category') as string,
             magic: formData.get('magic') === 'on',
             quantity: parseInt(formData.get('quantity') as string)
@@ -116,7 +116,7 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
     const renderRow = (row: InventoryItem, index: number, isDragging: boolean, dragHandler: React.ReactNode) => {
         return (
             <>
-                <TableCell className="whitespace-nowrap font-base flex gap-2 items-center">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles />}</TableCell>
+                <TableCell className="whitespace-nowrap font-base flex gap-2 items-center">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles className='-ml-2 pb-2 text-main' />}</TableCell>
                 <TableCell className={isDragging ? 'grow' : ''}>{row.description}</TableCell>
                 <TableCell>{row.weight} kg</TableCell>
                 <TableCell>{row.quantity}</TableCell>

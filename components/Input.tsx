@@ -49,6 +49,7 @@ export default function Input({
             id={id}
             min={min}
             max={max}
+            step={type === 'number' ? 'any' : undefined}
             name={name}
             defaultValue={defaultValue}
             maxLength={maxLength}

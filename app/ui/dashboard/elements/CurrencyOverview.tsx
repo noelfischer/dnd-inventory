@@ -14,10 +14,10 @@ const CurrencyOverview = async ({ character_id }: { character_id: string }) => {
             {noCurrency && <p>No currency.</p>}
             {!noCurrency &&
                 <ul>
-                    <li>Platinum: {currency.platin}</li>
-                    <li>Gold: {currency.gold}</li>
-                    <li>Silver: {currency.silver}</li>
-                    <li>Copper: {currency.copper}</li>
+                    <li key="pla">Platinum: {currency.platin}</li>
+                    <li key="gol">Gold: {currency.gold}</li>
+                    <li key="sil">Silver: {currency.silver}</li>
+                    <li key="cop">Copper: {currency.copper}</li>
                 </ul>
             }
         </div>

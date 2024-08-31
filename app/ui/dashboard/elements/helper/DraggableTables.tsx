@@ -150,7 +150,6 @@ const DraggableTables = ({
                         <Draggable key={row.item_id} draggableId={row.item_id} index={index}>
                           {(provided: any, snapshot: any) => {
 
-
                             function dragHandler() {
                               return (
                                 <div {...provided.dragHandleProps} className='h-6 w-6' >
@@ -174,7 +173,7 @@ const DraggableTables = ({
                                 ref={provided.innerRef}
                                 id={row.item_id}
                                 {...provided.draggableProps}
-
+                                key={row.item_id}
                                 className={`${snapshot.isDragging ? 'flex !bg-mainAccent/30' : ''}`}
                               >
                                 {renderRow(row, index, snapshot.isDragging, dragHandler())}

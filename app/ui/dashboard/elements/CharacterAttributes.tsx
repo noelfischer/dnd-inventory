@@ -15,12 +15,12 @@ const CharacterAttributes = async ({ character_id }: { character_id: string }) =
         <div className="attributes">
             <h2 className='text-2xl'>Attributes</h2>
             <ul>
-                <li>Strength: {character.strength}</li>
-                <li>Dexterity: {character.dexterity}</li>
-                <li>Constitution: {character.constitution}</li>
-                <li>Intelligence: {character.intelligence}</li>
-                <li>Wisdom: {character.wisdom}</li>
-                <li>Charisma: {character.charisma}</li>
+                <li key="str">Strength: {character.strength}</li>
+                <li key="dex">Dexterity: {character.dexterity}</li>
+                <li key="con">Constitution: {character.constitution}</li>
+                <li key="int">Intelligence: {character.intelligence}</li>
+                <li key="wis">Wisdom: {character.wisdom}</li>
+                <li key="cha">Charisma: {character.charisma}</li>
             </ul>
         </div>
     );

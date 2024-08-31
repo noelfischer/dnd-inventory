@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { Table as UiTable, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table as UiTable, TableBody, TableFooter, TableRow } from '@/components/ui/table';
 import { InventoryItem } from '@/app/lib/definitions';
 import { GripVertical } from 'lucide-react';
 
 // Define type for table and row structure
-type TableProps = {
+export type TableProps = {
   id: number;
-  name?: string;
+  name: string;
   rows: InventoryItem[];
 };
 
@@ -101,7 +101,7 @@ const DraggableTables = ({
         destinationTable.rows,
         source,
         destination,
-        destinationTable.name === 'Equipped' ? 'eq' : destinationTable.name === 'On Body' ? 'bd' : 'bp'
+        destinationTable.name
       );
 
       const updatedTables = tables.map((t) => {
@@ -133,8 +133,8 @@ const DraggableTables = ({
     <div id='tablebase'>
       <DragDropContext onDragEnd={onDragEnd}>
         {tables.map((table) => (
-          <div key={table.id}>
-            <h3 className='text-text text-lg bg-main border-y-2 px-4 border-black font-medium'>{table.name}</h3>
+          <div key={table.id} id={"table" + table.id}>
+            <h3 className='text-text text-lg bg-main border-y-2 px-4 border-black font-medium'>{table.name === "eq" ? "Equipped" : table.name === "bd" ? "On Body" : "Backpack"}</h3>
             <Droppable droppableId={table.id.toString()} direction="vertical" isDropDisabled={false} isCombineEnabled={false} ignoreContainerClipping={true}>
               {(provided: any, snapshot: any) => (
                 <UiTable
@@ -162,13 +162,12 @@ const DraggableTables = ({
                               );
                             }
 
+                            // this block is to calculate the offset of the dragged item
+                            // react beautiful dnd would actually do this for you, but it's not working
+                            // it is not a perfect solution, as it doesn't take into account the scroll position
                             if (snapshot.isDragging) {
                               provided.draggableProps.style.left = 0;
-                              const tableBase = document.getElementById(row.item_id) // container aligned in the middle
-                              if (tableBase) {
-                                provided.draggableProps.style.top = "inherit";
-
-                              }
+                              provided.draggableProps.style.top = "inherit";
                             }
                             return (
                               <TableRow

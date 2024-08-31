@@ -1,5 +1,5 @@
 import { InventoryItem } from '@/app/lib/definitions'
-import { Form, FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
+import { FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
@@ -11,19 +11,30 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog'
 import { Pencil } from 'lucide-react'
+import { useState } from 'react'
 
+type Props = {
+    item: InventoryItem;
+    updateItem: (item: InventoryItem, formData: FormData) => void;
+    deleteItem: (item_id: string) => void;
+    className?: string;
+}
 
+const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
+    const [open, setOpen] = useState(false);
 
-const EditItem = ({ className, item }: { className?: string, item: InventoryItem }) => {
+    async function handleSubmit(formData: FormData) {
+        updateItem(item, formData);
+        setOpen(false);
+    }
 
-
-    function handleSubmit(formData: FormData) {
-        console.log('submitting')
-        console.log(formData)
+    async function handleDelete() {
+        deleteItem(item.item_id);
+        setOpen(false);
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
 
             <DialogTrigger asChild>
                 <Pencil className='cursor-pointer rounded-lg h-[28px] w-[28px] -my-0.5 mr-2  p-1 hover:bg-zinc-500/20' />
@@ -38,7 +49,7 @@ const EditItem = ({ className, item }: { className?: string, item: InventoryItem
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <FormItemInput name="item_name" label="Name" className='col-span-4 w-full' defaultValue={item.item_name} />
+                            <FormItemInput name="item_name" label="Name" className='col-span-4 w-full' defaultValue={item.item_name} minLength={2} />
                             <FormItemInput name="description" label="Description" className='col-span-4 w-full' defaultValue={item.description} />
                             <FormItemSelect name="category" label="Category" defaultValue={item.category} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'W', value: 'Weapon' }, { key: 'A', value: 'Armor' }, { key: 'C', value: 'Consumable' }, { key: 'T', value: 'Tool' }, { key: 'M', value: 'Miscellaneous' }]} />
                             <FormItemSelect name="slot" label="Slot" defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'eq', value: 'Equipped' }, { key: 'bd', value: 'On Body' }, { key: 'bp', value: 'Backpack' }]} />
@@ -49,7 +60,7 @@ const EditItem = ({ className, item }: { className?: string, item: InventoryItem
                         </div>
                     </div>
                     <DialogFooter className='sm:justify-between'>
-                        <Button type='button' className='mt-4 sm:mt-0 '>Delete</Button>
+                        <Button type='button' className='mt-4 sm:mt-0' onClick={handleDelete}>Delete</Button>
                         <Button type='submit' className='bg-mainAccent'>Update</Button>
                     </DialogFooter>
                 </form>

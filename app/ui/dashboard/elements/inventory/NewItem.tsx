@@ -1,7 +1,10 @@
-import { Form, FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
+'use client'
+
+import { FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -9,19 +12,20 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog'
+import { useState } from 'react'
 
 
 
-const NewItem = ({ className }: { className?: string }) => {
+const NewItem = ({ className, createItem }: { className?: string, createItem: (item: FormData) => void }) => {
+    const [open, setOpen] = useState(false);
 
-
-    function handleSubmit(formData: FormData) {
-        console.log('submitting')
-        console.log(formData)
+    async function handleSubmit(formData: FormData) {
+        await createItem(formData)
+        setOpen(false);
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
 
             <DialogTrigger asChild>
                 <Button className={className}>New Item</Button>
@@ -36,7 +40,7 @@ const NewItem = ({ className }: { className?: string }) => {
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <FormItemInput name="item_name" label="Name" className='col-span-4 w-full' />
+                            <FormItemInput name="item_name" label="Name" className='col-span-4 w-full' minLength={2} />
                             <FormItemInput name="description" label="Description" className='col-span-4 w-full' />
                             <FormItemSelect name="category" label="Category" defaultValue='M' classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'W', value: 'Weapon' }, { key: 'A', value: 'Armor' }, { key: 'C', value: 'Consumable' }, { key: 'T', value: 'Tool' }, { key: 'M', value: 'Miscellaneous' }]} />
                             <FormItemSelect name="slot" label="Slot" defaultValue='eq' classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'eq', value: 'Equipped' }, { key: 'bd', value: 'On Body' }, { key: 'bp', value: 'Backpack' }]} />

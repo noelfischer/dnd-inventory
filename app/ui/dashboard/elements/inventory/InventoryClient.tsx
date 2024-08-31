@@ -2,30 +2,93 @@
 
 import React, { useState } from 'react';
 import { InventoryItem } from '@/app/lib/definitions';
-import { Ham, Pencil, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'lucide-react';
-import Button from '@/components/Button';
-import DraggableTables from '../helper/DraggableTables';
+import { Ham, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'lucide-react';
+import DraggableTables, { TableProps } from '../helper/DraggableTables';
 import { TableRow, TableCell, TableHead, TableHeader } from '@/components/ui/table';
 import NewItem from './NewItem';
 import EditItem from './EditItem';
+import { resetServerContext } from 'react-beautiful-dnd';
 
-type TableProps = {
-    id: number;
-    name?: string;
-    rows: InventoryItem[];
+type Props = {
+    initialItems: InventoryItem[];
+    createItem: (item: InventoryItem) => Promise<string>;
+    updateItem: (item: InventoryItem) => void;
+    deleteItem: (item_id: string) => void;
+    updateIndex: (items: { item_id: string, i: number, slot: string }[]) => void;
 };
 
-const InventoryClient = ({ initialItems, updateIndex }: { initialItems: InventoryItem[], updateIndex: (items: { item_id: string, i: number, slot: string }[]) => void }) => {
+const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, updateIndex }: Props) => {
 
     function formatInitialItemstoTableData(initialItems: InventoryItem[]): TableProps[] {
         return [
-            { id: 1, name: "Equipped", rows: initialItems.filter(i => i.slot == "eq").sort((a, b) => a.i - b.i) },
-            { id: 2, name: "On Body", rows: initialItems.filter(i => i.slot == "bd").sort((a, b) => a.i - b.i) },
-            { id: 3, name: "Backpack", rows: initialItems.filter(i => i.slot == "bp").sort((a, b) => a.i - b.i) },
+            { id: 1, name: "eq", rows: initialItems.filter(i => i.slot == "eq").sort((a, b) => a.i - b.i) },
+            { id: 2, name: "bd", rows: initialItems.filter(i => i.slot == "bd").sort((a, b) => a.i - b.i) },
+            { id: 3, name: "bp", rows: initialItems.filter(i => i.slot == "bp").sort((a, b) => a.i - b.i) },
         ];
     }
 
     const [tables, setTables] = useState<TableProps[]>(formatInitialItemstoTableData(initialItems));
+
+    async function handleCreate(formData: FormData) {
+
+        const allTablesRowsLength = tables.map(table => table.rows.length).reduce((acc, curr) => acc + curr);
+        const newItem: InventoryItem = {
+            item_id: '0',
+            character_id: '0',
+            i: allTablesRowsLength,
+            slot: formData.get('slot') as string,
+            item_name: formData.get('item_name') as string,
+            description: formData.get('description') as string,
+            ability: '',
+            weight: parseInt(formData.get('weight') as string),
+            category: formData.get('category') as string,
+            magic: formData.get('magic') === 'on',
+            quantity: parseInt(formData.get('quantity') as string)
+        }
+        const item_id = await createItem(newItem);
+        newItem.item_id = item_id;
+
+        const table = tables.find(table => table.name === newItem.slot);
+        table?.rows.push(newItem);
+        setTables([...tables]);
+    }
+
+    async function handleUpdate(item: InventoryItem, formData: FormData) {
+        const newItem: InventoryItem = {
+            item_id: item.item_id,
+            character_id: item.character_id,
+            i: item.i,
+            slot: formData.get('slot') as string,
+            item_name: formData.get('item_name') as string,
+            description: formData.get('description') as string,
+            ability: item.ability,
+            weight: parseInt(formData.get('weight') as string),
+            category: formData.get('category') as string,
+            magic: formData.get('magic') === 'on',
+            quantity: parseInt(formData.get('quantity') as string)
+        }
+        tables.forEach(table => {
+            table.rows.forEach((row, index) => {
+                if (row.item_id === item.item_id) {
+                    table.rows[index] = newItem;
+                }
+            });
+        });
+
+        setTables([...tables]);
+
+        await updateItem(newItem);
+    }
+
+    async function handleDelete(itemid: string) {
+        tables.forEach(table => {
+            const newRows = table.rows.filter(row => row.item_id !== itemid);
+            table.rows = newRows;
+        });
+        setTables([...tables]);
+        await deleteItem(itemid);
+
+    }
 
     const headerContent = () => {
         return (
@@ -59,14 +122,14 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell id={index.toString()} className=' flex flex-row-reverse'>
                     {dragHandler}
-                    <EditItem item={row} />
+                    <EditItem item={row} updateItem={handleUpdate} deleteItem={handleDelete} />
                 </TableCell>
             </>
         )
     };
 
     const footerContent = (table: TableProps) => {
-        if (table.name === 'Backpack') {
+        if (table.name === 'bp') {
             return (
                 <>
                     <TableCell id='-1' colSpan={4}>Total Weight</TableCell>
@@ -76,6 +139,8 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
         }
         return null;
     };
+
+    resetServerContext();
 
     return (
         <div>
@@ -87,7 +152,7 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
                 footerContent={footerContent}
             />
 
-            <NewItem className='w-auto m-4' />
+            <NewItem className='w-auto m-4' createItem={handleCreate} />
         </div>
     );
 };

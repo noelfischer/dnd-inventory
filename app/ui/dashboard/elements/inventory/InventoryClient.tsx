@@ -6,6 +6,8 @@ import { Ham, Pencil, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'luci
 import Button from '@/components/Button';
 import DraggableTables from '../helper/DraggableTables';
 import { TableRow, TableCell, TableHead, TableHeader } from '@/components/ui/table';
+import NewItem from './NewItem';
+import EditItem from './EditItem';
 
 type TableProps = {
     id: number;
@@ -57,7 +59,7 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell id={index.toString()} className=' flex flex-row-reverse'>
                     {dragHandler}
-                    <Pencil id={index.toString()} className='cursor-pointer rounded-lg h-[28px] w-[28px] -my-0.5 mr-2  p-1 hover:bg-zinc-500/20' />
+                    <EditItem item={row} />
                 </TableCell>
             </>
         )
@@ -84,7 +86,8 @@ const InventoryClient = ({ initialItems, updateIndex }: { initialItems: Inventor
                 renderRow={renderRow}
                 footerContent={footerContent}
             />
-            <Button className='w-auto m-4'>Add Item</Button>
+
+            <NewItem className='w-auto m-4' />
         </div>
     );
 };

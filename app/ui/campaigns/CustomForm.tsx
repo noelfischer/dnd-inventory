@@ -1,5 +1,6 @@
 import Input from "@/components/Input"
 import Textarea from "@/components/Textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     Select,
     SelectContent,
@@ -31,12 +32,12 @@ export const Form = ({ children, action, close }: { children: React.ReactNode, a
     )
 }
 
-export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defaultValue = "", placeholder, type = "text", min = 0, max = 20, visible = true, Icon }: {
+export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defaultValue = "", placeholder, type = "text", min = 0, max = 20, visible = true, Icon, className }: {
     name: string, label: string, maxLength?: number, minLength?: number, defaultValue?: string, placeholder?: string, type?: string, min?: number, max?: number, visible?: boolean
-    Icon?: React.FC<React.SVGProps<SVGSVGElement>>
+    Icon?: React.FC<React.SVGProps<SVGSVGElement>>, className?: string
 }) => {
     return (
-        <div className={(visible ? "mb-4" : "invisible max-h-0")}>
+        <div className={cn((visible ? "mb-4" : "invisible max-h-0"), className)}>
             <label htmlFor={name} className="text-text mb-2 block text-sm font-medium">
                 {label}
             </label>
@@ -70,11 +71,11 @@ export type keyValuePair = {
     value: string
 }
 
-export const FormItemSelect = ({ name, label, options, defaultValue = "", visible = true, classNameLabel, classNameSelect }: {
-    name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean, classNameLabel?: string, classNameSelect?: string
+export const FormItemSelect = ({ name, label, options, defaultValue = "", visible = true, className, classNameLabel, classNameSelect }: {
+    name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean, className?: string, classNameLabel?: string, classNameSelect?: string
 }) => {
     return (
-        <div className={(visible ? "mb-4" : "invisible max-h-0")}>
+        <div className={cn((visible ? "mb-4" : "invisible max-h-0"), className)}>
             <label htmlFor={name} className={cn(
                 'mb-2 block text-sm font-medium',
                 classNameLabel,
@@ -96,6 +97,21 @@ export const FormItemSelect = ({ name, label, options, defaultValue = "", visibl
                     </SelectGroup>
                 </SelectContent>
             </Select>
+        </div>
+    )
+}
+
+export const FormItemCheckbox = ({ name, label, defaultChecked, visible = true, className }: {
+    name: string, label: string, defaultChecked: boolean, visible?: boolean, className?: string
+}) => {
+    return (
+        <div className={cn((visible ? "ml-1 mb-8" : "invisible max-h-0"), className)}>
+            <label htmlFor={name} className="text-text mb-5 block text-sm font-medium">
+                {label}
+            </label>
+            <div className="flex">
+                <Checkbox id={name} name={name} defaultChecked={defaultChecked} />
+            </div>
         </div>
     )
 }

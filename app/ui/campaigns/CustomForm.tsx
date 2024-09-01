@@ -32,9 +32,9 @@ export const Form = ({ children, action, close }: { children: React.ReactNode, a
     )
 }
 
-export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defaultValue = "", placeholder, type = "text", min = 0, max = 20, visible = true, Icon, className }: {
+export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defaultValue = "", placeholder, type = "text", min = 0, max = 20, visible = true, Icon, autofocus, className }: {
     name: string, label: string, maxLength?: number, minLength?: number, defaultValue?: string, placeholder?: string, type?: string, min?: number, max?: number, visible?: boolean
-    Icon?: React.FC<React.SVGProps<SVGSVGElement>>, className?: string
+    Icon?: React.FC<React.SVGProps<SVGSVGElement>>, autofocus?: boolean, className?: string
 }) => {
     return (
         <div className={cn((visible ? "mb-4" : "invisible max-h-0"), className)}>
@@ -42,7 +42,7 @@ export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defa
                 {label}
             </label>
             <div className="relative">
-                <Input type={type} min={min} max={max} defaultValue={(type === "number" && defaultValue === "") ? 0 : defaultValue} placeholder={placeholder ? placeholder : name.replaceAll("_", " ")} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0} className={Icon ? "pl-10" : ""} />
+                <Input type={type} min={min} max={max} defaultValue={(type === "number" && defaultValue === "") ? 0 : defaultValue} placeholder={placeholder ? placeholder : name.replaceAll("_", " ")} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0} autofocus={autofocus} className={Icon ? "pl-10" : ""} />
                 {Icon && <Icon className="absolute left-3 top-1/2 text-gray-500 peer-focus:text-gray-500 h-[18px] w-[18px] -translate-y-1/2" />}
             </div>
         </div>

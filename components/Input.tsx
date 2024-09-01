@@ -19,6 +19,7 @@ type Props = {
     minLength?: number
     required?: boolean
     placeholder?: string
+    autofocus?: boolean
 }
 
 export default function Input({
@@ -36,6 +37,7 @@ export default function Input({
     minLength,
     required,
     placeholder,
+    autofocus,
 }: Props) {
     return (
         <input
@@ -56,6 +58,7 @@ export default function Input({
             minLength={minLength}
             required={required}
             readOnly={readOnly}
+            autoFocus={autofocus}
             onChange={(e) => {
                 if (setValue)
                     setValue(e.target.value)

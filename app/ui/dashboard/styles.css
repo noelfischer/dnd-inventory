@@ -184,3 +184,39 @@
 .edit-hidden {
   display: none;
 }
+
+.platinum {
+  background: linear-gradient(45deg, #c3d2e1 5%, #cad4de 15%, #e0e8ef 30%, #f3faff 50%, #e0e8ef 70%, #b7c4d2 85%, #d1d9e1 95%);
+}
+
+.gold {
+  background: linear-gradient(45deg, #d4af37 5%, #e0bc5e 15%, #e8cd82 30%, #f0dab0 50%, #e8cd82 70%, #e0bc5e 85%, #d4af37 95%);
+}
+
+.silver {
+  background: linear-gradient(45deg, #999999 5%, #b8b8b8 15%, #c2c2c2 30%, #e5e5e5 50%, #bebebe 70%, #bebebe 85%, #a2a2a2 95%);
+}
+
+.copper {
+  background: linear-gradient(45deg, #7a4d2a 5%, #81512b 15%, #996439 30%, #aa7549 50%, #996439 70%, #81512b 85%, #7a4d2a 95%);
+}
+
+/* Shine Effect Styles */
+.card-shine-effect {
+  --shine-deg: 45deg;
+  background-image: linear-gradient(var(--shine-deg),
+      transparent 20%,
+      transparent 40%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.15) 55%,
+      transparent 70%,
+      transparent 100%);
+  background-repeat: no-repeat;
+  background-position: -100% 0, 0 0;
+  background-size: 250% 250%, 100% 100%;
+}
+
+.card-shine-effect:hover {
+  background-position: 200% 0, 0 0;
+  transition-duration: 1s;
+}

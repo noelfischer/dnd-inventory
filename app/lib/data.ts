@@ -145,17 +145,6 @@ export async function fetchCharacterName(character_id: string) {
   }
 }
 
-// Fetch skills by character ID
-export async function fetchSkillsByCharacter(character_id: string) {
-  try {
-    const data = await sql<Skill>`SELECT * FROM Skills WHERE character_id = ${character_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch skills for character ID ${character_id}.`);
-  }
-}
-
 // Fetch inventory by character ID
 export async function fetchInventoryByCharacter(character_id: string) {
   try {

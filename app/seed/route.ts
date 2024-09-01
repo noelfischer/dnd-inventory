@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { db } from '@vercel/postgres';
-import { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, spellSlots, abilities, conditions, dashboards, dashboardElements } from '../lib/placeholder-data';
+import { users, campaigns, characters, campaignUsers, inventory, currency, userSpells, spellSlots, dashboards, dashboardElements, characterInfos } from '../lib/placeholder-data';
 import { spells } from '../lib/spells';
 
 const client = await db.connect();
@@ -141,29 +141,6 @@ async function seedCampaignUsers() {
   return insertedCampaignUsers;
 }
 
-async function seedSkills() {
-  await client.sql`
-    CREATE TABLE IF NOT EXISTS Skills (
-      skill_id VARCHAR(10) PRIMARY KEY,
-      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
-      skill_name VARCHAR(100),
-      proficiency BOOLEAN
-    );
-  `;
-
-  const insertedSkills = await Promise.all(
-    skills.map(
-      (skill) => client.sql`
-        INSERT INTO Skills (skill_id, character_id, skill_name, proficiency)
-        VALUES (${skill.id}, ${skill.character_id}, ${skill.skill_name}, ${skill.proficiency})
-        ON CONFLICT (skill_id) DO NOTHING;
-      `,
-    ),
-  );
-
-  return insertedSkills;
-}
-
 async function seedInventory() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS Inventory (
@@ -294,51 +271,28 @@ async function seedSpellSlots() {
   return insertedSpellSlots;
 }
 
-async function seedAbilities() {
+async function seedCharacterInfos() {
   await client.sql`
-    CREATE TABLE IF NOT EXISTS Abilities (
-      ability_id VARCHAR(10) PRIMARY KEY,
+  CREATE TABLE IF NOT EXISTS CharacterInfos (
+      character_info_id VARCHAR(10) PRIMARY KEY,
       character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
-      ability_name VARCHAR(100),
-      description TEXT
+      abilities TEXT,
+      conditions TEXT,
+      notes TEXT
     );
   `;
 
-  const insertedAbilities = await Promise.all(
-    abilities.map(
-      (ability) => client.sql`
-        INSERT INTO Abilities (ability_id, character_id, ability_name, description)
-        VALUES (${ability.id}, ${ability.character_id}, ${ability.ability_name}, ${ability.description})
-        ON CONFLICT (ability_id) DO NOTHING;
+  const insertedCharacterInfos = await Promise.all(
+    characterInfos.map(
+      (characterInfo) => client.sql`
+        INSERT INTO CharacterInfos (character_info_id, character_id, abilities, conditions, notes)
+        VALUES (${characterInfo.id}, ${characterInfo.character_id}, ${characterInfo.abilities}, ${characterInfo.conditions}, ${characterInfo.notes})
+        ON CONFLICT (character_info_id) DO NOTHING;
       `,
     ),
   );
 
-  return insertedAbilities;
-}
-
-async function seedConditions() {
-  await client.sql`
-    CREATE TABLE IF NOT EXISTS Conditions (
-      condition_id VARCHAR(10) PRIMARY KEY,
-      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
-      condition_name VARCHAR(100),
-      duration INT,
-      impact TEXT
-    );
-  `;
-
-  const insertedConditions = await Promise.all(
-    conditions.map(
-      (condition) => client.sql`
-        INSERT INTO Conditions (condition_id, character_id, condition_name, duration, impact)
-        VALUES (${condition.id}, ${condition.character_id}, ${condition.condition_name}, ${condition.duration}, ${condition.impact})
-        ON CONFLICT (condition_id) DO NOTHING;
-      `,
-    ),
-  );
-
-  return insertedConditions;
+  return insertedCharacterInfos;
 }
 
 async function seedDashboards() {
@@ -423,8 +377,6 @@ export async function GET() {
     console.log('Characters seeded');
     await seedCampaignUsers();
     console.log('Campaign users seeded');
-    await seedSkills();
-    console.log('Skills seeded');
     await seedInventory();
     console.log('Inventory seeded');
     await seedCurrency();
@@ -435,10 +387,8 @@ export async function GET() {
     console.log('User spells seeded');
     await seedSpellSlots();
     console.log('Spell slots seeded');
-    await seedAbilities();
-    console.log('Abilities seeded');
-    await seedConditions();
-    console.log('Conditions seeded');
+    await seedCharacterInfos();
+    console.log('Character infos seeded');
     await seedDashboards();
     console.log('Dashboards seeded');
     await seedDashboardElements();

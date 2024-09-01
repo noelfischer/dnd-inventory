@@ -78,15 +78,6 @@ const campaignUsers = [
   }
 ];
 
-const skills = [
-  {
-    id: "Y1aZICHbj3",
-    character_id: characters[0].id,
-    skill_name: 'Stealth',
-    proficiency: true,
-  },
-];
-
 const inventory = [
   {
     id: "fNkZBYJixX",
@@ -212,23 +203,14 @@ const spellSlots = [
   }
 ];
 
-const abilities = [
+const characterInfos = [
   {
-    id: "UJ6leJdKGc",
+    id: "0wmnbAEG24",
     character_id: characters[0].id,
-    ability_name: 'Second Wind',
-    description: 'Once per short rest, you can use a bonus action to regain 1d10 + 5 HP.',
-  },
-];
-
-const conditions = [
-  {
-    id: "FWZ0m_J-Dv",
-    character_id: characters[0].id,
-    condition_name: 'Poisoned',
-    duration: 10,
-    impact: 'Disadvantage on attack rolls and ability checks.',
-  },
+    abilities: "Second Wind\nOnce per short rest, you can use a bonus action to regain 1d10 + 5 HP.",
+    conditions: "Poisoned\nDisadvantage on attack rolls and ability checks.",
+    notes: "Current quest: Find the lost sword of Arathorn.\nAllies: Gandalf, Legolas, Gimli.",
+  }
 ];
 
 const dashboards = [
@@ -261,4 +243,4 @@ const dashboardElements = [
   },
 ];
 
-export { users, campaigns, characters, campaignUsers, skills, inventory, currency, userSpells, spellSlots, abilities, conditions, dashboards, dashboardElements };
+export { users, campaigns, characters, campaignUsers, inventory, currency, userSpells, spellSlots, characterInfos, dashboards, dashboardElements };

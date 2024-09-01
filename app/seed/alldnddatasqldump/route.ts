@@ -9,14 +9,12 @@ export async function GET() {
         const campaigns = await client.sql`SELECT * FROM Campaigns`;
         const characters = await client.sql`SELECT * FROM Characters`;
         const campaignUsers = await client.sql`SELECT * FROM CampaignUsers`;
-        const skills = await client.sql`SELECT * FROM Skills`;
         const inventory = await client.sql`SELECT * FROM Inventory`;
         const currency = await client.sql`SELECT * FROM Currency`;
         const generalSpells = await client.sql`SELECT * FROM GeneralSpells`;
         const userSpells = await client.sql`SELECT * FROM UserSpells`;
         const spellSlots = await client.sql`SELECT * FROM SpellSlots`;
-        const abilities = await client.sql`SELECT * FROM Abilities`;
-        const conditions = await client.sql`SELECT * FROM Conditions`;
+        const characterInfos = await client.sql`SELECT * FROM CharacterInfos`;
         const dashboards = await client.sql`SELECT * FROM Dashboards`;
         const dashboardElements = await client.sql`SELECT * FROM DashboardElements`;
 
@@ -42,14 +40,12 @@ export async function GET() {
         sqlText += generateInsertStatements('Campaigns', campaigns.rows, 'campaign_id') + '\n';
         sqlText += generateInsertStatements('Characters', characters.rows, 'character_id') + '\n';
         sqlText += generateInsertStatements('CampaignUsers', campaignUsers.rows, 'campaign_user_id') + '\n';
-        sqlText += generateInsertStatements('Skills', skills.rows, 'skill_id') + '\n';
         sqlText += generateInsertStatements('Inventory', inventory.rows, 'item_id') + '\n';
         sqlText += generateInsertStatements('Currency', currency.rows, 'currency_id') + '\n';
         sqlText += generateInsertStatements('GeneralSpells', generalSpells.rows, 'spell_id') + '\n';
         sqlText += generateInsertStatements('UserSpells', userSpells.rows, 'user_spell_id') + '\n';
         sqlText += generateInsertStatements('SpellSlots', spellSlots.rows, 'spell_slot_id') + '\n';
-        sqlText += generateInsertStatements('Abilities', abilities.rows, 'ability_id') + '\n';
-        sqlText += generateInsertStatements('Conditions', conditions.rows, 'condition_id') + '\n';
+        sqlText += generateInsertStatements('CharacterInfos', characterInfos.rows, 'condition_id') + '\n';
         sqlText += generateInsertStatements('Dashboards', dashboards.rows, 'dashboard_id') + '\n';
         sqlText += generateInsertStatements('DashboardElements', dashboardElements.rows, 'element_id') + '\n';
 

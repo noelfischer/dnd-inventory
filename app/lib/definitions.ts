@@ -70,13 +70,6 @@ export type SimpleCharacter = {
   character_type: string;
 };
 
-export type Skill = {
-  skill_id: string;
-  character_id: string;
-  skill_name: string;
-  proficiency: boolean;
-};
-
 export type InventoryItem = {
   item_id: string;
   character_id: string;
@@ -122,20 +115,14 @@ export type SpellSlot = {
   casts_remaining: number;
 };
 
-export type Ability = {
-  ability_id: string;
+export type CharacterInfo = {
+  character_info_id: string;
   character_id: string;
-  ability_name: string;
-  description: string;
+  abilities: string;
+  conditions: string;
+  notes: string;
 };
 
-export type Condition = {
-  condition_id: string;
-  character_id: string;
-  condition_name: string;
-  duration: number;
-  impact: string;
-};
 
 export type Dashboard = {
   dashboard_id: string;

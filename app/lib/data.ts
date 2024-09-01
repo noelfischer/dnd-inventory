@@ -7,13 +7,10 @@ import {
   User,
   Campaign,
   Character,
-  Skill,
   InventoryItem,
   Currency,
   UserSpell,
   GeneralSpell,
-  Ability,
-  Condition,
   Dashboard,
   DashboardElement,
   SimpleCharacter,
@@ -186,28 +183,6 @@ export async function fetchGeneralSpells() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch general spells.');
-  }
-}
-
-// Fetch abilities by character ID
-export async function fetchAbilitiesByCharacter(character_id: string) {
-  try {
-    const data = await sql<Ability>`SELECT * FROM Abilities WHERE character_id = ${character_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch abilities for character ID ${character_id}.`);
-  }
-}
-
-// Fetch conditions by character ID
-export async function fetchConditionsByCharacter(character_id: string) {
-  try {
-    const data = await sql<Condition>`SELECT * FROM Conditions WHERE character_id = ${character_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch conditions for character ID ${character_id}.`);
   }
 }
 

@@ -60,7 +60,7 @@ const SpellsClient = ({ userspells, learnableSpells, learnSpell, forgetSpell }: 
             <CarouselContent>
                 {detailedSpells.map(spell => (
                     <CarouselItem key={spell.id}>
-                        <Card className='h-full'>
+                        <Card className='border-0 shadow-none dark:shadow-none'>
                             <CardHeader>
                                 <CardTitle className='flex justify-between'><span>{spell.name}</span><CornerDownRight className='h-7 w-7' /></CardTitle>
                             </CardHeader>
@@ -82,12 +82,12 @@ const SpellsClient = ({ userspells, learnableSpells, learnSpell, forgetSpell }: 
                     </CarouselItem>
                 ))}
                 <CarouselItem>
-                    <Card className='h-full'>
+                    <Card className='border-0 shadow-none dark:shadow-none'>
                         <CardHeader>
                             <CardTitle>Learnable Spells</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <Command className="w-full h-80">
+                            <Command className="w-full min-h-80">
                                 <CommandInput placeholder="Search Spells..." />
                                 <CommandList>
                                     <CommandEmpty>No results found.</CommandEmpty>

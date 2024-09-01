@@ -24,6 +24,6 @@ export default function OnLeaveTextArea({ initialValue, placeholder = '  ', onLe
     }
 
     return (
-        <Textarea placeholder={placeholder} value={value.toString()} onChange={(e) => setValue(e.target.value)} onBlur={handleBlur} className={cn('', className)} />
+        <Textarea placeholder={placeholder} value={value.toString()} onChange={(e) => setValue(e.target.value)} onBlur={handleBlur} className={cn('placeholder:text-zinc-500', className)} />
     );
 }

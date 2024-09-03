@@ -17,6 +17,7 @@ import SpellsServer from '@/app/ui/dashboard/elements/spells/SpellsServer';
 import InventoryServer from '@/app/ui/dashboard/elements/inventory/InventoryServer';
 import WeightServer from '@/app/ui/dashboard/elements/weight/WeightServer';
 import CurrencyServer from '@/app/ui/dashboard/elements/currency/CurrencyServer';
+import Inspiration from '@/app/ui/dashboard/elements/Inspiration';
 
 export type GridElement = {
   i: string;
@@ -106,6 +107,8 @@ function componentMap(type: string, character_id: string): ReactNode {
       return <CurrencyServer character_id={character_id} />;
     case 'spellslots':
       return <SpellSlotsServer character_id={character_id} />;
+    case 'inspiration':
+      return <Inspiration character_id={character_id} />;
     default:
       return <div>Unknown component</div>;
   }
@@ -155,9 +158,10 @@ function getLayoutTemplate(characterID: string) {
       { i: '0000000003,notes,' + characterID, x: 9, y: 12, w: 3, h: 6 },
       { i: '0000000004,inventory,' + characterID, x: 0, y: 5, w: 7, h: 13 },
       { i: '0000000005,spells,' + characterID, x: 7, y: 0, w: 3, h: 12 },
-      { i: '0000000006,abilities,' + characterID, x: 10, y: 6, w: 2, h: 6 },
-      { i: '0000000007,conditions,' + characterID, x: 10, y: 6, w: 2, h: 6 },
+      { i: '0000000006,abilities,' + characterID, x: 10, y: 2, w: 2, h: 5 },
+      { i: '0000000007,conditions,' + characterID, x: 10, y: 7, w: 2, h: 5 },
       { i: '00000000008,currency,' + characterID, x: 7, y: 12, w: 2, h: 6 },
+      { i: '00000000010,inspiration,' + characterID, x: 10, y: 0, w: 2, h: 2 },
     ],
   };
   const initial_componentList = [
@@ -171,6 +175,7 @@ function getLayoutTemplate(characterID: string) {
     { i: '0000000006,abilities,' + characterID, type: <Abilities character_id={characterID} /> },
     { i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} /> },
     { i: '00000000008,currency,' + characterID, type: <CurrencyServer character_id={characterID} /> },
+    { i: '00000000010,inspiration,' + characterID, type: <Inspiration character_id={characterID} /> },
   ];
   return { layout: initial_layout, list: initial_componentList };
 }

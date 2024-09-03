@@ -27,6 +27,7 @@ export default function AddElement({ characters, addElementHandler, disabled = f
         { key: "notes", value: "Notes" },
         { key: "abilities", value: "Abilities" },
         { key: "spellslots", value: "Spell Slots" },
+        { key: "inspiration", value: "Inspiration" },
     ].sort((a, b) => a.value.localeCompare(b.value));
 
     return (

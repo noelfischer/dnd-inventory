@@ -27,7 +27,6 @@ const WeightClient = ({ max_weight, inventory_weight, coins_weight, updateTotalC
 
     useEffect(() => {
         function handleCoinsChange(e: any) {
-            console.log(e);
             setCoinsWeight(parseFloat(e.detail));
         }
         function handleInventoryChange(e: any) {

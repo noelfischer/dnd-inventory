@@ -71,8 +71,8 @@ export type keyValuePair = {
     value: string
 }
 
-export const FormItemSelect = ({ name, label, options, defaultValue = "", visible = true, className, classNameLabel, classNameSelect }: {
-    name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean, className?: string, classNameLabel?: string, classNameSelect?: string
+export const FormItemSelect = ({ name, label, options, defaultValue = "", visible = true, className, classNameLabel, classNameSelect, classNameSelectContent }: {
+    name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean, className?: string, classNameLabel?: string, classNameSelect?: string, classNameSelectContent?: string
 }) => {
     return (
         <div className={cn((visible ? "mb-4" : "invisible max-h-0"), className)}>
@@ -86,7 +86,7 @@ export const FormItemSelect = ({ name, label, options, defaultValue = "", visibl
                 <SelectTrigger className={classNameSelect}>
                     <SelectValue placeholder={label} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className={classNameSelectContent}>
                     <SelectGroup>
                         <SelectLabel>{label}</SelectLabel>
                         {options.map((option, index) => (

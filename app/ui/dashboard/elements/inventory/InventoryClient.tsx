@@ -8,6 +8,7 @@ import { TableRow, TableCell, TableHead, TableHeader } from '@/components/ui/tab
 import NewItem from './NewItem';
 import EditItem from './EditItem';
 import { resetServerContext } from 'react-beautiful-dnd';
+import { cn } from '@/lib/utils';
 
 type Props = {
     initialItems: InventoryItem[];
@@ -103,7 +104,7 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
                 <TableHeader id='-1'>
                     <TableRow id='-1'>
                         <TableHead id='-1' className="w-[180px]">Name</TableHead>
-                        <TableHead id='-1'>Description</TableHead>
+                        <TableHead id='-1' className='hidden sm:inline'>Description</TableHead>
                         <TableHead id='-1'>Weight</TableHead>
                         <TableHead id='-1'>Quantity</TableHead>
                         <TableHead id='-1' className="text-right">Actions</TableHead>
@@ -117,8 +118,8 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
         return (
             <>
                 <TableCell className="whitespace-nowrap font-base flex gap-2 items-center">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles className='-ml-2 pb-2 text-main' />}</TableCell>
-                <TableCell className={isDragging ? 'grow' : ''}>{row.description}</TableCell>
-                <TableCell>{row.weight} kg</TableCell>
+                <TableCell className={cn((isDragging ? 'grow' : ''), 'hidden sm:table-cell')}>{row.description}</TableCell>
+                <TableCell>{row.weight} lb.</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell id={index.toString()} className=' flex flex-row-reverse'>
                     {dragHandler}
@@ -132,8 +133,8 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
         if (table.name === 'bp') {
             return (
                 <>
-                    <TableCell id='-1' colSpan={4}>Total Weight</TableCell>
-                    <TableCell id='-1' className="text-right">87%</TableCell>
+                    <TableCell>Total Weight</TableCell>
+                    <TableCell className="text-right" colSpan={100}>87%</TableCell>
                 </>
             );
         }

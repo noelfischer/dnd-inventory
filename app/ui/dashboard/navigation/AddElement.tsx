@@ -20,14 +20,14 @@ export default function AddElement({ characters, addElementHandler, disabled = f
         { key: "name", value: "Name" },
         { key: "health", value: "Health" },
         { key: "inventory", value: "Inventory" },
-        { key: "currency", value: "Currency" },
+        { key: "currency", value: "Coinage" },
         { key: "conditions", value: "Conditions" },
         { key: "spells", value: "Spells" },
-        { key: "attributes", value: "Attributes" },
+        { key: "weight", value: "Weight" },
         { key: "notes", value: "Notes" },
         { key: "abilities", value: "Abilities" },
         { key: "spellslots", value: "Spell Slots" },
-    ];
+    ].sort((a, b) => a.value.localeCompare(b.value));
 
     return (
         <Sheet>
@@ -46,7 +46,7 @@ export default function AddElement({ characters, addElementHandler, disabled = f
                     </SheetHeader>
                     <div className="grid gap-4 py-4">
                         <FormItemSelect label="Character" name="character" options={characters} defaultValue={characters[0].key} visible={characters.length > 1} />
-                        <FormItemSelect label="Element Type" name="element" options={elementOptions} defaultValue='name' />
+                        <FormItemSelect label="Element Type" name="element" options={elementOptions} defaultValue='name' classNameSelectContent="max-h-[500px]" />
                     </div>
                     <SheetFooter>
                         <SheetClose asChild>

@@ -185,6 +185,11 @@
   display: none;
 }
 
+.encumbered {
+  background-color: #b53914;
+  background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%23da6e4e' fill-opacity='0.85'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
 .platinum {
   background: linear-gradient(45deg, #c3d2e1 5%, #cad4de 15%, #e0e8ef 30%, #f3faff 50%, #e0e8ef 70%, #b7c4d2 85%, #d1d9e1 95%);
 }

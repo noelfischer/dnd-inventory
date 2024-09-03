@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InventoryItem } from '@/app/lib/definitions';
 import { Ham, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'lucide-react';
 import DraggableTables, { TableProps } from '../helper/DraggableTables';
@@ -9,16 +9,19 @@ import NewItem from './NewItem';
 import EditItem from './EditItem';
 import { resetServerContext } from 'react-beautiful-dnd';
 import { cn } from '@/lib/utils';
+import OnLeaveInput from '../helper/OnLeaveInput';
 
 type Props = {
     initialItems: InventoryItem[];
+    initialBackpackCapacity: number;
     createItem: (item: InventoryItem) => Promise<string>;
     updateItem: (item: InventoryItem) => void;
     deleteItem: (item_id: string) => void;
     updateIndex: (items: { item_id: string, i: number, slot: string }[]) => void;
+    updateBackpackCapacity: (capacity: number) => void;
 };
 
-const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, updateIndex }: Props) => {
+const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, updateItem, deleteItem, updateIndex, updateBackpackCapacity }: Props) => {
 
     function formatInitialItemstoTableData(initialItems: InventoryItem[]): TableProps[] {
         return [
@@ -29,6 +32,14 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
     }
 
     const [tables, setTables] = useState<TableProps[]>(formatInitialItemstoTableData(initialItems));
+    const [backpackCapacity, setBackpackCapacity] = useState<number>(initialBackpackCapacity);
+
+    const backpackFilled = tables.find(table => table.name === 'bp')?.rows.map(row => row.weight * row.quantity).reduce((acc, curr) => acc + curr, 0) || 0;
+    const [backpackPercentage, setBackpackPercentage] = useState<number>(Math.floor(backpackFilled / backpackCapacity * 10000) / 100);
+
+    useEffect(() => {
+        setBackpackPercentage(Math.floor(backpackFilled / backpackCapacity * 10000) / 100);
+    }, [backpackFilled, initialBackpackCapacity]);
 
     async function handleCreate(formData: FormData) {
 
@@ -91,6 +102,14 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
 
     }
 
+    function onChangeBackpackLoadCapacity(capacity: string) {
+        const capacityNumber = parseInt(capacity);
+        if (isNaN(capacityNumber)) return;
+        updateBackpackCapacity(capacityNumber);
+        setBackpackCapacity(capacityNumber);
+        setBackpackPercentage(Math.floor(backpackFilled / capacityNumber * 10000) / 100);
+    }
+
     const headerContent = () => {
         return (
             <>
@@ -134,7 +153,7 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
             return (
                 <>
                     <TableCell>Total Weight</TableCell>
-                    <TableCell className="text-right" colSpan={100}>87%</TableCell>
+                    <TableCell className="text-right" colSpan={100}><span className='pr-2'>{backpackFilled}</span> / <OnLeaveInput className='h-6 -mt-0.5' initialValue={backpackCapacity.toString()} onLeave={onChangeBackpackLoadCapacity} /><span className='mr-2'> lb. </span> | <span className='ml-3'>{backpackPercentage} %</span></TableCell>
                 </>
             );
         }
@@ -146,7 +165,8 @@ const InventoryClient = ({ initialItems, createItem, updateItem, deleteItem, upd
     return (
         <div>
             <DraggableTables
-                tableData={tables}
+                tables={tables}
+                setTables={setTables}
                 updateIndex={updateIndex}
                 headerContent={headerContent}
                 renderRow={renderRow}

@@ -9,6 +9,9 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
     const data = await sql<InventoryItem>`SELECT item_id, character_id, i, slot, item_name, description, ability, weight, category, magic, quantity FROM Inventory WHERE character_id = ${character_id}`;
     const items: InventoryItem[] = data.rows;
 
+    const characterData = await sql`SELECT backpack_capacity FROM Characters WHERE character_id = ${character_id}`;
+    const backpackCapacity = characterData.rows[0].backpack_capacity;
+
     async function updateIndex(items: { item_id: string, i: number, slot: string }[]) {
         'use server'
         for (let i = 0; i < items.length; i++) {
@@ -34,9 +37,14 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
         await sql`DELETE FROM Inventory WHERE item_id = ${item_id}`;
     }
 
+    async function updateBackpackCapacity(capacity: number) {
+        'use server'
+        await sql`UPDATE Characters SET backpack_capacity = ${capacity} WHERE character_id = ${character_id}`;
+    }
+
     return (
         <div className="inventory -z-50">
-            <InventoryClient initialItems={items} createItem={createItem} updateItem={updateItem} deleteItem={deleteItem} updateIndex={updateIndex} />
+            <InventoryClient initialItems={items} initialBackpackCapacity={backpackCapacity} createItem={createItem} updateItem={updateItem} deleteItem={deleteItem} updateIndex={updateIndex} updateBackpackCapacity={updateBackpackCapacity} />
         </div>
     );
 };

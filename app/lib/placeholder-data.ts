@@ -53,6 +53,7 @@ const characters = [
     current_hit_points: 45,
     temp_hit_points: 0,
     load_capacity: 270,
+    backpack_capacity: 90,
     armor_class: 16,
     speed: 6,
     initiative: 0,

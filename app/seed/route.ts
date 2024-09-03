@@ -80,6 +80,7 @@ async function seedCharacters() {
       current_hit_points INT DEFAULT 0,
       temp_hit_points INT DEFAULT 0,
       load_capacity INT DEFAULT 0,
+      backpack_capacity INT DEFAULT 0,
       armor_class INT DEFAULT 0,
       speed INT DEFAULT 0,
       initiative INT DEFAULT 0,
@@ -98,7 +99,7 @@ async function seedCharacters() {
         INSERT INTO Characters (
           character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment,
           portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma,
-          max_hit_points, current_hit_points, temp_hit_points, load_capacity,
+          max_hit_points, current_hit_points, temp_hit_points, load_capacity, backpack_capacity,
           armor_class, speed, initiative, inspiration,
           death_saves_success, death_saves_failure, experience_points
         )
@@ -106,7 +107,7 @@ async function seedCharacters() {
           ${character.id}, ${character.campaign_id}, ${character.user_id}, ${character.name}, ${character.description}, ${character.character_type}, ${character.race},
           ${character.cclass}, ${character.level}, ${character.background}, ${character.alignment}, ${character.portrait_url},
           ${character.strength}, ${character.dexterity}, ${character.constitution}, ${character.intelligence}, ${character.wisdom},
-          ${character.charisma}, ${character.max_hit_points}, ${character.current_hit_points}, ${character.temp_hit_points}, ${character.load_capacity},
+          ${character.charisma}, ${character.max_hit_points}, ${character.current_hit_points}, ${character.temp_hit_points}, ${character.load_capacity}, ${character.backpack_capacity},
           ${character.armor_class}, ${character.speed}, ${character.initiative}, ${character.inspiration},
           ${character.death_saves_success}, ${character.death_saves_failure}, ${character.experience_points}
         )

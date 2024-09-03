@@ -14,7 +14,8 @@ export type TableProps = {
 };
 
 type DraggableTablesProps = {
-  tableData: TableProps[];
+  tables: TableProps[];
+  setTables: React.Dispatch<React.SetStateAction<TableProps[]>>;
   updateIndex: (items: { item_id: string; i: number; slot: string }[]) => void;
   headerContent: () => React.ReactNode;
   renderRow: (row: InventoryItem, index: number, isDragging: boolean, dragHandler: React.ReactNode) => React.ReactNode;
@@ -50,13 +51,13 @@ const move = (
 };
 
 const DraggableTables = ({
-  tableData,
+  tables,
+  setTables,
   updateIndex,
   headerContent,
   renderRow,
   footerContent
 }: DraggableTablesProps) => {
-  const [tables, setTables] = useState<TableProps[]>(tableData);
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;

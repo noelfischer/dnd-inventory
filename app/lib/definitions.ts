@@ -50,6 +50,7 @@ export type Character = {
   current_hit_points: number;
   temp_hit_points: number;
   load_capacity: number;
+  backpack_capacity: number;
   armor_class: number;
   speed: number;
   initiative: number;

@@ -21,7 +21,7 @@ const Notes = async ({ character_id }: { character_id: string }) => {
             {noNotes && <p>No notes.</p>}
             {!noNotes &&
                 <div className='pt-3' style={{ height: "calc(100% - 44px)" }}>
-                    <OnLeaveTextArea initialValue={characterInfo.notes} onLeave={updateNotes} className='h-full border-x-0 rounded-none' placeholder='Write down personal notes like quests, relationships, etc.' />
+                    <OnLeaveTextArea initialValue={characterInfo.notes || ""} onLeave={updateNotes} className='h-full border-x-0 rounded-none' placeholder='Write down personal notes like quests, relationships, etc.' />
                 </div>
             }
         </div>

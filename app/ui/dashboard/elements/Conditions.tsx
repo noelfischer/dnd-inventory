@@ -21,7 +21,7 @@ const Conditions = async ({ character_id }: { character_id: string }) => {
             {noConditions && <p>No conditions.</p>}
             {!noConditions &&
                 <div className='pt-3' style={{ height: "calc(100% - 44px)" }}>
-                    <OnLeaveTextArea initialValue={characterInfo.conditions} onLeave={updateConditions} className='h-full border-x-0 rounded-none' placeholder='Write down conditions like poison, exhaustion, disadvantage, etc.' />
+                    <OnLeaveTextArea initialValue={characterInfo.conditions || ""} onLeave={updateConditions} className='h-full border-x-0 rounded-none' placeholder='Write down conditions like poison, exhaustion, disadvantage, etc.' />
                 </div>
             }
         </div>

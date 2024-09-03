@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <Link className="unset w-full sm:max-w-64" href={`/dashboard/${dashboards.filter
           (dashboard => dashboard.character_id === null)[0]?.dashboard_id || "-"
           }`}>
-          <LinkButton>
+          <LinkButton disabled={characters.length == 0}>
             View Party Dashboard
             <ChevronRight className="w-6 mr-1" />
           </LinkButton>

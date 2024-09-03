@@ -80,7 +80,7 @@ async function seedCharacters() {
       current_hit_points INT DEFAULT 0,
       temp_hit_points INT DEFAULT 0,
       load_capacity INT DEFAULT 0,
-      backpack_capacity INT DEFAULT 0,
+      backpack_capacity INT DEFAULT 60,
       armor_class INT DEFAULT 0,
       speed INT DEFAULT 0,
       initiative INT DEFAULT 0,

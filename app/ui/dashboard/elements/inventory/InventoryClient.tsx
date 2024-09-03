@@ -164,7 +164,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
             return (
                 <>
                     <TableCell>Total Weight</TableCell>
-                    <TableCell className="text-right" colSpan={100}><span className='pr-2'>{backpackFilled}</span> / <OnLeaveInput className='h-6 -mt-0.5' initialValue={backpackCapacity.toString()} onLeave={onChangeBackpackLoadCapacity} /><span className='mr-2'> lb. </span> | <span className='ml-3'>{backpackPercentage} %</span></TableCell>
+                    <TableCell className="text-right" colSpan={100}><span className='pr-2'>{backpackFilled}</span> / <OnLeaveInput className='h-6 -mt-0.5' initialValue={backpackCapacity.toString()} onLeave={onChangeBackpackLoadCapacity} /><span className='mr-2'> lb. </span> | <span className='ml-3'>{isNaN(backpackPercentage) ? "0" : backpackPercentage} %</span></TableCell>
                 </>
             );
         }

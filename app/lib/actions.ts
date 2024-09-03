@@ -249,14 +249,16 @@ export async function createCharacter(campaignId: string, formData: FormData) {
   });
 
   const characterId = nanoid(10);
-  const dashboardId = nanoid(10);
 
   try {
     console.log('Creating character:');
     await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
       VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${speed})`;
 
-    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${characterId}, 'private', ${name + "-Dashboard-1"})`;
+    // create all secondary tables
+    await sql`INSERT INTO Dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${nanoid(10)}, ${campaignId}, ${characterId}, 'private', ${name + "-Dashboard-1"})`;
+    await sql`INSERT INTO Currency (currency_id, character_id) VALUES (${nanoid(10)}, ${characterId})`;
+    await sql`INSERT INTO CharacterInfos (character_info_id, character_id) VALUES (${nanoid(10)}, ${characterId})`;
 
   } catch (e) {
     console.error('Failed to create character:', e, "Input: \n", "Campaign ID: ", campaignId, "\n", "Name: ", name);

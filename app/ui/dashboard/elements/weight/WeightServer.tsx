@@ -11,7 +11,6 @@ const WeightServer = async ({ character_id }: { character_id: string }) => {
     const inventoryWeight: number = inventoryWeightData.rows[0].total_weight;
     const currencyData = await sql`SELECT platin, gold, silver, copper FROM Currency WHERE character_id = ${character_id}`;
     const coinsWeight: number = (currencyData.rows[0].platin + currencyData.rows[0].gold + currencyData.rows[0].silver + currencyData.rows[0].copper) * 0.02;
-    const totalWeight: number = parseFloat(inventoryWeight.toString()) + parseFloat(coinsWeight.toString());
 
 
 
@@ -22,7 +21,7 @@ const WeightServer = async ({ character_id }: { character_id: string }) => {
 
     return (
         <div className="w-full h-full">
-            <WeightClient max_weight={maxWeight} current_weight={totalWeight} updateTotalCarriableWeight={updateTotalCarriableWeight} />
+            <WeightClient max_weight={maxWeight} inventory_weight={inventoryWeight} coins_weight={coinsWeight} updateTotalCarriableWeight={updateTotalCarriableWeight} />
         </div>
     );
 };

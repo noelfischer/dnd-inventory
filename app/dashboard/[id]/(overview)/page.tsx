@@ -7,7 +7,6 @@ import { ReactNode } from 'react';
 import HealthBarServer from '@/app/ui/dashboard/elements/healthbar/HealthBarServer';
 import Abilities from '@/app/ui/dashboard/elements/Abilities';
 import Conditions from '@/app/ui/dashboard/elements/Conditions';
-import CurrencyOverview from '@/app/ui/dashboard/elements/CurrencyOverview';
 import Notes from '@/app/ui/dashboard/elements/Notes';
 import { checkDMStatus, createCharacterDashboard, createDashboardElement, deleteDashboardByDashboardID, updateDashboardLayout } from '@/app/lib/actions';
 import { Layouts } from 'react-grid-layout';
@@ -17,6 +16,7 @@ import SpellSlotsServer from '@/app/ui/dashboard/elements/spellslots/SpellSlotsS
 import SpellsServer from '@/app/ui/dashboard/elements/spells/SpellsServer';
 import InventoryServer from '@/app/ui/dashboard/elements/inventory/InventoryServer';
 import WeightServer from '@/app/ui/dashboard/elements/weight/WeightServer';
+import CurrencyServer from '@/app/ui/dashboard/elements/currency/CurrencyServer';
 
 export type GridElement = {
   i: string;
@@ -103,7 +103,7 @@ function componentMap(type: string, character_id: string): ReactNode {
     case 'conditions':
       return <Conditions character_id={character_id} />;
     case 'currency':
-      return <CurrencyOverview character_id={character_id} />;
+      return <CurrencyServer character_id={character_id} />;
     case 'spellslots':
       return <SpellSlotsServer character_id={character_id} />;
     default:
@@ -170,7 +170,7 @@ function getLayoutTemplate(characterID: string) {
     { i: '0000000005,spells,' + characterID, type: <SpellsServer character_id={characterID} /> },
     { i: '0000000006,abilities,' + characterID, type: <Abilities character_id={characterID} /> },
     { i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} /> },
-    { i: '00000000008,currency,' + characterID, type: <CurrencyOverview character_id={characterID} /> },
+    { i: '00000000008,currency,' + characterID, type: <CurrencyServer character_id={characterID} /> },
   ];
   return { layout: initial_layout, list: initial_componentList };
 }

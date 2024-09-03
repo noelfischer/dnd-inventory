@@ -62,6 +62,10 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
 
         const table = tables.find(table => table.name === newItem.slot);
         table?.rows.push(newItem);
+
+        const event = new CustomEvent('inventoryWeight', { detail: tables.map(table => table.rows).flat().map(row => row.weight * row.quantity).reduce((acc, curr) => acc + curr, 0) });
+        window.dispatchEvent(event);
+
         setTables([...tables]);
     }
 
@@ -89,6 +93,9 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
 
         setTables([...tables]);
 
+        const event = new CustomEvent('inventoryWeight', { detail: tables.map(table => table.rows).flat().map(row => row.weight * row.quantity).reduce((acc, curr) => acc + curr, 0) });
+        window.dispatchEvent(event);
+
         await updateItem(newItem);
     }
 
@@ -97,6 +104,10 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
             const newRows = table.rows.filter(row => row.item_id !== itemid);
             table.rows = newRows;
         });
+
+        const event = new CustomEvent('inventoryWeight', { detail: tables.map(table => table.rows).flat().map(row => row.weight * row.quantity).reduce((acc, curr) => acc + curr, 0) });
+        window.dispatchEvent(event);
+
         setTables([...tables]);
         await deleteItem(itemid);
 

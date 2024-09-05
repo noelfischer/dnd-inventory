@@ -1,8 +1,45 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { keyValuePair } from '../ui/campaigns/CustomForm'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export const getClasses = (lang: 'de' | 'en') => {
+  const classesDe: keyValuePair[] = [
+    { key: 'bb', value: 'Barbar' },
+    { key: 'ba', value: 'Barde' },
+    { key: 'dr', value: 'Druide' },
+    { key: 'he', value: 'Hexenmeister' },
+    { key: 'ka', value: 'Kämpfer' },
+    { key: 'kl', value: 'Kleriker' },
+    { key: 'ma', value: 'Magier' },
+    { key: 'mo', value: 'Mönch' },
+    { key: 'pa', value: 'Paladin' },
+    { key: 'sc', value: 'Schurke' },
+    { key: 'wa', value: 'Waldläufer' },
+    { key: 'za', value: 'Zauberer' },
+    { key: 'ar', value: 'Magieschmied / Artifizient' },
+  ];
+
+  const classesEn: keyValuePair[] = [
+    { key: 'bb', value: 'Barbarian' },
+    { key: 'ba', value: 'Bard' },
+    { key: 'dr', value: 'Druid' },
+    { key: 'he', value: 'Warlock' },
+    { key: 'ka', value: 'Fighter' },
+    { key: 'kl', value: 'Cleric' },
+    { key: 'ma', value: 'Wizard' },
+    { key: 'mo', value: 'Monk' },
+    { key: 'pa', value: 'Paladin' },
+    { key: 'sc', value: 'Rogue' },
+    { key: 'wa', value: 'Ranger' },
+    { key: 'za', value: 'Sorcerer' },
+    { key: 'ar', value: 'Artificer' },
+  ];
+
+  return lang === 'de' ? classesDe : classesEn;
 }
 
 export const formatCurrency = (amount: number) => {
@@ -26,35 +63,3 @@ export const formatDateToLocal = (
   return formatter.format(date);
 };
 
-export const generatePagination = (currentPage: number, totalPages: number) => {
-  // If the total number of pages is 7 or less,
-  // display all pages without any ellipsis.
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-
-  // If the current page is among the first 3 pages,
-  // show the first 3, an ellipsis, and the last 2 pages.
-  if (currentPage <= 3) {
-    return [1, 2, 3, '...', totalPages - 1, totalPages];
-  }
-
-  // If the current page is among the last 3 pages,
-  // show the first 2, an ellipsis, and the last 3 pages.
-  if (currentPage >= totalPages - 2) {
-    return [1, 2, '...', totalPages - 2, totalPages - 1, totalPages];
-  }
-
-  // If the current page is somewhere in the middle,
-  // show the first page, an ellipsis, the current page and its neighbors,
-  // another ellipsis, and the last page.
-  return [
-    1,
-    '...',
-    currentPage - 1,
-    currentPage,
-    currentPage + 1,
-    '...',
-    totalPages,
-  ];
-};

@@ -33,7 +33,7 @@ export default function Page() {
             className="unset"
           >
             <LinkButton>
-              <span>Sign up</span> <ArrowRight className="w-5 md:w-6" />
+              <span>Create Account</span> <ArrowRight className="w-5 md:w-6" />
             </LinkButton>
           </Link>
         </div>

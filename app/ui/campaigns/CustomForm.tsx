@@ -49,12 +49,12 @@ export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defa
     )
 }
 
-export const FormItemTextArea = ({ name, label, maxLength = 300, minLength = 0, defaultValue = "", placeholder, visible = true, Icon }: {
+export const FormItemTextArea = ({ name, label, maxLength = 300, minLength = 0, defaultValue = "", placeholder, visible = true, Icon, className }: {
     name: string, label: string, maxLength?: number, minLength?: number, defaultValue?: string, placeholder?: string, visible?: boolean
-    Icon?: React.FC<React.SVGProps<SVGSVGElement>>
+    Icon?: React.FC<React.SVGProps<SVGSVGElement>>, className?: string
 }) => {
     return (
-        <div className={(visible ? "mb-4" : "invisible max-h-0")}>
+        <div className={cn((visible ? "mb-4" : "invisible max-h-0"), className)}>
             <label htmlFor={name} className="text-text mb-2 block text-sm font-medium">
                 {label}
             </label>

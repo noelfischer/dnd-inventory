@@ -36,7 +36,7 @@ export default function SignupPage() {
             )}
             <Button className="mt-5 w-full" aria-disabled={isPending} type='submit' disabled={isPending}>
               <p className='flex'>
-                Sign Up {isPending && <LoaderCircle className='animate-spin ml-2' />}
+                Create Account {isPending && <LoaderCircle className='animate-spin ml-2' />}
               </p>
               <ArrowRight className="h-6 w-6" />
             </Button>

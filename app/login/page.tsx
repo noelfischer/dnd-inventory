@@ -42,7 +42,7 @@ export default function LoginPage() {
             <div className='flex items-center gap-4 mt-16 justify-between'>
               <p className="text-text">Don&apos;t have an account?</p>
               <Link href="/signup" className="text-text font-semibold">
-                Sign up
+                Create Account
               </Link>
             </div>
           </div>

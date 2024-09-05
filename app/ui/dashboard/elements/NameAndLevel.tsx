@@ -1,6 +1,7 @@
 'use server'
 
 import { Character } from '@/app/lib/definitions';
+import { getClasses } from '@/app/lib/utils';
 import { sql } from '@vercel/postgres';
 import { notFound } from 'next/navigation';
 
@@ -11,9 +12,11 @@ const NameAndLevel = async ({ character_id }: { character_id: string }) => {
         notFound();
     }
 
+    const cclass = getClasses('en').find(c => c.key === character.cclass)?.value;
+
     return (
         <div>
-            <h1 className='text-3xl'>{character.name}, {character.cclass}, Level {character.level}</h1>
+            <h1 className='text-3xl'>{character.name}, {cclass}, Level {character.level}</h1>
         </div>
     );
 };

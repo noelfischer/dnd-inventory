@@ -3,10 +3,11 @@ import { GeneralSpell } from '@/app/lib/definitions';
 import { fetchSpell, FormattedSpell } from './externalData';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
-import { CornerDownLeft, CornerDownRight, Hand } from 'lucide-react';
+import { CornerDownRight } from 'lucide-react';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '@/components/ui/select';
 
 interface Props {
     userspells: GeneralSpell[];
@@ -16,7 +17,7 @@ interface Props {
 }
 
 const SpellsClient = ({ userspells, learnableSpells, learnSpell, forgetSpell }: Props) => {
-    const lang = 'de';
+    const [lang, setLang] = useState<'de' | 'en'>('de');
     const [detailedSpells, setDetailedSpells] = useState<FormattedSpell[]>([]);
     const [search, setSearch] = useState<string>('');
 
@@ -102,7 +103,27 @@ const SpellsClient = ({ userspells, learnableSpells, learnSpell, forgetSpell }: 
                                 </CommandList>
                             </Command>
                         </CardContent>
-                        <CardFooter>
+                        <CardFooter className='block'>
+                            <div className="mb-4 flex gap-5 items-center">
+                                <label htmlFor="lang" className='mb-2 block text-sm font-medium'>
+                                    Language
+                                </label>
+                                <Select name="lang" defaultValue={lang} onValueChange={(value: 'de' | 'en') => setLang(value)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Language" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Language</SelectLabel>
+                                            {[{ key: 'de', value: 'de' }, { key: 'en', value: 'en' }].map((option, index) => (
+                                                <SelectItem key={option.key} value={option.key} >
+                                                    {option.value}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                             <Button className="w-auto" disabled={search.length < 2} onClick={() => learnSpellClient()}>Add&nbsp;
                                 {search.length > 2 && lang === 'de' ? learnableSpells.find(spell => spell.spell_id === search)?.spell_name_de : learnableSpells.find(spell => spell.spell_id === search)?.spell_name_en}
                             </Button>

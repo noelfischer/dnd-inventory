@@ -29,7 +29,8 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
 
     async function updateItem(item: InventoryItem) {
         'use server'
-        await sql`UPDATE Inventory SET item_name = ${item.item_name}, description = ${item.description}, ability = ${item.ability}, weight = ${item.weight}, category = ${item.category}, magic = ${item.magic}, quantity = ${item.quantity} WHERE item_id = ${item.item_id}`;
+        await sql`UPDATE Inventory SET item_name = ${item.item_name}, description = ${item.description}, ability = ${item.ability}, weight = ${item.weight}, category = ${item.category}, magic = ${item.magic}, quantity = ${item.quantity}, slot = ${item.slot}, i = ${item.i}
+        WHERE item_id = ${item.item_id}`;
     }
 
     async function deleteItem(item_id: string) {

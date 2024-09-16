@@ -62,11 +62,10 @@ export default async function Page({ params }: { params: { id: string, character
             <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type} visible={isDM} />
             <FormItemInput className='col-span-2' name="race" label='Choose your race' minLength={2} defaultValue={character.race} />
             <FormItemSelect className='col-span-2' name="cclass" label="Choose your class" classNameLabel='text-text' defaultValue={character.cclass} options={getClasses('en')} />
-            <FormItemInput name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />
-            <FormItemInput name="speed" label="Enter your speed" type="number" max={9999} defaultValue={character.speed.toString()} />
+            <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />
             <FormItemInput className='col-span-2' name="background" label="Choose your background" defaultValue={character.background} maxLength={100} />
             <FormItemInput className='col-span-2' name="alignment" label="Choose your alignment" defaultValue={character.alignment} />
-            <FormItemInput name="strength" label="Enter your strength" type="number" defaultValue={character.strength.toString()} />
+            <FormItemInput name="strength" label="Enter your strength (0-20)" type="number" defaultValue={character.strength.toString()} />
             <FormItemInput name="dexterity" label="Enter your dexterity" type="number" defaultValue={character.dexterity.toString()} />
             <FormItemInput name="constitution" label="Enter your constitution" type="number" defaultValue={character.constitution.toString()} />
             <FormItemInput name="intelligence" label="Enter your intelligence" type="number" defaultValue={character.intelligence.toString()} />

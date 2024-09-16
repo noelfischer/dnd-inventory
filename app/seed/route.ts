@@ -353,6 +353,13 @@ async function seedDashboardElements() {
 );
   `;
 
+  // create a constraint for dashboard_id, character_id, element_type
+  await client.sql`
+    ALTER TABLE DashboardElements
+    ADD CONSTRAINT unique_dashboard_element
+    UNIQUE (dashboard_id, character_id, element_type);
+  `;
+
   const insertedDashboardElements = await Promise.all(
     dashboardElements.map(
       (element) => client.sql`

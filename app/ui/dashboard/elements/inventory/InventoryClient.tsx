@@ -86,7 +86,18 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
         tables.forEach(table => {
             table.rows.forEach((row, index) => {
                 if (row.item_id === item.item_id) {
-                    table.rows[index] = newItem;
+                    //check if the slot has changed
+                    if (row.slot !== newItem.slot) {
+                        const newTable = tables.find(table => table.name === newItem.slot);
+                        if (newTable) {
+                            newItem.i = newTable.rows.length;
+                            newTable.rows.push(newItem);
+                            table.rows.splice(index, 1);
+                        }
+                    } else {
+                        table.rows[index] = newItem;
+                    }
+
                 }
             });
         });

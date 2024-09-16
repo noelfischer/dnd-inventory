@@ -141,8 +141,8 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
         </Link>
       </CardContent>
       <CardFooter>
-        {(campaign.dm_id === uID || character.user_id == uID) &&
-          <div className="w-full flex gap-2 justify-between">
+        <div className="w-full flex gap-2 justify-between">
+          {(campaign.dm_id === uID || character.user_id == uID) &&
             <form action={duplicateCharacterById}>
               <TooltipProvider>
                 <Tooltip>
@@ -158,28 +158,28 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
                 </Tooltip>
               </TooltipProvider>
             </form>
+          }
+          <span>
+            <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`}>
+              <LinkButton>
+                <span className="sr-only">Update</span>
+                <Pencil className="w-5 h6" />
+              </LinkButton>
+            </Link>
+          </span>
 
-            <span>
-              <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`}>
-                <LinkButton>
-                  <span className="sr-only">Update</span>
-                  <Pencil className="w-5 h6" />
-                </LinkButton>
-              </Link>
-            </span>
 
+          <span>
+            <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/delete`}>
+              <LinkButton>
+                <span className="sr-only">Delete</span>
+                <Trash2 className="h-6 w-5" />
+              </LinkButton>
+            </Link>
+          </span>
 
-            <span>
-              <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/delete`}>
-                <LinkButton>
-                  <span className="sr-only">Delete</span>
-                  <Trash2 className="h-6 w-5" />
-                </LinkButton>
-              </Link>
-            </span>
+        </div>
 
-          </div>
-        }
       </CardFooter>
     </Card>
   )

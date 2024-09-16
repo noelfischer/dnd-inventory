@@ -45,11 +45,10 @@ export default async function Page({ params }: { params: { id: string } }) {
             <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' visible={isDM} />
             <FormItemInput className='col-span-2' name="race" label="Choose your race" minLength={2} />
             <FormItemSelect className='col-span-2' name="cclass" classNameLabel='text-text' label="Choose your class" options={getClasses('en')} />
-            <FormItemInput name="level" label="Choose your level" type="number" defaultValue='1' />
-            <FormItemInput name="speed" label="Enter your speed" type="number" max={9999} />
+            <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue='1' />
             <FormItemInput className='col-span-2' placeholder='Noble' name="background" label="Choose your background" maxLength={100} />
             <FormItemInput className='col-span-2' placeholder='Lawful Good' name="alignment" label="Choose your alignment" />
-            <FormItemInput name="strength" label="Enter your strength" type="number" />
+            <FormItemInput name="strength" label="Enter your strength (0-20)" type="number" />
             <FormItemInput name="dexterity" label="Enter your dexterity" type="number" />
             <FormItemInput name="constitution" label="Enter your constitution" type="number" />
             <FormItemInput name="intelligence" label="Enter your intelligence" type="number" />

@@ -47,7 +47,6 @@ const CharacterSchema = z.object({
   charisma: z.preprocess(parseNumber, z.number()),
   max_hit_points: z.preprocess(parseNumber, z.number()),
   armor_class: z.preprocess(parseNumber, z.number()),
-  speed: z.preprocess(parseNumber, z.number()),
 });
 
 export async function authenticate(
@@ -226,7 +225,7 @@ export async function deleteCampaignUser(campaignUserId: string, campaignId: str
 //create character
 export async function createCharacter(campaignId: string, formData: FormData) {
   const uID = await getUIDFromSession();
-  const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
+  const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class } = CharacterSchema.parse({
     userID: uID,
     name: formData.get('name'),
     description: formData.get('description'),
@@ -245,15 +244,16 @@ export async function createCharacter(campaignId: string, formData: FormData) {
     charisma: formData.get('charisma'),
     max_hit_points: formData.get('max_hit_points'),
     armor_class: formData.get('armor_class'),
-    speed: formData.get('speed'),
   });
+
+  const load_capacity = 15 * strength;
 
   const characterId = nanoid(10);
 
   try {
     console.log('Creating character:');
-    await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed)
-      VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${speed})`;
+    await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, load_capacity)
+      VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${load_capacity})`;
 
     // create all secondary tables
     await sql`INSERT INTO Dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${nanoid(10)}, ${campaignId}, ${characterId}, 'private', ${name + "-Dashboard-1"})`;
@@ -271,7 +271,7 @@ export async function createCharacter(campaignId: string, formData: FormData) {
 
 // update character
 export async function updateCharacter(characterId: string, campaignId: string, formData: FormData) {
-  const { userID, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, speed } = CharacterSchema.parse({
+  const { userID, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class } = CharacterSchema.parse({
     userID: formData.get('user_id'),
     name: formData.get('name'),
     description: formData.get('description'),
@@ -290,11 +290,12 @@ export async function updateCharacter(characterId: string, campaignId: string, f
     charisma: formData.get('charisma'),
     max_hit_points: formData.get('max_hit_points'),
     armor_class: formData.get('armor_class'),
-    speed: formData.get('speed'),
   });
 
+  const load_capacity = 15 * strength;
+
   try {
-    await sql`UPDATE characters SET user_id = ${userID}, name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, cclass = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, speed = ${speed}
+    await sql`UPDATE characters SET user_id = ${userID}, name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, cclass = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, load_capacity = ${load_capacity}
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
   } catch (e) {
     console.error('Failed to update character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId);
@@ -324,8 +325,8 @@ export async function duplicateCharacter(characterId: string, campaignId: string
   const dashboardId = nanoid(10);
   try {
     await sql`
-      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, speed, initiative, death_saves_success, death_saves_failure, experience_points)
-      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, speed, initiative, death_saves_success, death_saves_failure, experience_points
+      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, initiative, death_saves_success, death_saves_failure, experience_points, load_capacity, backpack_capacity)
+      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, initiative, death_saves_success, death_saves_failure, experience_points, load_capacity, backpack_capacity
       FROM characters
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
     `;
@@ -433,7 +434,7 @@ export async function updateDashboardLayout(dashboardId: string, layout: any) {
     for (const element of dashboardElement) {
       await sql`INSERT INTO dashboardelements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg, x_md, y_md, w_md, h_md, x_sm, y_sm, w_sm, h_sm, x_xs, y_xs, w_xs, h_xs, x_xxs, y_xxs, w_xxs, h_xxs)
         VALUES (${element.element_id}, ${element.dashboard_id}, ${element.character_id}, ${element.element_type}, ${element.x_lg}, ${element.y_lg}, ${element.w_lg}, ${element.h_lg}, ${element.x_md}, ${element.y_md}, ${element.w_md}, ${element.h_md}, ${element.x_sm}, ${element.y_sm}, ${element.w_sm}, ${element.h_sm}, ${element.x_xs}, ${element.y_xs}, ${element.w_xs}, ${element.h_xs}, ${element.x_xxs}, ${element.y_xxs}, ${element.w_xxs}, ${element.h_xxs})
-        ON CONFLICT (element_id) DO UPDATE SET
+        ON CONFLICT (dashboard_id, character_id, element_type) DO UPDATE SET
           x_lg = ${element.x_lg}, y_lg = ${element.y_lg}, w_lg = ${element.w_lg}, h_lg = ${element.h_lg},
           x_md = ${element.x_md}, y_md = ${element.y_md}, w_md = ${element.w_md}, h_md = ${element.h_md},
           x_sm = ${element.x_sm}, y_sm = ${element.y_sm}, w_sm = ${element.w_sm}, h_sm = ${element.h_sm},
@@ -460,6 +461,12 @@ export async function createDashboardElement(dashboard_id: string, formData: For
   const character_id: string = z.string().parse(formData.get('character'));
   const element_type: string = z.string().parse(formData.get('element'));
   try {
+    //check if element already exists for dashboard and character id
+    const existingElement = await sql`SELECT * FROM dashboardelements WHERE dashboard_id = ${dashboard_id} AND character_id = ${character_id} AND element_type = ${element_type}`;
+    if (existingElement.rows.length > 0) {
+      console.error('Element already exists', "Input: \n", "Dashboard ID: ", dashboard_id, "\n", "Character ID: ", character_id, "\n", "Element Type: ", element_type);
+      return 'Element already exists';
+    }
     await sql`INSERT INTO dashboardelements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg)
       VALUES (${elementId}, ${dashboard_id}, ${character_id}, ${element_type}, ${9}, ${9999}, ${3}, ${5})`;
   } catch (e) {

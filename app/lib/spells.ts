@@ -15,7 +15,7 @@ export const spells = [
   },
   {
     id: "6WrfeeG0jm",
-    spell_name_de: "drnkunst",
+    spell_name_de: "Druidenkunst",
     spell_name_en: "Druidcraft",
     classes: "dr",
     spell_level: 0
@@ -92,7 +92,7 @@ export const spells = [
   },
   {
     id: "1GUMBGhO4n",
-    spell_name_de: "mahand",
+    spell_name_de: "Magierhand",
     spell_name_en: "Mage Hand",
     classes: "ba, he, ma, za, ar",
     spell_level: 0
@@ -316,7 +316,7 @@ export const spells = [
   },
   {
     id: "TkBQL5bXT0",
-    spell_name_de: "marüstung",
+    spell_name_de: "Magierrüstung",
     spell_name_en: "Mage Armor",
     classes: "ma, za",
     spell_level: 1

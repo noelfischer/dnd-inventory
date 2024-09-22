@@ -5,9 +5,9 @@ import Dropdown from "@/components/Dropdown"
 import { ChevronLeft, LoaderCircle, PanelsLeftBottom, Plus, Trash2 } from "lucide-react"
 import Link from "next/link"
 import "./styles.css"
-import { useActionState, useEffect, useState } from "react"
+import { useActionState, useEffect, useMemo, useState } from "react"
 import { Layouts } from "react-grid-layout"
-import AddElement from "./AddElement"
+import AddElement, { AddableElement } from "./AddElement"
 import { keyValuePair } from "../../campaigns/CustomForm"
 
 type LinkText = {
@@ -37,6 +37,7 @@ type Props = {
 export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, characters, addElementHandler }: Props) => {
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
+  const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters), [characters, layouts.lg]);
 
   const [errorMessageUpdateLayout, formActionUpdateLayout, isPendingUpdateLayout] = useActionState(updateLayoutWithData, undefined,);
   const [errorMessageNewDashboard, formActionNewDashboard, isPendingNewDashboard] = useActionState(newDashboard, undefined);
@@ -61,8 +62,10 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   };
 
   async function addElementHandlerCustom(formData: FormData) {
-    await updateLayoutWithData();
-    return await addElementHandler(formData);
+    const layoutUpdatePromise = updateLayoutWithData();
+    const elementHandlerPromise = addElementHandler(formData);
+    const res = await Promise.all([layoutUpdatePromise, elementHandlerPromise]);
+    return res[1];
   }
 
   return (
@@ -105,10 +108,40 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
           :
           <Button className='min-w-[160px] flex justify-between bg-mainAccent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }
-        <AddElement characters={characters} addElementHandler={addElementHandlerCustom} disabled={isPendingUpdateLayout} />
+        <AddElement addableElements={addableElements} addElementHandler={addElementHandlerCustom} disabled={isPendingUpdateLayout} />
       </div>
     </div>
   )
+}
+
+function getAddableElements(layouts: Layouts, characters: keyValuePair[]): AddableElement[] {
+  const elementOptions = [
+    { key: "name", value: "Name" },
+    { key: "health", value: "Health" },
+    { key: "inventory", value: "Inventory" },
+    { key: "currency", value: "Coinage" },
+    { key: "conditions", value: "Conditions" },
+    { key: "spells", value: "Spells" },
+    { key: "weight", value: "Weight" },
+    { key: "notes", value: "Notes" },
+    { key: "abilities", value: "Abilities" },
+    { key: "spellslots", value: "Spell Slots" },
+    { key: "inspiration", value: "Inspiration" },
+  ].sort((a, b) => a.value.localeCompare(b.value));
+
+  let addableElements: AddableElement[] = [];
+  for (const character of characters) {
+
+    addableElements.push({
+      character, addableElements: elementOptions.filter(
+        (element) => !layouts.lg.find((layout) => {
+          return layout.i.includes(`${element.key},${character.key}`)
+
+        }
+        ))
+    });
+  }
+  return addableElements;
 }
 
 function cleanLayout(layouts: Layouts): Layouts {

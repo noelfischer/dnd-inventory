@@ -5,9 +5,27 @@ import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescri
 import { LoaderCircle, Plus } from "lucide-react";
 import { FormItemSelect, keyValuePair } from "../../campaigns/CustomForm";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+    SelectLabel,
+    SelectGroup,
+} from "@/components/ui/select"
 
-export default function AddElement({ characters, addElementHandler, disabled = false }: { characters: keyValuePair[], addElementHandler: (formData: FormData) => Promise<string>, disabled?: boolean }) {
+// if a dashboard element is already present, it should not be displayed in the add element dropdown
+export type AddableElement = {
+    character: keyValuePair,
+    addableElements: keyValuePair[]
+}
+
+export default function AddElement({ addableElements, addElementHandler, disabled = false }: { addableElements: AddableElement[], addElementHandler: (formData: FormData) => Promise<string>, disabled?: boolean }) {
     const [loading, setLoading] = useState(false);
+    const [selectedCharacter, setSelectedCharacter] = useState(addableElements[0].character.key);
+    const elementSelect: keyValuePair[] = addableElements.find(addableElement => addableElement.character.key == selectedCharacter)?.addableElements || addableElements[0].addableElements
 
     function formAction(formData: FormData) {
         addElementHandler(formData).then(() =>
@@ -15,20 +33,6 @@ export default function AddElement({ characters, addElementHandler, disabled = f
             setTimeout(() => { setLoading(false); }, 2100)
         );
     }
-
-    const elementOptions = [
-        { key: "name", value: "Name" },
-        { key: "health", value: "Health" },
-        { key: "inventory", value: "Inventory" },
-        { key: "currency", value: "Coinage" },
-        { key: "conditions", value: "Conditions" },
-        { key: "spells", value: "Spells" },
-        { key: "weight", value: "Weight" },
-        { key: "notes", value: "Notes" },
-        { key: "abilities", value: "Abilities" },
-        { key: "spellslots", value: "Spell Slots" },
-        { key: "inspiration", value: "Inspiration" },
-    ].sort((a, b) => a.value.localeCompare(b.value));
 
     return (
         <Sheet>
@@ -46,16 +50,49 @@ export default function AddElement({ characters, addElementHandler, disabled = f
                         </SheetDescription>
                     </SheetHeader>
                     <div className="grid gap-4 py-4">
-                        <FormItemSelect label="Character" name="character" options={characters} defaultValue={characters[0].key} visible={characters.length > 1} />
-                        <FormItemSelect label="Element Type" name="element" options={elementOptions} defaultValue='name' classNameSelectContent="max-h-[500px]" />
+                        <CustomFormItemSelect label="Character" name="character" options={addableElements.map((e: AddableElement) => e.character)}
+                            defaultValue={addableElements[0].character.key} valueChange={(e) => { setSelectedCharacter(e) }} visible={addableElements.length > 1}
+                        />
+                        {elementSelect.length == 0 ? <p className="text-gray-500 px-2">No more elements to add.</p> :
+                            <FormItemSelect label="Element Type" name="element" options={elementSelect} defaultValue={elementSelect[0].key} classNameSelectContent="max-h-[500px]" />
+                        }
                     </div>
                     <SheetFooter>
                         <SheetClose asChild>
-                            <Button type="submit" onClick={() => setLoading(true)}>Add Element</Button>
+                            <Button type="submit" onClick={() => setLoading(true)} disabled={elementSelect.length == 0}>Add Element</Button>
                         </SheetClose>
                     </SheetFooter>
                 </form>
             </SheetContent>
         </Sheet>
+    )
+}
+
+const CustomFormItemSelect = ({ name, label, options, defaultValue = "", visible = true, valueChange }: {
+    name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean, valueChange?: (value: string) => void
+}) => {
+    return (
+        <div className={(visible ? "mb-4" : "invisible max-h-0")}>
+            <label htmlFor={name} className={cn(
+                'mb-2 block text-sm font-medium',
+            )}>
+                {label}
+            </label>
+            <Select name={name} defaultValue={defaultValue} onValueChange={valueChange}>
+                <SelectTrigger>
+                    <SelectValue placeholder={label} />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        <SelectLabel>{label}</SelectLabel>
+                        {options.map((option, index) => (
+                            <SelectItem key={option.key} value={option.key} >
+                                {option.value}
+                            </SelectItem>
+                        ))}
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+        </div>
     )
 }

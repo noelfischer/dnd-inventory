@@ -30,6 +30,7 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
 
     const [layouts, setLayouts] = useState<Layouts>(initialLayout);
     const [editMode, setEditMode] = useState<boolean>(false);
+    const [deleteHover, setDeleteHover] = useState<boolean>(false);
     const [componentList, setComponentList] = useState<Component[]>(initialComponentList);
 
     const cols: { [key: string]: number } = { lg: 12, md: 10, sm: 5, xs: 3, xxs: 1 }
@@ -92,7 +93,7 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
                 onLayoutChange={onLayoutChange}
                 onBreakpointChange={onBreakpointChange}
                 rowHeight={42}
-                isDraggable={editMode}
+                isDraggable={editMode && !deleteHover}
                 isResizable={editMode}
                 measureBeforeMount={false}
                 useCSSTransforms={true}
@@ -102,8 +103,8 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
                 {componentList.map((component: Component) => (
                     <div key={component.i} className="border-2 border-black dark:border-black bg-bg dark:bg-darkElevatedBg shadow-light dark:shadow-dark">
                         <div className={(editMode ? "edit-shown" : "edit-hidden")}>
-                            <div className="remove" onClick={() => { removeElement(component.i) }}>
-                                <X className="h-5 -mr-[5px] -mt-[3px]" strokeWidth={3} />
+                            <div className="remove" onClick={() => { removeElement(component.i) }} onTouchEnd={() => removeElement(component.i)} onMouseEnter={() => setDeleteHover(true)} onMouseLeave={() => setDeleteHover(false)}>
+                                <X className="h-7 -mr-[3px] -mt-[5px]" strokeWidth={3} />
                             </div>
                         </div>
                         <div>

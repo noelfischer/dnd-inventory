@@ -75,8 +75,8 @@
   position: absolute;
   right: 3px;
   bottom: 4px;
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-right: 3px solid rgb(143, 143, 143);
   border-bottom: 3px solid rgb(121, 121, 121);
   z-index: 35;
@@ -160,7 +160,6 @@
   border: none;
 
   color: rgb(126, 126, 126);
-  background-color: inherit;
   border-bottom-left-radius: 15px;
   z-index: 25;
 }

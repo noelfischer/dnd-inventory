@@ -15,8 +15,16 @@ const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, upd
 
     const [slots, setSlots] = useState<SpellSlot[]>(spell_slots);
 
+    function resetSlots() {
+        spell_slots.forEach(slot => {
+            slot.casts_remaining = slot.total_casts;
+        });
+        setSlots([...spell_slots]);
+    }
+
     useEffect(() => {
         setSlots(spell_slots);
+        window.addEventListener('longRest', resetSlots);
     }, [spell_slots]);
 
     function updateLevelDescriptionClient(spellSlotID: string, totalCasts: number) {

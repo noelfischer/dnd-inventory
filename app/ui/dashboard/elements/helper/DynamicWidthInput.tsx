@@ -21,6 +21,10 @@ const DynamicWidthInput: React.FC<DynamicWidthInputProps> = ({ value = '', onCha
         adjustWidth();
     }, [inputValue]);
 
+    useEffect(() => {
+        setInputValue(value);
+    }, [value]);
+
     const adjustWidth = () => {
         if (spanRef.current && inputRef.current) {
             spanRef.current.textContent = inputValue == '' ? placeholder : inputValue;

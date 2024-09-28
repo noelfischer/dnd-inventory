@@ -127,6 +127,7 @@ function getAddableElements(layouts: Layouts, characters: keyValuePair[]): Addab
     { key: "abilities", value: "Abilities" },
     { key: "spellslots", value: "Spell Slots" },
     { key: "inspiration", value: "Inspiration" },
+    { key: "longrest", value: "Long Rest" },
   ].sort((a, b) => a.value.localeCompare(b.value));
 
   let addableElements: AddableElement[] = [];

@@ -17,13 +17,17 @@ const HealthBarClient = ({ max_hit_points, current_hit_points, temp_hit_points, 
     const [tempHitPoints, setTempHitPoints] = useState<number>(temp_hit_points);
     const [maxHitPoints, setMaxHitPoints] = useState<number>(max_hit_points);
 
+    function resetHealth() {
+        setCurrentHitPoints(maxHitPoints);
+        setTempHitPoints(0);
+    }
+
     useEffect(() => {
         setCurrentHitPoints(current_hit_points);
         setTempHitPoints(temp_hit_points);
         setMaxHitPoints(max_hit_points);
+        window.addEventListener('longRest', resetHealth);
     }, [current_hit_points, temp_hit_points, max_hit_points]);
-
-    const totalHitPoints = maxHitPoints + tempHitPoints;
 
     const currentHealthPercentage = Math.min(Math.max(0, (currentHitPoints / maxHitPoints) * 100), 100);
     const tempHealthPercentageFull = Math.max(0, (tempHitPoints / (currentHitPoints + tempHitPoints)) * 100);

@@ -18,6 +18,7 @@ import InventoryServer from '@/app/ui/dashboard/elements/inventory/InventoryServ
 import WeightServer from '@/app/ui/dashboard/elements/weight/WeightServer';
 import CurrencyServer from '@/app/ui/dashboard/elements/currency/CurrencyServer';
 import Inspiration from '@/app/ui/dashboard/elements/Inspiration';
+import LongRestServer from '@/app/ui/dashboard/elements/longRest/LongRestServer';
 
 export type GridElement = {
   i: string;
@@ -109,6 +110,8 @@ function componentMap(type: string, character_id: string): ReactNode {
       return <SpellSlotsServer character_id={character_id} />;
     case 'inspiration':
       return <Inspiration character_id={character_id} />;
+    case 'longrest':
+      return <LongRestServer character_id={character_id} />;
     default:
       return <div>Unknown component</div>;
   }
@@ -152,9 +155,9 @@ function getLayoutTemplate(characterID: string) {
   const initial_layout: Layouts = {
     lg: [
       { i: '0000000000,name,' + characterID, x: 0, y: 0, w: 7, h: 1 },
-      { i: '0000000001,health,' + characterID, x: 0, y: 1, w: 5, h: 2 },
-      { i: '0000000009,spellslots,' + characterID, x: 0, y: 3, w: 7, h: 2 },
-      { i: '0000000002,weight,' + characterID, x: 5, y: 1, w: 2, h: 2 },
+      { i: '0000000001,health,' + characterID, x: 0, y: 1, w: 4, h: 2 },
+      { i: '0000000009,spellslots,' + characterID, x: 0, y: 3, w: 5, h: 2 },
+      { i: '0000000002,weight,' + characterID, x: 4, y: 1, w: 3, h: 2 },
       { i: '0000000003,notes,' + characterID, x: 9, y: 12, w: 3, h: 6 },
       { i: '0000000004,inventory,' + characterID, x: 0, y: 5, w: 7, h: 13 },
       { i: '0000000005,spells,' + characterID, x: 7, y: 0, w: 3, h: 12 },
@@ -162,6 +165,7 @@ function getLayoutTemplate(characterID: string) {
       { i: '0000000007,conditions,' + characterID, x: 10, y: 7, w: 2, h: 5 },
       { i: '00000000008,currency,' + characterID, x: 7, y: 12, w: 2, h: 6 },
       { i: '00000000010,inspiration,' + characterID, x: 10, y: 0, w: 2, h: 2 },
+      { i: '00000000011,longrest,' + characterID, x: 5, y: 3, w: 2, h: 2 },
     ],
   };
   const initial_componentList = [
@@ -176,6 +180,7 @@ function getLayoutTemplate(characterID: string) {
     { i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} /> },
     { i: '00000000008,currency,' + characterID, type: <CurrencyServer character_id={characterID} /> },
     { i: '00000000010,inspiration,' + characterID, type: <Inspiration character_id={characterID} /> },
+    { i: '00000000011,longrest,' + characterID, type: <LongRestServer character_id={characterID} /> },
   ];
   return { layout: initial_layout, list: initial_componentList };
 }

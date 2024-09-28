@@ -1,12 +1,16 @@
 'use client'
 
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DynamicWidthInput from './DynamicWidthInput';
 
 export default function OnLeaveInput({ initialValue, placeholder = '  ', onLeave, className }: { initialValue: string, placeholder?: string, onLeave: (value: string) => void, className?: string }) {
     const [value, setValue] = useState(initialValue);
     const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        setValue(initialValue);
+    }, [initialValue]);
 
     function handleBlur() {
         setIsEditing(false);

@@ -19,6 +19,7 @@ import WeightServer from '@/app/ui/dashboard/elements/weight/WeightServer';
 import CurrencyServer from '@/app/ui/dashboard/elements/currency/CurrencyServer';
 import Inspiration from '@/app/ui/dashboard/elements/Inspiration';
 import LongRestServer from '@/app/ui/dashboard/elements/longRest/LongRestServer';
+import StatusServer from '@/app/ui/dashboard/elements/status/StatusServer';
 
 export type GridElement = {
   i: string;
@@ -112,6 +113,8 @@ function componentMap(type: string, character_id: string): ReactNode {
       return <Inspiration character_id={character_id} />;
     case 'longrest':
       return <LongRestServer character_id={character_id} />;
+    case 'status':
+      return <StatusServer character_id={character_id} />;
     default:
       return <div>Unknown component</div>;
   }

@@ -128,6 +128,7 @@ function getAddableElements(layouts: Layouts, characters: keyValuePair[]): Addab
     { key: "spellslots", value: "Spell Slots" },
     { key: "inspiration", value: "Inspiration" },
     { key: "longrest", value: "Long Rest" },
+    { key: "status", value: "Status" },
   ].sort((a, b) => a.value.localeCompare(b.value));
 
   let addableElements: AddableElement[] = [];
@@ -135,7 +136,7 @@ function getAddableElements(layouts: Layouts, characters: keyValuePair[]): Addab
 
     addableElements.push({
       character, addableElements: elementOptions.filter(
-        (element) => !layouts.lg.find((layout) => {
+        (element) => !(layouts.lg || []).find((layout) => {
           return layout.i.includes(`${element.key},${character.key}`)
 
         }

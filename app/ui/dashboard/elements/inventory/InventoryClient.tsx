@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { InventoryItem } from '@/app/lib/definitions';
-import { Ham, PencilRuler, Pickaxe, Shield, Sparkles, Sword } from 'lucide-react';
+import { Ham, PencilRuler, Pickaxe, Shield, Sparkles, Sword, Watch } from 'lucide-react';
 import DraggableTables, { TableProps } from '../helper/DraggableTables';
 import { TableRow, TableCell, TableHead, TableHeader } from '@/components/ui/table';
 import NewItem from './NewItem';
@@ -145,7 +145,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
                 <TableHeader id='-1'>
                     <TableRow id='-1'>
                         <TableHead id='-1' className="w-[180px]">Name</TableHead>
-                        <TableHead id='-1' className='hidden sm:inline'>Description</TableHead>
+                        <TableHead id='-1' className='hidden sm:table-cell'>Description</TableHead>
                         <TableHead id='-1'>Weight</TableHead>
                         <TableHead id='-1'>Quantity</TableHead>
                         <TableHead id='-1' className="text-right">Actions</TableHead>
@@ -214,6 +214,9 @@ export function selectIcon(category: string) {
         // Tools
         case 'T':
             return <Pickaxe className='min-w-6 min-h-6' />;
+        // Wearables
+        case 'B':
+            return <Watch className='min-w-6 min-h-6' />;
         // Default
         default:
             return <PencilRuler className='min-w-6 min-h-6' />;

@@ -51,10 +51,10 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                         <div className="grid grid-cols-4 items-center gap-4">
                             <FormItemInput name="item_name" label="Name" className='col-span-4 w-full' defaultValue={item.item_name} minLength={2} />
                             <FormItemInput name="description" label="Description" className='col-span-4 w-full' defaultValue={item.description} />
-                            <FormItemSelect name="category" label="Category" defaultValue={item.category} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'W', value: 'Weapon' }, { key: 'A', value: 'Armor' }, { key: 'C', value: 'Consumable' }, { key: 'T', value: 'Tool' }, { key: 'M', value: 'Miscellaneous' }]} />
+                            <FormItemSelect name="category" label="Category" defaultValue={item.category} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'W', value: 'Weapon' }, { key: 'A', value: 'Armor' }, { key: 'B', value: 'Wearable' }, { key: 'T', value: 'Tool' }, { key: 'C', value: 'Consumable' }, { key: 'M', value: 'Miscellaneous' }]} />
                             <FormItemSelect name="slot" label="Slot" defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'eq', value: 'Equipped' }, { key: 'bd', value: 'On Body' }, { key: 'bp', value: 'Backpack' }]} />
                             <FormItemInput name="weight" label="Weight" type="number" className='col-span-1 w-full' min={0} max={500} defaultValue={item.weight.toString()} />
-                            <FormItemInput name="quantity" label="Quantity" type="number" className='col-span-1 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} autofocus/>
+                            <FormItemInput name="quantity" label="Quantity" type="number" className='col-span-1 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} autofocus />
                             <FormItemCheckbox name="magic" label="Magic" defaultChecked={item.magic} className='col-span-2 w-full' />
 
                         </div>

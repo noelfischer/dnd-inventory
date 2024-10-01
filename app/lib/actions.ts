@@ -320,6 +320,10 @@ export async function deleteCharacter(characterId: string, campaignId: string) {
 // move character to another campaign
 export async function moveCharacter(characterId: string, campaignId: string, formData: FormData) {
   const newCampaignId: string = z.string().parse(formData.get('new_campaign_id'));
+
+  if (newCampaignId === campaignId) {
+    redirect(`/campaigns/${campaignId}`);
+  }
   console.log('Moving character:', characterId, campaignId, newCampaignId);
   try {
     await sql`UPDATE characters SET campaign_id = ${newCampaignId} WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;

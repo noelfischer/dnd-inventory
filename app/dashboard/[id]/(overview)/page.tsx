@@ -40,6 +40,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
   const character: Character = await fetchCharacterByDashboard(dashboardID);
   const characterID = character ? character.character_id : null;
+  const partyDashboard = !characterID;
   const characterName = character ? character.name : "Party";
   const campaignID = await fetchCampaignIDByDashboard(dashboardID);
   const navLinks: NavLink[] = await fetchNavLinksByDashboard(dashboardID);
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   } else {
     characters = await fetchCharactersByCampaignAndUser(campaignID, uID);
   }
+  console.log("partyDashboard", partyDashboard);
 
   if (!campaignID) notFound();
 
@@ -81,6 +83,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         ableToDeleteDashboard={ableToDeleteDashboard}
         deleteDashboard={deleteDashboard}
         characters={formatCharactersData(characters)}
+        isPartyDashboard={partyDashboard}
         addElementHandler={addDashBoardElement}
       />
     </>

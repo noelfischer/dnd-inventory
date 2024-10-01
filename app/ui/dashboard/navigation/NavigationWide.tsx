@@ -30,14 +30,15 @@ type Props = {
   newDashboard: any,
   ableToDeleteDashboard: boolean,
   deleteDashboard: any,
+  isPartyDashboard: boolean,
   characters: keyValuePair[],
   addElementHandler: (formData: FormData) => Promise<string>
 }
 
-export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, characters, addElementHandler }: Props) => {
+export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
-  const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters), [characters, layouts.lg]);
+  const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters, isPartyDashboard), [characters, layouts.lg]);
 
   const [errorMessageUpdateLayout, formActionUpdateLayout, isPendingUpdateLayout] = useActionState(updateLayoutWithData, undefined,);
   const [errorMessageNewDashboard, formActionNewDashboard, isPendingNewDashboard] = useActionState(newDashboard, undefined);
@@ -114,7 +115,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   )
 }
 
-function getAddableElements(layouts: Layouts, characters: keyValuePair[]): AddableElement[] {
+function getAddableElements(layouts: Layouts, characters: keyValuePair[], isPartyDashboard: boolean): AddableElement[] {
   const elementOptions = [
     { key: "name", value: "Name" },
     { key: "health", value: "Health" },
@@ -128,8 +129,11 @@ function getAddableElements(layouts: Layouts, characters: keyValuePair[]): Addab
     { key: "spellslots", value: "Spell Slots" },
     { key: "inspiration", value: "Inspiration" },
     { key: "longrest", value: "Long Rest" },
-    { key: "status", value: "Status" },
   ].sort((a, b) => a.value.localeCompare(b.value));
+
+  if (isPartyDashboard) {
+    elementOptions.unshift({ key: "status", value: "Status" });
+  }
 
   let addableElements: AddableElement[] = [];
   for (const character of characters) {

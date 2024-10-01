@@ -17,11 +17,12 @@ type Props = {
     newDashboard: Function,
     ableToDeleteDashboard: boolean,
     deleteDashboard: any,
+    isPartyDashboard: boolean,
     characters: keyValuePair[],
     addElementHandler: (formData: FormData) => Promise<string>
 }
 
-const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, characters, addElementHandler }: Props) => {
+const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
 
     useEffect(() => {
         setLayouts(initialLayout);
@@ -83,6 +84,7 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
                 newDashboard={newDashboard}
                 ableToDeleteDashboard={ableToDeleteDashboard}
                 deleteDashboard={deleteDashboard}
+                isPartyDashboard={isPartyDashboard}
                 characters={characters}
                 addElementHandler={addElementHandler}
             />

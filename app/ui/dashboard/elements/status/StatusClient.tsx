@@ -53,7 +53,7 @@ const StatusClient = ({ name, imgLink, health, weight, spell_slots, conditions, 
                         </div>
                     </div>
                     <div className='border-2 dark:border-white/80 border-black p-2 mt-4' style={{ height: "calc(100% - 152px)", whiteSpace: "pre-wrap" }}>
-                        {conditions}
+                        {conditions || "No status conditions"}
                     </div>
                 </div>
                 <div className='border-2 dark:border-white/80 border-black p-2 text-center shadow-light dark:shadow-dark '>

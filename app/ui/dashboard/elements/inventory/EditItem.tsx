@@ -23,14 +23,21 @@ type Props = {
 const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
     const [open, setOpen] = useState(false);
 
+    // This is a workaround to prevent the user from accidentally deleting an item
+    // More info https://github.com/shadcn-ui/ui/issues/1220#issuecomment-1731562088
+    const [pointHasDown, setPointHasDown] = useState(false);
+
     async function handleSubmit(formData: FormData) {
         updateItem(item, formData);
         setOpen(false);
     }
 
     async function handleDelete() {
-        deleteItem(item.item_id);
-        setOpen(false);
+        console.log('has down', pointHasDown);
+        if (pointHasDown) {
+            deleteItem(item.item_id);
+            setOpen(false);
+        }
     }
 
     return (
@@ -56,11 +63,10 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                             <FormItemInput name="weight" label="Weight" type="number" className='col-span-1 w-full' min={0} max={500} defaultValue={item.weight.toString()} />
                             <FormItemInput name="quantity" label="Quantity" type="number" className='col-span-1 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} autofocus />
                             <FormItemCheckbox name="magic" label="Magic" defaultChecked={item.magic} className='col-span-2 w-full' />
-
                         </div>
                     </div>
                     <DialogFooter className='sm:justify-between'>
-                        <Button type='button' className='mt-4 sm:mt-0' onClick={handleDelete}>Delete</Button>
+                        <Button type='button' className='mt-4 sm:mt-0' onPointerDown={() => setPointHasDown(true)} onClick={handleDelete}>Delete</Button>
                         <Button type='submit' className='bg-mainAccent'>Update</Button>
                     </DialogFooter>
                 </form>

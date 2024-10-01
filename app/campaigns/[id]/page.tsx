@@ -25,12 +25,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import DropdownCampaignCharacterOptions from "@/app/ui/campaigns/DropdownCampaignCharacterOptions";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const uID = await getUIDFromSession();
@@ -125,7 +120,7 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
   const duplicateCharacterById = duplicateCharacter.bind(null, character.character_id, campaign.campaign_id, character.name);
 
   return (
-    <Card key={character.character_id} className="w-full sm:max-w-[270px]">
+    <Card key={character.character_id} className="w-full sm:max-w-[270px] overflow-visible">
       <CardHeader>
         <CardTitle>
           {character.name}
@@ -142,23 +137,6 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
       </CardContent>
       <CardFooter>
         <div className="w-full flex gap-2 justify-between">
-          {(campaign.dm_id === uID || character.user_id == uID) &&
-            <form action={duplicateCharacterById}>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button type="submit">
-                      <span className="sr-only">Duplicate</span>
-                      <BookCopy className="w-5 h6" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Duplicate {character.character_type}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </form>
-          }
           <span>
             <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/update`}>
               <LinkButton>
@@ -167,8 +145,6 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
               </LinkButton>
             </Link>
           </span>
-
-
           <span>
             <Link className="unset" href={`/campaigns/${campaign.campaign_id}/${character.character_id}/delete`}>
               <LinkButton>
@@ -177,9 +153,11 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
               </LinkButton>
             </Link>
           </span>
-
+          <DropdownCampaignCharacterOptions
+            duplicateCharacterById={duplicateCharacterById}
+            character_id={character.character_id}
+            campaign_id={campaign.campaign_id} />
         </div>
-
       </CardFooter>
     </Card>
   )

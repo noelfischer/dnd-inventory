@@ -317,6 +317,22 @@ export async function deleteCharacter(characterId: string, campaignId: string) {
   redirect(`/campaigns/${campaignId}`);
 }
 
+// move character to another campaign
+export async function moveCharacter(characterId: string, campaignId: string, formData: FormData) {
+  const newCampaignId: string = z.string().parse(formData.get('new_campaign_id'));
+  console.log('Moving character:', characterId, campaignId, newCampaignId);
+  try {
+    await sql`UPDATE characters SET campaign_id = ${newCampaignId} WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
+    await sql`UPDATE dashboards SET campaign_id = ${newCampaignId} WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
+  } catch (e) {
+    console.error('Failed to move character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId, "\n", "New Campaign ID: ", newCampaignId);
+    return { message: 'Database Error: Failed to Move Character.' };
+  }
+  revalidatePath(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${newCampaignId}`);
+  redirect(`/campaigns/${campaignId}`);
+}
+
 
 // duplicate character
 export async function duplicateCharacter(characterId: string, campaignId: string, name: string) {

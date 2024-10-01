@@ -21,7 +21,8 @@ export const getClasses = (lang: 'de' | 'en') => {
     { key: 'wa', value: 'Waldläufer' },
     { key: 'za', value: 'Zauberer' },
     { key: 'ar', value: 'Magieschmied / Artifizient' },
-  ];
+    { key: 'pe', value: 'Tier' },
+  ].sort((a, b) => a.value.localeCompare(b.value));
 
   const classesEn: keyValuePair[] = [
     { key: 'bb', value: 'Barbarian' },
@@ -37,7 +38,8 @@ export const getClasses = (lang: 'de' | 'en') => {
     { key: 'wa', value: 'Ranger' },
     { key: 'za', value: 'Sorcerer' },
     { key: 'ar', value: 'Artificer' },
-  ];
+    { key: 'pe', value: 'Pet' },
+  ].sort((a, b) => a.value.localeCompare(b.value));
 
   return lang === 'de' ? classesDe : classesEn;
 }

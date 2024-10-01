@@ -42,7 +42,9 @@ export default async function Page({ params }: { params: { id: string } }) {
             <FormItemInput className='col-span-4' name="name" label="Choose a character name" minLength={2} />
             <FormItemTextArea className='col-span-4' name="description" label="Choose a character description" />
             <FormItemInput className='col-span-4' name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} maxLength={255} />
-            <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' visible={isDM} />
+            {isDM ?
+              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' /> :
+              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' />}
             <FormItemInput className='col-span-2' name="race" label="Choose your race" minLength={2} />
             <FormItemSelect className='col-span-2' name="cclass" classNameLabel='text-text' label="Choose your class" options={getClasses('en')} />
             <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue='1' />

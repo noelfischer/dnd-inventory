@@ -59,7 +59,9 @@ export default async function Page({ params }: { params: { id: string, character
               options={usersInCampaign.map(user => ({ key: user.user_id, value: user.username }))} visible={isDM} />
             <FormItemTextArea className='col-span-4' name="description" label="Choose a character description" defaultValue={character.description} />
             <FormItemInput className='col-span-4' name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url} maxLength={255} />
-            <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type} visible={isDM} />
+            {isDM ?
+              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type} /> :
+              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type} />}
             <FormItemInput className='col-span-2' name="race" label='Choose your race' minLength={2} defaultValue={character.race} />
             <FormItemSelect className='col-span-2' name="cclass" label="Choose your class" classNameLabel='text-text' defaultValue={character.cclass} options={getClasses('en')} />
             <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />

@@ -24,8 +24,8 @@ export type AddableElement = {
 
 export default function AddElement({ addableElements, addElementHandler, disabled = false }: { addableElements: AddableElement[], addElementHandler: (formData: FormData) => Promise<string>, disabled?: boolean }) {
     const [loading, setLoading] = useState(false);
-    const [selectedCharacter, setSelectedCharacter] = useState(addableElements[0].character.key);
-    const elementSelect: keyValuePair[] = addableElements.find(addableElement => addableElement.character.key == selectedCharacter)?.addableElements || addableElements[0].addableElements
+    const [selectedCharacter, setSelectedCharacter] = useState(addableElements[0]?.character.key);
+    const elementSelect: keyValuePair[] = addableElements.find(addableElement => addableElement.character.key == selectedCharacter)?.addableElements || addableElements[0]?.addableElements || [];
 
     function formAction(formData: FormData) {
         addElementHandler(formData).then(() =>
@@ -51,7 +51,7 @@ export default function AddElement({ addableElements, addElementHandler, disable
                     </SheetHeader>
                     <div className="grid gap-4 py-4">
                         <CustomFormItemSelect label="Character" name="character" options={addableElements.map((e: AddableElement) => e.character)}
-                            defaultValue={addableElements[0].character.key} valueChange={(e) => { setSelectedCharacter(e) }} visible={addableElements.length > 1}
+                            defaultValue={addableElements[0]?.character.key} valueChange={(e) => { setSelectedCharacter(e) }} visible={addableElements.length > 1}
                         />
                         {elementSelect.length == 0 ? <p className="text-gray-500 px-2">No more elements to add.</p> :
                             <FormItemSelect label="Element Type" name="element" options={elementSelect} defaultValue={elementSelect[0].key} classNameSelectContent="max-h-[500px]" />

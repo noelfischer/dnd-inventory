@@ -60,7 +60,7 @@ const CurrencyClient = ({ initial_currency, updatePlatinum, updateGold, updateSi
                     <div className={cn((label === "Platinum" || label == "Gold" ? 'card-shine-effect' : ''), "rounded-md transition-all bg-main/70 hover:bg-main/0")}>
                         <div className='text-center pt-2'>{label}</div>
                         <div className='border-b-2 border-black mt-3 mb-3'></div>
-                        <div className='flex justify-center'><OnLeaveInput className='text-text border-black text-3xl pb-9 border-b-[4px] mb-6' onLeave={onLeave} initialValue={value.toString()} /></div>
+                        <div className='flex justify-center'><OnLeaveInput className='dark:text-text dark:border-black text-3xl pb-9 border-b-[4px] mb-6' onLeave={onLeave} initialValue={value.toString()} /></div>
                     </div>
                 </div>
             </li>

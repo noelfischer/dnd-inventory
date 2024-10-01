@@ -35,10 +35,10 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
     const [backpackCapacity, setBackpackCapacity] = useState<number>(initialBackpackCapacity);
 
     const backpackFilled = tables.find(table => table.name === 'bp')?.rows.map(row => row.weight * row.quantity).reduce((acc, curr) => acc + curr, 0) || 0;
-    const [backpackPercentage, setBackpackPercentage] = useState<number>(Math.floor(backpackFilled / backpackCapacity * 10000) / 100);
+    const [backpackPercentage, setBackpackPercentage] = useState<number>(+(backpackFilled / backpackCapacity * 100).toFixed(2));
 
     useEffect(() => {
-        setBackpackPercentage(Math.floor(backpackFilled / backpackCapacity * 10000) / 100);
+        setBackpackPercentage(+(backpackFilled / backpackCapacity * 100).toFixed(2));
     }, [backpackFilled, initialBackpackCapacity]);
 
     async function handleCreate(formData: FormData) {
@@ -129,7 +129,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
         if (isNaN(capacityNumber)) return;
         updateBackpackCapacity(capacityNumber);
         setBackpackCapacity(capacityNumber);
-        setBackpackPercentage(Math.floor(backpackFilled / capacityNumber * 10000) / 100);
+        setBackpackPercentage(+(backpackFilled / backpackCapacity * 100).toFixed(2));
     }
 
     const headerContent = () => {

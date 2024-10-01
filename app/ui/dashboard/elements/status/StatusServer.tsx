@@ -3,19 +3,19 @@
 import React from 'react';
 import StatusClient from './StatusClient';
 import { sql } from '@vercel/postgres';
-import { Character } from '@/app/lib/definitions';
 
 const StatusServer = async ({ character_id }: { character_id: string }) => {
     const combinedData = await sql<{
         name: string;
         portrait_url: string;
+        inspiration: number;
         current_hit_points: number;
         max_hit_points: number;
         backpack_capacity: number;
         current_weight: string;
         conditions: string;
     }>`
-        SELECT c.name, c.portrait_url, c.current_hit_points, c.max_hit_points, 
+        SELECT c.name, c.portrait_url, c.inspiration, c.current_hit_points, c.max_hit_points, 
                c.backpack_capacity, 
                COALESCE(SUM(i.weight), 0) AS current_weight, 
                ci.conditions 
@@ -23,7 +23,7 @@ const StatusServer = async ({ character_id }: { character_id: string }) => {
         LEFT JOIN Inventory i ON c.character_id = i.character_id
         LEFT JOIN CharacterInfos ci ON c.character_id = ci.character_id
         WHERE c.character_id = ${character_id}
-        GROUP BY c.name, c.portrait_url, c.current_hit_points, c.max_hit_points, 
+        GROUP BY c.name, c.portrait_url, c.inspiration, c.current_hit_points, c.max_hit_points, 
                  c.backpack_capacity, ci.conditions;
     `;
 
@@ -52,6 +52,7 @@ const StatusServer = async ({ character_id }: { character_id: string }) => {
         <StatusClient
             imgLink={character.portrait_url}
             name={character.name}
+            inspiration={character.inspiration}
             health={{ current: character.current_hit_points, max: character.max_hit_points }}
             weight={{ current: parseFloat(character.current_weight), max: character.backpack_capacity }}
             spell_slots={spellSlots}

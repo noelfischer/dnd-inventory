@@ -50,10 +50,10 @@ const WeightClient = ({ max_weight, inventory_weight, coins_weight, updateTotalC
     return (
         <div className="w-full h-full">
             <div className="relative w-full h-full">
-                <div className={cn("relative top-0 left-0 h-full bg-yellow-800", encumbered && "encumbered")} style={{ width: `${currentWeightPercentage}%` }}>
+                <div className={cn("relative top-0 left-0 h-full bg-yellow-600 dark:bg-yellow-800", encumbered && "encumbered")} style={{ width: `${currentWeightPercentage}%` }}>
                     <div className='h-full bg-main/20' />
                 </div>
-                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-white font-bold text-2xl whitespace-nowrap">
+                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-black/90 dark:text-white font-bold text-2xl whitespace-nowrap">
                     {encumbered && <TriangleAlert className='w-10 h-10 mr-5' />}
                     {(inventoryWeight + coinsWeight)} / <OnLeaveInput initialValue={maxWeight.toString()} placeholder='Max HP' onLeave={onChangeMaxWeight} /> lb.
                     {encumbered && <TriangleAlert className='w-10 h-10 ml-4' />}

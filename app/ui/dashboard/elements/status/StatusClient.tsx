@@ -5,6 +5,7 @@ import "./styles.css";
 interface Props {
     name: string;
     imgLink: string;
+    inspiration: number;
     health: {
         current: number;
         max: number;
@@ -18,7 +19,7 @@ interface Props {
     conditions: string;
 }
 
-const StatusClient = ({ name, imgLink, health, weight, spell_slots, conditions }: Props) => {
+const StatusClient = ({ name, imgLink, health, weight, spell_slots, conditions, inspiration }: Props) => {
     return (
         <>
             <div className="flex flex-row gap-2 pb-1 overflow-hidden" style={{ height: "calc(100% - 70px)" }}>
@@ -58,7 +59,7 @@ const StatusClient = ({ name, imgLink, health, weight, spell_slots, conditions }
                 <div className='border-2 dark:border-white/80 border-black p-2 text-center shadow-light dark:shadow-dark '>
                     <h2 className='text-2xl mb-3'>Inspiration</h2>
                     <div className="content-center" style={{ height: "calc(100% - 55px)" }}>
-                        <h1 className='text-8xl font-bold text-center'>7</h1>
+                        <h1 className='text-8xl font-bold text-center'>{inspiration}</h1>
                     </div>
                 </div>
             </div>

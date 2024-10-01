@@ -65,7 +65,7 @@ const HealthBarClient = ({ max_hit_points, current_hit_points, temp_hit_points, 
                         style={{ width: `${tempHealthPercentageFull}%` }} />
                 }
 
-                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-white font-bold text-2xl">
+                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-white font-bold text-2xl dark">
                     <OnLeaveInput initialValue={currentHitPoints.toString()} placeholder='HP' onLeave={onChangeCurrentHealth} />
                     + <OnLeaveInput initialValue={tempHitPoints.toString()} placeholder='Temp HP' onLeave={onChangeTempHealth} /> /
                     <OnLeaveInput initialValue={maxHitPoints.toString()} placeholder='Max HP' onLeave={onChangeMaxHealth} />

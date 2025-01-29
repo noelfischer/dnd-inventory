@@ -27,14 +27,14 @@ CREATE TABLE "Character" (
     "campaign_id" CHAR(10) NOT NULL,
     "user_id" CHAR(10) NOT NULL,
     "name" VARCHAR(100) NOT NULL,
-    "description" VARCHAR(200) NOT NULL,
+    "description" VARCHAR(200),
     "character_type" VARCHAR(50) NOT NULL,
-    "race" VARCHAR(50) NOT NULL,
+    "race" VARCHAR(50),
     "cclass" CHAR(2) NOT NULL DEFAULT 'bb',
     "level" INTEGER NOT NULL DEFAULT 1,
-    "background" VARCHAR(100) NOT NULL,
-    "alignment" VARCHAR(50) NOT NULL,
-    "portrait_url" VARCHAR(500) NOT NULL,
+    "background" VARCHAR(100),
+    "alignment" VARCHAR(50),
+    "portrait_url" VARCHAR(500),
     "strength" INTEGER NOT NULL DEFAULT 0,
     "dexterity" INTEGER NOT NULL DEFAULT 0,
     "constitution" INTEGER NOT NULL DEFAULT 0,
@@ -154,7 +154,6 @@ CREATE TABLE "DashboardElement" (
     "y_xxs" INTEGER,
     "w_xxs" INTEGER,
     "h_xxs" INTEGER,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "DashboardElement_pkey" PRIMARY KEY ("element_id")
 );
@@ -164,6 +163,9 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DashboardElement_dashboard_id_character_id_element_type_key" ON "DashboardElement"("dashboard_id", "character_id", "element_type");
 
 -- AddForeignKey
 ALTER TABLE "Campaign" ADD CONSTRAINT "Campaign_dm_id_fkey" FOREIGN KEY ("dm_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;

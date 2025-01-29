@@ -322,6 +322,7 @@ async function seedDashboardElements() {
 }
 
 export async function GET() {
+  /*
   console.log('Seeding database...');
   try {
     await client.sql`BEGIN`;
@@ -352,5 +353,6 @@ export async function GET() {
     await client.sql`ROLLBACK`;
     console.error('Error seeding database:', error);
     return Response.json({ error }, { status: 500 });
-  }
+  }*/
+  return new Response('Seeding database is disabled', { status: 403 });
 }

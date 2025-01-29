@@ -28,7 +28,7 @@ export async function GET() {
                     }
                     return typeof value === 'string' ? `'${value.replace(/'/g, "''")}'` : value;
                 }).join(', ');
-                return `INSERT INTO ${tableName} (${columns}) VALUES (${values}) ON CONFLICT (${primaryKey}) DO NOTHING;`;
+                return `INSERT INTO "${tableName}" (${columns}) VALUES (${values}) ON CONFLICT (${primaryKey}) DO NOTHING;`;
             }).join('\n');
         };
 
@@ -41,7 +41,7 @@ export async function GET() {
         sqlText += generateInsertStatements('Inventory', inventory.rows, 'item_id') + '\n';
         sqlText += generateInsertStatements('Currency', currency.rows, 'currency_id') + '\n';
         sqlText += generateInsertStatements('SpellSlots', spellSlots.rows, 'spell_slot_id') + '\n';
-        sqlText += generateInsertStatements('CharacterInfos', characterInfos.rows, 'condition_id') + '\n';
+        sqlText += generateInsertStatements('CharacterInfos', characterInfos.rows, 'character_info_id') + '\n';
         sqlText += generateInsertStatements('Dashboards', dashboards.rows, 'dashboard_id') + '\n';
         sqlText += generateInsertStatements('DashboardElements', dashboardElements.rows, 'element_id') + '\n';
 

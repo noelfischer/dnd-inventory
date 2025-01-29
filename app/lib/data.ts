@@ -1,269 +1,215 @@
 'use server';
 
-import { sql } from '@vercel/postgres';
 import { auth } from '@/auth';
-
-import {
-  User,
-  Campaign,
-  Character,
-  InventoryItem,
-  Currency,
-  UserSpell,
-  GeneralSpell,
-  Dashboard,
-  DashboardElement,
-  SimpleCharacter,
-  CampaignUser,
-} from './definitions';
 import { NavLink } from '../ui/dashboard/navigation/NavigationWide';
 
+import { Campaign, CampaignUser, Character, Currency, Dashboard, DashboardElement, InventoryItem, PrismaClient, User } from '@prisma/client'
+import { DashboardWithCharacterType, SimpleCharacter } from './definitions';
 
-export async function getEmailFromSession() {
+const prisma = new PrismaClient()
+
+
+export async function getEmailFromSession(): Promise<string> {
   const data = await auth();
-  return data!.user!.email;
+  const res = data!.user!.email;
+  if (!res) throw new Error('No email in session');
+  return res;
 }
 
-export async function getUIDFromSession() {
-  try {
-    const email = await getEmailFromSession();
-    const user = await sql`SELECT user_id FROM users WHERE email=${email}`;
-    return user.rows[0].user_id;
-  } catch (e) {
-    return { message: 'Failed to get user id' };
-  }
+export async function fetchUID(): Promise<string> {
+  const email = await getEmailFromSession();
+  const user = await prisma.user.findUnique({
+    select: { user_id: true },
+    where: { email }
+  });
+
+  if (!user) throw new Error('User not found');
+  return user.user_id;
 }
 
-export async function getUsernameFromSession() {
-  try {
-    const email = await getEmailFromSession();
-    const user = await sql`SELECT username FROM users WHERE email=${email}`;
-    return user.rows[0].username;
-  } catch (e) {
-    return { message: 'Failed to get username' };
-  }
+export async function fetchUsernameFromSession(): Promise<string> {
+  const email = await getEmailFromSession();
+  const user = await prisma.user.findUnique({
+    select: { username: true },
+    where: { email }
+  });
+
+  if (!user) throw new Error('User not found');
+  return user.username;
 }
 
-// Fetch all users
+
+// Fetch users by campaign ID
 export async function fetchUsersByCampaign(campaign_id: string) {
-  try {
-    const data = await sql<User>`SELECT u.user_id, u.username FROM Users u JOIN CampaignUsers cu ON u.user_id = cu.user_id WHERE cu.campaign_id = ${campaign_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch users.');
-  }
+  return await prisma.campaignUser.findMany({
+    where: { campaign_id },
+    include: {
+      User: { select: { username: true } }
+    }
+  });
 }
 
-export async function fetchUsername(user_id: string) {
-  try {
-    const data = await sql<User>`SELECT username FROM Users WHERE user_id = ${user_id}`;
-    return data.rows[0].username;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch username.');
-  }
+export async function fetchUsername(user_id: string): Promise<string> {
+  const user = await prisma.user.findUnique({
+    select: { username: true },
+    where: { user_id }
+  });
+
+  if (!user) throw new Error('User not found');
+  return user.username;
 }
 
-// Fetch all campaigns
-export async function fetchCampaigns(user_id: string) {
-  try {
-    const data = await sql<Campaign>`SELECT c.campaign_id, c.name, c.dm_id FROM Campaigns c JOIN CampaignUsers cu ON c.campaign_id = cu.campaign_id WHERE cu.user_id = ${user_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch campaigns.');
-  }
+export async function fetchCampaigns(user_id: string): Promise<Campaign[]> {
+  return await prisma.campaign.findMany({
+    where: { CampaignUser: { some: { user_id } } }
+  });
 }
 
-// Fetch campaign by campaign ID
-export async function fetchCampaign(campaign_id: string) {
-  try {
-    const data = await sql<Campaign>`SELECT * FROM Campaigns WHERE campaign_id = ${campaign_id}`;
-    return data.rows[0];
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch campaign ID ${campaign_id}.`);
-  }
+export async function fetchCampaign(campaign_id: string): Promise<Campaign> {
+  const res = await prisma.campaign.findUnique({ where: { campaign_id } });
+  if (!res) throw new Error('Campaign not found');
+  return res;
 }
 
-// Fetch campaign users by campaign ID
 export async function fetchCampaignUsers(campaign_id: string) {
-  try {
-    const data = await sql<CampaignUser>`SELECT cu.campaign_user_id, u.user_id, u.username FROM Users u JOIN CampaignUsers cu ON u.user_id = cu.user_id WHERE cu.campaign_id = ${campaign_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch campaign users for campaign ID ${campaign_id}.`);
-  }
+  return await prisma.campaignUser.findMany({
+    where: { campaign_id },
+    include: {
+      User: { select: { username: true } }
+    }
+  });
 }
 
-// Fetch characters by campaign ID
-export async function fetchCharactersByCampaign(campaign_id: string) {
-  try {
-    const data = await sql<SimpleCharacter>`SELECT character_id, name, current_hit_points, max_hit_points, character_type FROM Characters WHERE campaign_id = ${campaign_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch characters for campaign ID ${campaign_id}.`);
-  }
+export async function fetchCharactersByCampaign(campaign_id: string): Promise<SimpleCharacter[]> {
+  return await prisma.character.findMany({
+    where: { campaign_id },
+    select: { character_id: true, name: true, current_hit_points: true, max_hit_points: true, character_type: true }
+  });
 }
 
-// Fetch characters by campaign ID and user ID
-export async function fetchCharactersByCampaignAndUser(campaign_id: string, user_id: string) {
-  try {
-    const data = await sql<SimpleCharacter>`SELECT character_id, name, current_hit_points, max_hit_points, character_type FROM Characters WHERE campaign_id = ${campaign_id} AND user_id = ${user_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch characters for campaign ID ${campaign_id}.`);
-  }
+export async function fetchCharactersByCampaignAndUser(campaign_id: string, user_id: string): Promise<SimpleCharacter[]> {
+  return await prisma.character.findMany({
+    where: { campaign_id, user_id },
+    select: { character_id: true, name: true, current_hit_points: true, max_hit_points: true, character_type: true }
+  });
 }
 
-// Fetch character by character ID
-export async function fetchCharacter(character_id: string) {
-  try {
-    const data = await sql<Character>`SELECT * FROM Characters WHERE character_id = ${character_id}`;
-    return data.rows[0];
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch character ID ${character_id}.`);
-  }
+export async function fetchCharacter(character_id: string): Promise<Character> {
+  const character = await prisma.character.findUnique({ where: { character_id } });
+  if (!character) throw new Error('Character not found');
+  return character;
 }
 
-// Fetch character name by character ID
-export async function fetchCharacterName(character_id: string) {
-  try {
-    const data = await sql<Character>`SELECT name FROM Characters WHERE character_id = ${character_id}`;
-    return data.rows[0].name;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch character name for character ID ${character_id}.`);
-  }
+export async function fetchInventoryByCharacter(character_id: string): Promise<InventoryItem[]> {
+  return await prisma.inventoryItem.findMany({
+    where: { character_id }
+  });
 }
 
-// Fetch inventory by character ID
-export async function fetchInventoryByCharacter(character_id: string) {
-  try {
-    const data = await sql<InventoryItem>`SELECT * FROM Inventory WHERE character_id = ${character_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch inventory for character ID ${character_id}.`);
-  }
+export async function fetchCurrencyByCharacter(character_id: string): Promise<Currency> {
+  const currency = await prisma.currency.findFirst({
+    where: { character_id }
+  });
+  if (!currency) throw new Error('Currency not found');
+  return currency;
 }
 
-// Fetch currency by character ID
-export async function fetchCurrencyByCharacter(character_id: string) {
-  try {
-    const data = await sql<Currency>`SELECT * FROM Currency WHERE character_id = ${character_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch currency for character ID ${character_id}.`);
-  }
+export async function fetchDashboardsByCampaign(campaign_id: string): Promise<Dashboard[]> {
+  return await prisma.dashboard.findMany({
+    where: { campaign_id }
+  });
 }
 
-// Fetch dashboards by campaign ID
-export async function fetchDashboardsByCampaign(campaign_id: string) {
-  try {
-    const data = await sql<Dashboard>`SELECT * FROM Dashboards WHERE campaign_id = ${campaign_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch dashboards for campaign ID ${campaign_id}.`);
-  }
+export async function fetchCampaignIDByDashboard(dashboard_id: string): Promise<string> {
+  const dashboard = await prisma.dashboard.findUnique({
+    select: { campaign_id: true },
+    where: { dashboard_id }
+  });
+
+  if (!dashboard) throw new Error('Dashboard not found');
+  return dashboard.campaign_id;
 }
 
-// Fetch campaign ID by dashboard ID
-export async function fetchCampaignIDByDashboard(dashboard_id: string) {
-  try {
-    const data = await sql<Dashboard>`SELECT campaign_id FROM Dashboards WHERE dashboard_id = ${dashboard_id}`;
-    return data.rows[0].campaign_id;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch campaign for dashboard ID ${dashboard_id}.`);
-  }
-}
-
-// Fetch character by dashboard ID
 export async function fetchCharacterByDashboard(dashboard_id: string) {
-  try {
-    const data = await sql<Character>`SELECT d.character_id, c.name FROM Dashboards d JOIN Characters c ON d.character_id = c.character_id WHERE d.dashboard_id = ${dashboard_id}`;
-    return data.rows[0];
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch character for dashboard ID ${dashboard_id}.`);
-  }
+  const dashboard = await prisma.dashboard.findFirst({
+    where: { dashboard_id },
+    include: { Character: { select: { character_id: true, name: true } } }
+  });
+  if (!dashboard || !dashboard.Character) throw new Error('Character not found');
+  return dashboard.Character;
 }
 
-// Fetch dashboard elements by dashboard ID
-export async function fetchDashboardElementsByDashboard(dashboard_id: string) {
-  try {
-    const data = await sql<DashboardElement>`SELECT * FROM DashboardElements WHERE dashboard_id = ${dashboard_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch dashboard elements for dashboard ID ${dashboard_id}.`);
-  }
+export async function fetchDashboardElementsByDashboard(dashboard_id: string): Promise<DashboardElement[]> {
+  return await prisma.dashboardElement.findMany({
+    where: { dashboard_id }
+  });
 }
 
 // Fetch navigation links by dashboard ID
 export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<NavLink[]> {
-  try {
-    const campaign_id = await fetchCampaignIDByDashboard(dashboard_id);
+  const campaign_id = await fetchCampaignIDByDashboard(dashboard_id);
 
-    const characterdata = await fetchCharacterNavLinks(campaign_id, dashboard_id);
-    const campaigndata = await fetchCampaignNavLinks(campaign_id, dashboard_id);
-    const data = { rows: [...campaigndata.rows, ...characterdata.rows] };
+  const characterdata: DashboardWithCharacterType[] = await fetchCharacterNavLinks(campaign_id, dashboard_id);
+  const campaigndata: DashboardWithCharacterType[] = await fetchCampaignNavLinks(campaign_id, dashboard_id);
 
-    const navLinks: NavLink[] = [];
+  const data: DashboardWithCharacterType[] = [...characterdata, ...campaigndata];
 
-    for (const dashboard of data.rows) {
-      const link = {
-        name: dashboard.name,
-        link: `/dashboard/${dashboard.dashboard_id}`
-      }
-      const index = navLinks.findIndex(navLink => navLink.name === dashboard.character_type);
-      if (index === -1) {
-        navLinks.push({ name: dashboard.character_type, links: [link] });
-      } else {
-        navLinks[index].links.push(link);
-      }
-    }
+  const navLinks: NavLink[] = [];
 
-    return navLinks;
-  }
-  catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch navigation links for dashboard ID ${dashboard_id}.`);
-  }
-}
-
-async function fetchCharacterNavLinks(campaign_id: string, dashboard_id: string) {
-  return await sql`SELECT d.dashboard_id, d.name, c.character_type FROM Dashboards d
-  JOIN Characters c ON d.character_id = c.character_id
-  WHERE d.campaign_id = ${campaign_id} AND d.dashboard_id != ${dashboard_id}`;
-}
-
-async function fetchCampaignNavLinks(campaign_id: string, dashboard_id: string) {
-  return await sql`SELECT dashboard_id, name, 'Party' as character_type FROM Dashboards WHERE campaign_id = ${campaign_id} AND character_id IS NULL AND dashboard_id != ${dashboard_id}`;
-}
-
-// Fetch dashboard number
-export async function fetchDashboardNumber(campaignID: string, characterID: string | null) {
-  try {
-    let numDashboards: number;
-    if (characterID) {
-      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE character_id = ${characterID} AND campaign_id = ${campaignID}`;
-      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
+  for (const dashboard of data) {
+    const link = {
+      name: dashboard.name,
+      link: `/dashboard/${dashboard.dashboard_id}`
+    };
+    const index = navLinks.findIndex(navLink => navLink.name === dashboard.character_type);
+    if (index === -1) {
+      navLinks.push({ name: dashboard.character_type, links: [link] });
     } else {
-      const countDashboards = await sql`SELECT COUNT(*) FROM dashboards WHERE campaign_id = ${campaignID} AND character_id IS NULL`;
-      numDashboards = countDashboards.rows[0] ? countDashboards.rows[0].count : 0;
+      navLinks[index].links.push(link);
     }
-    return numDashboards;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch dashboard number for campaign ID ${campaignID} and character ID ${characterID}.`);
   }
+
+  return navLinks;
+}
+
+async function fetchCharacterNavLinks(campaign_id: string, dashboard_id: string): Promise<DashboardWithCharacterType[]> {
+  const results = await prisma.dashboard.findMany({
+    where: {
+      campaign_id,
+      dashboard_id: { not: dashboard_id },
+      character_id: { not: null }
+    },
+    include: {
+      Character: {
+        select: { character_type: true }
+      }
+    }
+  });
+
+  return results.map(dashboard => ({
+    name: dashboard.name,
+    dashboard_id: dashboard.dashboard_id,
+    character_id: dashboard.character_id!,
+    character_type: dashboard.Character?.character_type ?? "Unknown" // Handle potential null values
+  }));
+}
+
+async function fetchCampaignNavLinks(campaign_id: string, dashboard_id: string): Promise<DashboardWithCharacterType[]> {
+  let dashboard: any = await prisma.dashboard.findMany({
+    where: {
+      campaign_id,
+      dashboard_id: { not: dashboard_id },
+      character_id: null,
+
+    },
+    select: { dashboard_id: true, name: true }
+  });
+  dashboard.character_type = "Party";
+  return dashboard;
+}
+
+export async function fetchDashboardNumber(campaignID: string, characterID: string | null): Promise<number> {
+  return await prisma.dashboard.count({
+    where: { campaign_id: campaignID, character_id: characterID ?? undefined }
+  });
 }

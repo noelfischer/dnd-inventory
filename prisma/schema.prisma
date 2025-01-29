@@ -1,0 +1,168 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id       String         @id @db.Char(10)
+  username      String         @unique @db.VarChar(50)
+  password_hash String         @db.VarChar(100)
+  email         String         @unique @db.VarChar(100)
+  created_at    DateTime       @default(now())
+  Campaign      Campaign[]
+  Character     Character[]
+  CampaignUser  CampaignUser[]
+}
+
+model Campaign {
+  campaign_id  String         @id @db.Char(10)
+  name         String         @db.VarChar(100)
+  description  String         @db.VarChar(1000)
+  password     String?        @db.VarChar(100)
+  dm_id        String         @db.Char(10)
+  created_at   DateTime       @default(now())
+  User         User           @relation(fields: [dm_id], references: [user_id], onDelete: Cascade)
+  Character    Character[]
+  CampaignUser CampaignUser[]
+  Dashboard    Dashboard[]
+}
+
+model Character {
+  character_id       String             @id @db.Char(10)
+  campaign_id        String             @db.Char(10)
+  user_id            String             @db.Char(10)
+  name               String             @db.VarChar(100)
+  description        String             @db.VarChar(200)
+  character_type     String             @db.VarChar(50)
+  race               String             @db.VarChar(50)
+  cclass             String             @default("bb") @db.Char(2)
+  level              Int                @default(1)
+  background         String             @db.VarChar(100)
+  alignment          String             @db.VarChar(50)
+  portrait_url       String             @db.VarChar(500)
+  strength           Int                @default(0)
+  dexterity          Int                @default(0)
+  constitution       Int                @default(0)
+  intelligence       Int                @default(0)
+  wisdom             Int                @default(0)
+  charisma           Int                @default(0)
+  max_hit_points     Int                @default(0)
+  current_hit_points Int                @default(0)
+  temp_hit_points    Int                @default(0)
+  load_capacity      Int                @default(0)
+  backpack_capacity  Int                @default(60)
+  armor_class        Int                @default(0)
+  speed              Int                @default(0)
+  inspiration        Int                @default(0)
+  created_at         DateTime           @default(now())
+  updated_at         DateTime           @default(now())
+  Campaign           Campaign           @relation(fields: [campaign_id], references: [campaign_id], onDelete: Cascade)
+  User               User               @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  InventoryItem      InventoryItem[]
+  Currency           Currency[]
+  SpellSlot          SpellSlot[]
+  CharacterInfo      CharacterInfo[]
+  Dashboard          Dashboard[]
+  DashboardElement   DashboardElement[]
+}
+
+model CampaignUser {
+  campaign_user_id String   @id @db.Char(10)
+  campaign_id      String   @db.Char(10)
+  user_id          String   @db.Char(10)
+  created_at       DateTime @default(now())
+  Campaign         Campaign @relation(fields: [campaign_id], references: [campaign_id], onDelete: Cascade)
+  User             User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+}
+
+model InventoryItem {
+  item_id      String    @id @db.Char(10)
+  character_id String    @db.Char(10)
+  i            Int       @default(0)
+  slot         String    @db.VarChar(10)
+  item_name    String    @db.VarChar(50)
+  description  String    @db.VarChar(200)
+  ability      String    @db.VarChar(200)
+  weight       Float     @default(0)
+  category     String    @db.VarChar(50)
+  magic        Boolean   @default(false)
+  quantity     Int       @default(1)
+  Character    Character @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
+}
+
+model Currency {
+  currency_id  String    @id @db.Char(10)
+  character_id String    @db.Char(10)
+  platin       Int       @default(0)
+  gold         Int       @default(0)
+  silver       Int       @default(0)
+  copper       Int       @default(0)
+  Character    Character @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
+}
+
+model SpellSlot {
+  spell_slot_id   String    @id @db.Char(10)
+  character_id    String    @db.Char(10)
+  spell_level     Int       @default(0)
+  total_casts     Int       @default(0)
+  casts_remaining Int       @default(0)
+  Character       Character @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
+}
+
+model CharacterInfo {
+  character_info_id String    @id @db.Char(10)
+  character_id      String    @db.Char(10)
+  abilities         String?   @db.VarChar(1000)
+  conditions        String?   @db.VarChar(1000)
+  notes             String?   @db.VarChar(1000)
+  Character         Character @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
+}
+
+model Dashboard {
+  dashboard_id     String             @id @db.Char(10)
+  campaign_id      String             @db.Char(10)
+  character_id     String?            @db.Char(10)
+  visibility       String             @db.VarChar(20)
+  name             String             @db.VarChar(50)
+  created_at       DateTime           @default(now())
+  Campaign         Campaign           @relation(fields: [campaign_id], references: [campaign_id], onDelete: Cascade)
+  Character        Character?         @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
+  DashboardElement DashboardElement[]
+}
+
+model DashboardElement {
+  element_id   String    @id @db.Char(10)
+  dashboard_id String    @db.Char(10)
+  character_id String    @db.Char(10)
+  element_type String    @db.VarChar(50)
+  x_lg         Int       @default(0)
+  y_lg         Int       @default(0)
+  w_lg         Int       @default(1)
+  h_lg         Int       @default(1)
+  x_md         Int?
+  y_md         Int?
+  w_md         Int?
+  h_md         Int?
+  x_sm         Int?
+  y_sm         Int?
+  w_sm         Int?
+  h_sm         Int?
+  x_xs         Int?
+  y_xs         Int?
+  w_xs         Int?
+  h_xs         Int?
+  x_xxs        Int?
+  y_xxs        Int?
+  w_xxs        Int?
+  h_xxs        Int?
+  created_at   DateTime  @default(now())
+  Dashboard    Dashboard @relation(fields: [dashboard_id], references: [dashboard_id], onDelete: Cascade)
+  Character    Character @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
+}

@@ -8,8 +8,7 @@ import bcrypt from 'bcrypt';
 
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
-import { fetchCampaign, fetchDashboardNumber, getUIDFromSession } from './data';
-import { DashboardElement } from './definitions';
+import { fetchCampaign, fetchDashboardNumber, fetchUID } from './data';
 
 const FormSchema = z.object({
   dmId: z.string(),
@@ -123,7 +122,7 @@ export async function checkDMStatus(campaign_id: string, uID: string) {
 
 export async function createCampaign(formData: FormData) {
   const { dmId, name, description, password } = FormSchema.parse({
-    dmId: await getUIDFromSession(),
+    dmId: await fetchUID(),
     name: formData.get('name'),
     description: formData.get('description'),
     password: formData.get('password'),
@@ -155,7 +154,7 @@ export async function createCampaign(formData: FormData) {
 
 export async function updateCampaign(campaignId: string, formData: FormData) {
   const { dmId, name, description, password } = FormSchema.parse({
-    dmId: await getUIDFromSession(),
+    dmId: await fetchUID(),
     name: formData.get('name'),
     description: formData.get('description'),
     password: formData.get('password'),
@@ -173,7 +172,7 @@ export async function updateCampaign(campaignId: string, formData: FormData) {
 
 export async function deleteCampaign(campaignId: string, dmId: string) {
   try {
-    if (dmId === await getUIDFromSession()) {
+    if (dmId === await fetchUID()) {
       await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
     } else {
       console.error('Only the DM can delete the campaign');
@@ -189,7 +188,7 @@ export async function deleteCampaign(campaignId: string, dmId: string) {
 }
 
 export async function addUserToCampaign(campaignId: string, password: string) {
-  const uID = await getUIDFromSession();
+  const uID = await fetchUID();
   try {
     const campaignUserId = nanoid(10);
     //check if user is already in campaign
@@ -224,7 +223,7 @@ export async function deleteCampaignUser(campaignUserId: string, campaignId: str
 
 //create character
 export async function createCharacter(campaignId: string, formData: FormData) {
-  const uID = await getUIDFromSession();
+  const uID = await fetchUID();
   const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class } = CharacterSchema.parse({
     userID: uID,
     name: formData.get('name'),
@@ -340,7 +339,7 @@ export async function moveCharacter(characterId: string, campaignId: string, for
 
 // duplicate character
 export async function duplicateCharacter(characterId: string, campaignId: string, name: string) {
-  const uID = await getUIDFromSession();
+  const uID = await fetchUID();
   const newCharacterId = nanoid(10);
   const dashboardId = nanoid(10);
   try {

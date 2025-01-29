@@ -1,5 +1,5 @@
 import { createCharacter } from '@/app/lib/actions';
-import { fetchCampaign, getUIDFromSession } from '@/app/lib/data';
+import { fetchCampaign, fetchUID } from '@/app/lib/data';
 import { Form, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
 import { Link } from 'lucide-react';
 import Button from '@/components/Button';
@@ -18,7 +18,7 @@ import { getClasses } from '@/app/lib/utils';
 export default async function Page({ params }: { params: { id: string } }) {
   const campaignID = params.id;
   const campaign = await fetchCampaign(campaignID);
-  const user_id = await getUIDFromSession();
+  const user_id = await fetchUID();
 
   const isDM = user_id === campaign.dm_id;
 

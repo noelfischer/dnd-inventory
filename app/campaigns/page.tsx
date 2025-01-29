@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { fetchCampaigns, getUsernameFromSession } from "../lib/data";
-import { Campaign } from "../lib/definitions";
-import { getUIDFromSession } from "../lib/data";
+import { fetchCampaigns, fetchUsernameFromSession } from "../lib/data";
+import { fetchUID } from "../lib/data";
 import Button, { LinkButton } from "@/components/Button"
 import { ArrowRight, Dices, LogOut, Milestone, PencilLine, Trash2 } from "lucide-react";
 import { logOut } from "../lib/actions";
+import { Campaign } from "@prisma/client";
 
 
 export default async function Page() {
-  const uID = await getUIDFromSession();
-  const username: string = await getUsernameFromSession();
+  const uID = await fetchUID();
+  const username: string = await fetchUsernameFromSession();
   const campaigns = await fetchCampaigns(uID);
   return (
     <main>

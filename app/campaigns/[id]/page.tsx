@@ -1,11 +1,13 @@
 import Link from "next/link";
-import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, getUIDFromSession } from "../../lib/data";
-import { Campaign, Dashboard, SimpleCharacter } from "../../lib/definitions";
+import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, fetchUID } from "../../lib/data";
+import { SimpleCharacter } from "../../lib/definitions";
 import { notFound } from "next/navigation";
 import { checkDMStatus, duplicateCharacter } from "@/app/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
 import Button, { LinkButton } from "@/components/Button"
+import DropdownCampaignCharacterOptions from "@/app/ui/campaigns/DropdownCampaignCharacterOptions";
+import { Campaign, Dashboard } from "@prisma/client";
 
 import {
   Breadcrumb,
@@ -25,10 +27,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import DropdownCampaignCharacterOptions from "@/app/ui/campaigns/DropdownCampaignCharacterOptions";
+
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const uID = await getUIDFromSession();
+  const uID = await fetchUID();
   const campaignID = params.id;
   const campaign: Campaign = await fetchCampaign(campaignID);
   const dashboards: Dashboard[] = await fetchDashboardsByCampaign(campaignID);

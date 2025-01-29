@@ -1,6 +1,5 @@
 import { updateCharacter } from '@/app/lib/actions';
-import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign, getUIDFromSession } from '@/app/lib/data';
-import { Campaign } from '@/app/lib/definitions';
+import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign, fetchUID } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import Button from '@/components/Button';
 import { Form, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
@@ -16,11 +15,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { getClasses } from '@/app/lib/utils';
+import { Campaign } from '@prisma/client';
 
 export default async function Page({ params }: { params: { id: string, characterId: string } }) {
   const campaignID = params.id;
   const characterID = params.characterId;
-  const user_id = await getUIDFromSession();
+  const user_id = await fetchUID();
 
   const campaign: Campaign = await fetchCampaign(campaignID);
   if (!campaign) {
@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { id: string, character
           <div className="grid grid-cols-4 items-center gap-4">
             <FormItemInput className={isDM ? 'col-span-2' : 'col-span-4'} name="name" label="Choose a character name" minLength={2} defaultValue={character.name} />
             <FormItemSelect className='col-span-2' name="user_id" label="Choose the character owner" defaultValue={character.user_id} classNameLabel='text-text'
-              options={usersInCampaign.map(user => ({ key: user.user_id, value: user.username }))} visible={isDM} />
+              options={usersInCampaign.map(user => ({ key: user.user_id, value: user.User.username }))} visible={isDM} />
             <FormItemTextArea className='col-span-4' name="description" label="Choose a character description" defaultValue={character.description} />
             <FormItemInput className='col-span-4' name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url} maxLength={255} />
             {isDM ?

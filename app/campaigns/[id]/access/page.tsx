@@ -1,5 +1,5 @@
 import { deleteCampaignUser } from "@/app/lib/actions";
-import { fetchCampaign, fetchCampaignUsers, getUIDFromSession } from "@/app/lib/data";
+import { fetchCampaign, fetchCampaignUsers, fetchUID } from "@/app/lib/data";
 
 import {
     Breadcrumb,
@@ -13,7 +13,7 @@ import Button from "@/components/Button";
 import { Trash2 } from "lucide-react";
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const uID = await getUIDFromSession();
+    const uID = await fetchUID();
     const campaignID = params.id;
     const campaign = await fetchCampaign(campaignID);
     const campaignUsers = await fetchCampaignUsers(campaignID);
@@ -38,13 +38,13 @@ export default async function Page({ params }: { params: { id: string } }) {
                 {campaignUsers.sort((u1, u2) => {
                     if (u1.user_id === uID) return -1;
                     if (u2.user_id === uID) return 1;
-                    return u1.username.localeCompare(u2.username);
+                    return u1.User.username.localeCompare(u2.User.username);
                 }).map((user) => {
                     const deleteUserById = deleteCampaignUser.bind(null, user.campaign_user_id, campaignID);
                     return (
                         <li key={user.user_id}>
                             <div className="flex gap-2 items-center rounded-lg py-2 px-3 justify-between h-16 mb-3 bg-bg dark:bg-darkElevatedBg border-2 border-black shadow-light dark:shadow-dark">
-                                {user.username} {uID === user.user_id && '(You)'}
+                                {user.User.username} {uID === user.user_id && '(You)'}
                                 {uID !== user.user_id &&
                                     <form action={deleteUserById}>
                                         <Button type="submit">

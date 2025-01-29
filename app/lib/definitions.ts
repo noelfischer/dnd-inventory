@@ -2,159 +2,18 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
-export type User = {
-  user_id: string;
-  username: string;
-  password_hash: string;
-  email: string;
-  created_at: string;
-};
-
-export type Campaign = {
-  campaign_id: string;
-  name: string;
-  description: string;
-  password: string;
-  dm_id: string;
-  created_at: string;
-};
-
-export type CampaignUser = {
-  campaign_user_id: string;
-  campaign_id: string;
-  user_id: string;
-  username: string;
-  created_at: string;
-};
-
-export type Character = {
-  character_id: string;
-  campaign_id: string;
-  user_id: string;
-  name: string;
-  description: string;
-  character_type: string;
-  race: string;
-  cclass: string;
-  level: number;
-  background: string;
-  alignment: string;
-  portrait_url: string;
-  strength: number;
-  dexterity: number;
-  constitution: number;
-  intelligence: number;
-  wisdom: number;
-  charisma: number;
-  max_hit_points: number;
-  current_hit_points: number;
-  temp_hit_points: number;
-  load_capacity: number;
-  backpack_capacity: number;
-  armor_class: number;
-  speed: number;
-  inspiration: number;
-  created_at: string;
-  updated_at: string;
-};
 
 export type SimpleCharacter = {
   character_id: string;
-  user_id: string;
   name: string;
   current_hit_points: number;
   max_hit_points: number;
   character_type: string;
 };
 
-export type InventoryItem = {
-  item_id: string;
-  character_id: string;
-  i: number;
-  slot: string;
-  item_name: string;
-  description: string;
-  ability: string;
-  weight: number;
-  category: string;
-  magic: boolean;
-  quantity: number;
-};
-
-export type Currency = {
-  currency_id: string;
-  character_id: string;
-  platin: number;
-  gold: number;
-  silver: number;
-  copper: number;
-};
-
-export type UserSpell = {
-  user_spell_id: string;
-  character_id: string;
-  spell_id: string;
-};
-
-export type GeneralSpell = {
-  spell_id: string;
-  spell_name_de: string;
-  spell_name_en: string;
-  classes: string;
-  spell_level: number;
-};
-
-export type SpellSlot = {
-  spell_slot_id: string;
-  character_id: string;
-  spell_level: number;
-  total_casts: number;
-  casts_remaining: number;
-};
-
-export type CharacterInfo = {
-  character_info_id: string;
-  character_id: string;
-  abilities: string;
-  conditions: string;
-  notes: string;
-};
-
-
-export type Dashboard = {
-  dashboard_id: string;
-  campaign_id: string;
-  character_id: string;
-  visibility: string;
+export type DashboardWithCharacterType = {
   name: string;
-  columns: number;
-  rows: number;
-  created_at: string;
-};
-
-export type DashboardElement = {
-  element_id: string;
   dashboard_id: string;
   character_id: string;
-  element_type: string;
-  x_lg?: number;
-  y_lg?: number;
-  w_lg?: number;
-  h_lg?: number;
-  x_md?: number;
-  y_md?: number;
-  w_md?: number;
-  h_md?: number;
-  x_sm?: number;
-  y_sm?: number;
-  w_sm?: number;
-  h_sm?: number;
-  x_xs?: number;
-  y_xs?: number;
-  w_xs?: number;
-  h_xs?: number;
-  x_xxs?: number;
-  y_xxs?: number;
-  w_xxs?: number;
-  h_xxs?: number;
+  character_type: string;
 };

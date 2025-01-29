@@ -1,5 +1,5 @@
 import { moveCharacter } from '@/app/lib/actions';
-import { fetchCampaigns, fetchCharacter, getUIDFromSession } from '@/app/lib/data';
+import { fetchCampaigns, fetchCharacter, fetchUID } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 import {
@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { id: string, character
     if (!character) {
         notFound();
     }
-    const uID = await getUIDFromSession();
+    const uID = await fetchUID();
     const campaigns = await fetchCampaigns(uID);
     const campaign = campaigns.find(campaign => campaign.campaign_id === campaignID) || campaigns[0];
 

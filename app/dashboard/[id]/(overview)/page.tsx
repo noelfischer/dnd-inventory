@@ -1,5 +1,5 @@
-import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardElementsByDashboard, fetchDashboardNumber, fetchNavLinksByDashboard, getUIDFromSession } from '@/app/lib/data';
-import { Character, DashboardElement, SimpleCharacter } from '../../../lib/definitions';
+import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardElementsByDashboard, fetchDashboardNumber, fetchNavLinksByDashboard, fetchUID } from '@/app/lib/data';
+import { SimpleCharacter } from '../../../lib/definitions';
 import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
 import NameAndLevel from '@/app/ui/dashboard/elements/NameAndLevel';
@@ -20,6 +20,7 @@ import Inspiration from '@/app/ui/dashboard/elements/Inspiration';
 import LongRestServer from '@/app/ui/dashboard/elements/longRest/LongRestServer';
 import StatusServer from '@/app/ui/dashboard/elements/status/StatusServer';
 import LevelupServer from '@/app/ui/dashboard/elements/levelup/LevelupServer';
+import { Character, DashboardElement } from '@prisma/client';
 
 export type GridElement = {
   i: string;
@@ -36,9 +37,9 @@ export type Component = {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const dashboardID = params.id;
-  const uID = await getUIDFromSession();
+  const uID = await fetchUID();
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
-  const character: Character = await fetchCharacterByDashboard(dashboardID);
+  const character = await fetchCharacterByDashboard(dashboardID);
   const characterID = character ? character.character_id : null;
   const partyDashboard = !characterID;
   const characterName = character ? character.name : "Party";

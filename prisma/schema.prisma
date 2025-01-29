@@ -40,7 +40,7 @@ model Character {
   user_id            String             @db.Char(10)
   name               String             @db.VarChar(100)
   description        String?            @db.VarChar(200)
-  character_type     String?            @db.VarChar(50)
+  character_type     String             @db.VarChar(50)
   race               String?            @db.VarChar(50)
   cclass             String             @default("bb") @db.Char(2)
   level              Int                @default(1)
@@ -164,6 +164,6 @@ model DashboardElement {
   h_xxs        Int?
   Dashboard    Dashboard @relation(fields: [dashboard_id], references: [dashboard_id], onDelete: Cascade)
   Character    Character @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
-  
+
   @@unique([dashboard_id, character_id, element_type])
 }

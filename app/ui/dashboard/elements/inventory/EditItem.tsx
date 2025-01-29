@@ -1,4 +1,3 @@
-import { InventoryItem } from '@/app/lib/definitions'
 import { FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,6 +9,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog'
+import { InventoryItem } from '@prisma/client'
 import { Pencil } from 'lucide-react'
 import { useState } from 'react'
 

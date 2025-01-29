@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Table as UiTable, TableBody, TableFooter, TableRow } from '@/components/ui/table';
-import { InventoryItem } from '@/app/lib/definitions';
 import { GripVertical } from 'lucide-react';
+import { InventoryItem } from '@prisma/client';
 
 // Define type for table and row structure
 export type TableProps = {

@@ -1,6 +1,6 @@
 'use client'
 
-import { SpellSlot } from "@/app/lib/definitions";
+import { SpellSlot } from "@prisma/client";
 import OnLeaveInput from "../helper/OnLeaveInput";
 import { useEffect, useState } from "react";
 

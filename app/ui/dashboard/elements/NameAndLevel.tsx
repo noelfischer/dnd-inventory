@@ -1,13 +1,15 @@
 'use server'
 
-import { Character } from '@/app/lib/definitions';
 import { getClasses } from '@/app/lib/utils';
-import { sql } from '@vercel/postgres';
+import { PrismaClient } from '@prisma/client';
 import { notFound } from 'next/navigation';
 
+const prisma = new PrismaClient()
+
+
 const NameAndLevel = async ({ character_id }: { character_id: string }) => {
-    const data = await sql<Character>`SELECT name, cclass, level FROM Characters WHERE character_id = ${character_id}`;
-    const character = data.rows[0];
+
+    const character = await prisma.character.findFirst({ where: { character_id }, select: { name: true, cclass: true, level: true } });
     if (!character) {
         notFound();
     }

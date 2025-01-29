@@ -1,21 +1,24 @@
 'use server'
 
-import { InventoryItem } from '@/app/lib/definitions';
-import { sql } from '@vercel/postgres';
+import { InventoryItem, PrismaClient } from '@prisma/client';
 import InventoryClient from './InventoryClient';
 import { nanoid } from 'nanoid';
 
-const InventoryServer = async ({ character_id }: { character_id: string }) => {
-    const data = await sql<InventoryItem>`SELECT item_id, character_id, i, slot, item_name, description, ability, weight, category, magic, quantity FROM Inventory WHERE character_id = ${character_id}`;
-    const items: InventoryItem[] = data.rows;
+const prisma = new PrismaClient()
 
-    const characterData = await sql`SELECT backpack_capacity FROM Characters WHERE character_id = ${character_id}`;
-    const backpackCapacity = characterData.rows[0].backpack_capacity;
+
+const InventoryServer = async ({ character_id }: { character_id: string }) => {
+    const items: InventoryItem[] = await prisma.inventoryItem.findMany({ where: { character_id }, orderBy: { i: 'asc' } });
+
+    const backpackCapacity = (await prisma.character.findFirst({ where: { character_id }, select: { backpack_capacity: true } }))!.backpack_capacity;
 
     async function updateIndex(items: { item_id: string, i: number, slot: string }[]) {
         'use server'
         for (let i = 0; i < items.length; i++) {
-            await sql`UPDATE Inventory SET i = ${i}, slot = ${items[i].slot} WHERE item_id = ${items[i].item_id}`;
+            await prisma.inventoryItem.updateMany({
+                where: { item_id: items[i].item_id },
+                data: { i: i, slot: items[i].slot }
+            });
         }
     }
 
@@ -23,24 +26,51 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
         'use server'
 
         const itemId = nanoid(10);
-        await sql`INSERT INTO Inventory (item_id, character_id, i, slot, item_name, description, ability, weight, category, magic, quantity) VALUES (${itemId}, ${character_id}, ${items.length}, ${item.slot}, ${item.item_name}, ${item.description}, ${item.ability}, ${item.weight}, ${item.category}, ${item.magic}, ${item.quantity})`;
+        await prisma.inventoryItem.create({
+            data: {
+                item_id: itemId,
+                character_id: character_id,
+                i: item.i,
+                slot: item.slot,
+                item_name: item.item_name,
+                description: item.description,
+                ability: item.ability,
+                weight: item.weight,
+                category: item.category,
+                magic: item.magic,
+                quantity: item.quantity
+            }
+        });
         return itemId;
     }
 
     async function updateItem(item: InventoryItem) {
         'use server'
-        await sql`UPDATE Inventory SET item_name = ${item.item_name}, description = ${item.description}, ability = ${item.ability}, weight = ${item.weight}, category = ${item.category}, magic = ${item.magic}, quantity = ${item.quantity}, slot = ${item.slot}, i = ${item.i}
-        WHERE item_id = ${item.item_id}`;
+        await prisma.inventoryItem.updateMany({
+            where: { item_id: item.item_id },
+            data: {
+                item_name: item.item_name,
+                description: item.description,
+                ability: item.ability,
+                weight: item.weight,
+                category: item.category,
+                magic: item.magic,
+                quantity: item.quantity
+            }
+        });
     }
 
     async function deleteItem(item_id: string) {
         'use server'
-        await sql`DELETE FROM Inventory WHERE item_id = ${item_id}`;
+        await prisma.inventoryItem.deleteMany({ where: { item_id } });
     }
 
     async function updateBackpackCapacity(capacity: number) {
         'use server'
-        await sql`UPDATE Characters SET backpack_capacity = ${capacity} WHERE character_id = ${character_id}`;
+        await prisma.character.updateMany({
+            where: { character_id },
+            data: { backpack_capacity: capacity }
+        });
     }
 
     return (

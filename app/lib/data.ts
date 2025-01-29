@@ -135,7 +135,7 @@ export async function fetchCharacterByDashboard(dashboard_id: string) {
     where: { dashboard_id },
     include: { Character: { select: { character_id: true, name: true } } }
   });
-  if (!dashboard || !dashboard.Character) throw new Error('Character not found');
+  if (!dashboard || !dashboard.Character) return null;
   return dashboard.Character;
 }
 
@@ -168,7 +168,6 @@ export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<Na
       navLinks[index].links.push(link);
     }
   }
-
   return navLinks;
 }
 
@@ -204,7 +203,10 @@ async function fetchCampaignNavLinks(campaign_id: string, dashboard_id: string):
     },
     select: { dashboard_id: true, name: true }
   });
-  dashboard.character_type = "Party";
+  dashboard = dashboard.map((d: any) => {
+    d.character_type = "Party";
+    return d;
+  });
   return dashboard;
 }
 

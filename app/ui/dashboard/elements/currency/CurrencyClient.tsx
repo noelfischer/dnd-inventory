@@ -1,16 +1,16 @@
 'use client'
 
-import { Currency } from "@/app/lib/definitions";
 import OnLeaveInput from "../helper/OnLeaveInput";
 import { cn } from "@/lib/utils";
+import { Currency } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 interface Props {
     initial_currency: Currency;
-    updatePlatinum: (value: string) => void;
-    updateGold: (value: string) => void;
-    updateSilver: (value: string) => void;
-    updateCopper: (value: string) => void;
+    updatePlatinum: (value: number) => void;
+    updateGold: (value: number) => void;
+    updateSilver: (value: number) => void;
+    updateCopper: (value: number) => void;
 }
 
 const CurrencyClient = ({ initial_currency, updatePlatinum, updateGold, updateSilver, updateCopper }: Props) => {
@@ -33,23 +33,23 @@ const CurrencyClient = ({ initial_currency, updatePlatinum, updateGold, updateSi
 
     function onChangePlatinum(value: string) {
         const amount = updateCoinage(value, 'platin');
-        if (amount) updatePlatinum(amount.toString());
+        if (amount) updatePlatinum(amount);
     }
 
     function onChangeGold(value: string) {
         const amount = updateCoinage(value, 'gold');
-        if (amount) updateGold(amount.toString());
+        if (amount) updateGold(amount);
     }
 
     function onChangeSilver(value: string) {
         const amount = updateCoinage(value, 'silver');
-        if (amount) updateSilver(amount.toString());
+        if (amount) updateSilver(amount);
     }
 
 
     function onChangeCopper(value: string) {
         const amount = updateCoinage(value, 'copper');
-        if (amount) updateCopper(amount.toString());
+        if (amount) updateCopper(amount);
     }
 
 

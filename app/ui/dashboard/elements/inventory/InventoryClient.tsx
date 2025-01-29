@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { InventoryItem } from '@/app/lib/definitions';
 import { Ham, PencilRuler, Pickaxe, Shield, Sparkles, Sword, Watch } from 'lucide-react';
 import DraggableTables, { TableProps } from '../helper/DraggableTables';
 import { TableRow, TableCell, TableHead, TableHeader } from '@/components/ui/table';
@@ -10,6 +9,7 @@ import EditItem from './EditItem';
 import { resetServerContext } from 'react-beautiful-dnd';
 import { cn } from '@/lib/utils';
 import OnLeaveInput from '../helper/OnLeaveInput';
+import { InventoryItem } from '@prisma/client';
 
 type Props = {
     initialItems: InventoryItem[];

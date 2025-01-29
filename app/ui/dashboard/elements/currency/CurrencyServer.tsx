@@ -1,32 +1,44 @@
 'use server'
 
-import { Currency } from '@/app/lib/definitions';
-import { sql } from '@vercel/postgres';
+import { PrismaClient } from '@prisma/client';
 import CurrencyClient from './CurrencyClient';
 
+const prisma = new PrismaClient()
+
 const CurrencyServer = async ({ character_id }: { character_id: string }) => {
-    const data = await sql<Currency>`SELECT platin, gold, silver, copper FROM Currency WHERE character_id = ${character_id}`;
-    const currency = data.rows[0];
-    const noCurrency = !currency;
+    const currency = await prisma.currency.findFirst({ where: { character_id } });
+    if (!currency) return <></>;
 
-    async function updatePlatinum(value: string) {
+    async function updatePlatinum(value: number) {
         'use server'
-        await sql`UPDATE Currency SET platin = ${value} WHERE character_id = ${character_id}`;
+        await prisma.currency.updateMany({
+            where: { character_id },
+            data: { platin: value }
+        });
     }
 
-    async function updateGold(value: string) {
+    async function updateGold(value: number) {
         'use server'
-        await sql`UPDATE Currency SET gold = ${value} WHERE character_id = ${character_id}`;
+        await prisma.currency.updateMany({
+            where: { character_id },
+            data: { gold: value }
+        });
     }
 
-    async function updateSilver(value: string) {
+    async function updateSilver(value: number) {
         'use server'
-        await sql`UPDATE Currency SET silver = ${value} WHERE character_id = ${character_id}`;
+        await prisma.currency.updateMany({
+            where: { character_id },
+            data: { silver: value }
+        });
     }
 
-    async function updateCopper(value: string) {
+    async function updateCopper(value: number) {
         'use server'
-        await sql`UPDATE Currency SET copper = ${value} WHERE character_id = ${character_id}`;
+        await prisma.currency.updateMany({
+            where: { character_id },
+            data: { copper: value }
+        });
     }
 
     return (

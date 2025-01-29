@@ -1,13 +1,14 @@
 'use server'
 
-import { SpellSlot } from "@/app/lib/definitions";
-import { sql } from '@vercel/postgres';
 import { nanoid } from "nanoid";
 import SpellSlotsClient from "./SpellSlotsClient";
+import { PrismaClient, SpellSlot } from "@prisma/client";
+
+const prisma = new PrismaClient()
+
 
 const SpellSlotsServer = async ({ character_id }: { character_id: string }) => {
-    const data = await sql<SpellSlot>`SELECT spell_slot_id, spell_level, total_casts, casts_remaining FROM SpellSlots WHERE character_id = ${character_id}`;
-    const spellSlots = data.rows;
+    const spellSlots = await prisma.spellSlot.findMany({ where: { character_id } });
     for (let i = 0; i <= 10; i++) {
         const slot = spellSlots.find(slot => slot.spell_level === i);
         if (!slot) {
@@ -23,21 +24,37 @@ const SpellSlotsServer = async ({ character_id }: { character_id: string }) => {
 
     async function updateRemainingCastsServer(character_id: string, spellSlots: SpellSlot) {
         'use server'
-        const existingSlot = await sql<SpellSlot>`SELECT 1 FROM SpellSlots WHERE spell_slot_id = ${spellSlots.spell_slot_id}`;
-        if (existingSlot.rows.length < 1) {
-            await sql`INSERT INTO SpellSlots (spell_slot_id, character_id, spell_level, total_casts, casts_remaining) VALUES (${spellSlots.spell_slot_id}, ${character_id}, ${spellSlots.spell_level}, ${spellSlots.total_casts}, ${spellSlots.casts_remaining})`;
+        const existingSlot = await prisma.spellSlot.findMany({ where: { spell_slot_id: spellSlots.spell_slot_id }, select: { spell_slot_id: true } });
+        if (existingSlot.length < 1) {
+            await prisma.spellSlot.create({
+                data: {
+                    spell_slot_id: spellSlots.spell_slot_id,
+                    character_id: character_id,
+                    spell_level: spellSlots.spell_level,
+                    total_casts: spellSlots.total_casts,
+                    casts_remaining: spellSlots.casts_remaining
+                }
+            });
         } else {
-            await sql`UPDATE SpellSlots SET casts_remaining = ${spellSlots.casts_remaining} WHERE spell_slot_id = ${spellSlots.spell_slot_id}`;
+            await prisma.spellSlot.update({ where: { spell_slot_id: spellSlots.spell_slot_id }, data: { casts_remaining: spellSlots.casts_remaining } });
         }
     }
 
     async function updateLevelDescriptionServer(character_id: string, spellSlots: SpellSlot) {
         'use server'
-        const existingSlot = await sql<SpellSlot>`SELECT 1 FROM SpellSlots WHERE spell_slot_id = ${spellSlots.spell_slot_id}`;
-        if (existingSlot.rows.length < 1) {
-            await sql`INSERT INTO SpellSlots (spell_slot_id, character_id, spell_level, total_casts, casts_remaining) VALUES (${spellSlots.spell_slot_id}, ${character_id}, ${spellSlots.spell_level}, ${spellSlots.total_casts}, ${spellSlots.casts_remaining})`;
+        const existingSlot = await prisma.spellSlot.findMany({ where: { spell_slot_id: spellSlots.spell_slot_id }, select: { spell_slot_id: true } });
+        if (existingSlot.length < 1) {
+            await prisma.spellSlot.create({
+                data: {
+                    spell_slot_id: spellSlots.spell_slot_id,
+                    character_id: character_id,
+                    spell_level: spellSlots.spell_level,
+                    total_casts: spellSlots.total_casts,
+                    casts_remaining: spellSlots.casts_remaining
+                }
+            });
         } else {
-            await sql`UPDATE SpellSlots SET total_casts = ${spellSlots.total_casts} WHERE spell_slot_id = ${spellSlots.spell_slot_id}`;
+            await prisma.spellSlot.update({ where: { spell_slot_id: spellSlots.spell_slot_id }, data: { total_casts: spellSlots.total_casts } });
         }
     }
 

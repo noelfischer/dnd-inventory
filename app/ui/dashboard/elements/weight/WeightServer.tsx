@@ -1,22 +1,36 @@
 'use server'
 
-import { Character } from '@/app/lib/definitions';
-import { sql } from '@vercel/postgres';
+import { PrismaClient } from '@prisma/client';
 import WeightClient from './WeightClient';
 
+const prisma = new PrismaClient()
+
+
 const WeightServer = async ({ character_id }: { character_id: string }) => {
-    const maxWeightData = await sql<Character>`SELECT load_capacity FROM Characters WHERE character_id = ${character_id}`;
-    const maxWeight: number = maxWeightData.rows[0].load_capacity;
-    const inventoryWeightData = await sql`SELECT SUM(weight * quantity) as total_weight FROM Inventory WHERE character_id = ${character_id}`;
-    const inventoryWeight: number = inventoryWeightData.rows[0].total_weight || 0;
-    const currencyData = await sql`SELECT platin, gold, silver, copper FROM Currency WHERE character_id = ${character_id}`;
-    const coinsWeight: number = (currencyData.rows[0].platin + currencyData.rows[0].gold + currencyData.rows[0].silver + currencyData.rows[0].copper) * 0.02;
+
+    const maxWeight = (await prisma.character.findFirst({ where: { character_id }, select: { load_capacity: true } }))!.load_capacity;
+    const currencyData = await prisma.currency.findFirst({ where: { character_id }, select: { platin: true, gold: true, silver: true, copper: true } });
+    const coinsWeight: number = (currencyData!.platin + currencyData!.gold + currencyData!.silver + currencyData!.copper) * 0.02;
+    const inventory: any = await prisma.inventoryItem.aggregate({
+        _sum: {
+            weight: true,
+            quantity: true,
+        },
+        where: {
+            character_id: character_id,
+        },
+    });
+    const inventoryWeight = inventory._sum.weight * inventory._sum.quantity;
+
 
 
 
     async function updateTotalCarriableWeight(capacity: number) {
         'use server'
-        await sql`UPDATE Characters SET load_capacity = ${capacity} WHERE character_id = ${character_id}`;
+        await prisma.character.updateMany({
+            where: { character_id },
+            data: { load_capacity: capacity }
+        });
     }
 
     return (

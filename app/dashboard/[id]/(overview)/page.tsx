@@ -20,7 +20,7 @@ import Inspiration from '@/app/ui/dashboard/elements/Inspiration';
 import LongRestServer from '@/app/ui/dashboard/elements/longRest/LongRestServer';
 import StatusServer from '@/app/ui/dashboard/elements/status/StatusServer';
 import LevelupServer from '@/app/ui/dashboard/elements/levelup/LevelupServer';
-import { Character, DashboardElement } from '@prisma/client';
+import { DashboardElement } from '@prisma/client';
 
 export type GridElement = {
   i: string;

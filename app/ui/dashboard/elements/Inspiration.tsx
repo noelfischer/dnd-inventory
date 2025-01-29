@@ -1,18 +1,23 @@
 'use server'
 
-import { sql } from "@vercel/postgres"
+import { PrismaClient } from "@prisma/client";
 import OnLeaveInput from "./helper/OnLeaveInput";
 import { Dices } from "lucide-react";
 
+const prisma = new PrismaClient()
+
 const Inspiration = async ({ character_id }: { character_id: string }) => {
-    const data = await sql`SELECT inspiration FROM Characters WHERE character_id = ${character_id}`;
-    const inspiration = data.rows[0].inspiration;
+    const character = await prisma.character.findFirst({ where: { character_id }, select: { inspiration: true } });
+    if (!character) return <></>;
 
     async function updateInspiration(inspiration: string) {
         'use server'
         const inspirationNumber = parseInt(inspiration);
         if (isNaN(inspirationNumber)) return;
-        await sql`UPDATE Characters SET inspiration = ${inspirationNumber} WHERE character_id = ${character_id}`;
+        await prisma.character.updateMany({
+            where: { character_id },
+            data: { inspiration: inspirationNumber }
+        });
     }
 
     return (
@@ -20,7 +25,7 @@ const Inspiration = async ({ character_id }: { character_id: string }) => {
 
             <span className="text-2xl">Inspiration</span>
             <span className="flex">
-                <OnLeaveInput className="text-5xl pb-14 border-b-[4px] mb-3" initialValue={inspiration} onLeave={updateInspiration} />
+                <OnLeaveInput className="text-5xl pb-14 border-b-[4px] mb-3" initialValue={character.inspiration.toString()} onLeave={updateInspiration} />
                 <Dices className="mt-2 ml-1" />
             </span>
         </div>

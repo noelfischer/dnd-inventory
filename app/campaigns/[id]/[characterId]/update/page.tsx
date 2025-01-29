@@ -57,16 +57,16 @@ export default async function Page({ params }: { params: { id: string, character
             <FormItemInput className={isDM ? 'col-span-2' : 'col-span-4'} name="name" label="Choose a character name" minLength={2} defaultValue={character.name} />
             <FormItemSelect className='col-span-2' name="user_id" label="Choose the character owner" defaultValue={character.user_id} classNameLabel='text-text'
               options={usersInCampaign.map(user => ({ key: user.user_id, value: user.User.username }))} visible={isDM} />
-            <FormItemTextArea className='col-span-4' name="description" label="Choose a character description" defaultValue={character.description} />
-            <FormItemInput className='col-span-4' name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url} maxLength={255} />
+            <FormItemTextArea className='col-span-4' name="description" label="Choose a character description" defaultValue={character.description || ''} />
+            <FormItemInput className='col-span-4' name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url || ''} maxLength={255} />
             {isDM ?
-              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type} /> :
-              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type} />}
-            <FormItemInput className='col-span-2' name="race" label='Choose your race' minLength={2} defaultValue={character.race} />
+              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} /> :
+              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} />}
+            <FormItemInput className='col-span-2' name="race" label='Choose your race' minLength={2} defaultValue={character.race || ''} />
             <FormItemSelect className='col-span-2' name="cclass" label="Choose your class" classNameLabel='text-text' defaultValue={character.cclass} options={getClasses('en')} />
             <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />
-            <FormItemInput className='col-span-2' name="background" label="Choose your background" defaultValue={character.background} maxLength={100} />
-            <FormItemInput className='col-span-2' name="alignment" label="Choose your alignment" defaultValue={character.alignment} />
+            <FormItemInput className='col-span-2' name="background" label="Choose your background" defaultValue={character.background || ''} maxLength={100} />
+            <FormItemInput className='col-span-2' name="alignment" label="Choose your alignment" defaultValue={character.alignment || ''} />
             <FormItemInput name="strength" label="Enter your strength (0-20)" type="number" defaultValue={character.strength.toString()} />
             <FormItemInput name="dexterity" label="Enter your dexterity" type="number" defaultValue={character.dexterity.toString()} />
             <FormItemInput name="constitution" label="Enter your constitution" type="number" defaultValue={character.constitution.toString()} />

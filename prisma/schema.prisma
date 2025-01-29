@@ -39,14 +39,14 @@ model Character {
   campaign_id        String             @db.Char(10)
   user_id            String             @db.Char(10)
   name               String             @db.VarChar(100)
-  description        String             @db.VarChar(200)
-  character_type     String             @db.VarChar(50)
-  race               String             @db.VarChar(50)
+  description        String?            @db.VarChar(200)
+  character_type     String?            @db.VarChar(50)
+  race               String?            @db.VarChar(50)
   cclass             String             @default("bb") @db.Char(2)
   level              Int                @default(1)
-  background         String             @db.VarChar(100)
-  alignment          String             @db.VarChar(50)
-  portrait_url       String             @db.VarChar(500)
+  background         String?            @db.VarChar(100)
+  alignment          String?            @db.VarChar(50)
+  portrait_url       String?            @db.VarChar(500)
   strength           Int                @default(0)
   dexterity          Int                @default(0)
   constitution       Int                @default(0)
@@ -162,7 +162,8 @@ model DashboardElement {
   y_xxs        Int?
   w_xxs        Int?
   h_xxs        Int?
-  created_at   DateTime  @default(now())
   Dashboard    Dashboard @relation(fields: [dashboard_id], references: [dashboard_id], onDelete: Cascade)
   Character    Character @relation(fields: [character_id], references: [character_id], onDelete: Cascade)
+  
+  @@unique([dashboard_id, character_id, element_type])
 }

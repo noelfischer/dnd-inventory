@@ -1,6 +1,5 @@
 'use server';
 import { z } from 'zod';
-import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { nanoid } from 'nanoid';
@@ -9,6 +8,10 @@ import bcrypt from 'bcrypt';
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 import { fetchCampaign, fetchDashboardNumber, fetchUID } from './data';
+import { Character, DashboardElement, PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient()
+
 
 const FormSchema = z.object({
   dmId: z.string(),
@@ -28,7 +31,7 @@ const parseNumber = (val: any) => {
 };
 
 const CharacterSchema = z.object({
-  userID: z.string(),
+  user_id: z.string(),
   name: z.string(),
   description: z.string(),
   character_type: z.string(),
@@ -37,7 +40,7 @@ const CharacterSchema = z.object({
   level: z.preprocess(parseNumber, z.number()),
   background: z.string(),
   alignment: z.string(),
-  portrait_url: z.string().optional(),
+  portrait_url: z.string(),
   strength: z.preprocess(parseNumber, z.number()),
   dexterity: z.preprocess(parseNumber, z.number()),
   constitution: z.preprocess(parseNumber, z.number()),
@@ -90,25 +93,19 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
 export async function createUser(email: string, password: string, username: string) {
   const passwordHash = await bcrypt.hash(password, 10);
   const userID = nanoid(10);
-  try {
-    // check if user already exists
-    const existingEmail = await sql`SELECT * FROM users WHERE email=${email}`;
-    if (existingEmail.rows.length > 0) {
-      console.error('Email already exists');
-      throw new Error('Email already exists');
-    }
-    const user = await sql`INSERT INTO users (user_id, username, password_hash, email) VALUES (${userID}, ${username}, ${passwordHash}, ${email}) RETURNING *`;
-    return user.rows[0];
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (existingUser) {
+    console.error("Failed to create user:", "User already exists", "Input: \n", "Email: ", email, "\n", "Username: ", username);
+    throw new Error("Failed to create user.");
   }
-  catch (error) {
-    console.error('Failed to create user:', error, "Input: \n", "Email: ", email, "\n", "Username: ", username);
-    throw new Error('Failed to create user.');
-  }
+  return await prisma.user.create({
+    data: { user_id: userID, username, password_hash: passwordHash, email },
+  });
 }
 
 export async function deleteUser(email: string) {
   try {
-    await sql`DELETE FROM users WHERE email=${email}`;
+    await prisma.user.delete({ where: { email } });
   } catch (error) {
     console.error('Failed to delete user:', error, "Input: \n", "Email: ", email);
     throw new Error('Failed to delete user.');
@@ -116,7 +113,8 @@ export async function deleteUser(email: string) {
 }
 
 export async function checkDMStatus(campaign_id: string, uID: string) {
-  const campaign = await fetchCampaign(campaign_id);
+  const campaign = await prisma.campaign.findUnique({ where: { campaign_id }, select: { dm_id: true } });
+  if (!campaign) throw new Error('Campaign not found');
   return uID === campaign.dm_id;
 }
 
@@ -132,16 +130,17 @@ export async function createCampaign(formData: FormData) {
     const campaignUserId = nanoid(10);
     const dashboardId = nanoid(10);
 
-    await sql`INSERT INTO campaigns (campaign_id, dm_id, name, description, password) VALUES (${campaignId}, ${dmId}, ${name}, ${description}, ${password || null})`;
-    try { // if this fails, we need to rollback the campaign creation
-      await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${dmId})`;
-      await sql`INSERT INTO dashboards (dashboard_id, campaign_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, 'public', 'Party Dashboard')`;
-    }
-    catch (e) {
-      await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
-      console.error('Failed to create campaign:', e, "Input: \n", "DM ID: ", dmId, "\n", "Name: ", name);
-      throw e; // rethrow the error
-    }
+    await prisma.campaign.create({
+      data: {
+        campaign_id: campaignId,
+        dm_id: dmId,
+        name,
+        description,
+        password,
+        CampaignUser: { create: { campaign_user_id: campaignUserId, user_id: dmId } },
+        Dashboard: { create: { dashboard_id: dashboardId, visibility: "public", name: "Party Dashboard" } },
+      },
+    });
   }
   catch (e) {
     console.error('Failed to create campaign:', e, "Input: \n", "DM ID: ", dmId, "\n", "Name: ", name);
@@ -152,7 +151,7 @@ export async function createCampaign(formData: FormData) {
   redirect('/campaigns');
 }
 
-export async function updateCampaign(campaignId: string, formData: FormData) {
+export async function updateCampaign(campaign_id: string, formData: FormData) {
   const { dmId, name, description, password } = FormSchema.parse({
     dmId: await fetchUID(),
     name: formData.get('name'),
@@ -160,26 +159,33 @@ export async function updateCampaign(campaignId: string, formData: FormData) {
     password: formData.get('password'),
   });
   try {
-    await sql`UPDATE campaigns SET name = ${name}, description = ${description}, password = ${password} WHERE campaign_id = ${campaignId}`;
+    await prisma.campaign.update({
+      where: { campaign_id },
+      data: {
+        name,
+        description,
+        password,
+      },
+    })
   } catch (e) {
-    console.error('Failed to update campaign:', e, "Input: \n", "Campaign ID: ", campaignId);
+    console.error('Failed to update campaign:', e, "Input: \n", "Campaign ID: ", campaign_id);
     return { message: 'Database Error: Failed to Update Campaign.' };
   }
-  revalidatePath(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${campaign_id}`);
   redirect('/campaigns');
 
 }
 
-export async function deleteCampaign(campaignId: string, dmId: string) {
+export async function deleteCampaign(campaign_id: string, dmId: string) {
   try {
     if (dmId === await fetchUID()) {
-      await sql`DELETE FROM campaigns WHERE campaign_id = ${campaignId}`;
+      await prisma.campaign.delete({ where: { campaign_id } });
     } else {
       console.error('Only the DM can delete the campaign');
       return { message: 'Only the DM can delete the campaign' };
     }
   } catch (e) {
-    console.error('Failed to delete campaign:', e, "Input: \n", "Campaign ID: ", campaignId, "\n", "DM ID: ", dmId);
+    console.error('Failed to delete campaign:', e, "Input: \n", "Campaign ID: ", campaign_id, "\n", "DM ID: ", dmId);
     return { message: 'Database Error: Failed to Delete Campaign.' };
   }
 
@@ -187,34 +193,36 @@ export async function deleteCampaign(campaignId: string, dmId: string) {
   redirect('/campaigns');
 }
 
-export async function addUserToCampaign(campaignId: string, password: string) {
+export async function addUserToCampaign(campaign_id: string, password: string) {
   const uID = await fetchUID();
   try {
     const campaignUserId = nanoid(10);
     //check if user is already in campaign
-    const user = await sql`SELECT * FROM campaignusers WHERE campaign_id = ${campaignId} AND user_id = ${uID}`;
-    if (user.rows.length === 0) {
+    const user = await prisma.campaignUser.findMany({ where: { campaign_id, user_id: uID } });
+    if (user.length === 0) {
       // if the campaign has a password, check if the password is correct
-      const campaign = await fetchCampaign(campaignId);
+      const campaign = await fetchCampaign(campaign_id);
       if (campaign.password && campaign.password !== password) {
         console.error('Incorrect password');
         return { message: 'Incorrect password' };
       }
-      await sql`INSERT INTO campaignusers (campaign_user_id, campaign_id, user_id) VALUES (${campaignUserId}, ${campaignId}, ${uID})`;
+      await prisma.campaignUser.create({
+        data: { campaign_user_id: campaignUserId, campaign_id, user_id: uID },
+      });
     }
   } catch (e) {
-    console.error('Failed to add user to campaign:', e, "Input: \n", "Campaign ID: ", campaignId, "\n", "User ID: ", uID);
+    console.error('Failed to add user to campaign:', e, "Input: \n", "Campaign ID: ", campaign_id, "\n", "User ID: ", uID);
     return { message: 'Database Error: Failed to Add User to Campaign.' };
   }
-  revalidatePath(`/campaigns/${campaignId}`);
-  redirect(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${campaign_id}`);
+  redirect(`/campaigns/${campaign_id}`);
 }
 
-export async function deleteCampaignUser(campaignUserId: string, campaignId: string) {
+export async function deleteCampaignUser(campaign_user_id: string, campaignId: string) {
   try {
-    await sql`DELETE FROM campaignusers WHERE campaign_user_id = ${campaignUserId}`;
+    await prisma.campaignUser.delete({ where: { campaign_user_id } });
   } catch (e) {
-    console.error('Failed to delete campaign user:', e, "Input: \n", "Campaign User ID: ", campaignUserId, "\n", "Campaign ID: ", campaignId);
+    console.error('Failed to delete campaign user:', e, "Input: \n", "Campaign User ID: ", campaign_user_id, "\n", "Campaign ID: ", campaignId);
     return { message: 'Database Error: Failed to Delete Campaign User.' };
   }
   revalidatePath(`/campaigns/${campaignId}/access`);
@@ -222,164 +230,170 @@ export async function deleteCampaignUser(campaignUserId: string, campaignId: str
 }
 
 //create character
-export async function createCharacter(campaignId: string, formData: FormData) {
+export async function createCharacter(campaign_id: string, formData: FormData) {
   const uID = await fetchUID();
-  const { name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class } = CharacterSchema.parse({
-    userID: uID,
-    name: formData.get('name'),
-    description: formData.get('description'),
-    character_type: formData.get('character_type'),
-    race: formData.get('race'),
-    cclass: formData.get('cclass'),
-    level: formData.get('level'),
-    background: formData.get('background'),
-    alignment: formData.get('alignment'),
-    portrait_url: formData.get('portrait_url'),
-    strength: formData.get('strength'),
-    dexterity: formData.get('dexterity'),
-    constitution: formData.get('constitution'),
-    intelligence: formData.get('intelligence'),
-    wisdom: formData.get('wisdom'),
-    charisma: formData.get('charisma'),
-    max_hit_points: formData.get('max_hit_points'),
-    armor_class: formData.get('armor_class'),
-  });
-
-  const load_capacity = 15 * strength;
-
-  const characterId = nanoid(10);
+  let data = {
+    character_id: nanoid(10), campaign_id, load_capacity: 0, ...CharacterSchema.parse({
+      user_id: uID, name: formData.get('name'), description: formData.get('description'), character_type: formData.get('character_type'), race: formData.get('race'), cclass: formData.get('cclass'), level: formData.get('level'), background: formData.get('background'), alignment: formData.get('alignment'), portrait_url: formData.get('portrait_url'), strength: formData.get('strength'), dexterity: formData.get('dexterity'), constitution: formData.get('constitution'), intelligence: formData.get('intelligence'), wisdom: formData.get('wisdom'), charisma: formData.get('charisma'), max_hit_points: formData.get('max_hit_points'), armor_class: formData.get('armor_class'),
+    })
+  };
+  data.load_capacity = 15 * data.strength;
 
   try {
-    console.log('Creating character:');
-    await sql`INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class, load_capacity)
-      VALUES (${characterId}, ${campaignId}, ${uID}, ${name}, ${description}, ${character_type}, ${race}, ${cclass}, ${level}, ${background}, ${alignment}, ${portrait_url}, ${strength}, ${dexterity}, ${constitution}, ${intelligence}, ${wisdom}, ${charisma}, ${max_hit_points}, ${armor_class}, ${load_capacity})`;
-
-    // create all secondary tables
-    await sql`INSERT INTO Dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${nanoid(10)}, ${campaignId}, ${characterId}, 'private', ${name + "-Dashboard-1"})`;
-    await sql`INSERT INTO Currency (currency_id, character_id) VALUES (${nanoid(10)}, ${characterId})`;
-    await sql`INSERT INTO CharacterInfos (character_info_id, character_id) VALUES (${nanoid(10)}, ${characterId})`;
-
+    await prisma.character.create({
+      data: {
+        ...data,
+        Dashboard: { create: { dashboard_id: nanoid(10), campaign_id, visibility: "private", name: `${data.name}-Dashboard-1` } },
+        Currency: { create: { currency_id: nanoid(10) } },
+        CharacterInfo: { create: { character_info_id: nanoid(10) } },
+      },
+    });
   } catch (e) {
-    console.error('Failed to create character:', e, "Input: \n", "Campaign ID: ", campaignId, "\n", "Name: ", name);
+    console.error('Failed to create character:', e, "Input: \n", "Campaign ID: ", campaign_id, "\n", "Name: ", name);
     return { message: 'Database Error: Failed to Create Character.' };
   }
-  revalidatePath(`/campaigns/${campaignId}`);
-  redirect(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${campaign_id}`);
+  redirect(`/campaigns/${campaign_id}`);
 }
 
 
 // update character
-export async function updateCharacter(characterId: string, campaignId: string, formData: FormData) {
-  const { userID, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, armor_class } = CharacterSchema.parse({
-    userID: formData.get('user_id'),
-    name: formData.get('name'),
-    description: formData.get('description'),
-    character_type: formData.get('character_type'),
-    race: formData.get('race'),
-    cclass: formData.get('cclass'),
-    level: formData.get('level'),
-    background: formData.get('background'),
-    alignment: formData.get('alignment'),
-    portrait_url: formData.get('portrait_url'),
-    strength: formData.get('strength'),
-    dexterity: formData.get('dexterity'),
-    constitution: formData.get('constitution'),
-    intelligence: formData.get('intelligence'),
-    wisdom: formData.get('wisdom'),
-    charisma: formData.get('charisma'),
-    max_hit_points: formData.get('max_hit_points'),
-    armor_class: formData.get('armor_class'),
-  });
-
-  const load_capacity = 15 * strength;
+export async function updateCharacter(character_id: string, campaign_id: string, formData: FormData) {
+  let data = {
+    character_id: character_id, campaign_id, load_capacity: 0, ...CharacterSchema.parse({
+      name: formData.get('name'), description: formData.get('description'), character_type: formData.get('character_type'), race: formData.get('race'), cclass: formData.get('cclass'), level: formData.get('level'), background: formData.get('background'), alignment: formData.get('alignment'), portrait_url: formData.get('portrait_url'), strength: formData.get('strength'), dexterity: formData.get('dexterity'), constitution: formData.get('constitution'), intelligence: formData.get('intelligence'), wisdom: formData.get('wisdom'), charisma: formData.get('charisma'), max_hit_points: formData.get('max_hit_points'), armor_class: formData.get('armor_class'),
+    })
+  };
+  data.load_capacity = 15 * data.strength;
 
   try {
-    await sql`UPDATE characters SET user_id = ${userID}, name = ${name}, description = ${description}, character_type = ${character_type}, race = ${race}, cclass = ${cclass}, level = ${level}, background = ${background}, alignment = ${alignment}, portrait_url = ${portrait_url}, strength = ${strength}, dexterity = ${dexterity}, constitution = ${constitution}, intelligence = ${intelligence}, wisdom = ${wisdom}, charisma = ${charisma}, max_hit_points = ${max_hit_points}, armor_class = ${armor_class}, load_capacity = ${load_capacity}
-      WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
+    await prisma.character.update({
+      where: { character_id, campaign_id },
+      data,
+    });
   } catch (e) {
-    console.error('Failed to update character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId);
+    console.error('Failed to update character:', e, "Input: \n", "Character ID: ", character_id, "\n", "Campaign ID: ", campaign_id);
     return { message: 'Database Error: Failed to Update Character.' };
   }
-  revalidatePath(`/campaigns/${campaignId}`);
-  redirect(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${campaign_id}`);
+  redirect(`/campaigns/${campaign_id}`);
 }
 
 // delete character
-export async function deleteCharacter(characterId: string, campaignId: string) {
+export async function deleteCharacter(character_id: string, campaign_id: string) {
   try {
-    await sql`DELETE FROM characters WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
+    await prisma.character.delete({ where: { character_id, campaign_id } });
   } catch (e) {
-    console.error('Failed to delete character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId);
+    console.error('Failed to delete character:', e, "Input: \n", "Character ID: ", character_id, "\n", "Campaign ID: ", campaign_id);
     return { message: 'Database Error: Failed to Delete Character.' };
   }
-  revalidatePath(`/campaigns/${campaignId}`);
-  redirect(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${campaign_id}`);
+  redirect(`/campaigns/${campaign_id}`);
 }
 
 // move character to another campaign
-export async function moveCharacter(characterId: string, campaignId: string, formData: FormData) {
+export async function moveCharacter(character_id: string, campaign_id: string, formData: FormData) {
   const newCampaignId: string = z.string().parse(formData.get('new_campaign_id'));
 
-  if (newCampaignId === campaignId) {
-    redirect(`/campaigns/${campaignId}`);
+  if (newCampaignId === campaign_id) {
+    redirect(`/campaigns/${campaign_id}`);
   }
-  console.log('Moving character:', characterId, campaignId, newCampaignId);
+  console.log('Moving character:', character_id, campaign_id, newCampaignId);
   try {
-    await sql`UPDATE characters SET campaign_id = ${newCampaignId} WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
-    await sql`UPDATE dashboards SET campaign_id = ${newCampaignId} WHERE character_id = ${characterId} AND campaign_id = ${campaignId}`;
+    await prisma.$transaction([
+      prisma.character.updateMany({
+        where: { character_id, campaign_id },
+        data: { campaign_id: newCampaignId },
+      }),
+      prisma.dashboard.updateMany({
+        where: { character_id, campaign_id },
+        data: { campaign_id: newCampaignId },
+      }),
+    ]);
   } catch (e) {
-    console.error('Failed to move character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId, "\n", "New Campaign ID: ", newCampaignId);
+    console.error('Failed to move character:', e, "Input: \n", "Character ID: ", character_id, "\n", "Campaign ID: ", campaign_id, "\n", "New Campaign ID: ", newCampaignId);
     return { message: 'Database Error: Failed to Move Character.' };
   }
-  revalidatePath(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${campaign_id}`);
   revalidatePath(`/campaigns/${newCampaignId}`);
-  redirect(`/campaigns/${campaignId}`);
+  redirect(`/campaigns/${campaign_id}`);
 }
 
 
 // duplicate character
-export async function duplicateCharacter(characterId: string, campaignId: string, name: string) {
+export async function duplicateCharacter(character_id: string, campaign_id: string, name: string) {
   const uID = await fetchUID();
   const newCharacterId = nanoid(10);
-  const dashboardId = nanoid(10);
+  const dashboard_id = nanoid(10);
   try {
-    await sql`
-      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, load_capacity, backpack_capacity)
-      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, load_capacity, backpack_capacity
-      FROM characters
-      WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
-    `;
+    const originalCharacter = await prisma.character.findUnique({
+      where: { character_id },
+    });
 
-    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) VALUES (${dashboardId}, ${campaignId}, ${newCharacterId}, 'private', ${name + "-Copy-Dashboard-1"})`;
+    if (!originalCharacter) throw new Error('Character not found');
 
+    await prisma.character.create({
+      data: {
+        ...originalCharacter,
+        character_id: newCharacterId,
+        user_id: uID,
+        name: `${name}-Copy`,
+      },
+    });
+
+    await prisma.dashboard.create({
+      data: {
+        dashboard_id,
+        campaign_id,
+        character_id: newCharacterId,
+        visibility: 'private',
+        name: `${name}-Copy-Dashboard-1`,
+      },
+    });
   } catch (e) {
-    console.error('Failed to create character:', e, "Input: \n", "Character ID: ", characterId, "\n", "Campaign ID: ", campaignId, "\n", "Name: ", name);
+    console.error('Failed to create character:', e, "Input: \n", "Character ID: ", character_id, "\n", "Campaign ID: ", campaign_id, "\n", "Name: ", name);
     return { message: 'Database Error: Failed to Create Character.' };
   }
-  revalidatePath(`/campaigns/${campaignId}`);
-  redirect(`/campaigns/${campaignId}`);
+  revalidatePath(`/campaigns/${campaign_id}`);
+  redirect(`/campaigns/${campaign_id}`);
 }
 
 // create dashboard for character
-export async function createCharacterDashboard(dashboardID: string, campaignID: string, characterID: string | null, characterName: string) {
+export async function createCharacterDashboard(dashboardID: string, campaign_id: string, character_id: string | null, characterName: string) {
   const newDashboardId = nanoid(10);
   try {
-    let numDashboards = await fetchDashboardNumber(campaignID, characterID);
+    let numDashboards = await fetchDashboardNumber(campaign_id, character_id);
     numDashboards++;
-    await sql`INSERT INTO dashboards (dashboard_id, campaign_id, character_id, visibility, name) SELECT ${newDashboardId}, campaign_id, character_id, visibility, ${characterName + "-Dashboard-" + (numDashboards)} FROM dashboards WHERE dashboard_id = ${dashboardID}`;
+    const originalDashboard = await prisma.dashboard.findUnique({
+      where: { dashboard_id: dashboardID },
+    });
+
+    if (!originalDashboard) throw new Error('Dashboard not found');
+
+    await prisma.dashboard.create({
+      data: {
+        dashboard_id: newDashboardId,
+        campaign_id,
+        character_id,
+        visibility: originalDashboard.visibility,
+        name: `${characterName}-Dashboard-${numDashboards}`,
+      },
+    });
   } catch (e) {
-    console.error('Failed to create dashboard:', e, "Input: \n", "Dashboard ID: ", dashboardID, "\n", "Campaign ID: ", campaignID, "\n", "Character ID: ", characterID, "\n", "Character Name: ", characterName);
+    console.error('Failed to create dashboard:', e, "Input: \n", "Dashboard ID: ", dashboardID, "\n", "Campaign ID: ", campaign_id, "\n", "Character ID: ", character_id, "\n", "Character Name: ", characterName);
     return { message: 'Database Error: Failed to Create Dashboard.' };
   }
   revalidatePath(`/dashboard/${newDashboardId}`);
   redirect(`/dashboard/${newDashboardId}`);
 }
 
-export async function deleteDashboardByDashboardID(dashboardId: string, campaignId: string) {
+export async function deleteDashboardByDashboardID(dashboard_id: string, campaignId: string) {
   try {
-    await sql`DELETE FROM dashboards WHERE dashboard_id = ${dashboardId}`;
+    await prisma.dashboard.delete({
+      where: { dashboard_id },
+    });
   } catch (e) {
-    console.error('Failed to delete dashboard:', e, "Input: \n", "Dashboard ID: ", dashboardId, "\n", "Campaign ID: ", campaignId);
+    console.error('Failed to delete dashboard:', e, "Input: \n", "Dashboard ID: ", dashboard_id, "\n", "Campaign ID: ", campaignId);
     return { message: 'Database Error: Failed to Delete Dashboard.' };
   }
   revalidatePath('/campaigns/' + campaignId);
@@ -387,111 +401,141 @@ export async function deleteDashboardByDashboardID(dashboardId: string, campaign
 }
 
 // update dashboard layout
-export async function updateDashboardLayout(dashboardId: string, layout: any) {
+export async function updateDashboardLayout(dashboard_id: string, layout: any) {
   try {
     // used for deleting elements that are removed from the layout
-    const existingElementData = await sql`SELECT element_id FROM dashboardelements WHERE dashboard_id = ${dashboardId}`;
-    let existingElementIds: string[] = existingElementData.rows.map((row: any) => row.element_id);
+    const existingElements = await prisma.dashboardElement.findMany({
+      where: { dashboard_id },
+      select: { element_id: true },
+    });
+
+    let existingElementIds = existingElements.map((el) => el.element_id);
 
 
-    var dashboardElement: DashboardElement[] = [];
+
+    let dashboardElements : DashboardElement[] = [];
     for (const breakpoint in layout) {
       if (layout.hasOwnProperty(breakpoint)) {
         for (const element of layout[breakpoint]) {
           const { w, h, x, y, i } = element;
 
-          let column: DashboardElement
-          const columnExists = dashboardElement.find((column) => column.element_id + "," + column.element_type + "," + column.character_id === i);
-          if (columnExists !== undefined && columnExists) {
-            column = columnExists;
-          } else {
-            let id: string = i.split(",")[0];
-            if (id.substring(0, 8) === "00000000") {
-              id = nanoid(10);
-            }
-            column = { element_id: id, element_type: i.split(",")[1], character_id: i.split(",")[2], dashboard_id: dashboardId };
-            dashboardElement.push(column);
+          let [id, element_type, character_id] = i.split(',');
+
+          if (id.startsWith('00000000')) {
+            id = nanoid(10);
+          }
+
+          let dashboardElement = dashboardElements.find(
+            (el) => el.element_id === id && el.element_type === element_type && el.character_id === character_id
+          );
+
+          if (!dashboardElement) {
+            dashboardElement = {
+              element_id: id,
+              dashboard_id,
+              character_id,
+              element_type,
+              x_lg: 0,y_lg: 0,w_lg: 1,h_lg: 1,
+              x_md: null,y_md: null,w_md: null,h_md: null,
+              x_sm: null,y_sm: null,w_sm: null,h_sm: null,
+              x_xs: null,y_xs: null,w_xs: null,h_xs: null,
+              x_xxs: null,y_xxs: null,w_xxs: null,h_xxs: null,
+            };
+            dashboardElements.push(dashboardElement);
           }
 
           switch (breakpoint) {
             case 'lg':
-              column.x_lg = x;
-              column.y_lg = y;
-              column.w_lg = w;
-              column.h_lg = h;
-              existingElementIds = existingElementIds.filter((id) => id !== column.element_id);
+              Object.assign(dashboardElement, { x_lg: x, y_lg: y, w_lg: w, h_lg: h });
+              existingElementIds = existingElementIds.filter((eid) => eid !== id);
               break;
             case 'md':
-              column.x_md = x;
-              column.y_md = y;
-              column.w_md = w;
-              column.h_md = h;
+              Object.assign(dashboardElement, { x_md: x, y_md: y, w_md: w, h_md: h });
               break;
             case 'sm':
-              column.x_sm = x;
-              column.y_sm = y;
-              column.w_sm = w;
-              column.h_sm = h;
+              Object.assign(dashboardElement, { x_sm: x, y_sm: y, w_sm: w, h_sm: h });
               break;
             case 'xs':
-              column.x_xs = x;
-              column.y_xs = y;
-              column.w_xs = w;
-              column.h_xs = h;
+              Object.assign(dashboardElement, { x_xs: x, y_xs: y, w_xs: w, h_xs: h });
               break;
             case 'xxs':
-              column.x_xxs = x;
-              column.y_xxs = y;
-              column.w_xxs = w;
-              column.h_xxs = h;
+              Object.assign(dashboardElement, { x_xxs: x, y_xxs: y, w_xxs: w, h_xxs: h });
               break;
           }
         }
       }
     }
 
-    for (const element of dashboardElement) {
-      await sql`INSERT INTO dashboardelements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg, x_md, y_md, w_md, h_md, x_sm, y_sm, w_sm, h_sm, x_xs, y_xs, w_xs, h_xs, x_xxs, y_xxs, w_xxs, h_xxs)
-        VALUES (${element.element_id}, ${element.dashboard_id}, ${element.character_id}, ${element.element_type}, ${element.x_lg}, ${element.y_lg}, ${element.w_lg}, ${element.h_lg}, ${element.x_md}, ${element.y_md}, ${element.w_md}, ${element.h_md}, ${element.x_sm}, ${element.y_sm}, ${element.w_sm}, ${element.h_sm}, ${element.x_xs}, ${element.y_xs}, ${element.w_xs}, ${element.h_xs}, ${element.x_xxs}, ${element.y_xxs}, ${element.w_xxs}, ${element.h_xxs})
-        ON CONFLICT (dashboard_id, character_id, element_type) DO UPDATE SET
-          x_lg = ${element.x_lg}, y_lg = ${element.y_lg}, w_lg = ${element.w_lg}, h_lg = ${element.h_lg},
-          x_md = ${element.x_md}, y_md = ${element.y_md}, w_md = ${element.w_md}, h_md = ${element.h_md},
-          x_sm = ${element.x_sm}, y_sm = ${element.y_sm}, w_sm = ${element.w_sm}, h_sm = ${element.h_sm},
-          x_xs = ${element.x_xs}, y_xs = ${element.y_xs}, w_xs = ${element.w_xs}, h_xs = ${element.h_xs},
-          x_xxs = ${element.x_xxs}, y_xxs = ${element.y_xxs}, w_xxs = ${element.w_xxs}, h_xxs = ${element.h_xxs}`;
-    }
+    await Promise.all(
+      dashboardElements.map((element) =>
+        prisma.dashboardElement.upsert({
+          where: {
+            dashboard_id_character_id_element_type: {
+              dashboard_id: element.dashboard_id,
+              character_id: element.character_id,
+              element_type: element.element_type,
+            },
+          },
+          update: element,
+          create: element,
+        })
+      )
+    );
 
-    for (const elementId of existingElementIds) {
-      await sql`DELETE FROM dashboardelements WHERE element_id = ${elementId}`;
+    // Remove elements no longer in the layout
+    if (existingElementIds.length > 0) {
+      await prisma.dashboardElement.deleteMany({
+        where: { element_id: { in: existingElementIds } },
+      });
     }
   } catch (e) {
-    console.error('Failed to update dashboard layout:', e, "Input: \n", "Dashboard ID: ", dashboardId, "\n", "Layout: ", layout);
+    console.error('Failed to update dashboard layout:', e, "Input: \n", "Dashboard ID: ", dashboard_id, "\n", "Layout: ", layout);
     return { message: 'Database Error: Failed to Update Dashboard Layout.' };
+  }
+
+  revalidatePath(`/dashboard/${dashboard_id}`);
+  redirect(`/dashboard/${dashboard_id}`);
+}
+
+// Create dashboard element
+export async function createDashboardElement(dashboardId: string, formData: FormData) {
+  console.log('Creating dashboard element');
+  const elementId = nanoid(10);
+  const character_id = z.string().parse(formData.get('character'));
+  const element_type = z.string().parse(formData.get('element'));
+
+  try {
+    // Check if the element already exists
+    const existingElement = await prisma.dashboardElement.findFirst({
+      where: {
+        dashboard_id: dashboardId,
+        character_id,
+        element_type,
+      },
+    });
+
+    if (existingElement) {
+      console.error('Element already exists');
+      return 'Element already exists';
+    }
+
+    await prisma.dashboardElement.create({
+      data: {
+        element_id: elementId,
+        dashboard_id: dashboardId,
+        character_id,
+        element_type,
+        x_lg: 9,
+        y_lg: 9999,
+        w_lg: 3,
+        h_lg: 2,
+      },
+    });
+  } catch (e) {
+    console.error('Failed to create dashboard element:', e);
+    return 'Database Error: Failed to Create Dashboard Element.';
   }
 
   revalidatePath(`/dashboard/${dashboardId}`);
   redirect(`/dashboard/${dashboardId}`);
-}
-
-// create dashboard element
-export async function createDashboardElement(dashboard_id: string, formData: FormData) {
-  console.log('Creating dashboard element');
-  const elementId = nanoid(10);
-  const character_id: string = z.string().parse(formData.get('character'));
-  const element_type: string = z.string().parse(formData.get('element'));
-  try {
-    //check if element already exists for dashboard and character id
-    const existingElement = await sql`SELECT * FROM dashboardelements WHERE dashboard_id = ${dashboard_id} AND character_id = ${character_id} AND element_type = ${element_type}`;
-    if (existingElement.rows.length > 0) {
-      console.error('Element already exists', "Input: \n", "Dashboard ID: ", dashboard_id, "\n", "Character ID: ", character_id, "\n", "Element Type: ", element_type);
-      return 'Element already exists';
-    }
-    await sql`INSERT INTO dashboardelements (element_id, dashboard_id, character_id, element_type, x_lg, y_lg, w_lg, h_lg)
-      VALUES (${elementId}, ${dashboard_id}, ${character_id}, ${element_type}, ${9}, ${9999}, ${3}, ${5})`;
-  } catch (e) {
-    console.error('Failed to create dashboard element:', e, "Input: \n", "Dashboard ID: ", dashboard_id, "\n", "Character ID: ", character_id, "\n", "Element Type: ", element_type);
-    return 'Database Error: Failed to Create Dashboard Element.';
-  }
-  revalidatePath(`/dashboard/${dashboard_id}`);
-  redirect(`/dashboard/${dashboard_id}`);
 }

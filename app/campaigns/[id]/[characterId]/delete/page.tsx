@@ -1,6 +1,5 @@
 import { deleteCharacter } from '@/app/lib/actions';
 import { fetchCampaign, fetchCharacter } from '@/app/lib/data';
-import { Campaign } from '@/app/lib/definitions';
 import { notFound } from 'next/navigation';
 
 import {
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import Button from '@/components/Button';
 import { Trash2 } from 'lucide-react';
+import { Campaign } from '@prisma/client';
 
 export default async function Page({ params }: { params: { id: string, characterId: string } }) {
   const campaignID = params.id;

@@ -53,11 +53,7 @@ export type Character = {
   backpack_capacity: number;
   armor_class: number;
   speed: number;
-  initiative: number;
   inspiration: number;
-  death_saves_success: number;
-  death_saves_failure: number;
-  experience_points: number;
   created_at: string;
   updated_at: string;
 };

@@ -122,7 +122,7 @@ function getAddableElements(layouts: Layouts, characters: keyValuePair[], isPart
     { key: "inventory", value: "Inventory" },
     { key: "currency", value: "Coinage" },
     { key: "conditions", value: "Conditions" },
-    { key: "spells", value: "Spells" },
+    { key: "levelup", value: "Level Up" },
     { key: "weight", value: "Weight" },
     { key: "notes", value: "Notes" },
     { key: "abilities", value: "Abilities" },

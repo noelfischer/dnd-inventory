@@ -1,8 +1,6 @@
 import bcrypt from 'bcrypt';
 import { db } from '@vercel/postgres';
-import { users, campaigns, characters, campaignUsers, inventory, currency, userSpells, spellSlots, dashboards, dashboardElements, characterInfos } from '../lib/placeholder-data';
-import { spells } from '../lib/spells';
-
+import { users, campaigns, characters, campaignUsers, inventory, currency, spellSlots, dashboards, dashboardElements, characterInfos } from '../lib/placeholder-data';
 const client = await db.connect();
 
 async function seedUsers() {
@@ -83,11 +81,7 @@ async function seedCharacters() {
       backpack_capacity INT DEFAULT 60,
       armor_class INT DEFAULT 0,
       speed INT DEFAULT 0,
-      initiative INT DEFAULT 0,
       inspiration INT DEFAULT 0,
-      death_saves_success INT DEFAULT 0,
-      death_saves_failure INT DEFAULT 0,
-      experience_points INT DEFAULT 0,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -100,16 +94,16 @@ async function seedCharacters() {
           character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment,
           portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma,
           max_hit_points, current_hit_points, temp_hit_points, load_capacity, backpack_capacity,
-          armor_class, speed, initiative, inspiration,
-          death_saves_success, death_saves_failure, experience_points
+          armor_class, speed, inspiration
+          
         )
         VALUES (
           ${character.id}, ${character.campaign_id}, ${character.user_id}, ${character.name}, ${character.description}, ${character.character_type}, ${character.race},
           ${character.cclass}, ${character.level}, ${character.background}, ${character.alignment}, ${character.portrait_url},
           ${character.strength}, ${character.dexterity}, ${character.constitution}, ${character.intelligence}, ${character.wisdom},
           ${character.charisma}, ${character.max_hit_points}, ${character.current_hit_points}, ${character.temp_hit_points}, ${character.load_capacity}, ${character.backpack_capacity},
-          ${character.armor_class}, ${character.speed}, ${character.initiative}, ${character.inspiration},
-          ${character.death_saves_success}, ${character.death_saves_failure}, ${character.experience_points}
+          ${character.armor_class}, ${character.speed}, ${character.inspiration}
+          
         )
         ON CONFLICT (character_id) DO NOTHING;
       `,
@@ -202,52 +196,6 @@ async function seedCurrency() {
   return insertedCurrency;
 }
 
-async function seedUserSpells() {
-  await client.sql`
-    CREATE TABLE IF NOT EXISTS UserSpells (
-      user_spell_id VARCHAR(10) PRIMARY KEY,
-      character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
-      spell_id VARCHAR(10) REFERENCES GeneralSpells(spell_id)
-    );
-  `;
-
-  const insertedUserSpells = await Promise.all(
-    userSpells.map(
-      (userSpell) => client.sql`
-        INSERT INTO UserSpells (user_spell_id, character_id, spell_id)
-        VALUES (${userSpell.id}, ${userSpell.character_id}, ${userSpell.spell_id})
-        ON CONFLICT (user_spell_id) DO NOTHING;
-      `,
-    ),
-  );
-
-  return insertedUserSpells;
-}
-
-async function seedGeneralSpells() {
-  await client.sql`
-    CREATE TABLE IF NOT EXISTS GeneralSpells (
-      spell_id VARCHAR(10) PRIMARY KEY,
-      spell_name_de VARCHAR(100) NOT NULL,
-      spell_name_en VARCHAR(100) NOT NULL,
-      classes VARCHAR(256) NOT NULL,
-      spell_level INT NOT NULL
-    );
-  `;
-
-  const insertedGeneralSpells = await Promise.all(
-    spells.map(
-      (spell) => client.sql`
-        INSERT INTO GeneralSpells (spell_id, spell_name_de, spell_name_en, classes, spell_level)
-        VALUES (${spell.id}, ${spell.spell_name_de}, ${spell.spell_name_en}, ${spell.classes}, ${spell.spell_level})
-        ON CONFLICT (spell_id) DO NOTHING;
-      `,
-    ),
-  );
-
-  return insertedGeneralSpells;
-}
-
 async function seedSpellSlots() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS SpellSlots (
@@ -327,7 +275,7 @@ async function seedDashboardElements() {
     element_id VARCHAR(10) PRIMARY KEY,
     dashboard_id VARCHAR(10) REFERENCES Dashboards(dashboard_id) ON DELETE CASCADE,
     character_id VARCHAR(10) REFERENCES Characters(character_id) ON DELETE CASCADE,
-    element_type VARCHAR(50) NOT NULL, -- Type of element (e.g., 'status', 'inventory', 'spells')
+    element_type VARCHAR(50) NOT NULL, -- Type of element (e.g., 'status', 'inventory', '...')
     -- Position and size for different breakpoints
     x_lg INT NOT NULL DEFAULT 0,
     y_lg INT NOT NULL DEFAULT 0,
@@ -389,10 +337,6 @@ export async function GET() {
     console.log('Inventory seeded');
     await seedCurrency();
     console.log('Currency seeded');
-    await seedGeneralSpells();
-    console.log('General spells seeded');
-    await seedUserSpells();
-    console.log('User spells seeded');
     await seedSpellSlots();
     console.log('Spell slots seeded');
     await seedCharacterInfos();

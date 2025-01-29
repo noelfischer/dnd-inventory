@@ -13,13 +13,13 @@ import { Layouts } from 'react-grid-layout';
 import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
 import { keyValuePair } from '@/app/ui/campaigns/CustomForm';
 import SpellSlotsServer from '@/app/ui/dashboard/elements/spellslots/SpellSlotsServer';
-import SpellsServer from '@/app/ui/dashboard/elements/spells/SpellsServer';
 import InventoryServer from '@/app/ui/dashboard/elements/inventory/InventoryServer';
 import WeightServer from '@/app/ui/dashboard/elements/weight/WeightServer';
 import CurrencyServer from '@/app/ui/dashboard/elements/currency/CurrencyServer';
 import Inspiration from '@/app/ui/dashboard/elements/Inspiration';
 import LongRestServer from '@/app/ui/dashboard/elements/longRest/LongRestServer';
 import StatusServer from '@/app/ui/dashboard/elements/status/StatusServer';
+import LevelupServer from '@/app/ui/dashboard/elements/levelup/LevelupServer';
 
 export type GridElement = {
   i: string;
@@ -102,8 +102,8 @@ function componentMap(type: string, character_id: string): ReactNode {
       return <Notes character_id={character_id} />;
     case 'inventory':
       return <InventoryServer character_id={character_id} />;
-    case 'spells':
-      return <SpellsServer character_id={character_id} />;
+    case 'levelup':
+      return <LevelupServer character_id={character_id} />;
     case 'abilities':
       return <Abilities character_id={character_id} />;
     case 'conditions':
@@ -161,17 +161,17 @@ function getLayoutTemplate(characterID: string) {
   const initial_layout: Layouts = {
     lg: [
       { i: '0000000000,name,' + characterID, x: 0, y: 0, w: 7, h: 1 },
-      { i: '0000000001,health,' + characterID, x: 0, y: 1, w: 4, h: 2 },
-      { i: '0000000009,spellslots,' + characterID, x: 0, y: 3, w: 5, h: 2 },
-      { i: '0000000002,weight,' + characterID, x: 4, y: 1, w: 3, h: 2 },
-      { i: '0000000003,notes,' + characterID, x: 9, y: 12, w: 3, h: 6 },
-      { i: '0000000004,inventory,' + characterID, x: 0, y: 5, w: 7, h: 13 },
-      { i: '0000000005,spells,' + characterID, x: 7, y: 0, w: 3, h: 12 },
-      { i: '0000000006,abilities,' + characterID, x: 10, y: 2, w: 2, h: 5 },
-      { i: '0000000007,conditions,' + characterID, x: 10, y: 7, w: 2, h: 5 },
-      { i: '00000000008,currency,' + characterID, x: 7, y: 12, w: 2, h: 6 },
-      { i: '00000000010,inspiration,' + characterID, x: 10, y: 0, w: 2, h: 2 },
-      { i: '00000000011,longrest,' + characterID, x: 5, y: 3, w: 2, h: 2 },
+      { i: '0000000001,health,' + characterID, x: 0, y: 1, w: 7, h: 2 },
+      { i: '0000000009,spellslots,' + characterID, x: 0, y: 3, w: 7, h: 2 },
+      { i: '0000000002,weight,' + characterID, x: 7, y: 2, w: 2, h: 3 },
+      { i: '0000000003,notes,' + characterID, x: 7, y: 15, w: 5, h: 8 },
+      { i: '0000000004,inventory,' + characterID, x: 0, y: 5, w: 7, h: 18 },
+      { i: '0000000005,levelup,' + characterID, x: 10, y: 0, w: 2, h: 2 },
+      { i: '0000000006,abilities,' + characterID, x: 9, y: 4, w: 3, h: 7 },
+      { i: '0000000007,conditions,' + characterID, x: 7, y: 11, w: 5, h: 4 },
+      { i: '00000000008,currency,' + characterID, x: 7, y: 5, w: 2, h: 6 },
+      { i: '00000000010,inspiration,' + characterID, x: 7, y: 0, w: 3, h: 2 },
+      { i: '00000000011,longrest,' + characterID, x: 9, y: 2, w: 3, h: 2 },
     ],
   };
   const initial_componentList = [
@@ -181,7 +181,7 @@ function getLayoutTemplate(characterID: string) {
     { i: '0000000002,weight,' + characterID, type: <WeightServer character_id={characterID} /> },
     { i: '0000000003,notes,' + characterID, type: <Notes character_id={characterID} /> },
     { i: '0000000004,inventory,' + characterID, type: <InventoryServer character_id={characterID} /> },
-    { i: '0000000005,spells,' + characterID, type: <SpellsServer character_id={characterID} /> },
+    { i: '0000000005,levelup,' + characterID, type: <LevelupServer character_id={characterID} /> },
     { i: '0000000006,abilities,' + characterID, type: <Abilities character_id={characterID} /> },
     { i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} /> },
     { i: '00000000008,currency,' + characterID, type: <CurrencyServer character_id={characterID} /> },

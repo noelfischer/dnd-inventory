@@ -11,8 +11,6 @@ export async function GET() {
         const campaignUsers = await client.sql`SELECT * FROM CampaignUsers`;
         const inventory = await client.sql`SELECT * FROM Inventory`;
         const currency = await client.sql`SELECT * FROM Currency`;
-        const generalSpells = await client.sql`SELECT * FROM GeneralSpells`;
-        const userSpells = await client.sql`SELECT * FROM UserSpells`;
         const spellSlots = await client.sql`SELECT * FROM SpellSlots`;
         const characterInfos = await client.sql`SELECT * FROM CharacterInfos`;
         const dashboards = await client.sql`SELECT * FROM Dashboards`;
@@ -42,8 +40,6 @@ export async function GET() {
         sqlText += generateInsertStatements('CampaignUsers', campaignUsers.rows, 'campaign_user_id') + '\n';
         sqlText += generateInsertStatements('Inventory', inventory.rows, 'item_id') + '\n';
         sqlText += generateInsertStatements('Currency', currency.rows, 'currency_id') + '\n';
-        sqlText += generateInsertStatements('GeneralSpells', generalSpells.rows, 'spell_id') + '\n';
-        sqlText += generateInsertStatements('UserSpells', userSpells.rows, 'user_spell_id') + '\n';
         sqlText += generateInsertStatements('SpellSlots', spellSlots.rows, 'spell_slot_id') + '\n';
         sqlText += generateInsertStatements('CharacterInfos', characterInfos.rows, 'condition_id') + '\n';
         sqlText += generateInsertStatements('Dashboards', dashboards.rows, 'dashboard_id') + '\n';

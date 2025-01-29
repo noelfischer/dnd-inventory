@@ -164,28 +164,6 @@ export async function fetchCurrencyByCharacter(character_id: string) {
   }
 }
 
-// Fetch user spells by character ID
-export async function fetchUserSpellsByCharacter(character_id: string) {
-  try {
-    const data = await sql<UserSpell>`SELECT * FROM UserSpells WHERE character_id = ${character_id}`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error(`Failed to fetch user spells for character ID ${character_id}.`);
-  }
-}
-
-// Fetch all general spells
-export async function fetchGeneralSpells() {
-  try {
-    const data = await sql<GeneralSpell>`SELECT * FROM GeneralSpells`;
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch general spells.');
-  }
-}
-
 // Fetch dashboards by campaign ID
 export async function fetchDashboardsByCampaign(campaign_id: string) {
   try {

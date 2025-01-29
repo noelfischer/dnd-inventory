@@ -345,8 +345,8 @@ export async function duplicateCharacter(characterId: string, campaignId: string
   const dashboardId = nanoid(10);
   try {
     await sql`
-      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, initiative, death_saves_success, death_saves_failure, experience_points, load_capacity, backpack_capacity)
-      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, initiative, death_saves_success, death_saves_failure, experience_points, load_capacity, backpack_capacity
+      INSERT INTO characters (character_id, campaign_id, user_id, name, description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, load_capacity, backpack_capacity)
+      SELECT ${newCharacterId}, ${campaignId}, ${uID}, CONCAT(name, '-copy'), description, character_type, race, cclass, level, background, alignment, portrait_url, strength, dexterity, constitution, intelligence, wisdom, charisma, max_hit_points, current_hit_points, temp_hit_points, armor_class, load_capacity, backpack_capacity
       FROM characters
       WHERE character_id = ${characterId} AND campaign_id = ${campaignId}
     `;

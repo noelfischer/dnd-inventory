@@ -16,7 +16,7 @@ const StatusServer = async ({ character_id }: { character_id: string }) => {
             inspiration: true,
             current_hit_points: true,
             max_hit_points: true,
-            backpack_capacity: true,
+            load_capacity: true,
             CharacterInfo: {
                 select: {
                     conditions: true
@@ -34,7 +34,7 @@ const StatusServer = async ({ character_id }: { character_id: string }) => {
     });
 
     const inventoryWeight = inventoryItems.reduce((sum, item) => sum + item.weight * item.quantity, 0);
-    const currentWeight = coinsWeight + inventoryWeight;
+    const currentWeight = +(coinsWeight + inventoryWeight).toFixed(2);
 
 
     // Fetch spell slots and ensure all levels are present
@@ -52,7 +52,7 @@ const StatusServer = async ({ character_id }: { character_id: string }) => {
             name={character.name}
             inspiration={character.inspiration}
             health={{ current: character.current_hit_points, max: character.max_hit_points }}
-            weight={{ current: currentWeight, max: character.backpack_capacity }}
+            weight={{ current: currentWeight, max: character.load_capacity }}
             spell_slots={spellSlots}
             conditions={character.CharacterInfo[0].conditions!}
         />

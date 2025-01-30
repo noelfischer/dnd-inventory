@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Avatar from '@radix-ui/react-avatar';
 import "./styles.css";
+import { Snail } from 'lucide-react';
 
 interface Props {
     name: string;
@@ -47,7 +48,7 @@ const StatusClient = ({ name, imgLink, health, weight, spell_slots, conditions, 
                         <div className="relative w-full bg-yellow-700/30 h-12 w-full">
                             <div className="relative top-0 left-0 h-full bg-yellow-700" style={{ width: `${Math.max(0, Math.min(100, (weight.current / weight.max) * 100))}%` }} />
                             <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-white font-bold text-2xl">
-                                {weight.current} / {weight.max}
+                                {weight.current} / {weight.max} {weight.current > weight.max ? <Snail className="ml-2" /> : null}
 
                             </div>
                         </div>
@@ -66,11 +67,19 @@ const StatusClient = ({ name, imgLink, health, weight, spell_slots, conditions, 
             <table className="table-auto mt-4 w-full border-collapse border border-black">
                 <tbody>
                     <tr>
-                        {spell_slots.map(slot => (
-                            <td key={slot.casts_remaining} className="border-2 dark:border-white/80 border-black p-2 text-center text-2xl">
-                                {slot.casts_remaining}
-                            </td>
-                        ))}
+                        {spell_slots.map(slot => {
+                            const opacity = Math.min(1, (slot.casts_remaining / 10));
+                            return (
+                                <td key={slot.casts_remaining} className="border-2 dark:border-white/80 border-black text-center text-2xl overflow-hidden">
+                                    <div className="relative w-full h-12">
+                                        <div className="absolute top-0 left-0 bg-main -m-0.5" style={{ opacity, height: "110%", width: "110%" }} />
+                                        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+                                            {slot.casts_remaining}
+                                        </div>
+                                    </div>
+                                </td>
+                            )
+                        })}
                     </tr>
                 </tbody>
             </table>

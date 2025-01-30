@@ -14,10 +14,12 @@ import { useState } from "react";
 import { SpellSlotWithoutCharacterID } from "../spellslots/helper";
 import { LevelUpCharacter } from "./LevelupServer";
 import { LoaderCircle } from "lucide-react";
+import OnLeaveInput from "../helper/OnLeaveInput";
 
 const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpCharacter, spellSlots: SpellSlotWithoutCharacterID[], levelup: (character: LevelUpCharacter, spell_slots: SpellSlotWithoutCharacterID[]) => Promise<void> }) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [newLevel, setNewLevel] = useState<number>(character.level + 1);
 
     function parseAndValidate(formDataEntryValue: FormDataEntryValue | null): number | null {
         if (formDataEntryValue === null || formDataEntryValue === undefined || formDataEntryValue === '') {
@@ -30,8 +32,7 @@ const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpC
         return value;
     }
 
-    async function handleSubmit(formData: FormData) {
-        setLoading(true);
+    async function postLevelUp(formData: FormData) {
         character.max_hit_points = parseAndValidate(formData.get('max_hit_points')) ?? character.max_hit_points;
         character.armor_class = parseAndValidate(formData.get('armor_class')) ?? character.armor_class;
         character.strength = parseAndValidate(formData.get('strength')) ?? character.strength;
@@ -40,6 +41,7 @@ const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpC
         character.intelligence = parseAndValidate(formData.get('intelligence')) ?? character.intelligence;
         character.wisdom = parseAndValidate(formData.get('wisdom')) ?? character.wisdom;
         character.charisma = parseAndValidate(formData.get('charisma')) ?? character.charisma;
+        character.level = newLevel;
 
         spellSlots[0].total_casts = parseAndValidate(formData.get('spell_slots_0')) ?? spellSlots[0].total_casts;
         spellSlots[1].total_casts = parseAndValidate(formData.get('spell_slots_1')) ?? spellSlots[1].total_casts;
@@ -52,11 +54,32 @@ const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpC
         spellSlots[8].total_casts = parseAndValidate(formData.get('spell_slots_8')) ?? spellSlots[8].total_casts;
         spellSlots[9].total_casts = parseAndValidate(formData.get('spell_slots_9')) ?? spellSlots[9].total_casts;
         spellSlots[10].total_casts = parseAndValidate(formData.get('spell_slots_10')) ?? spellSlots[10].total_casts;
+
+        for (let i = 0; i < spellSlots.length; i++) {
+            spellSlots[i].casts_remaining = spellSlots[i].total_casts;
+        }
+
+        const event = new CustomEvent('levelup', { detail: { newLevel, maxhitpoints: character.max_hit_points, maxweight: character.strength * 15, spellSlots } });
+        window.dispatchEvent(event);
+
         await levelup(character, spellSlots);
         setOpen(false);
         setLoading(false);
-        const event = new CustomEvent('levelup');
-        window.dispatchEvent(event);
+        setNewLevel(newLevel + 1);
+    }
+
+    function onChangeNewLevel(level: string) {
+        const levelNumber = parseInt(level);
+        if (isNaN(levelNumber)) return;
+        setNewLevel(levelNumber);
+    }
+
+    function handleSubmit(formData: FormData) {
+        setOpen(false);
+        setLoading(true);
+        setTimeout(() => {
+            postLevelUp(formData);
+        }, 10);
     }
 
     return (
@@ -64,7 +87,7 @@ const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpC
             <Dialog open={open} onOpenChange={setOpen}>
 
                 <DialogTrigger asChild>
-                    <button className="group h-full w-full relative overflow-hidden bg-secondary text-black text-2xl transition-all duration-300
+                    <button disabled={loading} className="group h-full w-full relative overflow-hidden bg-secondary text-black text-2xl transition-all duration-300
             before:absolute before:left-0 before:bottom-0 before:w-full before:h-0 hover:before:h-full 
             hover:text-white hover:font-bold hover:before:skew-y-0 hover:font-bold hover:scale-105 
             before:bg-green-500 before:transition-all before:duration-500 before:origin-bottom-left before:skew-y-6">
@@ -75,12 +98,12 @@ const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpC
                 <DialogContent className="sm:max-w-[625px]">
                     <form action={handleSubmit}>
                         <DialogHeader>
-                            <DialogTitle className='text-text text-4xl'>Level Up to Level {character.level + 1}?</DialogTitle>
+                            <DialogTitle className='text-text text-4xl'>Level Up to Level <OnLeaveInput className="dark:text-text dark:border-black text-4xl pb-10 border-b-[5px] mb-6" initialValue={newLevel.toString()} placeholder={newLevel.toString()} onLeave={onChangeNewLevel} />?</DialogTitle>
                         </DialogHeader>
                         <div className="grid gap-4 py-2">
                             <h2 className="text-text text-md mt-5">Change stats</h2>
                             <div className="grid grid-cols-4 items-center gap-x-4">
-                                <FormItemInput name="max_hit_points" label="max hit points" type="number" max={9999} defaultValue={character.max_hit_points.toString()} />
+                                <FormItemInput autofocus name="max_hit_points" label="max hit points" type="number" max={9999} defaultValue={character.max_hit_points.toString()} />
                                 <FormItemInput name="armor_class" label="armor class" type="number" max={50} defaultValue={character.armor_class.toString()} />
                                 <FormItemInput name="strength" label="strength" type="number" defaultValue={character.strength.toString()} />
                                 <FormItemInput name="dexterity" label="dexterity" type="number" defaultValue={character.dexterity.toString()} />
@@ -106,7 +129,7 @@ const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpC
                             </div>
                         </div>
                         <DialogFooter className="mt-6">
-                            <Button type='submit' disabled={loading}>Level Up {loading && <LoaderCircle className='animate-spin ml-2' />}</Button>
+                            <Button type='submit'>Level Up</Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>

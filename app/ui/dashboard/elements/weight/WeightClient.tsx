@@ -25,16 +25,22 @@ const WeightClient = ({ max_weight, inventory_weight, coins_weight, updateTotalC
     const currentWeightPercentage = Math.min(Math.max(0, ((inventoryWeight + coinsWeight) / maxWeight) * 100), 100);
     const encumbered = (inventoryWeight + coinsWeight) > maxWeight;
 
+    function handleCoinsChange(e: any) {
+        setCoinsWeight(parseFloat(e.detail));
+    }
+    function handleInventoryChange(e: any) {
+        setInventoryWeight(parseFloat(e.detail));
+    }
+    function handleMaxWeightChange(e: any) {
+        const newMaxWeight = parseInt(e.detail.maxweight);
+        setMaxWeight(newMaxWeight > maxWeight ? newMaxWeight : maxWeight);
+    }
     useEffect(() => {
-        function handleCoinsChange(e: any) {
-            setCoinsWeight(parseFloat(e.detail));
-        }
-        function handleInventoryChange(e: any) {
-            setInventoryWeight(parseFloat(e.detail));
-        }
+        window.addEventListener('levelup', handleMaxWeightChange);
         window.addEventListener('coinsWeight', handleCoinsChange);
         window.addEventListener('inventoryWeight', handleInventoryChange);
         return () => {
+            window.removeEventListener('maxWeight', handleMaxWeightChange);
             window.removeEventListener('coinsWeight', handleCoinsChange);
             window.removeEventListener('inventoryWeight', handleInventoryChange);
         };

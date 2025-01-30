@@ -22,11 +22,23 @@ const HealthBarClient = ({ max_hit_points, current_hit_points, temp_hit_points, 
         setTempHitPoints(0);
     }
 
+    function levelup(e: any) {
+        setMaxHitPoints(e.detail.maxhitpoints);
+        setCurrentHitPoints(e.detail.maxhitpoints);
+        setTempHitPoints(0);
+    }
+
     useEffect(() => {
         setCurrentHitPoints(current_hit_points);
         setTempHitPoints(temp_hit_points);
         setMaxHitPoints(max_hit_points);
         window.addEventListener('longRest', resetHealth);
+        window.addEventListener('levelup', levelup);
+
+        return () => {
+            window.removeEventListener('longRest', resetHealth);
+            window.removeEventListener('levelup', levelup);
+        };
     }, [current_hit_points, temp_hit_points, max_hit_points]);
 
     const currentHealthPercentage = Math.min(Math.max(0, (currentHitPoints / maxHitPoints) * 100), 100);

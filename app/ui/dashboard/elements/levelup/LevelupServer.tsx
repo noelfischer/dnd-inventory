@@ -11,6 +11,7 @@ export type LevelUpCharacter = {
     armor_class: number,
     strength: number,
     dexterity: number,
+    load_capacity: number,
     constitution: number,
     intelligence: number,
     wisdom: number,
@@ -26,6 +27,7 @@ const LevelupServer = async ({ character_id }: { character_id: string }) => {
             armor_class: true,
             strength: true,
             dexterity: true,
+            load_capacity: true,
             constitution: true,
             intelligence: true,
             wisdom: true,
@@ -39,6 +41,7 @@ const LevelupServer = async ({ character_id }: { character_id: string }) => {
         'use server'
         console.log(character);
         console.log(spellSlots);
+        const newLoadCapacity = 15 * character.strength;
         await prisma.character.update({
             where: { character_id: character_id },
             data: {
@@ -47,13 +50,13 @@ const LevelupServer = async ({ character_id }: { character_id: string }) => {
                 temp_hit_points: 0,
                 armor_class: character.armor_class,
                 strength: character.strength,
-                load_capacity: 15 * character.strength,
+                load_capacity: newLoadCapacity > character.load_capacity ? newLoadCapacity : character.load_capacity,
                 dexterity: character.dexterity,
                 constitution: character.constitution,
                 intelligence: character.intelligence,
                 wisdom: character.wisdom,
                 charisma: character.charisma,
-                level: character.level + 1
+                level: character.level
             }
         });
         await updateSpellSlots(character_id, spellSlots);

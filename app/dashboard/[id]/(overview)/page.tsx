@@ -2,7 +2,6 @@ import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchCharactersB
 import { SimpleCharacter } from '../../../lib/definitions';
 import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
-import NameAndLevel from '@/app/ui/dashboard/elements/NameAndLevel';
 import { ReactNode } from 'react';
 import HealthBarServer from '@/app/ui/dashboard/elements/healthbar/HealthBarServer';
 import Abilities from '@/app/ui/dashboard/elements/Abilities';
@@ -21,6 +20,7 @@ import LongRestServer from '@/app/ui/dashboard/elements/longRest/LongRestServer'
 import StatusServer from '@/app/ui/dashboard/elements/status/StatusServer';
 import LevelupServer from '@/app/ui/dashboard/elements/levelup/LevelupServer';
 import { DashboardElement } from '@prisma/client';
+import NameAndLevelServer from '@/app/ui/dashboard/elements/nameAndLevel/NameAndLevelServer';
 
 export type GridElement = {
   i: string;
@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 function componentMap(type: string, character_id: string): ReactNode {
   switch (type) {
     case 'name':
-      return <NameAndLevel character_id={character_id} />;
+      return <NameAndLevelServer character_id={character_id} />;
     case 'health':
       return <HealthBarServer character_id={character_id} />;
     case 'weight':
@@ -175,7 +175,7 @@ function getLayoutTemplate(characterID: string) {
     ],
   };
   const initial_componentList = [
-    { i: '0000000000,name,' + characterID, type: <NameAndLevel character_id={characterID} /> },
+    { i: '0000000000,name,' + characterID, type: <NameAndLevelServer character_id={characterID} /> },
     { i: '0000000001,health,' + characterID, type: <HealthBarServer character_id={characterID} /> },
     { i: '0000000009,spellslots,' + characterID, type: <SpellSlotsServer character_id={characterID} /> },
     { i: '0000000002,weight,' + characterID, type: <WeightServer character_id={characterID} /> },

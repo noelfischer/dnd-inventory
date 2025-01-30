@@ -1,6 +1,5 @@
 'use client'
 
-import { SpellSlot } from "@prisma/client";
 import OnLeaveInput from "../helper/OnLeaveInput";
 import { useEffect, useState } from "react";
 import { SpellSlotWithoutCharacterID } from "./helper";
@@ -23,9 +22,18 @@ const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, upd
         setSlots([...spell_slots]);
     }
 
+    function levelup(e: any) {
+        setSlots(e.detail.spellSlots);
+    }
+
     useEffect(() => {
         setSlots(spell_slots);
         window.addEventListener('longRest', resetSlots);
+        window.addEventListener('levelup', levelup);
+        return () => {
+            window.removeEventListener('longRest', resetSlots);
+            window.removeEventListener('levelup', levelup);
+        };
     }, [spell_slots]);
 
     function updateLevelDescriptionClient(spellSlotID: string, totalCasts: number) {

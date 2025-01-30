@@ -23,10 +23,10 @@ const LongRestClient = ({ longRest }: { longRest: () => Promise<void>; }) => {
     return (
         <div className="flex h-full">
             <Button
-                className={cn("rounded-none px-4 border-0 border-r-4 -ml-0.5 py-2 h-full transition-all z-20")}
+                className={cn("rounded-none px-4 border-0 border-r-4 -ml-0.5 py-2 h-full transition-all z-20 bg-secondary")}
                 onClick={handleLeft} size="lg" variant="noShadow"
             >
-                {rightDisabled ? <Lock /> : <Unlock />}
+                {rightDisabled ? <Unlock /> : <Lock />}
             </Button>
 
             <div className={cn("h-full w-full")}>
@@ -36,7 +36,7 @@ const LongRestClient = ({ longRest }: { longRest: () => Promise<void>; }) => {
                 )}>
                     <Button
                         className={cn(
-                            "rounded-r-lg rounded-l-none pr-4 pl-2 py-2 h-full w-[120%] translate-x-[-10%] text-2xl"
+                            "rounded-r-lg rounded-l-none pr-4 pl-2 py-2 h-full w-[120%] translate-x-[-10%] text-2xl bg-secondary",
                         )}
                         onClick={handleRight} size="lg" disabled={rightDisabled} variant="noShadow"
                     >

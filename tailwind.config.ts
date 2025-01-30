@@ -13,6 +13,7 @@ const config = {
       colors: {
         main: '#a388ee',
         mainAccent: '#9e66ff', // not needed for shadcn components
+        secondary: '#7d66ff',
         overlay: 'rgba(0,0,0,0.8)',
         // background color overlay for alert dialogs, modals, etc.
 
@@ -35,15 +36,15 @@ const config = {
         dark: '#000',
       },
       boxShadow: {
-        light: '4px 4px 0px 0px #000',
-        dark: '4px 4px 0px 0px #000',
+        light: '2px 2px 0px 0px #000',
+        dark: '2px 2px 0px 0px #000',
         none: 'none',
       },
       translate: {
-        boxShadowX: '4px',
-        boxShadowY: '4px',
-        reverseBoxShadowX: '-4px',
-        reverseBoxShadowY: '-4px',
+        boxShadowX: '2px',
+        boxShadowY: '2px',
+        reverseBoxShadowX: '-2px',
+        reverseBoxShadowY: '-2px',
       },
       fontWeight: {
         base: '500',

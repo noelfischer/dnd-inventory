@@ -53,7 +53,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   } else {
     characters = await fetchCharactersByCampaignAndUser(campaignID, uID);
   }
-  console.log("partyDashboard", partyDashboard);
 
   if (!campaignID) notFound();
 

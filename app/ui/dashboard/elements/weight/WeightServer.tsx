@@ -11,16 +11,12 @@ const WeightServer = async ({ character_id }: { character_id: string }) => {
     const maxWeight = (await prisma.character.findFirst({ where: { character_id }, select: { load_capacity: true } }))!.load_capacity;
     const currencyData = await prisma.currency.findFirst({ where: { character_id }, select: { platin: true, gold: true, silver: true, copper: true } });
     const coinsWeight: number = (currencyData!.platin + currencyData!.gold + currencyData!.silver + currencyData!.copper) * 0.02;
-    const inventory: any = await prisma.inventoryItem.aggregate({
-        _sum: {
-            weight: true,
-            quantity: true,
-        },
-        where: {
-            character_id: character_id,
-        },
+    const inventoryItems = await prisma.inventoryItem.findMany({
+        where: { character_id: character_id },
+        select: { weight: true, quantity: true },
     });
-    const inventoryWeight = inventory._sum.weight * inventory._sum.quantity;
+    
+    const inventoryWeight = inventoryItems.reduce((sum, item) => sum + item.weight * item.quantity, 0);
 
 
 

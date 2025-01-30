@@ -46,7 +46,6 @@ const WeightClient = ({ max_weight, inventory_weight, coins_weight, updateTotalC
         setMaxWeight(weightNumber);
         updateTotalCarriableWeight(weightNumber);
     }
-
     return (
         <div className="w-full h-full">
             <div className="relative w-full h-full">

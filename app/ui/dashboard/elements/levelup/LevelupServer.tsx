@@ -1,9 +1,66 @@
 import React from 'react';
 import LevelupClient from './LevelupClient';
+import { PrismaClient } from '@prisma/client';
+import { getSpellSlots, SpellSlotWithoutCharacterID, updateSpellSlots } from '../spellslots/helper';
+
+
+const prisma = new PrismaClient()
+
+export type LevelUpCharacter = {
+    max_hit_points: number,
+    armor_class: number,
+    strength: number,
+    dexterity: number,
+    constitution: number,
+    intelligence: number,
+    wisdom: number,
+    charisma: number,
+    level: number
+}
 
 const LevelupServer = async ({ character_id }: { character_id: string }) => {
+    const character = (await prisma.character.findFirst({
+        where: { character_id },
+        select: {
+            max_hit_points: true,
+            armor_class: true,
+            strength: true,
+            dexterity: true,
+            constitution: true,
+            intelligence: true,
+            wisdom: true,
+            charisma: true,
+            level: true
+        }
+    }))!;
+    const spellSlots = (await getSpellSlots(character_id));
+
+    async function levelup(character: LevelUpCharacter, spellSlots: SpellSlotWithoutCharacterID[]) {
+        'use server'
+        console.log(character);
+        console.log(spellSlots);
+        await prisma.character.update({
+            where: { character_id: character_id },
+            data: {
+                max_hit_points: character.max_hit_points,
+                current_hit_points: character.max_hit_points,
+                temp_hit_points: 0,
+                armor_class: character.armor_class,
+                strength: character.strength,
+                load_capacity: 15 * character.strength,
+                dexterity: character.dexterity,
+                constitution: character.constitution,
+                intelligence: character.intelligence,
+                wisdom: character.wisdom,
+                charisma: character.charisma,
+                level: character.level + 1
+            }
+        });
+        await updateSpellSlots(character_id, spellSlots);
+    }
+
     return (
-        <LevelupClient />
+        <LevelupClient character={character} spellSlots={spellSlots} levelup={levelup} />
     );
 };
 

@@ -3,17 +3,18 @@
 import { SpellSlot } from "@prisma/client";
 import OnLeaveInput from "../helper/OnLeaveInput";
 import { useEffect, useState } from "react";
+import { SpellSlotWithoutCharacterID } from "./helper";
 
 interface Props {
-    spell_slots: SpellSlot[];
+    spell_slots: SpellSlotWithoutCharacterID[];
     character_id: string;
-    updateRemainingCasts: (character_id: string, spell_slots: SpellSlot) => Promise<void>;
-    updateLevelDescription: (character_id: string, spell_slots: SpellSlot) => Promise<void>;
+    updateRemainingCasts: (character_id: string, spell_slots: SpellSlotWithoutCharacterID) => Promise<void>;
+    updateTotalCasts: (character_id: string, spell_slots: SpellSlotWithoutCharacterID) => Promise<void>;
 }
 
-const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, updateLevelDescription }: Props) => {
+const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, updateTotalCasts }: Props) => {
 
-    const [slots, setSlots] = useState<SpellSlot[]>(spell_slots);
+    const [slots, setSlots] = useState<SpellSlotWithoutCharacterID[]>(spell_slots);
 
     function resetSlots() {
         spell_slots.forEach(slot => {
@@ -36,7 +37,7 @@ const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, upd
             return;
         }
         existingSlot.total_casts = totalCasts;
-        updateLevelDescription(character_id, existingSlot);
+        updateTotalCasts(character_id, existingSlot);
         setSlots([...slots]);
     }
 
@@ -56,7 +57,7 @@ const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, upd
     return (
         <div>
             <ul className="flex flex-row gap-2 flex-wrap">
-                {slots.sort((a, b) => a.spell_level - b.spell_level).map((spellslot: SpellSlot, index: number) => {
+                {slots.sort((a, b) => a.spell_level - b.spell_level).map((spellslot: SpellSlotWithoutCharacterID, index: number) => {
                     return (
                         <li key={index} className={"w-max border-2 border-black rounded px-1.5 py-1.5 grow" + ((spellslot.casts_remaining / spellslot.total_casts) > 0 ? " bg-mainAccent" : " bg-main/20")}>
                             <div className="text-lg text-text text-center border-b-2 border-black pb-1.5 z-10">

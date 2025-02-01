@@ -21,7 +21,7 @@ const Inspiration = async ({ character_id }: { character_id: string }) => {
     }
 
     return (
-        <div className="flex items-center justify-around px-4 h-full">
+        <div className="flex items-center justify-around px-4 h-full overflow-y-hidden">
 
             <span className="text-2xl">Inspiration</span>
             <span className="flex">

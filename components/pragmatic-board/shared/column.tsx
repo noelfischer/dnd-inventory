@@ -4,7 +4,6 @@ import {
   draggable,
   dropTargetForElements,
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { Copy, Ellipsis, Plus } from 'lucide-react';
 import { memo, useContext, useEffect, useRef, useState } from 'react';
 import invariant from 'tiny-invariant';
 
@@ -47,7 +46,7 @@ type TColumnState =
   };
 
 const stateStyles: { [Key in TColumnState['type']]: string } = {
-  idle: 'cursor-grab',
+  idle: '',
   'is-card-over': 'outline outline-2 outline-neutral-50',
   'is-dragging': 'opacity-40',
   'is-column-over': 'bg-dark-purple-900',
@@ -224,16 +223,18 @@ export function Column({ column }: { column: TColumn }) {
         <div
           className={`flex max-h-full flex-col ${state.type === 'is-column-over' ? 'invisible' : ''}`}
         >
-          <div className="flex flex-row items-center justify-between p-3 pb-2" ref={headerRef}>
-            <div className="pl-2 font-bold leading-4">{column.title}</div>
+          <div className="bg-main text-text flex flex-row items-center justify-between px-3 py-1.5" ref={headerRef}>
+            <div className="font-bold leading-4">{column.title}</div>
           </div>
           <div
-            className="flex flex-col py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:theme(colors.slate.600)_theme(colors.slate.700)] [scrollbar-width:thin]"
+            className="grid grid-cols-5 py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:theme(colors.slate.600)_theme(colors.slate.700)] [scrollbar-width:thin]"
             ref={scrollableRef}
           >
+            {column.header()}
             <CardList column={column} />
+            {column.footer(column.id)}
             {state.type === 'is-card-over' && !state.isOverChildCard ? (
-              <div className="flex-shrink-0 px-3 py-1">
+              <div className="grid grid-cols-subgrid col-span-5">
                 <CardShadow dragging={state.dragging} />
               </div>
             ) : null}

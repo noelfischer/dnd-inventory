@@ -22,29 +22,29 @@ import { isShallowEqual } from './is-shallow-equal';
 
 type TCardState =
   | {
-      type: 'idle';
-    }
+    type: 'idle';
+  }
   | {
-      type: 'is-dragging';
-    }
+    type: 'is-dragging';
+  }
   | {
-      type: 'is-dragging-and-left-self';
-    }
+    type: 'is-dragging-and-left-self';
+  }
   | {
-      type: 'is-over';
-      dragging: DOMRect;
-      closestEdge: Edge;
-    }
+    type: 'is-over';
+    dragging: DOMRect;
+    closestEdge: Edge;
+  }
   | {
-      type: 'preview';
-      container: HTMLElement;
-      dragging: DOMRect;
-    };
+    type: 'preview';
+    container: HTMLElement;
+    dragging: DOMRect;
+  };
 
 const idle: TCardState = { type: 'idle' };
 
 const innerStyles: { [Key in TCardState['type']]?: string } = {
-  idle: 'hover:outline outline-2 outline-neutral-50 cursor-grab',
+  idle: 'hover:outline outline-2 outline-neutral-50',
   'is-dragging': 'opacity-40',
 };
 
@@ -58,7 +58,7 @@ const outerStyles: { [Key in TCardState['type']]?: string } = {
 };
 
 export function CardShadow({ dragging }: { dragging: DOMRect }) {
-  return <div className="flex-shrink-0 rounded bg-dark-purple-950" style={{ height: dragging.height }} />;
+  return <div className="col-span-5 rounded bg-dark-purple-950" style={{ height: 32 }} />;
 }
 
 export function CardDisplay({
@@ -75,26 +75,28 @@ export function CardDisplay({
   return (
     <div
       ref={outerRef}
-      className={`flex flex-shrink-0 flex-col py-px ${outerStyles[state.type]}`}
+      className={`grid grid-cols-subgrid col-span-5 py-px ${outerStyles[state.type]}`}
     >
       {/* Put a shadow before the item if closer to the top edge */}
       {state.type === 'is-over' && state.closestEdge === 'top' ? (
         <CardShadow dragging={state.dragging} />
       ) : null}
       <div
-        className={`bg-dark-purple-900 px-2 py-1 text-dark-purple-100 ${innerStyles[state.type]}`}
-        ref={innerRef}
+        className={`grid grid-cols-subgrid col-span-5 bg-dark-purple-900 px-2 py-1 text-dark-purple-100 ${innerStyles[state.type]}`}
+
         style={
           state.type === 'preview'
             ? {
-                width: state.dragging.width,
-                height: state.dragging.height,
-                transform: !isSafari() ? 'rotate(3deg)' : undefined,
-              }
+              width: state.dragging.width,
+              height: 32,
+              transform: !isSafari() ? `rotate(3deg) translate(-${(state.dragging.x)}px, -10px)` : undefined,
+            }
             : undefined
         }
       >
-        <div>{card.description}</div>
+        <div className='grid grid-cols-subgrid col-span-5'>
+          {card.gridRow(innerRef)}
+        </div>
       </div>
       {/* Put a shadow after the item if closer to the bottom edge */}
       {state.type === 'is-over' && state.closestEdge === 'bottom' ? (

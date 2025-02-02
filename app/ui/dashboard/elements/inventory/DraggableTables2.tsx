@@ -1,34 +1,51 @@
 import { Board } from "@/components/pragmatic-board/shared/board";
-import { TBoard, TCard, TColumn } from "@/components/pragmatic-board/shared/data";
+import { TColumn } from "@/components/pragmatic-board/shared/data";
+import { InventoryItem } from "@prisma/client";
+import { HandleRef, Item } from "./helper";
 
 
-function getInitialData(): TBoard {
-  // Doing this so we get consistent ids on server and client
-  const getCards = (() => {
-    let count: number = 0;
+type DraggableTablesProps = {
+  tables: Item[];
+  setTables: React.Dispatch<React.SetStateAction<Item[]>>;
+  updateIndex: (items: { item_id: string; i: number; slot: string }[]) => void;
+  headerContent: () => React.ReactNode;
+  renderRow: (row: InventoryItem, index: number) => (ref: HandleRef) => React.ReactNode;
+  footerContent: (id: string) => React.ReactNode;
+};
 
-    return function getCards({ amount }: { amount: number }): TCard[] {
-      return Array.from({ length: amount }, (): TCard => {
-        const id = count++;
+const DraggableTables = ({
+  tables,
+  setTables,
+  updateIndex,
+  headerContent,
+  renderRow,
+  footerContent
+}: DraggableTablesProps) => {
+
+
+  const columns: TColumn[] = tables.map((table) => {
+    return {
+      id: table.name,
+      title: getTableName(table.name),
+      header: headerContent,
+      footer: footerContent,
+      cards: table.rows.map((row, index) => {
         return {
-          id: `card:${id}`,
-          description: `Card ${id}`,
+          id: row.item_id,
+          gridRow: renderRow(row, index)
         };
-      });
+      })
     };
-  })();
+  });
 
-  const columns: TColumn[] = [
-    { id: 'column:a', title: 'Column A', cards: getCards({ amount: 6 }) },
-    { id: 'column:b', title: 'Column B', cards: getCards({ amount: 4 }) },
-    { id: 'column:c', title: 'Column C', cards: getCards({ amount: 5 }) }
-  ];
+  const initialBoard = { columns };
 
-  return {
-    columns,
-  };
+
+  return <Board initial={initialBoard} />;
 }
 
-export default function Page() {
-  return <Board initial={getInitialData()} />;
+function getTableName(short: string) {
+  return short === "eq" ? "Equipped" : short === "bd" ? "On Body" : "Backpack"
 }
+
+export default DraggableTables;

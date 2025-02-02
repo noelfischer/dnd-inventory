@@ -1,11 +1,15 @@
+import { MutableRefObject, ReactNode } from "react";
+
 export type TCard = {
   id: string;
-  description: string;
+  gridRow: (ref: MutableRefObject<HTMLDivElement | null> | undefined) => ReactNode
 };
 
 export type TColumn = {
   id: string;
   title: string;
+  header: () => React.ReactNode;
+  footer: (id: string) => React.ReactNode;
   cards: TCard[];
 };
 

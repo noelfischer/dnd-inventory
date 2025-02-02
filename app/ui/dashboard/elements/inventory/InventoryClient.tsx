@@ -1,17 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Sparkles } from 'lucide-react';
-import DraggableTables from './DraggableTables';
-import { TableCell } from '@/components/ui/table';
+import { GripVertical, Sparkles } from 'lucide-react';
 import NewItem from './NewItem';
 import EditItem from './EditItem';
 import { resetServerContext } from 'react-beautiful-dnd';
-import { cn } from '@/lib/utils';
 import OnLeaveInput from '../helper/OnLeaveInput';
 import { InventoryItem } from '@prisma/client';
-import { createInventoryItem, formatInitialItemstoTableData, Item, Props, removeItemFromInventory, updateInventoryItem } from './helper';
-import { headerContent, selectIcon } from './HelperComponents';
+import { createInventoryItem, formatInitialItemstoTableData, HandleRef, Item, Props, removeItemFromInventory, updateInventoryItem } from './helper';
+import { selectIcon } from './HelperComponents';
 import DraggableTables2 from './DraggableTables2';
 
 const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, updateItem, deleteItem, updateIndex, updateBackpackCapacity }: Props) => {
@@ -51,27 +48,42 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
         setBackpackPercentage(+(backpackFilled / backpackCapacity * 100).toFixed(2));
     }
 
-    const renderRow = (row: InventoryItem, index: number, isDragging: boolean, dragHandler: React.ReactNode) => {
+
+    const headerContent = () => {
         return (
             <>
-                <TableCell className="whitespace-nowrap font-base flex gap-2 items-center">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles className='-ml-2 pb-2 text-main' />}</TableCell>
-                <TableCell className={cn((isDragging ? 'grow' : ''), 'hidden sm:table-cell')}>{row.description}</TableCell>
-                <TableCell>{row.weight} lb.</TableCell>
-                <TableCell>{row.quantity}</TableCell>
-                <TableCell id={index.toString()} className=' flex flex-row-reverse'>
-                    {dragHandler}
-                    <EditItem item={row} updateItem={handleUpdate} deleteItem={handleDelete} />
-                </TableCell>
+                <div className="w-[180px] px-3 col-span-2 sm:col-span-1">Name</div>
+                <div className='hidden sm:table-cell'>Description</div>
+                <div>Weight</div>
+                <div>Quantity</div>
+                <div className="text-right px-3">Actions</div>
             </>
         )
     };
 
-    const footerContent = (table: Item) => {
-        if (table.name === 'bp') {
+    const renderRow = (row: InventoryItem, index: number) => {
+        return (ref: HandleRef) => (
+            <>
+                <div className="whitespace-nowrap font-base flex gap-2 items-center col-span-2 sm:col-span-1">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles className='-ml-2 pb-2 text-main' />}</div>
+                <div className="hidden sm:table-cell">{row.description}</div>
+                <div>{row.weight} lb.</div>
+                <div className='sm:mr-32'>{row.quantity}</div>
+                <div id={index.toString()} className='flex flex-row-reverse'>
+                    <div ref={ref} className='cursor-grab'>
+                        <GripVertical />
+                    </div>
+                    <EditItem item={row} updateItem={handleUpdate} deleteItem={handleDelete} />
+                </div>
+            </>
+        )
+    };
+
+    const footerContent = (id: string) => {
+        if (id === 'bp') {
             return (
                 <>
-                    <TableCell>Total Weight</TableCell>
-                    <TableCell className="text-right" colSpan={100}><span className='pr-2'>{backpackFilled}</span> / <OnLeaveInput className='h-6 -mt-0.5' initialValue={backpackCapacity.toString()} onLeave={onChangeBackpackLoadCapacity} /><span className='mr-2'> lb. </span> | <span className='ml-3'>{isNaN(backpackPercentage) ? "0" : backpackPercentage} %</span></TableCell>
+                    <div className='px-3'>Backpack Load</div>
+                    <div className="text-right col-span-4 px-3"><span className='pr-2'>{backpackFilled}</span> / <OnLeaveInput className='h-6 -mt-0.5' initialValue={backpackCapacity.toString()} onLeave={onChangeBackpackLoadCapacity} /><span className='mr-2'> lb. </span> | <span className='ml-3'>{isNaN(backpackPercentage) ? "0" : backpackPercentage} %</span></div>
                 </>
             );
         }
@@ -82,7 +94,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
 
     return (
         <div>
-            <DraggableTables
+            <DraggableTables2
                 tables={tables}
                 setTables={setTables}
                 updateIndex={updateIndex}

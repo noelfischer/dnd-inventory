@@ -1,8 +1,9 @@
 import { InventoryItem } from '@prisma/client';
 import type { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/types';
-import { createContext } from 'react';
+import { createContext, MutableRefObject } from 'react';
 
 
+export type HandleRef = MutableRefObject<HTMLDivElement | null> | undefined;
 
 export type Props = {
     initialItems: InventoryItem[];

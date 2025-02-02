@@ -27,6 +27,23 @@ const config = {
         darkElevatedBg: '#292a32',
         darkText: '#eeefe9',
         darkBorder: '#000',
+
+        // dark-purple
+        "dark-purple": {
+          "50": "#ffffff",
+          "100": "#e9e9ea",
+          "200": "#d4d4d6",
+          "300": "#bebfc1",
+          "400": "#a9a9ad",
+          "500": "#949498",
+          "600": "#7e7f84",
+          "700": "#69696f",
+          "800": "#53545a",
+          "830": "#47474d",
+          "860": "#3c3c42",
+          "900": "#292a32",
+          "950": "#1d1f27"
+        }
       },
       borderRadius: {
         base: '5px'

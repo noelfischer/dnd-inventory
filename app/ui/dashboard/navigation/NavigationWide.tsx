@@ -5,7 +5,7 @@ import Dropdown from "@/components/Dropdown"
 import { ChevronLeft, LoaderCircle, PanelsLeftBottom, Plus, Trash2 } from "lucide-react"
 import Link from "next/link"
 import "./styles.css"
-import { useActionState, useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Layouts } from "react-grid-layout"
 import AddElement, { AddableElement } from "./AddElement"
 import { keyValuePair } from "../../campaigns/CustomForm"
@@ -39,28 +39,26 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
   const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters, isPartyDashboard), [characters, layouts.lg]);
+  const [isPending, setIsPending] = useState(false);
 
-  const [errorMessageUpdateLayout, formActionUpdateLayout, isPendingUpdateLayout] = useActionState(updateLayoutWithData, undefined,);
-  const [errorMessageNewDashboard, formActionNewDashboard, isPendingNewDashboard] = useActionState(newDashboard, undefined);
-  const [errorMessageDeleteDashboard, formActionDeleteDashboard, isPendingDeleteDashboard] = useActionState(deleteDashboard, undefined);
-  const [pendingClick, setPendingClick] = useState(false);
-
-  useEffect(() => {
-    if (pendingClick && isPendingUpdateLayout === false) {
-      if (errorMessageUpdateLayout !== undefined) {
-        console.error("Error saving layout: ", errorMessageUpdateLayout);
-      }
-      setEditMode(false);
-    }
-  }, [initialLayouts, isPendingUpdateLayout, errorMessageUpdateLayout]);
-
-  function save() {
+  async function save() {
     if (noChange) { setEditMode(false); }
     else {
-      formActionUpdateLayout();
-      setPendingClick(true);
+      await dispatchServerFunction(updateLayoutWithData);
+      setEditMode(false);
     }
   };
+
+
+  async function dispatchServerFunction(serverFunction: Function) {
+    setIsPending(true);
+    try {
+      await serverFunction();
+    } catch (error) {
+      console.error("an error:", error);
+    }
+    setIsPending(false);
+  }
 
   async function addElementHandlerCustom(formData: FormData) {
     const layoutUpdatePromise = updateLayoutWithData();
@@ -81,18 +79,10 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
           {navLinks.map(({ name, links }) => (
             <Dropdown key={name} text={name === "Party" ? name : name.charAt(0).toUpperCase() + name.slice(1) + "s"} items={links} disabled={editMode} />
           ))}
-          <form action={formActionNewDashboard}>
-            <Button className='w-auto min-w-[180px] flex justify-between mb-1' type="submit" disabled={isPendingNewDashboard || editMode}>
-              {isPendingNewDashboard && <span className="animate-spin mr-2">
-                <LoaderCircle />
-              </span>}
-              New Dashboard <Plus /></Button>
-          </form>
+          <Button className='w-auto min-w-[180px] flex justify-between mb-1' type="submit" disabled={isPending || editMode} onClick={() => dispatchServerFunction(newDashboard)}>
+            New Dashboard <Plus /></Button>
           {ableToDeleteDashboard &&
-            <Button className='w-auto min-w-[180px] flex justify-between px-3' disabled={editMode} onClick={() => formActionDeleteDashboard()}>
-              {isPendingDeleteDashboard && <span className="animate-spin mr-2">
-                <LoaderCircle />
-              </span>}
+            <Button className='w-auto min-w-[180px] flex justify-between px-3' disabled={isPending || editMode} onClick={() => dispatchServerFunction(deleteDashboard)}>
               Delete Dashboard
               <Trash2 />
             </Button>
@@ -102,14 +92,14 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
 
       <div className="ml-auto flex flex-wrap md:flex-nowrap items-start gap-2 h-min flex-row-reverse">
         {editMode ?
-          <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={isPendingUpdateLayout} onClick={save}>
-            {isPendingUpdateLayout && <span className="animate-spin mr-2"><LoaderCircle /></span>}
+          <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={isPending} onClick={save}>
+            {isPending && <span className="animate-spin mr-2"><LoaderCircle /></span>}
             Save <PanelsLeftBottom />
           </Button>
           :
           <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }
-        <AddElement addableElements={addableElements} addElementHandler={addElementHandlerCustom} disabled={isPendingUpdateLayout} />
+        <AddElement addableElements={addableElements} addElementHandler={addElementHandlerCustom} disabled={isPending} />
       </div>
     </div>
   )
@@ -154,7 +144,7 @@ function cleanLayout(layouts: Layouts): Layouts {
   let newLayouts: Layouts = { lg: [] };
   for (const breakpoint in layouts) {
     if (layouts.hasOwnProperty(breakpoint)) {
-      newLayouts[breakpoint] = layouts[breakpoint].map(({ moved, static: staticProp, ...rest }) => rest);
+      newLayouts[breakpoint] = layouts[breakpoint].map(({ moved, static: staticProp, ...rest }) => { return { i: rest.i, x: rest.x, y: rest.y, h: rest.h, w: rest.w } });
     }
   }
   return newLayouts;

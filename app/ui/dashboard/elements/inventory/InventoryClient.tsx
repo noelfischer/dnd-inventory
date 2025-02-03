@@ -67,7 +67,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
                 <div className="hidden sm:table-cell">{row.description}</div>
                 <div>{row.weight} lb.</div>
                 <div className='sm:mr-32'>{row.quantity}</div>
-                <div id={index.toString()} className='flex flex-row-reverse'>
+                <div id={index.toString()} className='flex flex-row-reverse items-center'>
                     <div ref={ref} className='cursor-grab'>
                         <GripVertical />
                     </div>

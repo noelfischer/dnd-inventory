@@ -34,7 +34,6 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
                 slot: item.slot,
                 item_name: item.item_name,
                 description: item.description,
-                ability: item.ability,
                 weight: item.weight,
                 category: item.category,
                 magic: item.magic,
@@ -51,7 +50,6 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
             data: {
                 item_name: item.item_name,
                 description: item.description,
-                ability: item.ability,
                 weight: item.weight,
                 category: item.category,
                 magic: item.magic,

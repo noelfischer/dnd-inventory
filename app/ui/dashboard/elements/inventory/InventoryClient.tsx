@@ -61,7 +61,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
     };
 
     const renderRow = (row: InventoryItem, index: number) => {
-        return (ref: HandleRef) => (
+        const rowContent = (ref: HandleRef) => (
             <>
                 <div className="whitespace-nowrap font-base flex gap-2 items-center col-span-2 sm:col-span-1">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles className='-ml-2 pb-2 text-main' />}</div>
                 <div className="hidden sm:table-cell">{row.description}</div>
@@ -75,6 +75,9 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
                 </div>
             </>
         )
+        // Eslint error fix
+        rowContent.displayName = 'RowContent';
+        return rowContent;
     };
 
     const footerContent = (id: string) => {

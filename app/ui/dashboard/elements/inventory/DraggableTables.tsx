@@ -1,7 +1,7 @@
-import { Board } from "@/components/pragmatic-board/shared/board";
-import { TColumn } from "@/components/pragmatic-board/shared/data";
 import { InventoryItem } from "@prisma/client";
 import { HandleRef, Item } from "./helper";
+import { Board } from "./pragmatic-board/shared/board";
+import { TColumn } from "./pragmatic-board/shared/data";
 
 
 type DraggableTablesProps = {

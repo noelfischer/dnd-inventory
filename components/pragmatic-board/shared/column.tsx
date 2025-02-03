@@ -232,12 +232,12 @@ export function Column({ column }: { column: TColumn }) {
           >
             {column.header()}
             <CardList column={column} />
-            {column.footer(column.id)}
             {state.type === 'is-card-over' && !state.isOverChildCard ? (
               <div className="grid grid-cols-subgrid col-span-5">
                 <CardShadow dragging={state.dragging} />
               </div>
             ) : null}
+            {column.footer(column.id)}
           </div>
         </div>
       </div>

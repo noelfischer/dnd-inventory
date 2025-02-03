@@ -23,11 +23,16 @@ import { unsafeOverflowAutoScrollForElements } from '@atlaskit/pragmatic-drag-an
 import { bindAll } from 'bind-event-listener';
 import { blockBoardPanningAttr } from './data-attributes';
 import { CleanupFn } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
+import { InventoryItem } from '@prisma/client';
 
 export function Board({ initial }: { initial: TBoard }) {
   const [data, setData] = useState(initial);
   const scrollableRef = useRef<HTMLDivElement | null>(null);
   const { settings } = useContext(SettingsContext);
+
+  useEffect(() => {
+    setData(initial);
+  }, [initial]);
 
   useEffect(() => {
     const element = scrollableRef.current;
@@ -47,14 +52,16 @@ export function Board({ initial }: { initial: TBoard }) {
             return;
           }
           const dropTargetData = innerMost.data;
+          const homeColumnId = dragging.columnId;
           const homeColumnIndex = data.columns.findIndex(
-            (column) => column.id === dragging.columnId,
+            (column) => column.id === homeColumnId,
           );
           const home: TColumn | undefined = data.columns[homeColumnIndex];
 
-          if (!home) {
-            return;
-          }
+          const table = data.tables.find((t) => t.name === homeColumnId);
+          if (!table) { return }
+
+          if (!home) { return; }
           const cardIndexInHome = home.cards.findIndex((card) => card.id === dragging.card.id);
 
           // dropping on a card
@@ -65,9 +72,7 @@ export function Board({ initial }: { initial: TBoard }) {
             const destination = data.columns[destinationColumnIndex];
             // reordering in home column
             if (home === destination) {
-              const cardFinishIndex = home.cards.findIndex(
-                (card) => card.id === dropTargetData.card.id,
-              );
+              const cardFinishIndex = home.cards.findIndex((card) => card.id === dropTargetData.card.id);
 
               // could not find cards needed
               if (cardIndexInHome === -1 || cardFinishIndex === -1) {
@@ -79,58 +84,35 @@ export function Board({ initial }: { initial: TBoard }) {
                 return;
               }
 
+              // Reorder rows within the same table
               const closestEdge = extractClosestEdge(dropTargetData);
 
-              const reordered = reorderWithEdge({
+              const updatedRows = reorderWithEdge({
                 axis: 'vertical',
-                list: home.cards,
+                list: table.rows,
                 startIndex: cardIndexInHome,
                 indexOfTarget: cardFinishIndex,
                 closestEdgeOfTarget: closestEdge,
               });
 
-              const updated: TColumn = {
-                ...home,
-                cards: reordered,
-              };
-              const columns = Array.from(data.columns);
-              columns[homeColumnIndex] = updated;
-              setData({ ...data, columns });
+              moveCardInSameColumn(updatedRows);
+
               return;
             }
-
-            // moving card from one column to another
 
             // unable to find destination
             if (!destination) {
               return;
             }
 
+            // moving card from one column to another
             const indexOfTarget = destination.cards.findIndex(
               (card) => card.id === dropTargetData.card.id,
             );
 
             const closestEdge = extractClosestEdge(dropTargetData);
             const finalIndex = closestEdge === 'bottom' ? indexOfTarget + 1 : indexOfTarget;
-
-            // remove card from home list
-            const homeCards = Array.from(home.cards);
-            homeCards.splice(cardIndexInHome, 1);
-
-            // insert into destination list
-            const destinationCards = Array.from(destination.cards);
-            destinationCards.splice(finalIndex, 0, dragging.card);
-
-            const columns = Array.from(data.columns);
-            columns[homeColumnIndex] = {
-              ...home,
-              cards: homeCards,
-            };
-            columns[destinationColumnIndex] = {
-              ...destination,
-              cards: destinationCards,
-            };
-            setData({ ...data, columns });
+            transferCardBetweenColumns(destinationColumnIndex, destination, finalIndex);
             return;
           }
 
@@ -147,47 +129,67 @@ export function Board({ initial }: { initial: TBoard }) {
 
             // dropping on home
             if (home === destination) {
-              console.log('moving card to home column');
-
-              // move to last position
-              const reordered = reorder({
-                list: home.cards,
+              const updatedRows = reorder({
+                list: table.rows,
                 startIndex: cardIndexInHome,
                 finishIndex: home.cards.length - 1,
               });
-
-              const updated: TColumn = {
-                ...home,
-                cards: reordered,
-              };
-              const columns = Array.from(data.columns);
-              columns[homeColumnIndex] = updated;
-              setData({ ...data, columns });
+              moveCardInSameColumn(updatedRows);
               return;
             }
 
-            console.log('moving card to another column');
-
-            // remove card from home list
-
-            const homeCards = Array.from(home.cards);
-            homeCards.splice(cardIndexInHome, 1);
-
-            // insert into destination list
-            const destinationCards = Array.from(destination.cards);
-            destinationCards.splice(destination.cards.length, 0, dragging.card);
-
-            const columns = Array.from(data.columns);
-            columns[homeColumnIndex] = {
-              ...home,
-              cards: homeCards,
-            };
-            columns[destinationColumnIndex] = {
-              ...destination,
-              cards: destinationCards,
-            };
-            setData({ ...data, columns });
+            transferCardBetweenColumns(destinationColumnIndex, destination, destination.cards.length);
             return;
+          }
+
+          function moveCardInSameColumn(updatedRows: InventoryItem[]) {
+
+            // object are the same, no change needed
+            if (table?.rows.length === updatedRows.length && table.rows.every(function (value, index) { return value === updatedRows[index] })) {
+              return;
+            };
+
+            const updatedTables = data.tables.map((t) => t.name === homeColumnId ? { ...t, rows: updatedRows } : t
+            );
+
+            // Prepare server update data
+            let serverItems: { item_id: string; i: number; slot: string; }[] = [];
+            updatedRows.forEach((row, index) => {
+              serverItems.push({ item_id: row.item_id, i: index, slot: row.slot });
+            });
+
+            // Update server with the new row order
+            data.updateIndex(serverItems);
+            data.setTables(updatedTables);
+          }
+
+          function transferCardBetweenColumns(destinationColumnIndex: number, destination: TColumn, position: number) {
+            const sourceClone = Array.from(data.tables[homeColumnIndex].rows);
+            const destClone = Array.from(data.tables[destinationColumnIndex].rows);
+            const [removed] = sourceClone.splice(cardIndexInHome, 1);
+            removed.slot = destination.id;
+            destClone.splice(position, 0, removed);
+
+            const updatedTables = data.tables.map((t, i) => {
+              if (i === homeColumnIndex) {
+                return { ...t, rows: sourceClone };
+              } else if (i === destinationColumnIndex) {
+                return { ...t, rows: destClone };
+              }
+              return t;
+            });
+
+            // Prepare server update data for both source and destination tables
+            let serverItems: { item_id: string; i: number; slot: string; }[] = [];
+            destClone.forEach((row, index) => {
+              serverItems.push({ item_id: row.item_id, i: index, slot: row.slot });
+            });
+            sourceClone.forEach((row, index) => {
+              serverItems.push({ item_id: row.item_id, i: index, slot: row.slot });
+            });
+            // Update server with the new row order and slots
+            data.updateIndex(serverItems);
+            data.setTables(updatedTables);
           }
         },
       }),

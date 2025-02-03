@@ -89,7 +89,6 @@ model InventoryItem {
   slot         String    @db.VarChar(10)
   item_name    String    @db.VarChar(50)
   description  String    @db.VarChar(200)
-  ability      String    @db.VarChar(200)
   weight       Float     @default(0)
   category     String    @db.VarChar(50)
   magic        Boolean   @default(false)

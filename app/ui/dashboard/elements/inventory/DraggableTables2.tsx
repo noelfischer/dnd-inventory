@@ -38,7 +38,12 @@ const DraggableTables = ({
     };
   });
 
-  const initialBoard = { columns };
+  const initialBoard = {
+    tables,
+    setTables,
+    updateIndex,
+    columns
+  };
 
 
   return <Board initial={initialBoard} />;

@@ -16,52 +16,51 @@ export type Props = {
 };
 
 export type Item = {
-    id: number;
     name: string;
     rows: InventoryItem[];
 };
 
 export type ItemRegistration = {
-	item: Item;
-	element: HTMLElement;
-	index: number;
+    item: Item;
+    element: HTMLElement;
+    index: number;
 };
 
 export type ReorderFunction = (args: {
-	startIndex: number;
-	indexOfTarget: number;
-	closestEdgeOfTarget?: Edge | null;
+    startIndex: number;
+    indexOfTarget: number;
+    closestEdgeOfTarget?: Edge | null;
 }) => void;
 
 type UnregisterFn = () => void;
 
 export type ItemContextValue = {
-	getItemsForColumnPreview: () => {
-		items: Item[];
-		isMoreItems: boolean;
-	};
-	reorderColumn: ReorderFunction;
-	reorderItem: ReorderFunction;
-	register: (args: ItemRegistration) => UnregisterFn;
-	instanceId: symbol | null;
+    getItemsForColumnPreview: () => {
+        items: Item[];
+        isMoreItems: boolean;
+    };
+    reorderColumn: ReorderFunction;
+    reorderItem: ReorderFunction;
+    register: (args: ItemRegistration) => UnregisterFn;
+    instanceId: symbol | null;
 };
 export const TableContext = createContext<ItemContextValue>({
-	getItemsForColumnPreview: () => ({ items: [], isMoreItems: false }),
-	reorderColumn: () => {},
-	reorderItem: () => {},
-	register: function register() {
-		return function unregister() {};
-	},
-	instanceId: null,
+    getItemsForColumnPreview: () => ({ items: [], isMoreItems: false }),
+    reorderColumn: () => { },
+    reorderItem: () => { },
+    register: function register() {
+        return function unregister() { };
+    },
+    instanceId: null,
 });
 
 
 
 export function formatInitialItemstoTableData(initialItems: InventoryItem[]): Item[] {
     return [
-        { id: 1, name: "eq", rows: initialItems.filter(i => i.slot == "eq").sort((a, b) => a.i - b.i) },
-        { id: 2, name: "bd", rows: initialItems.filter(i => i.slot == "bd").sort((a, b) => a.i - b.i) },
-        { id: 3, name: "bp", rows: initialItems.filter(i => i.slot == "bp").sort((a, b) => a.i - b.i) },
+        { name: "eq", rows: initialItems.filter(i => i.slot == "eq").sort((a, b) => a.i - b.i) },
+        { name: "bd", rows: initialItems.filter(i => i.slot == "bd").sort((a, b) => a.i - b.i) },
+        { name: "bp", rows: initialItems.filter(i => i.slot == "bp").sort((a, b) => a.i - b.i) },
     ];
 }
 
@@ -75,7 +74,6 @@ export async function createInventoryItem(formData: FormData, tables: Item[], cr
         slot: formData.get('slot') as string,
         item_name: formData.get('item_name') as string,
         description: formData.get('description') as string,
-        ability: '',
         weight: parseFloat(formData.get('weight') as string),
         category: formData.get('category') as string,
         magic: formData.get('magic') === 'on',
@@ -102,7 +100,6 @@ export function updateInventoryItem(item: InventoryItem, formData: FormData, tab
         slot: formData.get('slot') as string,
         item_name: formData.get('item_name') as string,
         description: formData.get('description') as string,
-        ability: item.ability,
         weight: parseFloat(formData.get('weight') as string),
         category: formData.get('category') as string,
         magic: formData.get('magic') === 'on',

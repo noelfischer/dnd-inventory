@@ -1,3 +1,4 @@
+import { Item } from "@/app/ui/dashboard/elements/inventory/helper";
 import { MutableRefObject, ReactNode } from "react";
 
 export type TCard = {
@@ -14,6 +15,9 @@ export type TColumn = {
 };
 
 export type TBoard = {
+  tables: Item[];
+  setTables: React.Dispatch<React.SetStateAction<Item[]>>;
+  updateIndex: (items: { item_id: string; i: number; slot: string }[]) => void;
   columns: TColumn[];
 };
 

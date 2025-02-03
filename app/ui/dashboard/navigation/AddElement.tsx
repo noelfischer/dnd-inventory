@@ -37,7 +37,7 @@ export default function AddElement({ addableElements, addElementHandler, disable
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button className='min-w-[160px] flex justify-between bg-mainAccent' disabled={disabled || loading}>
+                <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={disabled || loading}>
                     {loading && <LoaderCircle className='animate-spin ml-2' />}
                     Add Element<Plus /></Button>
             </SheetTrigger>

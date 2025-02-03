@@ -17,7 +17,7 @@ const Command = React.forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      'flex h-full w-full flex-col overflow-hidden rounded-base border-2 border-border dark:border-darkBorder bg-main font-base text-black',
+      'flex h-full w-full flex-col overflow-hidden rounded-base border-2 border-border dark:border-dark-border bg-main font-base text-black',
       className,
     )}
     {...props}
@@ -44,14 +44,14 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div
-    className="flex items-center border-b-2 border-border dark:border-darkBorder px-3"
+    className="flex items-center border-b-2 border-border dark:border-dark-border px-3"
     cmdk-input-wrapper=""
   >
     <Search className="mr-2 h-4 w-4 shrink-0" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        'flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-black/50 disabled:cursor-not-allowed disabled:opacity-50',
+        'flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-black/50 disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       {...props}
@@ -122,7 +122,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-base px-2 py-1.5 text-sm text-black outline outline-0 outline-border dark:outline-darkBorder aria-selected:outline-2',
+      'relative flex cursor-default select-none items-center rounded-base px-2 py-1.5 text-sm text-black outline outline-0 outline-border dark:outline-dark-border aria-selected:outline-2',
       className,
     )}
     {...props}

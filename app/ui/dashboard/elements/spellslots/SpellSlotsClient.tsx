@@ -67,7 +67,7 @@ const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, upd
             <ul className="flex flex-row gap-2 flex-wrap">
                 {slots.sort((a, b) => a.spell_level - b.spell_level).map((spellslot: SpellSlotWithoutCharacterID, index: number) => {
                     return (
-                        <li key={index} className={"w-max border-2 border-black rounded px-1.5 py-1.5 grow" + ((spellslot.casts_remaining / spellslot.total_casts) > 0 ? " bg-mainAccent" : " bg-main/20")}>
+                        <li key={index} className={"w-max border-2 border-black rounded-sm px-1.5 py-1.5 grow" + ((spellslot.casts_remaining / spellslot.total_casts) > 0 ? " bg-main-accent" : " bg-main/20")}>
                             <div className="text-lg text-text text-center border-b-2 border-black pb-1.5 z-10">
                                 {(spellslot.spell_level === 0 ? "Ability" : createRomanNumeralSpan(spellslot.spell_level))} {" ("}
                                 <OnLeaveInput initialValue={spellslot.total_casts.toString()} placeholder="Total"

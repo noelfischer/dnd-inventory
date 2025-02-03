@@ -44,7 +44,7 @@ type TCardState =
 const idle: TCardState = { type: 'idle' };
 
 const innerStyles: { [Key in TCardState['type']]?: string } = {
-  idle: 'hover:outline outline-2 outline-neutral-50',
+  idle: 'hover:outline hover:outline-2 outline-neutral-50',
   'is-dragging': 'opacity-40',
 };
 
@@ -58,7 +58,7 @@ const outerStyles: { [Key in TCardState['type']]?: string } = {
 };
 
 export function CardShadow({ dragging }: { dragging: DOMRect }) {
-  return <div className="col-span-5 rounded bg-dark-purple-950" style={{ height: 32 }} />;
+  return <div className="col-span-5 rounded-sm bg-dark-purple-950" style={{ height: 32 }} />;
 }
 
 export function CardDisplay({

@@ -213,9 +213,9 @@ export function Column({ column }: { column: TColumn }) {
   }, [column, settings]);
 
   return (
-    <div className="flex w-full flex-shrink-0 select-none flex-col" ref={outerFullHeightRef}>
+    <div className="flex w-full shrink-0 select-none flex-col" ref={outerFullHeightRef}>
       <div
-        className={`flex max-h-full flex-col rounded bg-dark-purple-830 text-neutral-50 ${stateStyles[state.type]}`}
+        className={`flex max-h-full flex-col rounded-sm bg-dark-purple-830 text-neutral-50 ${stateStyles[state.type]}`}
         ref={innerRef}
         {...{ [blockBoardPanningAttr]: true }}
       >
@@ -227,7 +227,7 @@ export function Column({ column }: { column: TColumn }) {
             <div className="font-bold leading-4">{column.title}</div>
           </div>
           <div
-            className="grid grid-cols-5 py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:theme(colors.slate.600)_theme(colors.slate.700)] [scrollbar-width:thin]"
+            className="grid grid-cols-5 py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:var(--color-slate-600)_var(--color-slate-700)] [scrollbar-width:thin]"
             ref={scrollableRef}
           >
             {column.header()}

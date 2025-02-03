@@ -102,12 +102,12 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
 
       <div className="ml-auto flex flex-wrap md:flex-nowrap items-start gap-2 h-min flex-row-reverse">
         {editMode ?
-          <Button className='min-w-[160px] flex justify-between bg-mainAccent' disabled={isPendingUpdateLayout} onClick={save}>
+          <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={isPendingUpdateLayout} onClick={save}>
             {isPendingUpdateLayout && <span className="animate-spin mr-2"><LoaderCircle /></span>}
             Save <PanelsLeftBottom />
           </Button>
           :
-          <Button className='min-w-[160px] flex justify-between bg-mainAccent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
+          <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
         }
         <AddElement addableElements={addableElements} addElementHandler={addElementHandlerCustom} disabled={isPendingUpdateLayout} />
       </div>

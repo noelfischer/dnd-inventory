@@ -67,7 +67,7 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                     </div>
                     <DialogFooter className='sm:justify-between'>
                         <Button type='button' className='mt-4 sm:mt-0' onPointerDown={() => setPointHasDown(true)} onClick={handleDelete}>Delete</Button>
-                        <Button type='submit' className='bg-mainAccent'>Update</Button>
+                        <Button type='submit' className='bg-main-accent'>Update</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

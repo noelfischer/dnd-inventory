@@ -9,7 +9,7 @@ export default function Page() {
       <ToggleDarkMode singleBackground />
       <div className="flex h-[76px] bg-main" />
       <div className="flex grow flex-col md:flex-row h-full">
-        <div className="flex flex-col justify-center gap-6 md:min-w-96 px-12 pt-10 pb-16 md:pb-32 md:w-2/5 md:px-20 md:bg-bg md:dark:bg-darkElevatedBg">
+        <div className="flex flex-col justify-center gap-6 md:min-w-96 px-12 pt-10 pb-16 md:pb-32 md:w-2/5 md:px-20 md:bg-bg md:dark:bg-dark-elevated-bg">
           <p className={`text-xl md:text-3xl md:leading-normal`}>
             <strong>D&D Inventory</strong>. Keep track of everything.
           </p>
@@ -23,9 +23,9 @@ export default function Page() {
           </Link>
 
           <div className="flex items-center w-full px-8" style={{ marginTop: "-3px", marginBottom: "-5px" }}>
-            <div className="flex-grow border-[1.5px] border-black dark:border-white"></div>
+            <div className="grow border-[1.5px] border-black dark:border-white"></div>
             <span className="mx-4 text-lg font-semibold">or</span>
-            <div className="flex-grow border-[1.5px] border-black dark:border-white"></div>
+            <div className="grow border-[1.5px] border-black dark:border-white"></div>
           </div>
 
           <Link

@@ -103,7 +103,7 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
                 preventCollision={false}
             >
                 {componentList.map((component: Component) => (
-                    <div key={component.i} className="border-2 border-black dark:border-black bg-bg dark:bg-darkElevatedBg shadow-light dark:shadow-dark">
+                    <div key={component.i} className="border-2 border-black dark:border-black bg-bg dark:bg-dark-elevated-bg shadow-light dark:shadow-dark">
                         <div className={(editMode ? "edit-shown" : "edit-hidden")}>
                             <div className="remove" onClick={() => { removeElement(component.i) }} onTouchEnd={() => removeElement(component.i)} onMouseEnter={() => setDeleteHover(true)} onMouseLeave={() => setDeleteHover(false)}>
                                 <X className="h-7 -mr-[3px] -mt-[5px]" strokeWidth={3} />

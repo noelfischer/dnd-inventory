@@ -33,7 +33,7 @@ export default function Textarea({
     return (
         <textarea
             className={cn(
-                'w-full h-[150px] bg-white dark:bg-darkBg resize-none rounded-base border-2 border-border dark:border-darkBorder p-[10px] font-base ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none',
+                'w-full h-[150px] bg-white dark:bg-dark-bg resize-none rounded-base border-2 border-border dark:border-dark-border p-[10px] font-base ring-offset-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-hidden',
                 className,
             )}
             placeholder={placeholder}

@@ -42,7 +42,7 @@ export default function Input({
     return (
         <input
             className={cn(
-                'w-full rounded-base bg-white dark:bg-darkBg border-2 border-border dark:border-darkBorder p-[10px] font-base ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none',
+                'w-full rounded-base bg-white dark:bg-dark-bg border-2 border-border dark:border-dark-border p-[10px] font-base ring-offset-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-hidden',
                 className,
             )}
             type={type}

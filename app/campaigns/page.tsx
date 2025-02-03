@@ -27,7 +27,7 @@ export default async function Page() {
         {campaigns.map((campaign: Campaign) => {
           return (
             <li key={campaign.campaign_id} className="mb-5">
-              <div className="flex gap-2 items-center rounded-lg border-2 border-black py-2 px-3 justify-between bg-bg dark:bg-darkElevatedBg">
+              <div className="flex gap-2 items-center rounded-lg border-2 border-black py-2 px-3 justify-between bg-bg dark:bg-dark-elevated-bg">
 
                 <Link className="unset w-full text-lg" href={`/campaigns/${campaign.campaign_id}`}>
                   {campaign.name}

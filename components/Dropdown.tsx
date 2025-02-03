@@ -45,14 +45,14 @@ export default function Dropdown({
       </Button>
       <div
         role="listbox"
-        className="absolute z-10 left-0 w-auto group-data-[state=open]:top-[43px] group-data-[state=open]:opacity-100 group-data-[state=closed]:invisible group-data-[state=closed]:top-[50px] group-data-[state=closed]:opacity-0 group-data-[state=open]:visible rounded-base border-2 border-border dark:border-darkBorder text-center font-base shadow-light dark:shadow-dark transition-all"
+        className="absolute z-10 left-0 w-auto group-data-[state=open]:top-[43px] group-data-[state=open]:opacity-100 group-data-[state=closed]:invisible group-data-[state=closed]:top-[50px] group-data-[state=closed]:opacity-0 group-data-[state=open]:visible rounded-base border-2 border-border dark:border-dark-border text-center font-base shadow-light dark:shadow-dark transition-all"
       >
         {items.map((item, index) => {
           return (
             <a
               key={index}
               href={item.link}
-              className="block w-full border-b-2 border-border dark:border-darkBorder bg-main px-7 py-2 no-underline first:rounded-t-base last:rounded-b-base hover:bg-mainAccent"
+              className="block w-full border-b-2 border-border dark:border-dark-border bg-main px-7 py-2 no-underline first:rounded-t-base last:rounded-b-base hover:bg-main-accent"
             >
               {item.name}
             </a>

@@ -31,7 +31,8 @@ import {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const uID = await fetchUID();
-  const campaignID = params.id;
+  const { id } = await params;
+  const campaignID = id;
   const campaign: Campaign = await fetchCampaign(campaignID);
   const dashboards: Dashboard[] = await fetchDashboardsByCampaign(campaignID);
   if (!campaign) {

@@ -4,12 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { GripVertical, Sparkles } from 'lucide-react';
 import NewItem from './NewItem';
 import EditItem from './EditItem';
-import { resetServerContext } from 'react-beautiful-dnd';
 import OnLeaveInput from '../helper/OnLeaveInput';
 import { InventoryItem } from '@prisma/client';
 import { createInventoryItem, formatInitialItemstoTableData, HandleRef, Item, Props, removeItemFromInventory, updateInventoryItem } from './helper';
 import { selectIcon } from './HelperComponents';
-import DraggableTables2 from './DraggableTables2';
+import DraggableTables from './DraggableTables';
 
 const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, updateItem, deleteItem, updateIndex, updateBackpackCapacity }: Props) => {
 
@@ -90,11 +89,9 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
         return null;
     };
 
-    resetServerContext();
-
     return (
         <div>
-            <DraggableTables2
+            <DraggableTables
                 tables={tables}
                 setTables={setTables}
                 updateIndex={updateIndex}

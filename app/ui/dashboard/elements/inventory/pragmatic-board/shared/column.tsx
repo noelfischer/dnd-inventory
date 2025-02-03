@@ -227,7 +227,7 @@ export function Column({ column }: { column: TColumn }) {
             <div className="font-bold leading-4">{column.title}</div>
           </div>
           <div
-            className="grid grid-cols-5 py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:var(--color-slate-600)_var(--color-slate-700)] [scrollbar-width:thin]"
+            className="grid auto-cols-auto py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:var(--color-slate-600)_var(--color-slate-700)] [scrollbar-width:thin]"
             ref={scrollableRef}
           >
             {column.header()}

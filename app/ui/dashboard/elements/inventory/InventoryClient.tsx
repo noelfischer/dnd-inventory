@@ -51,9 +51,9 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
     const headerContent = () => {
         return (
             <>
-                <div className="w-[180px] px-3 col-span-2 sm:col-span-1">Name</div>
-                <div className='hidden sm:table-cell'>Description</div>
-                <div>Weight</div>
+                <div className="px-3 col-span-2 sm:col-span-1">Name</div>
+                <div className='hidden sm:table-cell mr-3'>Description</div>
+                <div className='mr-3'>Weight</div>
                 <div>Quantity</div>
                 <div className="text-right px-3">Actions</div>
             </>
@@ -63,10 +63,10 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
     const renderRow = (row: InventoryItem, index: number) => {
         const rowContent = (ref: HandleRef) => (
             <>
-                <div className="whitespace-nowrap font-base flex gap-2 items-center col-span-2 sm:col-span-1">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles className='-ml-2 pb-2 text-main' />}</div>
+                <div className="whitespace-nowrap font-base flex gap-2 items-center col-span-2 sm:col-span-1 mr-3">{selectIcon(row.category)} {row.item_name} {row.magic && <Sparkles className='-ml-2 pb-2 text-main' />}</div>
                 <div className="hidden sm:table-cell">{row.description}</div>
                 <div>{row.weight} lb.</div>
-                <div className='sm:mr-32'>{row.quantity}</div>
+                <div className='sm:mr-12'>{row.quantity}</div>
                 <div id={index.toString()} className='flex flex-row-reverse items-center'>
                     <div ref={ref} className='cursor-grab'>
                         <GripVertical />

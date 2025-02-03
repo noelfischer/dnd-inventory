@@ -49,7 +49,7 @@ export default function DropdownCampaignCharacterOptions({ duplicateCharacterByI
         <Link className="flex gap-2 w-full border-b-2 border-border dark:border-dark-border bg-main px-7 py-2 no-underline first:rounded-t-base last:rounded-b-base hover:bg-main-accent"
           href={`/campaigns/${campaign_id}/${character_id}/move`}
         >
-          <Package className="w-5 h6" /> Move campaign
+          <Package className="w-5 h6" /> Change Campaign
         </Link>
       </div>
     </div>

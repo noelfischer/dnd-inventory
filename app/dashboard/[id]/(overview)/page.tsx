@@ -35,7 +35,8 @@ export type Component = {
   type: ReactNode;
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const dashboardID = params.id;
   const uID = await fetchUID();
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const characterName = character ? character.name : "Party";
   const campaignID = await fetchCampaignIDByDashboard(dashboardID);
   const navLinks: NavLink[] = await fetchNavLinksByDashboard(dashboardID);
-  const ableToDeleteDashboard = await fetchDashboardNumber(campaignID, characterID) > 1;
+  const ableToDeleteDashboard = (await fetchDashboardNumber(campaignID, characterID)) > 1;
   const isDM = await checkDMStatus(campaignID, uID);
   let characters = [];
   if (isDM) {

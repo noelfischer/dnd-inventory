@@ -12,7 +12,8 @@ import {
 import Button from "@/components/Button";
 import { Trash2 } from "lucide-react";
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
     const uID = await fetchUID();
     const campaignID = params.id;
     const campaign = await fetchCampaign(campaignID);
@@ -46,12 +47,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                             <div className="flex gap-2 items-center rounded-lg py-2 px-3 justify-between h-16 mb-3 bg-bg dark:bg-dark-elevated-bg border-2 border-black shadow-light dark:shadow-dark">
                                 {user.User.username} {uID === user.user_id && '(You)'}
                                 {uID !== user.user_id &&
-                                    <form action={deleteUserById}>
-                                        <Button type="submit">
-                                            <span className="sr-only">Delete</span>
-                                            <Trash2 className="h-5 w-5" />
-                                        </Button>
-                                    </form>
+                                    <Button onClick={deleteUserById} className="w-auto">
+                                        <span className="sr-only">Delete</span>
+                                        <Trash2 className="h-5 w-5" />
+                                    </Button>
                                 }
                             </div>
                         </li>

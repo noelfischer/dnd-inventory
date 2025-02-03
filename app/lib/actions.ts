@@ -218,7 +218,7 @@ export async function addUserToCampaign(campaign_id: string, password: string) {
   redirect(`/campaigns/${campaign_id}`);
 }
 
-export async function deleteCampaignUser(campaign_user_id: string, campaignId: string) {
+export async function deleteCampaignUser(campaign_user_id: string, campaignId: string): Promise<void | { message: string }> {
   try {
     await prisma.campaignUser.delete({ where: { campaign_user_id } });
   } catch (e) {
@@ -292,7 +292,7 @@ export async function deleteCharacter(character_id: string, campaign_id: string)
 }
 
 // move character to another campaign
-export async function moveCharacter(character_id: string, campaign_id: string, formData: FormData) {
+export async function moveCharacter(character_id: string, campaign_id: string, formData: FormData): Promise<void> {
   const newCampaignId: string = z.string().parse(formData.get('new_campaign_id'));
 
   if (newCampaignId === campaign_id) {
@@ -312,7 +312,7 @@ export async function moveCharacter(character_id: string, campaign_id: string, f
     ]);
   } catch (e) {
     console.error('Failed to move character:', e, "Input: \n", "Character ID: ", character_id, "\n", "Campaign ID: ", campaign_id, "\n", "New Campaign ID: ", newCampaignId);
-    return { message: 'Database Error: Failed to Move Character.' };
+    return;
   }
   revalidatePath(`/campaigns/${campaign_id}`);
   revalidatePath(`/campaigns/${newCampaignId}`);
@@ -413,7 +413,7 @@ export async function updateDashboardLayout(dashboard_id: string, layout: any) {
 
 
 
-    let dashboardElements : DashboardElement[] = [];
+    let dashboardElements: DashboardElement[] = [];
     for (const breakpoint in layout) {
       if (layout.hasOwnProperty(breakpoint)) {
         for (const element of layout[breakpoint]) {
@@ -435,11 +435,11 @@ export async function updateDashboardLayout(dashboard_id: string, layout: any) {
               dashboard_id,
               character_id,
               element_type,
-              x_lg: 0,y_lg: 0,w_lg: 1,h_lg: 1,
-              x_md: null,y_md: null,w_md: null,h_md: null,
-              x_sm: null,y_sm: null,w_sm: null,h_sm: null,
-              x_xs: null,y_xs: null,w_xs: null,h_xs: null,
-              x_xxs: null,y_xxs: null,w_xxs: null,h_xxs: null,
+              x_lg: 0, y_lg: 0, w_lg: 1, h_lg: 1,
+              x_md: null, y_md: null, w_md: null, h_md: null,
+              x_sm: null, y_sm: null, w_sm: null, h_sm: null,
+              x_xs: null, y_xs: null, w_xs: null, h_xs: null,
+              x_xxs: null, y_xxs: null, w_xxs: null, h_xxs: null,
             };
             dashboardElements.push(dashboardElement);
           }

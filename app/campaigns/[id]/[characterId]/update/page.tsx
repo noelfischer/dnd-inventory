@@ -17,7 +17,8 @@ import {
 import { getClasses } from '@/app/lib/utils';
 import { Campaign } from '@prisma/client';
 
-export default async function Page({ params }: { params: { id: string, characterId: string } }) {
+export default async function Page(props: { params: Promise<{ id: string, characterId: string }> }) {
+  const params = await props.params;
   const campaignID = params.id;
   const characterID = params.characterId;
   const user_id = await fetchUID();

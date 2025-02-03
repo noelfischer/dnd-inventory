@@ -4,7 +4,8 @@ import Button from '@/components/Button';
 import { Dices } from 'lucide-react';
 
 
-export default async function Page({ params }: { params: { id: string, password: string } }) {
+export default async function Page(props: { params: Promise<{ id: string, password: string }> }) {
+  const params = await props.params;
   const campaignID = params.id;
   const pw = params.password;
 
@@ -22,12 +23,10 @@ export default async function Page({ params }: { params: { id: string, password:
         </h1>
         <p>{campaign.description || "descriptionless campaign"}</p>
         <p className="mb-8">DM: {dmname}</p>
-        <form action={addUserToCampaignWithId}>
-          <Button type='submit' className='text-lg w-auto'>
-            Join
-            <Dices className='ml-3' />
-          </Button>
-        </form>
+        <Button className='text-lg w-auto' onClick={addUserToCampaignWithId}>
+          Join
+          <Dices className='ml-3' />
+        </Button>
       </div>
     </div>
   );

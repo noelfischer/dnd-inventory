@@ -14,7 +14,8 @@ import Button from '@/components/Button';
 import { Package } from 'lucide-react';
 import { FormItemSelect } from '@/app/ui/campaigns/CustomForm';
 
-export default async function Page({ params }: { params: { id: string, characterId: string } }) {
+export default async function Page(props: { params: Promise<{ id: string, characterId: string }> }) {
+    const params = await props.params;
     const campaignID = params.id;
     const characterID = params.characterId;
 

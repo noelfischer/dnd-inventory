@@ -14,7 +14,8 @@ import Button from '@/components/Button';
 import { Trash2 } from 'lucide-react';
 import { Campaign } from '@prisma/client';
 
-export default async function Page({ params }: { params: { id: string, characterId: string } }) {
+export default async function Page(props: { params: Promise<{ id: string, characterId: string }> }) {
+  const params = await props.params;
   const campaignID = params.id;
   const characterID = params.characterId;
 
@@ -47,13 +48,10 @@ export default async function Page({ params }: { params: { id: string, character
       <p>{character.description}</p>
       <p>HP: {character.current_hit_points} / {character.max_hit_points}</p>
       <p>{character.race}</p>
-
-      <form action={deleteCharacterById}>
-        <Button type="submit" className='mt-7 w-auto'>
-          <Trash2 className="w-4 mr-3" />
-          <span>Delete</span>
-        </Button>
-      </form>
+      <Button className='mt-7 w-auto' onClick={deleteCharacterById}>
+        <Trash2 className="w-4 mr-3" />
+        <span>Delete</span>
+      </Button>
     </main>
   );
 }

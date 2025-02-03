@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/breadcrumb"
 import { getClasses } from '@/app/lib/utils';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const campaignID = params.id;
   const campaign = await fetchCampaign(campaignID);
   const user_id = await fetchUID();

@@ -14,7 +14,8 @@ import {
 import { Trash2 } from 'lucide-react';
 import { Campaign } from '@prisma/client';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const campaignID = params.id;
 
   const campaign: Campaign = await fetchCampaign(campaignID);
@@ -37,15 +38,13 @@ export default async function Page({ params }: { params: { id: string } }) {
       </Breadcrumb>
       <h1 className="text-text text-2xl mb-6 bg-red-500 banner font-semibold">
         Delete Campaign
-        </h1>
+      </h1>
       <h2>Name: {campaign.name}</h2>
       <p>Description: {campaign.description}</p>
-      <form action={deleteCampaignWithId}>
-          <Button type="submit" className='mt-7 bg-red-500 w-auto'>
-            <Trash2 className="w-5 mr-3" />
-            <span>Delete</span>
-          </Button>
-      </form>
+      <Button className='mt-7 bg-red-500 w-auto' onClick={deleteCampaignWithId}>
+        <Trash2 className="w-5 mr-3" />
+        <span>Delete</span>
+      </Button>
     </main>
   );
 }

@@ -18,7 +18,8 @@ import { Campaign } from '@prisma/client';
 
 
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const campaignID = params.id;
 
   const campaign: Campaign = await fetchCampaign(campaignID);

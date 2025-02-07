@@ -1,5 +1,5 @@
-import { deleteCampaign } from '@/app/lib/actions';
-import { fetchCampaign } from '@/app/lib/data';
+import { deleteCampaign } from '@/lib/actions';
+import { fetchCampaign } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Button from "@/components/Button"
 

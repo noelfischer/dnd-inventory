@@ -1,17 +1,20 @@
 'use server';
 
-import { auth } from '@/auth';
-import { NavLink } from '../ui/dashboard/navigation/NavigationWide';
+import { auth } from '@/lib/auth';
+import { NavLink } from '../app/ui/dashboard/navigation/NavigationWide';
 
 import { Campaign, CampaignUser, Character, Currency, Dashboard, DashboardElement, InventoryItem, PrismaClient, User } from '@prisma/client'
 import { DashboardWithCharacterType, SimpleCharacter } from './definitions';
+import { redirect } from 'next/navigation';
 
 const prisma = new PrismaClient()
 
 
 export async function getEmailFromSession(): Promise<string> {
   const data = await auth();
-  const res = data!.user!.email;
+  if (!data) redirect("/login");
+
+  const res = data.user!.email;
   if (!res) throw new Error('No email in session');
   return res;
 }

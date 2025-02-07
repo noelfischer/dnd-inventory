@@ -1,6 +1,8 @@
 'use client';
 
 import Button, { LinkButton } from '@/components/Button';
+import { logOut } from '@/lib/actions';
+import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -36,6 +38,13 @@ export default function Error({
                     </Link>
 
                 </span>
+                or
+                <form action={logOut}>
+                    <Button className="w-full sm:w-48" type="submit">
+                        Logout
+                        <LogOut className="w-6 h-6 ml-3" />
+                    </Button>
+                </form>
             </div>
         </main>
     );

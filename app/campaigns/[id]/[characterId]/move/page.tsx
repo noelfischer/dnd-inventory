@@ -1,5 +1,5 @@
-import { moveCharacter } from '@/app/lib/actions';
-import { fetchCampaigns, fetchCharacter, fetchUID } from '@/app/lib/data';
+import { moveCharacter } from '@/lib/actions';
+import { fetchCampaigns, fetchCharacter, fetchUID } from '@/lib/data';
 import { notFound } from 'next/navigation';
 
 import {

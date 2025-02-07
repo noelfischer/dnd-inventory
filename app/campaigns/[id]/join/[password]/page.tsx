@@ -1,5 +1,5 @@
-import { addUserToCampaign } from '@/app/lib/actions';
-import { fetchCampaign, fetchUsername } from '@/app/lib/data';
+import { addUserToCampaign } from '@/lib/actions';
+import { fetchCampaign, fetchUsername } from '@/lib/data';
 import Button from '@/components/Button';
 import { Dices } from 'lucide-react';
 

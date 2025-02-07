@@ -1,5 +1,5 @@
-import { updateCharacter } from '@/app/lib/actions';
-import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign, fetchUID } from '@/app/lib/data';
+import { updateCharacter } from '@/lib/actions';
+import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign, fetchUID } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Button from '@/components/Button';
 import { Form, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
@@ -14,7 +14,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { getClasses } from '@/app/lib/utils';
+import { getClasses } from '@/lib/utils';
 import { Campaign } from '@prisma/client';
 
 export default async function Page(props: { params: Promise<{ id: string, characterId: string }> }) {

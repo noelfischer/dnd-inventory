@@ -1,6 +1,6 @@
 'use server'
 
-import { getClasses } from '@/app/lib/utils';
+import { getClasses } from '@/lib/utils';
 import { PrismaClient } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import NameAndLevelClient from './NameAndLevelClient';

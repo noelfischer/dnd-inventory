@@ -1,5 +1,5 @@
-import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardElementsByDashboard, fetchDashboardNumber, fetchNavLinksByDashboard, fetchUID } from '@/app/lib/data';
-import { SimpleCharacter } from '../../../lib/definitions';
+import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardElementsByDashboard, fetchDashboardNumber, fetchNavLinksByDashboard, fetchUID } from '@/lib/data';
+import { SimpleCharacter } from '../../../../lib/definitions';
 import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
 import { ReactNode } from 'react';
@@ -7,7 +7,7 @@ import HealthBarServer from '@/app/ui/dashboard/elements/healthbar/HealthBarServ
 import Abilities from '@/app/ui/dashboard/elements/Abilities';
 import Conditions from '@/app/ui/dashboard/elements/Conditions';
 import Notes from '@/app/ui/dashboard/elements/Notes';
-import { checkDMStatus, createCharacterDashboard, createDashboardElement, deleteDashboardByDashboardID, updateDashboardLayout } from '@/app/lib/actions';
+import { checkDMStatus, createCharacterDashboard, createDashboardElement, deleteDashboardByDashboardID, updateDashboardLayout } from '@/lib/actions';
 import { Layouts } from 'react-grid-layout';
 import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
 import { keyValuePair } from '@/app/ui/campaigns/CustomForm';

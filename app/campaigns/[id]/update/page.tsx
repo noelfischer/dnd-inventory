@@ -1,5 +1,5 @@
-import { updateCampaign } from '@/app/lib/actions';
-import { fetchCampaign } from '@/app/lib/data';
+import { updateCampaign } from '@/lib/actions';
+import { fetchCampaign } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Form, FormItemInput, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
 import { ShieldPlus } from 'lucide-react';

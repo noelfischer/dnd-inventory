@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react';
-import { authenticate } from '@/app/lib/actions';
+import { authenticate } from '@/lib/actions';
 import Button from '@/components/Button';
 import { ArrowRight, AtSign, CircleAlert, KeyRound, LoaderCircle } from 'lucide-react';
 import { FormItemInput } from '../ui/campaigns/CustomForm';

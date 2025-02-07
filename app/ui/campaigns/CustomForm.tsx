@@ -10,7 +10,7 @@ import {
     SelectLabel,
     SelectGroup,
 } from "@/components/ui/select"
-import { cn } from "@/lib/utils"
+import { cn, keyValuePair } from "@/lib/utils"
 import { X } from "lucide-react"
 import Link from "next/link"
 
@@ -66,10 +66,6 @@ export const FormItemTextArea = ({ name, label, maxLength = 300, minLength = 0, 
     )
 }
 
-export type keyValuePair = {
-    key: string,
-    value: string
-}
 
 export const FormItemSelect = ({ name, label, options, defaultValue = "", visible = true, className, classNameLabel, classNameSelect, classNameSelectContent }: {
     name: string, label: string, options: keyValuePair[], defaultValue?: string, visible?: boolean, className?: string, classNameLabel?: string, classNameSelect?: string, classNameSelectContent?: string

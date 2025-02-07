@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, fetchUID } from "../../lib/data";
-import { SimpleCharacter } from "../../lib/definitions";
+import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, fetchUID } from "../../../lib/data";
+import { SimpleCharacter } from "../../../lib/definitions";
 import { notFound } from "next/navigation";
-import { checkDMStatus, duplicateCharacter } from "@/app/lib/actions";
+import { duplicateCharacter } from "@/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
-import Button, { LinkButton } from "@/components/Button"
+import { LinkButton } from "@/components/Button"
 import DropdownCampaignCharacterOptions from "@/app/ui/campaigns/DropdownCampaignCharacterOptions";
 import { Campaign, Dashboard } from "@prisma/client";
 

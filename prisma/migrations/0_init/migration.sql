@@ -73,7 +73,6 @@ CREATE TABLE "InventoryItem" (
     "slot" VARCHAR(10) NOT NULL,
     "item_name" VARCHAR(50) NOT NULL,
     "description" VARCHAR(200) NOT NULL,
-    "ability" VARCHAR(200) NOT NULL,
     "weight" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "category" VARCHAR(50) NOT NULL,
     "magic" BOOLEAN NOT NULL DEFAULT false,

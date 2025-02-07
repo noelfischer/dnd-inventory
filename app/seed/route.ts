@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
 import { db } from '@vercel/postgres';
-import { users, campaigns, characters, campaignUsers, inventory, currency, spellSlots, dashboards, dashboardElements, characterInfos } from '../lib/placeholder-data';
+import { users, campaigns, characters, campaignUsers, inventory, currency, spellSlots, dashboards, dashboardElements, characterInfos } from '../../lib/placeholder-data';
+import { saltAndHashPassword } from '@/lib/utils';
 const client = await db.connect();
 
 async function seedUsers() {
@@ -16,7 +16,7 @@ async function seedUsers() {
 
   const insertedUsers = await Promise.all(
     users.map(async (user) => {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
+      const hashedPassword = await saltAndHashPassword(user.password);
       return client.sql`
         INSERT INTO Users (user_id, username, password_hash, email)
         VALUES (${user.id}, ${user.username}, ${hashedPassword}, ${user.email})

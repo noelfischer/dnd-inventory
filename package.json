@@ -24,7 +24,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4.0.3",
     "@vercel/postgres": "^0.10.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "bind-event-listener": "^3.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

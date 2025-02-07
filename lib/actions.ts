@@ -3,12 +3,12 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { nanoid } from 'nanoid';
-import bcrypt from 'bcrypt';
 
-import { signIn, signOut } from '@/auth';
+import { signIn, signOut } from '@/lib/auth';
 import { AuthError } from 'next-auth';
 import { fetchCampaign, fetchDashboardNumber, fetchUID } from './data';
-import { Character, DashboardElement, PrismaClient } from '@prisma/client';
+import { DashboardElement, PrismaClient } from '@prisma/client';
+import { saltAndHashPassword } from './utils';
 
 const prisma = new PrismaClient()
 
@@ -56,7 +56,7 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
-    const user = await signIn('credentials', formData);
+    const user = await signIn('credentials', { email: formData.get("email"), password: formData.get("password"), redirectTo: '/campaigns', redirect: true });
     console.log('User:', user);
   } catch (error) {
     if (error instanceof AuthError) {
@@ -72,7 +72,7 @@ export async function authenticate(
 }
 
 export async function logOut() {
-  await signOut();
+  await signOut({ redirectTo: '/login' });
   revalidatePath('/campaigns');
   redirect('/login');
 
@@ -91,16 +91,23 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
 }
 
 export async function createUser(email: string, password: string, username: string) {
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await saltAndHashPassword(password);
   const userID = nanoid(10);
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) {
     console.error("Failed to create user:", "User already exists", "Input: \n", "Email: ", email, "\n", "Username: ", username);
     throw new Error("Failed to create user.");
   }
-  return await prisma.user.create({
-    data: { user_id: userID, username, password_hash: passwordHash, email },
-  });
+  const [user] = await prisma.$transaction([
+    prisma.user.create({
+      data: { user_id: userID, username, email },
+    }),
+    prisma.credential.create({
+      data: { user_id: userID, password_hash: passwordHash },
+    }),
+  ]);
+
+  return user;
 }
 
 export async function deleteUser(email: string) {

@@ -1,5 +1,5 @@
-import { createCharacter } from '@/app/lib/actions';
-import { fetchCampaign, fetchUID } from '@/app/lib/data';
+import { createCharacter } from '@/lib/actions';
+import { fetchCampaign, fetchUID } from '@/lib/data';
 import { Form, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';
 import { Link } from 'lucide-react';
 import Button from '@/components/Button';
@@ -13,7 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { getClasses } from '@/app/lib/utils';
+import { getClasses } from '@/lib/utils';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

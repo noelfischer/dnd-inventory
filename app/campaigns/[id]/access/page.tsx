@@ -1,5 +1,5 @@
-import { deleteCampaignUser } from "@/app/lib/actions";
-import { fetchCampaign, fetchCampaignUsers, fetchUID } from "@/app/lib/data";
+import { deleteCampaignUser } from "@/lib/actions";
+import { fetchCampaign, fetchCampaignUsers, fetchUID } from "@/lib/data";
 
 import {
     Breadcrumb,

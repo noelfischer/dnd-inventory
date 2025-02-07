@@ -1,5 +1,5 @@
-import { deleteCharacter } from '@/app/lib/actions';
-import { fetchCampaign, fetchCharacter } from '@/app/lib/data';
+import { deleteCharacter } from '@/lib/actions';
+import { fetchCampaign, fetchCharacter } from '@/lib/data';
 import { notFound } from 'next/navigation';
 
 import {

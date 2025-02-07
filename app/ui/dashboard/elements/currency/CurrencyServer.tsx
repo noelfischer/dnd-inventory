@@ -1,9 +1,7 @@
 'use server'
 
-import { PrismaClient } from '@prisma/client';
 import CurrencyClient from './CurrencyClient';
-
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma';
 
 const CurrencyServer = async ({ character_id }: { character_id: string }) => {
     const currency = await prisma.currency.findFirst({ where: { character_id } });

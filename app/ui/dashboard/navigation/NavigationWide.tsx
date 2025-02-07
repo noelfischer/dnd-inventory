@@ -8,7 +8,7 @@ import "./styles.css"
 import { useMemo, useState } from "react"
 import { Layouts } from "react-grid-layout"
 import AddElement, { AddableElement } from "./AddElement"
-import { keyValuePair } from "../../campaigns/CustomForm"
+import { keyValuePair } from "@/lib/utils"
 
 type LinkText = {
   name: string

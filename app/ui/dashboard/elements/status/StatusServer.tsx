@@ -2,10 +2,7 @@
 
 import React from 'react';
 import StatusClient from './StatusClient';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 const StatusServer = async ({ character_id }: { character_id: string }) => {
     const character = await prisma.character.findFirst({

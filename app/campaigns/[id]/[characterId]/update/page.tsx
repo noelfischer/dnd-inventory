@@ -1,5 +1,5 @@
 import { updateCharacter } from '@/lib/actions';
-import { fetchCampaign, fetchCharacter, fetchUsername, fetchUsersByCampaign, fetchUID } from '@/lib/data';
+import { fetchCampaign, fetchCharacter, fetchUsersByCampaign, fetchUID } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Button from '@/components/Button';
 import { Form, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm';

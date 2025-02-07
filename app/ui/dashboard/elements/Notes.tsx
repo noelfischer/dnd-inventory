@@ -1,12 +1,8 @@
 'use server'
 
-
-import { PrismaClient } from '@prisma/client';
 import OnLeaveTextArea from './helper/OnLeaveTextArea';
 import { ScrollText } from 'lucide-react';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 const Notes = async ({ character_id }: { character_id: string }) => {
     const characterInfo = await prisma.characterInfo.findFirst({ where: { character_id }, select: { notes: true } });

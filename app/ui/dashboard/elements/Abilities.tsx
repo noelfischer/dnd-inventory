@@ -1,10 +1,9 @@
 'use server'
 
-import { PrismaClient } from '@prisma/client';
 import OnLeaveTextArea from './helper/OnLeaveTextArea';
 import { BookUp2 } from 'lucide-react';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient()
 
 const Abilities = async ({ character_id }: { character_id: string }) => {
     const characterInfo = await prisma.characterInfo.findFirst({ where: { character_id }, select: { abilities: true } });

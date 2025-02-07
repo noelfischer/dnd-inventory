@@ -1,9 +1,9 @@
 'use server';
 
-import { PrismaClient, SpellSlot } from "@prisma/client";
+import { SpellSlot } from "@prisma/client";
 import { nanoid } from "nanoid";
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient()
 export type SpellSlotWithoutCharacterID = Omit<SpellSlot, 'character_id'>;
 
 

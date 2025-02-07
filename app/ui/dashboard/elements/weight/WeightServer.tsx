@@ -1,10 +1,7 @@
 'use server'
 
-import { PrismaClient } from '@prisma/client';
 import WeightClient from './WeightClient';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 const WeightServer = async ({ character_id }: { character_id: string }) => {
 
@@ -15,7 +12,7 @@ const WeightServer = async ({ character_id }: { character_id: string }) => {
         where: { character_id: character_id },
         select: { weight: true, quantity: true },
     });
-    
+
     const inventoryWeight = inventoryItems.reduce((sum, item) => sum + item.weight * item.quantity, 0);
 
 

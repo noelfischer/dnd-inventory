@@ -1,11 +1,9 @@
 'use server'
 
-import { InventoryItem, PrismaClient } from '@prisma/client';
+import { InventoryItem } from '@prisma/client';
 import InventoryClient from './InventoryClient';
 import { nanoid } from 'nanoid';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 const InventoryServer = async ({ character_id }: { character_id: string }) => {
     const items: InventoryItem[] = await prisma.inventoryItem.findMany({ where: { character_id }, orderBy: { i: 'asc' } });

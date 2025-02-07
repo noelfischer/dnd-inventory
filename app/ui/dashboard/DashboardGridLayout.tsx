@@ -7,7 +7,7 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
 import { NavigationWide, NavLink } from "./navigation/NavigationWide";
 import { X } from "lucide-react";
-import { keyValuePair } from "../campaigns/CustomForm";
+import { keyValuePair } from "@/lib/utils";
 
 type Props = {
     initialLayout: Layouts,

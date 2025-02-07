@@ -10,7 +10,6 @@ import Notes from '@/app/ui/dashboard/elements/Notes';
 import { checkDMStatus, createCharacterDashboard, createDashboardElement, deleteDashboardByDashboardID, updateDashboardLayout } from '@/lib/actions';
 import { Layouts } from 'react-grid-layout';
 import { NavLink } from '@/app/ui/dashboard/navigation/NavigationWide';
-import { keyValuePair } from '@/app/ui/campaigns/CustomForm';
 import SpellSlotsServer from '@/app/ui/dashboard/elements/spellslots/SpellSlotsServer';
 import InventoryServer from '@/app/ui/dashboard/elements/inventory/InventoryServer';
 import WeightServer from '@/app/ui/dashboard/elements/weight/WeightServer';
@@ -21,6 +20,7 @@ import StatusServer from '@/app/ui/dashboard/elements/status/StatusServer';
 import LevelupServer from '@/app/ui/dashboard/elements/levelup/LevelupServer';
 import { DashboardElement } from '@prisma/client';
 import NameAndLevelServer from '@/app/ui/dashboard/elements/nameAndLevel/NameAndLevelServer';
+import { keyValuePair } from '@/lib/utils';
 
 export type GridElement = {
   i: string;

@@ -13,7 +13,6 @@ import {
 import { useState } from "react";
 import { SpellSlotWithoutCharacterID } from "../spellslots/helper";
 import { LevelUpCharacter } from "./LevelupServer";
-import { LoaderCircle } from "lucide-react";
 import OnLeaveInput from "../helper/OnLeaveInput";
 
 const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpCharacter, spellSlots: SpellSlotWithoutCharacterID[], levelup: (character: LevelUpCharacter, spell_slots: SpellSlotWithoutCharacterID[]) => Promise<void> }) => {

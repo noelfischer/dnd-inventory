@@ -2,10 +2,7 @@
 
 import { notFound } from 'next/navigation';
 import HealthBarClient from './HealthBarClient';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 const HealthBarServer = async ({ character_id }: { character_id: string }) => {
     const character = await prisma.character.findFirst({ where: { character_id }, select: { max_hit_points: true, current_hit_points: true, temp_hit_points: true } });

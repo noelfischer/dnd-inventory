@@ -1,12 +1,9 @@
 'use server'
 
 import { getClasses } from '@/lib/utils';
-import { PrismaClient } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import NameAndLevelClient from './NameAndLevelClient';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 const NameAndLevelServer = async ({ character_id }: { character_id: string }) => {
 
@@ -18,7 +15,7 @@ const NameAndLevelServer = async ({ character_id }: { character_id: string }) =>
     const cclass = getClasses('en').find(c => c.key === character.cclass)?.value || '';
 
     return (
-       <NameAndLevelClient name={character.name} cclass={cclass} il={character.level} />
+        <NameAndLevelClient name={character.name} cclass={cclass} il={character.level} />
     );
 };
 

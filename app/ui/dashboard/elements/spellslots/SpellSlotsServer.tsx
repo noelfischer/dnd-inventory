@@ -1,7 +1,6 @@
 'use server'
 
 import SpellSlotsClient from "./SpellSlotsClient";
-import { SpellSlot } from "@prisma/client";
 import { getSpellSlots, SpellSlotWithoutCharacterID, updateRemainingCasts, updateTotalCasts } from "./helper";
 
 

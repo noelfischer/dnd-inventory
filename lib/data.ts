@@ -3,12 +3,10 @@
 import { auth } from '@/lib/auth';
 import { NavLink } from '../app/ui/dashboard/navigation/NavigationWide';
 
-import { Campaign, CampaignUser, Character, Currency, Dashboard, DashboardElement, InventoryItem, PrismaClient, User } from '@prisma/client'
+import { Campaign, Character, Currency, Dashboard, DashboardElement, InventoryItem } from '@prisma/client'
 import { DashboardWithCharacterType, SimpleCharacter } from './definitions';
 import { redirect } from 'next/navigation';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 export async function getEmailFromSession(): Promise<string> {
   const data = await auth();

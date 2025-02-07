@@ -1,10 +1,7 @@
 import React from 'react';
 import LevelupClient from './LevelupClient';
-import { PrismaClient } from '@prisma/client';
 import { getSpellSlots, SpellSlotWithoutCharacterID, updateSpellSlots } from '../spellslots/helper';
-
-
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma';
 
 export type LevelUpCharacter = {
     max_hit_points: number,

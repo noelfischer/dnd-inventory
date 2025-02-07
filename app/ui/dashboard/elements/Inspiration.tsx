@@ -1,10 +1,9 @@
 'use server'
 
-import { PrismaClient } from "@prisma/client";
 import OnLeaveInput from "./helper/OnLeaveInput";
 import { Dices } from "lucide-react";
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient()
 
 const Inspiration = async ({ character_id }: { character_id: string }) => {
     const character = await prisma.character.findFirst({ where: { character_id }, select: { inspiration: true } });

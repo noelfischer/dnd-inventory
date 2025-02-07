@@ -1,10 +1,8 @@
 'use server'
 
-import { PrismaClient } from '@prisma/client';
 import OnLeaveTextArea from './helper/OnLeaveTextArea';
 import { SunSnow } from 'lucide-react';
-
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma';
 
 
 const Conditions = async ({ character_id }: { character_id: string }) => {

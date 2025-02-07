@@ -7,11 +7,9 @@ import { nanoid } from 'nanoid';
 import { signIn, signOut } from '@/lib/auth';
 import { AuthError } from 'next-auth';
 import { fetchCampaign, fetchDashboardNumber, fetchUID } from './data';
-import { DashboardElement, PrismaClient } from '@prisma/client';
+import { DashboardElement } from '@prisma/client';
 import { saltAndHashPassword } from './utils';
-
-const prisma = new PrismaClient()
-
+import { prisma } from '@/lib/prisma';
 
 const FormSchema = z.object({
   dmId: z.string(),

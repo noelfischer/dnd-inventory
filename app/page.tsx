@@ -22,14 +22,6 @@ export default function Page() {
               <span>Log in</span> <ArrowRight className="w-5 md:w-6" />
             </LinkButton>
           </Link>
-          <form
-            action={async () => {
-              "use server";
-              await signIn("google", { redirectTo: "/campaigns", redirect: true });
-            }}
-          >
-            <button type="submit">Login with Google</button>
-          </form>
 
           <div className="flex items-center w-full px-8" style={{ marginTop: "-3px", marginBottom: "-5px" }}>
             <div className="grow border-[1.5px] border-black dark:border-white"></div>

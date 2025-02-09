@@ -42,7 +42,8 @@ export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defa
                 {label}
             </label>
             <div className="relative">
-                <Input type={type} min={min} max={max} defaultValue={(type === "number" && defaultValue === "") ? 0 : defaultValue} placeholder={placeholder ? placeholder : name.replaceAll("_", " ")} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0} autofocus={autofocus} className={Icon ? "pl-10" : ""} />
+                <Input type={type} min={min} max={max} defaultValue={(type === "number" && defaultValue === "") ? 0 : defaultValue} placeholder={placeholder ? placeholder : name.replaceAll("_", " ")} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0} autofocus={autofocus}
+                    className={cn("placeholder:text-gray-400 dark:placeholder:text-gray-500", Icon ? "pl-10" : "")} />
                 {Icon && <Icon className="absolute left-3 top-1/2 text-gray-500 peer-focus:text-gray-500 h-[18px] w-[18px] -translate-y-1/2" />}
             </div>
         </div>

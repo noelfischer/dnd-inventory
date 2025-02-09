@@ -69,6 +69,10 @@ export async function authenticate(
   }
 }
 
+export async function loginGoogle() {
+  await signIn("google", { redirectTo: "/campaigns", redirect: true });
+}
+
 export async function logOut() {
   await signOut({ redirectTo: '/login' });
   revalidatePath('/campaigns');

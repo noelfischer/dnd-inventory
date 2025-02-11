@@ -38,8 +38,6 @@ const characters = [
     species: 'Human',
     cclass: 'za',
     level: 5,
-    background: 'Noble',
-    alignment: 'Lawful Good',
     portrait_url: 'https://i.etsystatic.com/6126662/r/il/f58966/715792094/il_570xN.715792094_4jxo.jpg',
     strength: 18,
     dexterity: 16,

@@ -36,8 +36,6 @@ const CharacterSchema = z.object({
   species: z.string(),
   cclass: z.string(),
   level: z.preprocess(parseNumber, z.number()),
-  background: z.string(),
-  alignment: z.string(),
   portrait_url: z.string(),
   strength: z.preprocess(parseNumber, z.number()),
   dexterity: z.preprocess(parseNumber, z.number()),
@@ -243,7 +241,7 @@ export async function createCharacter(campaign_id: string, formData: FormData) {
   const uID = await fetchUID();
   let data = {
     character_id: nanoid(10), campaign_id, load_capacity: 0, ...CharacterSchema.parse({
-      user_id: uID, name: formData.get('name'), description: formData.get('description'), character_type: formData.get('character_type'), species: formData.get('species'), cclass: formData.get('cclass'), level: formData.get('level'), background: formData.get('background'), alignment: formData.get('alignment'), portrait_url: formData.get('portrait_url'), strength: formData.get('strength'), dexterity: formData.get('dexterity'), constitution: formData.get('constitution'), intelligence: formData.get('intelligence'), wisdom: formData.get('wisdom'), charisma: formData.get('charisma'), max_hit_points: formData.get('max_hit_points'), armor_class: formData.get('armor_class'),
+      user_id: uID, name: formData.get('name'), description: formData.get('description'), character_type: formData.get('character_type'), species: formData.get('species'), cclass: formData.get('cclass'), level: formData.get('level'), portrait_url: formData.get('portrait_url'), strength: formData.get('strength'), dexterity: formData.get('dexterity'), constitution: formData.get('constitution'), intelligence: formData.get('intelligence'), wisdom: formData.get('wisdom'), charisma: formData.get('charisma'), max_hit_points: formData.get('max_hit_points'), armor_class: formData.get('armor_class'),
     })
   };
   data.load_capacity = 15 * data.strength;
@@ -270,7 +268,7 @@ export async function createCharacter(campaign_id: string, formData: FormData) {
 export async function updateCharacter(character_id: string, campaign_id: string, formData: FormData) {
   let data = {
     character_id: character_id, campaign_id, load_capacity: 0, ...CharacterSchema.parse({
-      name: formData.get('name'), description: formData.get('description'), character_type: formData.get('character_type'), species: formData.get('species'), cclass: formData.get('cclass'), level: formData.get('level'), background: formData.get('background'), alignment: formData.get('alignment'), portrait_url: formData.get('portrait_url'), strength: formData.get('strength'), dexterity: formData.get('dexterity'), constitution: formData.get('constitution'), intelligence: formData.get('intelligence'), wisdom: formData.get('wisdom'), charisma: formData.get('charisma'), max_hit_points: formData.get('max_hit_points'), armor_class: formData.get('armor_class'),
+      user_id: formData.get('user_id'), name: formData.get('name'), description: formData.get('description'), character_type: formData.get('character_type'), species: formData.get('species'), cclass: formData.get('cclass'), level: formData.get('level'), portrait_url: formData.get('portrait_url'), strength: formData.get('strength'), dexterity: formData.get('dexterity'), constitution: formData.get('constitution'), intelligence: formData.get('intelligence'), wisdom: formData.get('wisdom'), charisma: formData.get('charisma'), max_hit_points: formData.get('max_hit_points'), armor_class: formData.get('armor_class'),
     })
   };
   data.load_capacity = 15 * data.strength;

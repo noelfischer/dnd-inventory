@@ -2,9 +2,12 @@ import { LinkButton } from '@/components/Button';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import ToggleDarkMode from './ui/darkmode-toggle';
-import { signIn } from '../lib/auth';
+import { auth } from '@/lib/auth';
 
-export default function Page() {
+export default async function Page() {
+  const data = await auth();
+  const isNotAuthenticated = !data;
+
   return (
     <main className="flex min-h-screen flex-col max-h-screen overflow-y-hidden">
       <ToggleDarkMode singleBackground />
@@ -14,29 +17,39 @@ export default function Page() {
           <p className={`text-xl md:text-3xl md:leading-normal`}>
             <strong>D&D Inventory</strong>. Keep track of everything.
           </p>
-          <Link
-            href="/login"
-            className="unset"
-          >
-            <LinkButton>
-              <span>Log in</span> <ArrowRight className="w-5 md:w-6" />
-            </LinkButton>
-          </Link>
+          {isNotAuthenticated ?
+            <><Link
+              href="/login"
+              className="unset"
+            >
+              <LinkButton>
+                <span>Log in</span> <ArrowRight className="w-5 md:w-6" />
+              </LinkButton>
+            </Link>
 
-          <div className="flex items-center w-full px-8" style={{ marginTop: "-3px", marginBottom: "-5px" }}>
-            <div className="grow border-[1.5px] border-black dark:border-white"></div>
-            <span className="mx-4 text-lg font-semibold">or</span>
-            <div className="grow border-[1.5px] border-black dark:border-white"></div>
-          </div>
+              <div className="flex items-center w-full px-8" style={{ marginTop: "-3px", marginBottom: "-5px" }}>
+                <div className="grow border-[1.5px] border-black dark:border-white"></div>
+                <span className="mx-4 text-lg font-semibold">or</span>
+                <div className="grow border-[1.5px] border-black dark:border-white"></div>
+              </div>
 
-          <Link
-            href="/signup"
-            className="unset"
-          >
-            <LinkButton>
-              <span>Create Account</span> <ArrowRight className="w-5 md:w-6" />
-            </LinkButton>
-          </Link>
+              <Link
+                href="/signup"
+                className="unset"
+              >
+                <LinkButton>
+                  <span>Create Account</span> <ArrowRight className="w-5 md:w-6" />
+                </LinkButton>
+              </Link>
+            </> :
+            <Link
+              href="/campaigns"
+              className="unset mt-4"
+            >
+              <LinkButton>
+                <span>Go to Campaigns</span> <ArrowRight className="w-5 md:w-6" />
+              </LinkButton>
+            </Link>}
         </div>
         <div className="flex items-center justify-center w-full max-h-full">
           {/*<Image src="/landingBackground.jpg" width={1400} height={500} alt="Hero Image" className="landing-page-image inset-0 object-cover"/>*/}

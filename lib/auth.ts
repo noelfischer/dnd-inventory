@@ -6,7 +6,6 @@ import { getUserFromDb, validatePassword } from "./utils"
 import Google from "next-auth/providers/google";
 import { prisma } from './prisma';
 import { nanoid } from 'nanoid';
-import { redirect } from "next/navigation"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {

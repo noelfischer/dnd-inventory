@@ -4,7 +4,7 @@ import { SimpleCharacter } from "../../../lib/definitions";
 import { notFound } from "next/navigation";
 import { duplicateCharacter } from "@/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
-import { ChevronRight, ShieldCheck, Trash2, Pencil, BookCopy, DiamondPlus } from "lucide-react";
+import { ChevronRight, ShieldCheck, Trash2, Pencil, SquarePlus } from "lucide-react";
 import { LinkButton } from "@/components/Button"
 import DropdownCampaignCharacterOptions from "@/app/ui/campaigns/DropdownCampaignCharacterOptions";
 import { Campaign, Dashboard } from "@prisma/client";
@@ -84,7 +84,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <Link className="new-character unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/create-character`}>
           <LinkButton>
             Create a new Character
-            <DiamondPlus className="w-6 mr-1" />
+            <SquarePlus className="w-6 mr-1" />
           </LinkButton>
         </Link>
         {isDM &&

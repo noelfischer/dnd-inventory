@@ -35,7 +35,7 @@ const characters = [
     name: 'Aragorn',
     description: 'Son of Arathorn, heir to the throne of Gondor.',
     character_type: 'Player',
-    race: 'Human',
+    species: 'Human',
     cclass: 'za',
     level: 5,
     background: 'Noble',

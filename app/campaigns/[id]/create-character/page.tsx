@@ -41,24 +41,27 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <FormItemInput className='col-span-4' name="name" label="Choose a character name" minLength={2} />
-            <FormItemTextArea className='col-span-4' name="description" label="Choose a character description" />
-            <FormItemInput className='col-span-4' name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} maxLength={255} />
+            <FormItemTextArea className='col-span-4' classNameTextArea='h-28' name="description" label="Description" placeholder='Choose a character description' />
+            <FormItemInput className='col-span-4' name="portrait_url" label="Portrait URL" type="url" Icon={Link} maxLength={255} />
             {isDM ?
-              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' /> :
-              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' />}
-            <FormItemInput className='col-span-2' name="race" label="Choose your race" minLength={2} />
-            <FormItemSelect className='col-span-2' name="cclass" classNameLabel='text-text' label="Choose your class" options={getClasses('en')} />
-            <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue='1' />
-            <FormItemInput className='col-span-2' placeholder='Noble' name="background" label="Choose your background" maxLength={100} />
-            <FormItemInput className='col-span-2' placeholder='Lawful Good' name="alignment" label="Choose your alignment" />
-            <FormItemInput name="strength" label="Enter your strength (0-20)" type="number" />
-            <FormItemInput name="dexterity" label="Enter your dexterity" type="number" />
-            <FormItemInput name="constitution" label="Enter your constitution" type="number" />
-            <FormItemInput name="intelligence" label="Enter your intelligence" type="number" />
-            <FormItemInput name="wisdom" label="Enter your wisdom" type="number" />
-            <FormItemInput name="charisma" label="Enter your charisma" type="number" />
-            <FormItemInput name="max_hit_points" label="Enter your max hit points" type="number" max={9999} />
-            <FormItemInput name="armor_class" label="Enter your armor class" type="number" max={50} />
+              <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label="Character Type" classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' /> :
+              <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label="Character Type" classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue='Player' />}
+            <FormItemSelect className='col-span-2 sm:col-span-1' name="cclass" classNameLabel='text-text' classNameSelect='h-12' label="Class" options={getClasses('en')} defaultValue="ar" />
+            <FormItemInput className='col-span-4 sm:col-span-2' name="species" label="Species" placeholder='Human' minLength={2} />
+            <div className='col-span-4 sm:col-span-2 grid grid-cols-2 items-center gap-4'>
+              <FormItemInput className='col-span-2' name="level" label="Level" type="number" defaultValue='1' />
+              <FormItemInput className='col-span-2' name="max_hit_points" label="Max hit points" type="number" max={9999} />
+              <FormItemInput className='col-span-2' name="armor_class" label="Armor class" type="number" max={50} />
+            </div>
+            <div className='col-span-4 sm:col-span-2 grid grid-cols-2 items-center gap-4'>
+              <FormItemInput className='sm:col-span-1' name="strength" label="Strength (0-20)" type="number" />
+              <FormItemInput className='sm:col-span-1' name="dexterity" label="Dexterity" type="number" />
+              <FormItemInput className='sm:col-span-1' name="constitution" label="Constitution" type="number" />
+              <FormItemInput className='sm:col-span-1' name="intelligence" label="Intelligence" type="number" />
+              <FormItemInput className='sm:col-span-1' name="wisdom" label="Wisdom" type="number" />
+              <FormItemInput className='sm:col-span-1' name="charisma" label="Charisma" type="number" />
+            </div>
+
           </div>
         </div>
         <Button type="submit" className="w-auto">Create Character</Button>

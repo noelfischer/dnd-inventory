@@ -47,7 +47,7 @@ export default async function Page(props: { params: Promise<{ id: string, charac
       <p>{character.character_type}</p>
       <p>{character.description}</p>
       <p>HP: {character.current_hit_points} / {character.max_hit_points}</p>
-      <p>{character.race}</p>
+      <p>{character.species}</p>
       <Button className='mt-7 w-auto' onClick={deleteCharacterById}>
         <Trash2 className="w-4 mr-3" />
         <span>Delete</span>

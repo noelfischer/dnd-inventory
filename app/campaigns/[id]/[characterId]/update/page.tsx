@@ -55,27 +55,29 @@ export default async function Page(props: { params: Promise<{ id: string, charac
         <h1 className="text-2xl text-text">Create Character</h1>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <FormItemInput className={isDM ? 'col-span-2' : 'col-span-4'} name="name" label="Choose a character name" minLength={2} defaultValue={character.name} />
-            <FormItemSelect className='col-span-2' name="user_id" label="Choose the character owner" defaultValue={character.user_id} classNameLabel='text-text'
+            <FormItemInput className={isDM ? 'col-span-2' : 'col-span-4'} name="name" label="Character name" minLength={2} defaultValue={character.name} />
+            <FormItemSelect className='col-span-2' name="user_id" label="Character owner" defaultValue={character.user_id} classNameLabel='text-text'
               options={usersInCampaign.map(user => ({ key: user.user_id, value: user.User.username }))} visible={isDM} />
-            <FormItemTextArea className='col-span-4' name="description" label="Choose a character description" defaultValue={character.description || ''} />
-            <FormItemInput className='col-span-4' name="portrait_url" label="Enter a portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url || ''} maxLength={255} />
+            <FormItemTextArea className='col-span-4' classNameTextArea='h-28' name="description" label="Description" placeholder='Choose a character description' defaultValue={character.description || ''} />
+            <FormItemInput className='col-span-4' name="portrait_url" label="Portrait URL" type="url" Icon={Link} defaultValue={character.portrait_url || ''} maxLength={255} />
             {isDM ?
-              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} /> :
-              <FormItemSelect className='col-span-2' name="character_type" label="Select character type" classNameLabel='text-text' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} />}
-            <FormItemInput className='col-span-2' name="race" label='Choose your race' minLength={2} defaultValue={character.race || ''} />
-            <FormItemSelect className='col-span-2' name="cclass" label="Choose your class" classNameLabel='text-text' defaultValue={character.cclass} options={getClasses('en')} />
-            <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />
-            <FormItemInput className='col-span-2' name="background" label="Choose your background" defaultValue={character.background || ''} maxLength={100} />
-            <FormItemInput className='col-span-2' name="alignment" label="Choose your alignment" defaultValue={character.alignment || ''} />
-            <FormItemInput name="strength" label="Enter your strength (0-20)" type="number" defaultValue={character.strength.toString()} />
-            <FormItemInput name="dexterity" label="Enter your dexterity" type="number" defaultValue={character.dexterity.toString()} />
-            <FormItemInput name="constitution" label="Enter your constitution" type="number" defaultValue={character.constitution.toString()} />
-            <FormItemInput name="intelligence" label="Enter your intelligence" type="number" defaultValue={character.intelligence.toString()} />
-            <FormItemInput name="wisdom" label="Enter your wisdom" type="number" defaultValue={character.wisdom.toString()} />
-            <FormItemInput name="charisma" label="Enter your charisma" type="number" defaultValue={character.charisma.toString()} />
-            <FormItemInput name="max_hit_points" label="Enter your max hit points" type="number" max={9999} defaultValue={character.max_hit_points.toString()} />
-            <FormItemInput name="armor_class" label="Enter your armor class" type="number" max={50} defaultValue={character.armor_class.toString()} />
+              <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label="Type" classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} /> :
+              <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label="Type" classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} />}
+            <FormItemSelect className='col-span-2 sm:col-span-1' name="cclass" label="Class" classNameLabel='text-text' classNameSelect='h-12' defaultValue={character.cclass} options={getClasses('en')} />
+            <FormItemInput className='col-span-4 sm:col-span-2' name="species" label="Species" placeholder='Human' minLength={2} defaultValue={character.species || ''} />
+            <div className='col-span-4 sm:col-span-2 grid grid-cols-2 items-center gap-4'>
+              <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />
+              <FormItemInput className='col-span-2' name="max_hit_points" label="Max hit points" type="number" max={9999} defaultValue={character.max_hit_points.toString()} />
+              <FormItemInput className='col-span-2' name="armor_class" label="Armor class" type="number" max={50} defaultValue={character.armor_class.toString()} />
+            </div>
+            <div className='col-span-4 sm:col-span-2 grid grid-cols-2 items-center gap-4'>
+              <FormItemInput className='col-span-1' name="strength" label="Strength (0-20)" type="number" defaultValue={character.strength.toString()} />
+              <FormItemInput className='col-span-1' name="dexterity" label="Dexterity" type="number" defaultValue={character.dexterity.toString()} />
+              <FormItemInput className='col-span-1' name="constitution" label="Constitution" type="number" defaultValue={character.constitution.toString()} />
+              <FormItemInput className='col-span-1' name="intelligence" label="Intelligence" type="number" defaultValue={character.intelligence.toString()} />
+              <FormItemInput className='col-span-1' name="wisdom" label="Wisdom" type="number" defaultValue={character.wisdom.toString()} />
+              <FormItemInput className='col-span-1' name="charisma" label="Charisma" type="number" defaultValue={character.charisma.toString()} />
+            </div>
           </div>
         </div>
         <Button type="submit" className="w-auto">Update Character</Button>

@@ -32,7 +32,7 @@ model Credential {
 
 // Auth.js model (https://authjs.dev/getting-started/adapters/prisma)
 model Account {
-  accountId         String @id
+  accountId         String   @id
   userId            String
   type              String
   provider          String
@@ -61,11 +61,9 @@ model Character {
   name               String             @db.VarChar(100)
   description        String?            @db.VarChar(200)
   character_type     String             @db.VarChar(50)
-  race               String?            @db.VarChar(50)
-  cclass             String             @default("bb") @db.Char(2)
+  species            String?            @db.VarChar(50)
+  cclass             String             @default("ar") @db.Char(2)
   level              Int                @default(1)
-  background         String?            @db.VarChar(100)
-  alignment          String?            @db.VarChar(50)
   portrait_url       String?            @db.VarChar(500)
   strength           Int                @default(0)
   dexterity          Int                @default(0)

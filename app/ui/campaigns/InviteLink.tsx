@@ -19,7 +19,7 @@ export default function InviteLink({ link }: { link: string }) {
 
     return (
         <div className="my-5">
-            <Button className={"w-full sm:max-w-80" + (showLink ? " hidden" : "")} onClick={() => setShowLink(true)}>
+            <Button className={"invite-link w-full sm:max-w-80" + (showLink ? " hidden" : "")} onClick={() => setShowLink(true)}>
                 Invite People to Campaign
                 <Dices className="w-6" />
             </Button>

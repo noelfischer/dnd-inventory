@@ -28,8 +28,8 @@ export default function Page() {
       <Form action={createCampaign} close='/campaigns'>
         <h1 className="text-text text-2xl mb-6">Create Campaign</h1>
         <FormItemInput name="name" label="Choose a campaign name" minLength={2} />
-        <FormItemTextArea name="description" label="Choose a campaign description" />
-        <FormItemInput name="password" label="Choose a campaign access password" Icon={ShieldPlus} />
+        <FormItemTextArea name="description" label="Choose a campaign description (optional)" />
+        <FormItemInput name="password" label="Choose a campaign access password (optional)" Icon={ShieldPlus} />
         <Button type="submit" className="w-auto">Create Campaign</Button>
       </Form>
 

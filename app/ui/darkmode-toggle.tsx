@@ -23,7 +23,7 @@ const ToggleDarkMode = ({ singleBackground = false }: { singleBackground?: boole
 
     return (
         <div className="flex items-center space-x-2 absolute top-6 right-7">
-            <button id="dark-mode" onClick={setDarkmode} className={"w-7 h-7 rounded-full ease-out duration-100 " + (isSpinning ? 'animate-spin-once' : '') + (singleBackground ? ' text-text' : '')}>
+            <button id="dark-mode" onClick={setDarkmode} className={"dark-mode w-7 h-7 rounded-full ease-out duration-100 cursor-pointer " + (isSpinning ? 'animate-spin-once' : '') + (singleBackground ? ' text-text' : '')}>
                 <MoonStar className={"absolute top-0 w-7 h-7 py-0.5 ease-out duration-100" + (currentTheme === "dark" ? " opacity-100" : " opacity-0")} />
                 <Sun className={"absolute top-0 w-7 h-7 ease-out duration-100" + (currentTheme === "light" ? " opacity-100" : " opacity-0")} />
             </button>

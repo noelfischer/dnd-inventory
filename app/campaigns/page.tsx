@@ -5,6 +5,7 @@ import Button, { LinkButton } from "@/components/Button"
 import { ArrowRight, Dices, LogOut, Milestone, PencilLine, Trash2 } from "lucide-react";
 import { logOut } from "../../lib/actions";
 import { Campaign } from "@prisma/client";
+import Tour from "./Tour";
 
 
 export default async function Page() {
@@ -13,11 +14,14 @@ export default async function Page() {
   const campaigns = await fetchCampaigns(uID);
   return (
     <main>
+      {campaigns.length === 0 &&
+        <Tour name={username} />
+      }
       <div className="flex gap-2 text-zinc-700 dark:text-zinc-300">
         {(username && username.length > 0) &&
           <>
             <Milestone />
-            <p className="mb-6 font-semibold ">Logged in as {username}</p>
+            <p className="mb-6 font-semibold username">Logged in as {username}</p>
           </>
         }
       </div>
@@ -58,7 +62,7 @@ export default async function Page() {
       </ul>
       <div className="flex gap-3 items-center flex-wrap">
         <Link className="unset w-full sm:w-80" href={"/campaigns/create"}>
-          <Button>
+          <Button className="new-campaign">
             Create a new Campaign
             <Dices className="w-6 h-6 ml-3" />
           </Button>

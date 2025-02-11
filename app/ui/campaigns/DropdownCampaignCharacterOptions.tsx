@@ -1,24 +1,26 @@
 'use client'
 
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { BookCopy, Ellipsis, Package } from 'lucide-react'
 import Link from 'next/link';
 
 import { useState } from 'react'
 
 type Props = {
+  className?: string,
   duplicateCharacterById: () => void,
   character_id: string,
   campaign_id: string,
 }
 
-export default function DropdownCampaignCharacterOptions({ duplicateCharacterById, character_id, campaign_id }: Props) {
+export default function DropdownCampaignCharacterOptions({ className, duplicateCharacterById, character_id, campaign_id }: Props) {
   const [isActiveDropdown, setIsActiveDropdown] = useState(false)
 
   return (
     <div
       data-state={isActiveDropdown ? 'open' : 'closed'}
-      className="relative group text-text"
+      className={cn("relative group text-text", className)}
     >
       <Button
         aria-haspopup="listbox"

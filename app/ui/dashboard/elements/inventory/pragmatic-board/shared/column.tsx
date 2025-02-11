@@ -47,7 +47,7 @@ type TColumnState =
 
 const stateStyles: { [Key in TColumnState['type']]: string } = {
   idle: '',
-  'is-card-over': 'outline outline-2 outline-neutral-50',
+  'is-card-over': 'outline outline-2 outline-black dark:outline-neutral-50',
   'is-dragging': 'opacity-40',
   'is-column-over': 'bg-dark-purple-900',
 };
@@ -215,7 +215,7 @@ export function Column({ column }: { column: TColumn }) {
   return (
     <div className="flex w-full shrink-0 select-none flex-col" ref={outerFullHeightRef}>
       <div
-        className={`flex max-h-full flex-col rounded-sm bg-dark-purple-830 text-neutral-50 ${stateStyles[state.type]}`}
+        className={`flex max-h-full flex-col rounded-sm bg-dark-purple-200 dark:bg-dark-purple-830 dark:text-neutral-50 ${stateStyles[state.type]}`}
         ref={innerRef}
         {...{ [blockBoardPanningAttr]: true }}
       >
@@ -227,7 +227,7 @@ export function Column({ column }: { column: TColumn }) {
             <div className="font-bold leading-4">{column.title}</div>
           </div>
           <div
-            className="grid auto-cols-auto py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:var(--color-slate-600)_var(--color-slate-700)] [scrollbar-width:thin]"
+            className="grid grid-cols-5 py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:var(--color-slate-600)_var(--color-slate-700)] [scrollbar-width:thin]"
             ref={scrollableRef}
           >
             {column.header()}

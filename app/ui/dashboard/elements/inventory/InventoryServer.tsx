@@ -70,7 +70,7 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
     }
 
     return (
-        <div className="inventory -z-50">
+        <div className="inventory -z-50 bg-white/80 dark:bg-dark-bg h-full">
             <InventoryClient initialItems={items} initialBackpackCapacity={backpackCapacity} createItem={createItem} updateItem={updateItem} deleteItem={deleteItem} updateIndex={updateIndex} updateBackpackCapacity={updateBackpackCapacity} />
         </div>
     );

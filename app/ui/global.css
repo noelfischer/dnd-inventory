@@ -7,7 +7,7 @@
   --color-main-accent: #9e66ff;
   --color-secondary: #7d66ff;
   --color-overlay: rgba(0, 0, 0, 0.8);
-  --color-bg: #e3dff2;
+  --color-bg: #f0eef8;
   --color-text: #000;
   --color-border: #000;
   --color-dark-bg: #1d1f27;
@@ -16,18 +16,18 @@
   --color-dark-border: #000;
 
   --color-dark-purple-50: #ffffff;
-  --color-dark-purple-100: #e9e9ea;
-  --color-dark-purple-200: #d4d4d6;
-  --color-dark-purple-300: #bebfc1;
-  --color-dark-purple-400: #a9a9ad;
-  --color-dark-purple-500: #949498;
-  --color-dark-purple-600: #7e7f84;
-  --color-dark-purple-700: #69696f;
-  --color-dark-purple-800: #53545a;
-  --color-dark-purple-830: #47474d;
-  --color-dark-purple-860: #3c3c42;
-  --color-dark-purple-900: #292a32;
-  --color-dark-purple-950: #1d1f27;
+  --color-dark-purple-100: #f0eef8;
+  --color-dark-purple-200: #d8d6df;
+  --color-dark-purple-300: #c0bec6;
+  --color-dark-purple-400: #a8a6ad;
+  --color-dark-purple-500: #908e94;
+  --color-dark-purple-600: #78777c;
+  --color-dark-purple-700: #605f63;
+  --color-dark-purple-800: #565559;
+  --color-dark-purple-830: #383a3f;
+  --color-dark-purple-860: #33353c;
+  --color-dark-purple-900: #282a30;
+  --color-dark-purple-950: #181718;
 
   --radius-base: 5px;
 
@@ -60,8 +60,8 @@
 
 body {
   scroll-behavior: smooth;
-  background-image: linear-gradient(to right, rgba(75, 75, 75, 0.075) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(75, 75, 75, 0.075) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(75, 75, 75, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(75, 75, 75, 0.1) 1px, transparent 1px);
   background-size: 25px 25px;
   /* Adjust size for larger or smaller squares */
 }
@@ -90,7 +90,7 @@ body {
 }
 
 .banner {
-  margin-inline: -28px; 
+  margin-inline: -28px;
   padding-inline: 28px;
   border-block-color: black;
   border-block-width: 4px;

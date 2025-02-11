@@ -44,7 +44,7 @@ type TCardState =
 const idle: TCardState = { type: 'idle' };
 
 const innerStyles: { [Key in TCardState['type']]?: string } = {
-  idle: 'hover:outline hover:outline-2 outline-neutral-50',
+  idle: 'hover:outline hover:outline-2 outline-black dark:outline-neutral-50',
   'is-dragging': 'opacity-40',
 };
 
@@ -58,7 +58,7 @@ const outerStyles: { [Key in TCardState['type']]?: string } = {
 };
 
 export function CardShadow({ dragging }: { dragging: DOMRect }) {
-  return <div className="col-span-5 rounded-sm bg-dark-purple-950" style={{ height: 32 }} />;
+  return <div className="col-span-5 rounded-sm bg-dark-purple-200 dark:bg-dark-purple-950" style={{ height: 32 }} />;
 }
 
 export function CardDisplay({
@@ -82,7 +82,7 @@ export function CardDisplay({
         <CardShadow dragging={state.dragging} />
       ) : null}
       <div
-        className={`grid grid-cols-subgrid col-span-5 bg-dark-purple-900 px-2 py-1 text-dark-purple-100 ${innerStyles[state.type]}`}
+        className={`grid grid-cols-subgrid col-span-5 bg-dark-purple-100  dark:bg-dark-purple-900 px-2 py-1 dark:text-dark-purple-100 ${innerStyles[state.type]}`}
 
         style={
           state.type === 'preview'

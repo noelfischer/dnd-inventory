@@ -93,3 +93,22 @@ export const formatDateToLocal = (
   return formatter.format(date);
 };
 
+
+
+export const downloadJSON = (jsonObject: any, fileName: string) => {
+  const blob = new Blob([JSON.stringify(jsonObject, null, 2)], {
+    type: 'application/json',
+  });
+  const url = URL.createObjectURL(blob);
+
+  // Create a temporary link element to simulate the download
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName || 'data.json';
+
+  // Trigger the download
+  a.click();
+
+  // Cleanup
+  URL.revokeObjectURL(url);
+};

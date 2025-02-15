@@ -64,7 +64,7 @@ export default async function Page(props: { params: Promise<{ id: string, charac
               <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label="Type" classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: "Player" }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: "Enemy" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} /> :
               <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label="Type" classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: "Player" }, { key: "Pet", value: "Pet" }]} defaultValue={character.character_type || ''} />}
             <FormItemSelect className='col-span-2 sm:col-span-1' name="cclass" label="Class" classNameLabel='text-text' classNameSelect='h-12' defaultValue={character.cclass} options={getClasses('en')} />
-            <FormItemInput className='col-span-4 sm:col-span-2' name="species" label="Species" placeholder='Human' minLength={2} defaultValue={character.species || ''} />
+            <FormItemInput className='col-span-4 sm:col-span-2' name="species" label="Species" placeholder='Human' defaultValue={character.species || ''} />
             <div className='col-span-4 sm:col-span-2 grid grid-cols-2 items-center gap-4'>
               <FormItemInput className='col-span-2' name="level" label="Choose your level" type="number" defaultValue={character.level.toString()} />
               <FormItemInput className='col-span-2' name="max_hit_points" label="Max hit points" type="number" max={9999} defaultValue={character.max_hit_points.toString()} />

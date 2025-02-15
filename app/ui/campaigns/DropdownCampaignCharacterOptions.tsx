@@ -1,8 +1,9 @@
 'use client'
 
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { BookCopy, Ellipsis, Package } from 'lucide-react'
+import { ExportCharacter } from '@/lib/definitions';
+import { cn, downloadJSON } from '@/lib/utils';
+import { BookCopy, Download, Ellipsis, Package } from 'lucide-react'
 import Link from 'next/link';
 
 import { useState } from 'react'
@@ -10,12 +11,18 @@ import { useState } from 'react'
 type Props = {
   className?: string,
   duplicateCharacterById: () => void,
+  exportCharacterById: () => Promise<ExportCharacter>,
   character_id: string,
   campaign_id: string,
 }
 
-export default function DropdownCampaignCharacterOptions({ className, duplicateCharacterById, character_id, campaign_id }: Props) {
+export default function DropdownCampaignCharacterOptions({ className, duplicateCharacterById, exportCharacterById, character_id, campaign_id }: Props) {
   const [isActiveDropdown, setIsActiveDropdown] = useState(false)
+
+  async function downloadCharacter() {
+    const character = await exportCharacterById();
+    downloadJSON(character, `${character.name}-character-dnd-inventory.json`);
+  }
 
   return (
     <div
@@ -53,6 +60,13 @@ export default function DropdownCampaignCharacterOptions({ className, duplicateC
         >
           <Package className="w-5 h6" /> Change Campaign
         </Link>
+        <form action={downloadCharacter}>
+          <button className="flex gap-2 w-full border-b-2 border-border dark:border-dark-border bg-main px-7 py-2 no-underline first:rounded-t-base last:rounded-b-base hover:bg-main-accent"
+            type='submit'
+          >
+            <Download className="w-5 h6" /> Download Character
+          </button>
+        </form>
       </div>
     </div>
   )

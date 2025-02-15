@@ -38,13 +38,16 @@ export default function Error({
                     </Link>
 
                 </span>
-                or
-                <form action={logOut}>
-                    <Button className="w-full sm:w-48" type="submit">
-                        Logout
-                        <LogOut className="w-6 h-6 ml-3" />
-                    </Button>
-                </form>
+                <span className="ml-4 flex items-center">
+                    or
+
+                    <form action={logOut} className='ml-4'>
+                        <Button className="w-full sm:w-48" type="submit">
+                            Logout
+                            <LogOut className="w-6 h-6 ml-3" />
+                        </Button>
+                    </form>
+                </span>
             </div>
         </main>
     );

@@ -36,8 +36,6 @@ const LevelupServer = async ({ character_id }: { character_id: string }) => {
 
     async function levelup(character: LevelUpCharacter, spellSlots: SpellSlotWithoutCharacterID[]) {
         'use server'
-        console.log(character);
-        console.log(spellSlots);
         const newLoadCapacity = 15 * character.strength;
         await prisma.character.update({
             where: { character_id: character_id },

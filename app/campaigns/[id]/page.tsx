@@ -2,7 +2,7 @@ import Link from "next/link";
 import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, fetchUID } from "../../../lib/data";
 import { SimpleCharacter } from "../../../lib/definitions";
 import { notFound } from "next/navigation";
-import { duplicateCharacter } from "@/lib/actions";
+import { duplicateCharacter, exportCharacter } from "@/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
 import { ChevronRight, ShieldCheck, Trash2, Pencil, SquarePlus } from "lucide-react";
 import { LinkButton } from "@/components/Button"
@@ -26,10 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import Tour1 from "./Tour1";
-import Tour2 from "./Tour2";
-
-
+import Tour from "./Tour";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -51,8 +48,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <main>
-      {isDM && characters.length === 0 && <Tour1 />}
-      {characters.length > 0 && <Tour2 />}
+      <Tour isDM={isDM} characterLength={characters.length} />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
@@ -126,6 +122,7 @@ const CharacterTypeGroup = ({ characters, campaign, uID, dashboards, type, typeS
 
 const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: SimpleCharacter, campaign: Campaign, uID: string, dashboardID: string }) => {
   const duplicateCharacterById = duplicateCharacter.bind(null, character.character_id, campaign.campaign_id, character.name);
+  const exportCharacterById = exportCharacter.bind(null, character.character_id);
 
   return (
     <Card key={character.character_id} className="w-full sm:max-w-[270px] overflow-visible">
@@ -164,6 +161,7 @@ const CharacterCard = ({ character, campaign, uID, dashboardID }: { character: S
           <DropdownCampaignCharacterOptions
             className="dropdown-character-options"
             duplicateCharacterById={duplicateCharacterById}
+            exportCharacterById={exportCharacterById}
             character_id={character.character_id}
             campaign_id={campaign.campaign_id} />
         </div>

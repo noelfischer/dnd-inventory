@@ -10,41 +10,13 @@ import { fetchCampaign, fetchDashboardNumber, fetchUID } from './data';
 import { DashboardElement } from '@prisma/client';
 import { saltAndHashPassword } from './utils';
 import { prisma } from '@/lib/prisma';
+import { CharacterSchema, ExportCharacterSchema } from './definitions';
 
 const FormSchema = z.object({
   dmId: z.string(),
   name: z.string(),
   description: z.string(),
   password: z.string().optional(),
-});
-
-const parseNumber = (val: any) => {
-  if (typeof val === 'string') {
-    if (val === '') return 0;
-    const parsed = parseInt(val);
-    if (isNaN(parsed)) throw new Error(`Invalid number: ${val}`);
-    return parsed;
-  }
-  return val;
-};
-
-const CharacterSchema = z.object({
-  user_id: z.string(),
-  name: z.string(),
-  description: z.string(),
-  character_type: z.string(),
-  species: z.string(),
-  cclass: z.string(),
-  level: z.preprocess(parseNumber, z.number()),
-  portrait_url: z.string(),
-  strength: z.preprocess(parseNumber, z.number()),
-  dexterity: z.preprocess(parseNumber, z.number()),
-  constitution: z.preprocess(parseNumber, z.number()),
-  intelligence: z.preprocess(parseNumber, z.number()),
-  wisdom: z.preprocess(parseNumber, z.number()),
-  charisma: z.preprocess(parseNumber, z.number()),
-  max_hit_points: z.preprocess(parseNumber, z.number()),
-  armor_class: z.preprocess(parseNumber, z.number()),
 });
 
 export async function authenticate(
@@ -360,6 +332,146 @@ export async function duplicateCharacter(character_id: string, campaign_id: stri
   } catch (e) {
     console.error('Failed to create character:', e, "Input: \n", "Character ID: ", character_id, "\n", "Campaign ID: ", campaign_id, "\n", "Name: ", name);
     return { message: 'Database Error: Failed to Create Character.' };
+  }
+  revalidatePath(`/campaigns/${campaign_id}`);
+  redirect(`/campaigns/${campaign_id}`);
+}
+
+export async function exportCharacter(character_id: string) {
+  const character = await prisma.character.findUnique({
+    where: { character_id },
+    include: {
+      InventoryItem: true,
+      Currency: true,
+      SpellSlot: true,
+      CharacterInfo: true,
+    }
+  });
+  if (!character) throw new Error('Character not found');
+  const exportCharacter = ExportCharacterSchema.parse({
+    name: character.name,
+    description: character.description,
+    character_type: character.character_type,
+    species: character.species || '',
+    cclass: character.cclass,
+    level: character.level,
+    portrait_url: character.portrait_url,
+    strength: character.strength,
+    dexterity: character.dexterity,
+    constitution: character.constitution,
+    intelligence: character.intelligence,
+    wisdom: character.wisdom,
+    charisma: character.charisma,
+    max_hit_points: character.max_hit_points,
+    armor_class: character.armor_class,
+    Inventory: character.InventoryItem.map((item) => {
+      return {
+        i: item.i,
+        slot: item.slot,
+        name: item.item_name,
+        description: item.description,
+        category: item.category,
+        weight: item.weight,
+        quantity: item.quantity,
+        magic: item.magic,
+      };
+    }),
+    Currency: {
+      platinum: character.Currency[0].platin,
+      gold: character.Currency[0].gold,
+      silver: character.Currency[0].silver,
+      copper: character.Currency[0].copper,
+    },
+    CharacterInfo: {
+      abilities: character.CharacterInfo[0].abilities || '',
+      conditions: character.CharacterInfo[0].conditions || '',
+      notes: character.CharacterInfo[0].notes || '',
+    },
+    SpellSlot: character.SpellSlot.map((slot) => {
+      return {
+        level: slot.spell_level,
+        total_casts: slot.total_casts,
+        casts_remaining: slot.casts_remaining,
+      };
+    })
+  });
+
+  return exportCharacter;
+}
+
+export async function importCharacter(campaign_id: string, formData: FormData) {
+  const uID = await fetchUID();
+  const importedCharacter = ExportCharacterSchema.parse(formData.get('character'));
+  console.log('Imported character:', importedCharacter);
+  try {
+    await prisma.character.create({
+      data: {
+        character_id: nanoid(10),
+        campaign_id,
+        user_id: uID,
+        name: importedCharacter.name,
+        description: importedCharacter.description,
+        character_type: importedCharacter.character_type,
+        species: importedCharacter.species,
+        cclass: importedCharacter.cclass,
+        level: importedCharacter.level,
+        portrait_url: importedCharacter.portrait_url,
+        strength: importedCharacter.strength,
+        dexterity: importedCharacter.dexterity,
+        constitution: importedCharacter.constitution,
+        intelligence: importedCharacter.intelligence,
+        wisdom: importedCharacter.wisdom,
+        charisma: importedCharacter.charisma,
+        max_hit_points: importedCharacter.max_hit_points,
+        armor_class: importedCharacter.armor_class,
+        Currency: {
+          create: {
+            currency_id: nanoid(10),
+            platin: importedCharacter.Currency.platinum,
+            gold: importedCharacter.Currency.gold,
+            silver: importedCharacter.Currency.silver,
+            copper: importedCharacter.Currency.copper,
+          }
+        },
+        CharacterInfo: {
+          create: {
+            character_info_id: nanoid(10),
+            abilities: importedCharacter.CharacterInfo.abilities,
+            conditions: importedCharacter.CharacterInfo.conditions,
+            notes: importedCharacter.CharacterInfo.notes,
+          }
+        },
+        InventoryItem: {
+          create: importedCharacter.Inventory.map((item) => {
+            return {
+              item_id: nanoid(10),
+              i: item.i,
+              slot: item.slot,
+              item_name: item.name,
+              description: item.description,
+              category: item.category,
+              weight: item.weight,
+              quantity: item.quantity,
+              magic: item.magic,
+            };
+          }),
+        },
+        SpellSlot: {
+          create: importedCharacter.SpellSlot.map((slot) => {
+            return {
+              spell_slot_id: nanoid(10),
+              spell_level: slot.level,
+              total_casts: slot.total_casts,
+              casts_remaining: slot.casts_remaining,
+            };
+          }),
+        },
+      },
+    });
+
+  } catch (e) {
+    console.error('Failed to import character:', e, "Input: \n", "Campaign ID: ", campaign_id);
+    return { message: 'Database Error: Failed to Import Character.' };
   }
   revalidatePath(`/campaigns/${campaign_id}`);
   redirect(`/campaigns/${campaign_id}`);

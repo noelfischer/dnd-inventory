@@ -1,10 +1,12 @@
+'use server'
+
 import React from 'react';
 import LongRestClient from './LongRestClient';
 import { prisma } from '@/lib/prisma';
 
 const LongRestServer = async ({ character_id }: { character_id: string }) => {
 
-    async function longRest() {
+    async function longRest(character_id: string) {
         'use server'
         const character = await prisma.character.findUnique({
             where: { character_id: character_id },
@@ -40,7 +42,7 @@ const LongRestServer = async ({ character_id }: { character_id: string }) => {
     }
 
     return (
-        <LongRestClient longRest={longRest} />
+        <LongRestClient longRest={longRest.bind(null, character_id)} />
     );
 };
 

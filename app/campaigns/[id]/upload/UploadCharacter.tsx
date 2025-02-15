@@ -60,7 +60,7 @@ function UploadCharacter({ postCharacter }: { postCharacter: (character: ExportC
         <main>
             <div>
                 <p className="mb-1 text-gray-900 dark:text-gray-400 text-xl">Upload a Character JSON file to this campaign.</p>
-                <p className="mb-8 text-gray-700 dark:text-gray-400 text-sm">(a character JSON file can be downloaded from any character in the campaign by clicking "Download Character")</p>
+                <p className="mb-8 text-gray-700 dark:text-gray-400 text-sm">(a character JSON file can be downloaded from any character in the campaign by clicking &quot;Download Character&quot;)</p>
                 <div className="flex items-center"
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}

@@ -112,3 +112,23 @@ export const downloadJSON = (jsonObject: any, fileName: string) => {
   // Cleanup
   URL.revokeObjectURL(url);
 };
+
+
+export function handleFileUpload(file: File): Promise<any> {
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      try {
+        const jsonObject = JSON.parse(e.target.result);
+        resolve(jsonObject);
+      } catch (error) {
+        reject("Invalid JSON file");
+      }
+    };
+
+    reader.onerror = () => reject("Error reading file");
+    reader.readAsText(file);
+  })
+}

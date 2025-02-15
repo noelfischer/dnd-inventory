@@ -74,6 +74,10 @@ export const ExportCharacterSchema = z.object({
   wisdom: z.preprocess(parseNumber, z.number()),
   charisma: z.preprocess(parseNumber, z.number()),
   max_hit_points: z.preprocess(parseNumber, z.number()),
+  current_hit_points: z.preprocess(parseNumber, z.number()),
+  temp_hit_points: z.preprocess(parseNumber, z.number()),
+  load_capacity: z.preprocess(parseNumber, z.number()),
+  backpack_capacity: z.preprocess(parseNumber, z.number()),
   armor_class: z.preprocess(parseNumber, z.number()),
   Inventory: z.array(z.object({
     i: z.preprocess(parseNumber, z.number()),

@@ -10,7 +10,7 @@ import { fetchCampaign, fetchDashboardNumber, fetchUID } from './data';
 import { DashboardElement } from '@prisma/client';
 import { saltAndHashPassword } from './utils';
 import { prisma } from '@/lib/prisma';
-import { CharacterSchema, ExportCharacterSchema } from './definitions';
+import { CharacterSchema, ExportCharacter, ExportCharacterSchema } from './definitions';
 
 const FormSchema = z.object({
   dmId: z.string(),
@@ -363,6 +363,10 @@ export async function exportCharacter(character_id: string) {
     wisdom: character.wisdom,
     charisma: character.charisma,
     max_hit_points: character.max_hit_points,
+    current_hit_points: character.current_hit_points,
+    temp_hit_points: character.temp_hit_points,
+    load_capacity: character.load_capacity,
+    backpack_capacity: character.backpack_capacity,
     armor_class: character.armor_class,
     Inventory: character.InventoryItem.map((item) => {
       return {
@@ -399,9 +403,9 @@ export async function exportCharacter(character_id: string) {
   return exportCharacter;
 }
 
-export async function importCharacter(campaign_id: string, formData: FormData) {
+export async function importCharacter(campaign_id: string, character: ExportCharacter) {
   const uID = await fetchUID();
-  const importedCharacter = ExportCharacterSchema.parse(formData.get('character'));
+  const importedCharacter = ExportCharacterSchema.parse(character);
   console.log('Imported character:', importedCharacter);
   try {
     await prisma.character.create({
@@ -423,6 +427,9 @@ export async function importCharacter(campaign_id: string, formData: FormData) {
         wisdom: importedCharacter.wisdom,
         charisma: importedCharacter.charisma,
         max_hit_points: importedCharacter.max_hit_points,
+        current_hit_points: importedCharacter.current_hit_points,
+        temp_hit_points: importedCharacter.temp_hit_points,
+        load_capacity: importedCharacter.load_capacity,
         armor_class: importedCharacter.armor_class,
         Currency: {
           create: {

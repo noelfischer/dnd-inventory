@@ -4,7 +4,7 @@ import { SimpleCharacter } from "../../../lib/definitions";
 import { notFound } from "next/navigation";
 import { duplicateCharacter, exportCharacter } from "@/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";
-import { ChevronRight, ShieldCheck, Trash2, Pencil, SquarePlus } from "lucide-react";
+import { ChevronRight, ShieldCheck, Trash2, Pencil, SquarePlus, ArrowUpFromLine } from "lucide-react";
 import { LinkButton } from "@/components/Button"
 import DropdownCampaignCharacterOptions from "@/app/ui/campaigns/DropdownCampaignCharacterOptions";
 import { Campaign, Dashboard } from "@prisma/client";
@@ -99,6 +99,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </Link>
           </>
         }
+        <Link className="upload-character unset w-full sm:max-w-64" href={`/campaigns/${campaign.campaign_id}/upload`}>
+          <LinkButton>
+            Upload Character
+            <ArrowUpFromLine className="w-6 mr-1" />
+          </LinkButton>
+        </Link>
       </div>
       {isDM && <InviteLink link={`/join${campaign.password ? `/${campaign.password}` : "/-"}`} />}
     </main>

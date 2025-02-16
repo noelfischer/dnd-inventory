@@ -1,5 +1,5 @@
 import { fetchCampaignIDByDashboard, fetchCharacterByDashboard, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardElementsByDashboard, fetchDashboardNumber, fetchNavLinksByDashboard, fetchUID } from '@/lib/data';
-import { SimpleCharacter } from '../../../../lib/definitions';
+import { SimpleCharacter } from '../../../../../lib/definitions';
 import { notFound } from 'next/navigation';
 import DashboardGridLayout from '@/app/ui/dashboard/DashboardGridLayout';
 import { ReactNode } from 'react';

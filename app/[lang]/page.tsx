@@ -1,7 +1,7 @@
 import { LinkButton } from '@/components/Button';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import ToggleDarkMode from './ui/darkmode-toggle';
+import ToggleDarkMode from '../ui/darkmode-toggle';
 import { auth } from '@/lib/auth';
 
 export default async function Page() {

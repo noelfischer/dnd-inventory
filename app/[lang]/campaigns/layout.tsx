@@ -1,4 +1,4 @@
-import ToggleDarkMode from "../ui/darkmode-toggle";
+import ToggleDarkMode from "../../ui/darkmode-toggle";
 
 export default function RootLayout({ children }: { children: React.ReactNode; }) {
   return (

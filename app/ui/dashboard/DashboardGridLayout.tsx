@@ -1,6 +1,6 @@
 'use client'
 
-import { Component } from "@/app/dashboard/[id]/(overview)/page";
+import { Component } from "@/app/[lang]/dashboard/[id]/(overview)/page";
 import { useEffect, useState } from "react";
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);

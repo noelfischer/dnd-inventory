@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { prisma } from './prisma';
-
+import { match } from '@formatjs/intl-localematcher'
 
 export type keyValuePair = {
   key: string,
@@ -113,7 +113,6 @@ export const downloadJSON = (jsonObject: any, fileName: string) => {
   URL.revokeObjectURL(url);
 };
 
-
 export function handleFileUpload(file: File): Promise<any> {
 
   return new Promise((resolve, reject) => {
@@ -131,4 +130,18 @@ export function handleFileUpload(file: File): Promise<any> {
     reader.onerror = () => reject("Error reading file");
     reader.readAsText(file);
   })
+}
+
+export function getLocale(acceptLanguage: string, locales: string[]) {
+  const languages = formatAcceptLanguage(acceptLanguage)
+  const defaultLocale = 'en'
+  const language = match(languages, locales, defaultLocale)
+  return language
+}
+
+// Formats accepts-language header like this: da, en-gb;q=0.8, en;q=0.7 
+// into an array like this ['da', 'en-gb', 'en']
+// This function does not handle sorting the q values, since modern browsers send the most preferred language first
+function formatAcceptLanguage(acceptLanguage: string): string[] {
+  return acceptLanguage.split(',').map((lang) => lang.split(';')[0].trim());
 }

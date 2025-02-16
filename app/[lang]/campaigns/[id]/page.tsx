@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, fetchUID } from "../../../lib/data";
-import { SimpleCharacter } from "../../../lib/definitions";
+import { fetchCampaign, fetchCharactersByCampaign, fetchCharactersByCampaignAndUser, fetchDashboardsByCampaign, fetchUID } from "../../../../lib/data";
+import { SimpleCharacter } from "../../../../lib/definitions";
 import { notFound } from "next/navigation";
 import { duplicateCharacter, exportCharacter } from "@/lib/actions";
 import InviteLink from "@/app/ui/campaigns/InviteLink";

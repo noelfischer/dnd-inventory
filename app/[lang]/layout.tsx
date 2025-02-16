@@ -10,7 +10,18 @@ export const metadata: Metadata = {
   title: 'dnd inventory',
   description: 'A customizable inventory management system for D&D campaigns.',
   metadataBase: new URL('https://dnd-inventory.vercel.app/'),
+  icons: {
+    icon: [
+      {
+        url: '/favicon.ico',
+      }
+    ]
+  }
 };
+
+export async function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'de' }];
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

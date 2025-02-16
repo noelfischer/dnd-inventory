@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { fetchCampaigns, fetchUsernameFromSession } from "../../lib/data";
-import { fetchUID } from "../../lib/data";
+import { fetchCampaigns, fetchUsernameFromSession } from "../../../lib/data";
+import { fetchUID } from "../../../lib/data";
 import Button, { LinkButton } from "@/components/Button"
 import { ArrowRight, Dices, LogOut, Milestone, PencilLine, Trash2 } from "lucide-react";
-import { logOut } from "../../lib/actions";
+import { logOut } from "../../../lib/actions";
 import { Campaign } from "@prisma/client";
 import Tour from "./Tour";
 

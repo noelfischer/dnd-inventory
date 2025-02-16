@@ -3,8 +3,11 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import ToggleDarkMode from '../ui/darkmode-toggle';
 import { auth } from '@/lib/auth';
+import { getDictFromParams, Locale } from './dictionaries';
 
-export default async function Page() {
+export default async function Page({ params }: { params: Promise<{ lang: Locale }> }) {
+  const dict = await getDictFromParams(params)
+
   const data = await auth();
   const isNotAuthenticated = !data;
 
@@ -15,7 +18,7 @@ export default async function Page() {
       <div className="flex grow flex-col md:flex-row h-full">
         <div className="flex flex-col justify-center gap-6 md:min-w-96 px-12 pt-10 pb-16 md:pb-32 md:w-2/5 md:px-20 md:bg-bg md:dark:bg-dark-elevated-bg">
           <p className={`text-xl md:text-3xl md:leading-normal`}>
-            <strong>D&D Inventory</strong>. Keep track of everything.
+            <strong>{dict.landingPage.title}</strong>. {dict.landingPage.description}
           </p>
           {isNotAuthenticated ?
             <><Link
@@ -23,7 +26,7 @@ export default async function Page() {
               className="unset"
             >
               <LinkButton>
-                <span>Log in</span> <ArrowRight className="w-5 md:w-6" />
+                <span>{dict.landingPage.login}</span> <ArrowRight className="w-5 md:w-6" />
               </LinkButton>
             </Link>
 
@@ -38,7 +41,7 @@ export default async function Page() {
                 className="unset"
               >
                 <LinkButton>
-                  <span>Create Account</span> <ArrowRight className="w-5 md:w-6" />
+                  <span>{dict.general.createAccount}</span> <ArrowRight className="w-5 md:w-6" />
                 </LinkButton>
               </Link>
             </> :
@@ -47,7 +50,7 @@ export default async function Page() {
               className="unset mt-4"
             >
               <LinkButton>
-                <span>Go to Campaigns</span> <ArrowRight className="w-5 md:w-6" />
+                <span>{dict.landingPage.goToCampaigns}</span> <ArrowRight className="w-5 md:w-6" />
               </LinkButton>
             </Link>}
         </div>

@@ -3,12 +3,13 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { ACTIONS, Placement } from "@/lib/definitions";
+import { Dictionary } from "../../dictionaries";
 
 
 const Joyride = dynamic(() => import("react-joyride"), { ssr: false });
 
 
-const Tour2 = () => {
+const Tour2 = ({ dict }: { dict: Dictionary }) => {
     const [run, setRun] = useState(false);
     useEffect(() => {
         if (typeof window !== "undefined" && !localStorage.getItem("hasSeenCharacterTour")) {
@@ -18,28 +19,28 @@ const Tour2 = () => {
     const steps = [
         {
             target: ".character-title:first-of-type",
-            content: "This is one of your characters. Check out what you can do with it!",
+            content: dict.tour.t2.content1,
             placementBeacon: "top-end" as Placement,
         },
         {
             target: ".view-character-dashboard:first-of-type",
-            content: "Visit your character dashboard to view and manage your character's inventory, stats, and more.",
+            content: dict.tour.t2.content2,
         },
         {
             target: ".update-character:first-of-type",
-            content: "Click here to update your character details.",
+            content: dict.tour.t2.content3,
         },
         {
             target: ".delete-character:first-of-type",
-            content: "Click here to delete your character.",
+            content: dict.tour.t2.content4,
         },
         {
             target: ".dropdown-character-options:first-of-type",
-            content: "Here you can duplicate or move your character to another campaign.",
+            content: dict.tour.t2.content5,
         },
         {
             target: ".view-party-dashboard",
-            content: "Now that you have one or more characters, you can view your party dashboard to see all your characters in one place.",
+            content: dict.tour.t2.content6,
         }
     ];
 
@@ -59,7 +60,7 @@ const Tour2 = () => {
             continuous={true}
             showProgress={true}
             showSkipButton={true}
-            locale={{ last: "End tour" }}
+            locale={{ last: dict.tour.last, skip: dict.tour.skip, next: dict.tour.next, back: dict.tour.back }}
             callback={handleJoyrideCallback}
             run={run}
             styles={{

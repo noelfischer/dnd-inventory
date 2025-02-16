@@ -3,11 +3,12 @@
 import { ACTIONS } from "@/lib/definitions";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import { Dictionary } from "../dictionaries";
 
 const Joyride = dynamic(() => import("react-joyride"), { ssr: false });
 
 
-const Tour = ({ name }: { name: string }) => {
+const Tour = ({ name, dict }: { name: string, dict: Dictionary }) => {
     const [run, setRun] = useState(false);
     useEffect(() => {
         if (typeof window !== "undefined" && !localStorage.getItem("hasSeenAllCampaignsTour")) {
@@ -17,19 +18,19 @@ const Tour = ({ name }: { name: string }) => {
     const steps = [
         {
             target: ".username",
-            content: <span>Welcome{name ? `, ${name}` : ""}!<br /> This is your campaigns page, where you can manage your campaigns.</span>,
+            content: <span>{dict.tour.welcome}{name ? `, ${name}` : ""}!<br /> {dict.tour.t0.content1}</span>,
         },
         {
             target: ".banner",
-            content: "These are your campaigns, currently you have none.",
+            content: dict.tour.t0.content2,
         },
         {
             target: ".new-campaign",
-            content: <span>Here you can create a new campaign.<br />Alternatively you can join an existing campaign by requesting an invite link from the DM.</span>,
+            content: <span>{dict.tour.t0.content3}<br />{dict.tour.t0.content4}</span>,
         },
         {
             target: ".dark-mode",
-            content: "Lastly, you can toggle dark mode here. Enjoy!",
+            content: dict.tour.t0.content5,
         },
     ];
 
@@ -49,7 +50,7 @@ const Tour = ({ name }: { name: string }) => {
             continuous={true}
             showProgress={true}
             showSkipButton={true}
-            locale={{ last: "End tour" }}
+            locale={{ last: dict.tour.last, skip: dict.tour.skip, next: dict.tour.next, back: dict.tour.back }}
             callback={handleJoyrideCallback}
             run={run}
             styles={{

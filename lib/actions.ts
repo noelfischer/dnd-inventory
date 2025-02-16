@@ -11,6 +11,18 @@ import { DashboardElement } from '@prisma/client';
 import { saltAndHashPassword } from './utils';
 import { prisma } from '@/lib/prisma';
 import { CharacterSchema, ExportCharacter, ExportCharacterSchema } from './definitions';
+import { cookies } from 'next/headers'
+
+async function getLocale() {
+  const cookieStore = await cookies()
+  const locale = cookieStore.get("locale")?.value
+  return locale || "en"
+}
+
+async function getLocaleWithDash() {
+  const locale = await getLocale()
+  return `/${locale}`
+}
 
 const FormSchema = z.object({
   dmId: z.string(),
@@ -44,9 +56,11 @@ export async function loginGoogle() {
 }
 
 export async function logOut() {
-  await signOut({ redirectTo: '/login' });
-  revalidatePath('/campaigns');
-  redirect('/login');
+  const locale = await getLocaleWithDash();
+  console.log(locale + '/login');
+  await signOut({ redirectTo: locale + '/login' });
+  revalidatePath(locale + '/campaigns');
+  redirect(locale + '/login');
 
 }
 

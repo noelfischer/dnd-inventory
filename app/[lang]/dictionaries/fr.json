@@ -1,0 +1,104 @@
+{
+    "general": {
+        "campaings": "Campaigns",
+        "create": "Create",
+        "update": "Update",
+        "delete": "Delete",
+        "duplicate": "Duplicate",
+        "or": "or",
+        "logout": "Logout",
+        "createAccount": "Create Account",
+        "actions": "Actions"
+    },
+    "notFound": {
+        "title": "404 Not Found",
+        "description": "Could not find the requested page.",
+        "goBack": "Go back"
+    },
+    "error": {
+        "title": "Something went wrong!",
+        "tryAgain": "Try again",
+        "goBack": "Go Back to Campaigns"
+    },
+    "landingPage": {
+        "title": "D&D Inventory",
+        "description": "Keep track of everything.",
+        "login": "Log in",
+        "goToCampaigns": "Go to Campaigns"
+    },
+    "login": {
+        "title": "Please log in to continue.",
+        "google": "Continue with Google",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "login": "Log in",
+        "noAccount": "Don't have an account?"
+    },
+    "signup": {
+        "title": "Create an account",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "username": "Username",
+        "usernamePlaceholder": "Choose your username",
+        "password": "Password",
+        "passwordPlaceholder": "Choose your password",
+        "haveAccount": "Already have an account?"
+    },
+    "tour": {
+        "welcome": "Welcome",
+        "last": "End tour",
+        "next": "Next",
+        "back": "Back",
+        "skip": "Skip",
+        "t0": {
+            "content1": "This is your campaigns page, where you can manage your campaigns.",
+            "content2": "These are your campaigns, currently you have none.",
+            "content3": "Here you can create a new campaign.",
+            "content4": "Alternatively you can join an existing campaign by requesting an invite link from the DM.",
+            "content5": "Lastly, you can toggle dark mode here. Enjoy!"
+        },
+        "t1": {
+            "content1": "Building your first campaign? Don't worry, it's incredibly easy!",
+            "content2": "First, you can invite people to your campaign. Click here to get the invite link.",
+            "content3": "People who have joined your campaign can be managed here.",
+            "content4": "Click here to update your campaign details.",
+            "content5": "Now start by creating a new character. You can create as many as you like!"
+        },
+        "t2": {
+            "content1": "This is one of your characters. Check out what you can do with it!",
+            "content2": "Visit your character dashboard to view and manage your character's inventory, stats, and more.",
+            "content3": "Click here to update your character details.",
+            "content4": "Click here to delete your character.",
+            "content5": "Here you can duplicate or move your character to another campaign.",
+            "content6": "Now that you have one or more characters, you can view your party dashboard to see all your characters in one place."
+        }
+    },
+    "campaigns": {
+        "loggedInAs": "Logged in as ",
+        "create": "Create a new Campaign"
+    },
+    "createCampaign": {
+        "title": "Create Campaign",
+        "name": "Choose a campaign name",
+        "description": "Choose a campaign description (optional)",
+        "accessPassword": "Choose a campaign access password (optional)",
+        "create": "Create Campaign"
+    },
+    "campaign": {
+        "descriptionLessCampaign": "This campaign has no description.",
+        "players": "Players",
+        "enemies": "Enemies",
+        "pets": "Pets",
+        "viewPartyDashboard": "View Party Dashboard",
+        "createCharacter": "Create a new Character",
+        "update": "Update Campaign",
+        "access": "Handle Access",
+        "upload": "Upload Character",
+        "viewDashboard": "View Dashboard",
+        "moreOptions": "More Options",
+        "changeCampaign": "Change Campaign",
+        "downloadCharacter": "Download Character"
+    }
+}

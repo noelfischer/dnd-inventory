@@ -2,8 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
+import { Dictionary } from '../../dictionaries';
 
-const Tour = ({ isDM, characterLength }: { isDM: boolean, characterLength: number }) => {
+const Tour = ({ isDM, characterLength, dict }: { isDM: boolean, characterLength: number, dict: Dictionary }) => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -18,8 +19,8 @@ const Tour = ({ isDM, characterLength }: { isDM: boolean, characterLength: numbe
 
     return (
         <>
-            {isDM && characterLength === 0 && <Tour1 />}
-            {characterLength > 0 && <Tour2 />}
+            {isDM && characterLength === 0 && <Tour1 dict={dict} />}
+            {characterLength > 0 && <Tour2 dict={dict} />}
         </>
     );
 };

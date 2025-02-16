@@ -11,26 +11,28 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { getDictFromParams, Locale } from '../../dictionaries';
 
 
-export default function Page() {
+export default async function Page({ params }: { params: Promise<{ lang: Locale }> }) {
+  const dict = await getDictFromParams(params)
 
   return (
     <main>
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbPage>Create</BreadcrumbPage></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbPage>{dict.general.create}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <Form action={createCampaign} close='/campaigns'>
-        <h1 className="text-text text-2xl mb-6">Create Campaign</h1>
-        <FormItemInput name="name" label="Choose a campaign name" minLength={2} />
-        <FormItemTextArea name="description" label="Choose a campaign description (optional)" />
-        <FormItemInput name="password" label="Choose a campaign access password (optional)" Icon={ShieldPlus} />
-        <Button type="submit" className="w-auto">Create Campaign</Button>
+        <h1 className="text-text text-2xl mb-6">{dict.createCampaign.create}</h1>
+        <FormItemInput name="name" label={dict.createCampaign.name} minLength={2} />
+        <FormItemTextArea name="description" label={dict.createCampaign.description} />
+        <FormItemInput name="password" label={dict.createCampaign.accessPassword} Icon={ShieldPlus} />
+        <Button type="submit" className="w-auto">{dict.createCampaign.create}</Button>
       </Form>
 
     </main>

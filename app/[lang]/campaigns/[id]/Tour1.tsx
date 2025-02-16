@@ -3,12 +3,13 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { ACTIONS, Placement } from "@/lib/definitions";
+import { Dictionary } from "../../dictionaries";
 
 
 const Joyride = dynamic(() => import("react-joyride"), { ssr: false });
 
 
-const Tour1 = () => {
+const Tour1 = ({ dict }: { dict: Dictionary }) => {
     const [run, setRun] = useState(false);
     useEffect(() => {
         if (typeof window !== "undefined" && !localStorage.getItem("hasSeenCampaignTour")) {
@@ -18,24 +19,24 @@ const Tour1 = () => {
     const steps = [
         {
             target: ".actions",
-            content: "Building your first campaign? Don't worry, it's incredibly easy!",
+            content: dict.tour.t1.content1,
             placementBeacon: "top-end" as Placement,
         },
         {
             target: ".invite-link",
-            content: "First, you can invite people to your campaign. Click here to get the invite link.",
+            content: dict.tour.t1.content2,
         },
         {
             target: ".handle-access",
-            content: "People who have joined your campaign can be managed here.",
+            content: dict.tour.t1.content3,
         },
         {
             target: ".update-campaign",
-            content: "Click here to update your campaign details.",
+            content: dict.tour.t1.content4,
         },
         {
             target: ".new-character",
-            content: "Now start by creating a new character. You can create as many as you like!",
+            content: dict.tour.t1.content5,
         },
     ];
 
@@ -55,7 +56,7 @@ const Tour1 = () => {
             continuous={true}
             showProgress={true}
             showSkipButton={true}
-            locale={{ last: "End tour" }}
+            locale={{ last: dict.tour.last, skip: dict.tour.skip, next: dict.tour.next, back: dict.tour.back }}
             callback={handleJoyrideCallback}
             run={run}
             styles={{

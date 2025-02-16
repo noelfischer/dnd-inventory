@@ -1,5 +1,6 @@
 'use client'
 
+import { Dictionary } from '@/app/[lang]/dictionaries';
 import { Button } from '@/components/ui/button';
 import { ExportCharacter } from '@/lib/definitions';
 import { cn, downloadJSON } from '@/lib/utils';
@@ -14,9 +15,10 @@ type Props = {
   exportCharacterById: () => Promise<ExportCharacter>,
   character_id: string,
   campaign_id: string,
+  dict: Dictionary,
 }
 
-export default function DropdownCampaignCharacterOptions({ className, duplicateCharacterById, exportCharacterById, character_id, campaign_id }: Props) {
+export default function DropdownCampaignCharacterOptions({ className, duplicateCharacterById, exportCharacterById, character_id, campaign_id, dict }: Props) {
   const [isActiveDropdown, setIsActiveDropdown] = useState(false)
 
   async function downloadCharacter() {
@@ -40,7 +42,7 @@ export default function DropdownCampaignCharacterOptions({ className, duplicateC
         }}
         className="h-11"
       >
-        <span className="sr-only">More Options</span>
+        <span className="sr-only">{dict.campaign.moreOptions}</span>
 
         <Ellipsis className="w-5 h-6" />
       </Button>
@@ -52,19 +54,19 @@ export default function DropdownCampaignCharacterOptions({ className, duplicateC
           <button className="flex gap-2 w-full border-b-2 border-border dark:border-dark-border bg-main px-7 py-2 no-underline first:rounded-t-base last:rounded-b-base hover:bg-main-accent"
             type='submit'
           >
-            <BookCopy className="w-5 h6" /> Duplicate
+            <BookCopy className="w-5 h6" /> {dict.general.duplicate}
           </button>
         </form>
         <Link className="flex gap-2 w-full border-b-2 border-border dark:border-dark-border bg-main px-7 py-2 no-underline first:rounded-t-base last:rounded-b-base hover:bg-main-accent"
           href={`/campaigns/${campaign_id}/${character_id}/move`}
         >
-          <Package className="w-5 h6" /> Change Campaign
+          <Package className="w-5 h6" /> {dict.campaign.changeCampaign}
         </Link>
         <form action={downloadCharacter}>
           <button className="flex gap-2 w-full border-b-2 border-border dark:border-dark-border bg-main px-7 py-2 no-underline first:rounded-t-base last:rounded-b-base hover:bg-main-accent"
             type='submit'
           >
-            <Download className="w-5 h6" /> Download Character
+            <Download className="w-5 h6" /> {dict.campaign.downloadCharacter}
           </button>
         </form>
       </div>

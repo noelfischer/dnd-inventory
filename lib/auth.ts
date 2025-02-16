@@ -80,22 +80,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true;
     },
-    authorized({ auth, request: { nextUrl } }) {
+    authorized({ auth }) {
       const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      const isOnCampaigns = nextUrl.pathname.startsWith('/campaigns');
-
-      console.log("nextUrl", nextUrl);
-
-      // remove the /seed from the pathname when in production
-      const isOnSeed = nextUrl.pathname.startsWith('/seed');
-      if (isOnDashboard || isOnCampaigns || isOnSeed) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/campaigns', nextUrl));
-      }
-      return true;
+      return isLoggedIn;
     },
   }
 })

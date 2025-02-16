@@ -6,27 +6,29 @@ import { ArrowRight, Dices, LogOut, Milestone, PencilLine, Trash2 } from "lucide
 import { logOut } from "../../../lib/actions";
 import { Campaign } from "@prisma/client";
 import Tour from "./Tour";
+import { getDictFromParams, Locale } from "../dictionaries";
 
 
-export default async function Page() {
+export default async function Page({ params }: { params: Promise<{ lang: Locale }> }) {
+  const dict = await getDictFromParams(params)
+
   const uID = await fetchUID();
   const username: string = await fetchUsernameFromSession();
   const campaigns = await fetchCampaigns(uID);
   return (
     <main>
       {campaigns.length === 0 &&
-        <Tour name={username} />
+        <Tour name={username} dict={dict} />
       }
       <div className="flex gap-2 text-zinc-700 dark:text-zinc-300">
         {(username && username.length > 0) &&
           <>
             <Milestone />
-            <p className="mb-6 font-semibold username">Logged in as {username}</p>
+            <p className="mb-6 font-semibold username">{dict.campaigns.loggedInAs + username}</p>
           </>
         }
       </div>
-      <h1 className="text-text text-2xl mb-12 bg-banner banner">
-        Campaigns</h1>
+      <h1 className="text-text text-2xl mb-12 bg-banner banner">{dict.general.campaings}</h1>
       <ul className="pb-3">
         {campaigns.map((campaign: Campaign) => {
           return (
@@ -42,13 +44,13 @@ export default async function Page() {
 
                     <Link className="unset" href={`/campaigns/${campaign.campaign_id}/update`}>
                       <LinkButton>
-                        <span className="sr-only">Update</span>
+                        <span className="sr-only">{dict.general.update}</span>
                         <PencilLine className="w-5" />
                       </LinkButton>
                     </Link>
                     <Link className="unset" href={`/campaigns/${campaign.campaign_id}/delete`} >
                       <LinkButton>
-                        <span className="sr-only">Delete</span>
+                        <span className="sr-only">{dict.general.delete}</span>
                         <Trash2 className="w-5" />
                       </LinkButton>
                     </Link>
@@ -63,13 +65,13 @@ export default async function Page() {
       <div className="flex gap-3 items-center flex-wrap">
         <Link className="unset w-full sm:w-80" href={"/campaigns/create"}>
           <Button className="new-campaign">
-            Create a new Campaign
+            {dict.campaigns.create}
             <Dices className="w-6 h-6 ml-3" />
           </Button>
         </Link>
         <form action={logOut}>
           <Button className="w-full sm:w-48" type="submit">
-            Logout
+            {dict.general.logout}
             <LogOut className="w-6 h-6 ml-3" />
           </Button>
         </form>

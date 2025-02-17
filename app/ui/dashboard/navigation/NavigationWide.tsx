@@ -63,13 +63,6 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
     setIsPending(false);
   }
 
-  async function addElementHandlerCustom(formData: FormData) {
-    const layoutUpdatePromise = updateLayoutWithData();
-    const elementHandlerPromise = addElementHandler(formData);
-    const res = await Promise.all([layoutUpdatePromise, elementHandlerPromise]);
-    return res[1];
-  }
-
   return (
     <div className={(editMode && "edit") + " bg-main  py-3 xl:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
       <div className="flex gap-6 flex-wrap content-between">
@@ -97,12 +90,13 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
         {editMode ?
           <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={isPending} onClick={save}>
             {isPending && <span className="animate-spin mr-2"><LoaderCircle /></span>}
-            {dictionary.general.save} <PanelsLeftBottom />
+            <span>{dictionary.general.save} </span>
+            <PanelsLeftBottom />
           </Button>
           :
           <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout} <PanelsLeftBottom /></Button>
         }
-        <AddElement addableElements={addableElements} addElementHandler={addElementHandlerCustom} disabled={isPending} />
+        <AddElement addableElements={addableElements} addElementHandler={addElementHandler} disabled={isPending} />
       </div>
     </div>
   )

@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import * as Avatar from '@radix-ui/react-avatar';
 import "./styles.css";
@@ -70,10 +72,10 @@ const StatusClient = ({ name, imgLink, health, weight, spell_slots, conditions, 
             <table className="table-auto mt-4 w-full border-collapse border border-black">
                 <tbody>
                     <tr>
-                        {spell_slots.map(slot => {
+                        {spell_slots.map((slot, index) => {
                             const opacity = Math.min(1, (slot.casts_remaining / 10));
                             return (
-                                <td key={slot.casts_remaining} className="border-2 dark:border-white/80 border-black text-center text-2xl overflow-hidden">
+                                <td key={name+index} className="border-2 dark:border-white/80 border-black text-center text-2xl overflow-hidden">
                                     <div className="relative w-full h-12">
                                         <div className="absolute top-0 left-0 bg-main -m-0.5" style={{ opacity, height: "110%", width: "110%" }} />
                                         <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">

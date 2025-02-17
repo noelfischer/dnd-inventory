@@ -1,11 +1,12 @@
 'use client'
+import { Dictionary } from "@/app/[lang]/dictionaries";
 import { Button } from "@/components/ui/button";
 import { ExportCharacter, ExportCharacterSchema } from "@/lib/definitions";
 import { cn, handleFileUpload } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 
-function UploadCharacter({ postCharacter }: { postCharacter: (character: ExportCharacter) => void }) {
+function UploadCharacter({ postCharacter, dict }: { postCharacter: (character: ExportCharacter) => void, dict: Dictionary }) {
     const [exportCharacter, setExportCharacter] = useState<ExportCharacter | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
@@ -35,7 +36,7 @@ function UploadCharacter({ postCharacter }: { postCharacter: (character: ExportC
 
     const processFile = async (file: File) => {
         if (file.type !== 'application/json') {
-            setError("Invalid file type. Please upload a JSON file.");
+            setError(dict.uploadCharacter.invalidFileType);
             return;
         }
         const object = await handleFileUpload(file);
@@ -46,7 +47,7 @@ function UploadCharacter({ postCharacter }: { postCharacter: (character: ExportC
             setFileName(file.name);
             console.log("Input: ", formattedObject);
         } catch (error) {
-            setError("Invalid JSON format");
+            setError(dict.uploadCharacter.invalidFormat);
         }
     }
 
@@ -59,8 +60,8 @@ function UploadCharacter({ postCharacter }: { postCharacter: (character: ExportC
     return (
         <main>
             <div>
-                <p className="mb-1 text-gray-900 dark:text-gray-400 text-xl">Upload a Character JSON file to this campaign.</p>
-                <p className="mb-8 text-gray-700 dark:text-gray-400 text-sm">(a character JSON file can be downloaded from any character in the campaign by clicking &quot;Download Character&quot;)</p>
+                <p className="mb-1 text-gray-900 dark:text-gray-400 text-xl">{dict.uploadCharacter.description}</p>
+                <p className="mb-8 text-gray-700 dark:text-gray-400 text-sm">{dict.uploadCharacter.description2}</p>
                 <div className="flex items-center"
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
@@ -73,7 +74,7 @@ function UploadCharacter({ postCharacter }: { postCharacter: (character: ExportC
                             <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                             </svg>
-                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">{dict.uploadCharacter.input}</span> {dict.uploadCharacter.drag}</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">JSON</p>
                         </div>
                         <input id="dropzone-file" type="file" accept=".json" onChange={handleFileSelection} className="hidden" />
@@ -87,7 +88,7 @@ function UploadCharacter({ postCharacter }: { postCharacter: (character: ExportC
                         <p className="mt-8 font-bold text-gray-700 dark:text-gray-400">{fileName}</p>
                         <Button onClick={uploadCharacter} className="mt-4" disabled={loading}>
                             {loading && <LoaderCircle className='animate-spin mr-3' />}
-                            Upload</Button>
+                            {dict.uploadCharacter.title}</Button>
                     </>
                 }
             </div>

@@ -62,7 +62,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
         <h1 className=" text-text text-2xl font-semibold">{campaign.name}</h1>
         <p className="text-text">{campaign.description || dict.campaign.descriptionLessCampaign}</p>
       </div>
-      <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="player" typeShown={dict.campaign.players} dashboards={dashboards} dict={dict} />
+      <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="player" typeShown={dict.general.players} dashboards={dashboards} dict={dict} />
       {isDM && <>
         <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="npc" typeShown="NPCs" dashboards={dashboards} dict={dict} />
         <CharacterTypeGroup characters={characters} campaign={campaign} uID={uID} type="enemy" typeShown={dict.campaign.enemies} dashboards={dashboards} dict={dict} />
@@ -108,7 +108,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
           </LinkButton>
         </Link>
       </div>
-      {isDM && <InviteLink link={`/join${campaign.password ? `/${campaign.password}` : "/-"}`} />}
+      {isDM && <InviteLink link={`/join${campaign.password ? `/${campaign.password}` : "/-"}`} dict={dict} />}
     </main>
   );
 }

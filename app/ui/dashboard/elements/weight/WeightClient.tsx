@@ -60,7 +60,7 @@ const WeightClient = ({ max_weight, inventory_weight, coins_weight, updateTotalC
                 </div>
                 <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-black/90 dark:text-white font-bold text-2xl whitespace-nowrap">
                     {encumbered && <TriangleAlert className='w-10 h-10 mr-5' />}
-                    {+(inventoryWeight + coinsWeight).toFixed(2)} / <OnLeaveInput initialValue={maxWeight.toString()} placeholder='Max HP' onLeave={onChangeMaxWeight} /> lb.
+                    {+(inventoryWeight + coinsWeight).toFixed(2)} / <OnLeaveInput initialValue={maxWeight.toString()} placeholder='Max' onLeave={onChangeMaxWeight} /> lb.
                     {encumbered && <TriangleAlert className='w-10 h-10 ml-4' />}
                 </div>
             </div>

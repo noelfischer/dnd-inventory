@@ -5,10 +5,17 @@
         "update": "Update",
         "delete": "Delete",
         "duplicate": "Duplicate",
+        "save": "Save",
+        "move": "Move",
         "or": "or",
         "logout": "Logout",
         "createAccount": "Create Account",
-        "actions": "Actions"
+        "actions": "Actions",
+        "name": "Name",
+        "description": "Description",
+        "players": "Players",
+        "player": "Player",
+        "character": "Character"
     },
     "notFound": {
         "title": "404 Not Found",
@@ -76,7 +83,7 @@
         }
     },
     "campaigns": {
-        "loggedInAs": "Logged in as ",
+        "loggedInAs": "Logged in as",
         "create": "Create a new Campaign"
     },
     "createCampaign": {
@@ -88,7 +95,6 @@
     },
     "campaign": {
         "descriptionLessCampaign": "This campaign has no description.",
-        "players": "Players",
         "enemies": "Enemies",
         "pets": "Pets",
         "viewPartyDashboard": "View Party Dashboard",
@@ -99,6 +105,129 @@
         "viewDashboard": "View Dashboard",
         "moreOptions": "More Options",
         "changeCampaign": "Change Campaign",
-        "downloadCharacter": "Download Character"
+        "downloadCharacter": "Download Character",
+        "invite": "Invite People to Campaign",
+        "inviteSuccess": "The Invite Link can now be copied!"
+    },
+    "uploadCharacter": {
+        "title": "Upload Character",
+        "name": "Choose a character name",
+        "description": "Upload a Character JSON file to this campaign.",
+        "description2": "(a character JSON file can be downloaded from any character in the campaign by clicking \"Download Character\")",
+        "invalidFileType": "Invalid file type. Please upload a JSON file.",
+        "invalidFormat": "Invalid JSON format",
+        "input": "Click to upload",
+        "drag": "or drag and drop"
+    },
+    "update": {
+        "title": "Update Campaign"
+    },
+    "join": {
+        "title": "Join the Campaign",
+        "join": "Join"
+    },
+    "delete": {
+        "title": "Delete Campaign"
+    },
+    "character": {
+        "create": "Create Character",
+        "update": "Update Character",
+        "name": "Choose a character name",
+        "enemy": "Enemy",
+        "pet": "Pet",
+        "url": "Portrait URL",
+        "description": "Choose a character description",
+        "owner": "Character owner",
+        "characterType": "Character Type",
+        "cclass": "Class",
+        "species": "Species",
+        "level": "Level",
+        "maxHitPoints": "Max Hit Points",
+        "armorClass": "Armor Class",
+        "strength": "Strength (0-20)",
+        "dexterity": "Dexterity",
+        "constitution": "Constitution",
+        "intelligence": "Intelligence",
+        "wisdom": "Wisdom",
+        "charisma": "Charisma",
+        "human": "Human",
+        "move": {
+            "title": "Move",
+            "description": "Do you want to move",
+            "description2": "to a different campaign?"
+        },
+        "delete": "Delete Character"
+    },
+    "access": {
+        "access": "Access",
+        "title": "Campaign Users",
+        "you": "(You)"
+    },
+    "dashboard": {
+        "inspiration": "Inspiration",
+        "notes": "Notes",
+        "notesPlaceholder": "Write down personal notes like quests, relationships, etc.",
+        "conditions": "Conditions",
+        "conditionsPlaceholder": "Write down conditions like poison, exhaustion, disadvantage, etc.",
+        "abilities": "Abilities",
+        "abilitiesPlaceholder": "Write down abilities, skills, etc.",
+        "ability": "Ability",
+        "level": "Level",
+        "triggerLongRest": "Trigger Long Rest",
+        "levelUp": "Level Up",
+        "navigation": {
+            "newDashboard": "New Dashboard",
+            "deleteDashboard": "Delete Dashboard",
+            "party": "Party",
+            "editLayout": "Edit Layout",
+            "element": {
+                "title": "Add Element",
+                "description": "Select the type of element you want to add to the dashboard.",
+                "noMore": "No more elements to add.",
+                "elementType": "Element Type",
+                "options": {
+                    "health": "Health",
+                    "inventory": "Inventory",
+                    "currency": "Coinage",
+                    "conditions": "Conditions",
+                    "levelup": "Level Up",
+                    "weight": "Weight",
+                    "notes": "Notes",
+                    "abilities": "Abilities",
+                    "spellslots": "Spell Slots",
+                    "inspiration": "Inspiration",
+                    "longrest": "Long Rest",
+                    "status": "Status"
+                }
+            }
+        },
+        "inventory": {
+            "equipped": "Equipped",
+            "onBody": "On Body",
+            "backpack": "Backpack",
+            "description": "Description",
+            "weight": "Weight",
+            "quantity": "Quantity",
+            "actions": "Actions",
+            "new": {
+                "title": "New Item",
+                "description": "Create a new item to add to your inventory.",
+                "category": {
+                    "title": "Category",
+                    "weapon": "Weapon",
+                    "armor": "Armor",
+                    "wearable": "Wearable",
+                    "tool": "Tool",
+                    "consumable": "Consumable",
+                    "miscellaneous": "Miscellaneous"
+                },
+                "slot": "Slot",
+                "magic": "Magic"
+            }
+        },
+        "platinum": "Platinum",
+        "gold": "Gold",
+        "silver": "Silver",
+        "copper": "Copper"
     }
 }

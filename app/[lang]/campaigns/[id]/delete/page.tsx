@@ -13,9 +13,11 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Trash2 } from 'lucide-react';
 import { Campaign } from '@prisma/client';
+import { getDictionary, Locale } from '@/app/[lang]/dictionaries';
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ id: string, lang: Locale }> }) {
   const params = await props.params;
+  const dict = await getDictionary(params.lang);
   const campaignID = params.id;
 
   const campaign: Campaign = await fetchCampaign(campaignID);
@@ -29,21 +31,21 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <main>
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbPage>Delete</BreadcrumbPage></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbPage>{dict.general.delete}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="text-text text-2xl mb-6 bg-red-500 banner font-semibold">
-        Delete Campaign
+        {dict.delete.title}
       </h1>
-      <h2>Name: {campaign.name}</h2>
-      <p>Description: {campaign.description}</p>
+      <h2>{dict.general.name}: {campaign.name}</h2>
+      <p>{dict.general.description}: {campaign.description}</p>
       <Button className='mt-7 bg-red-500 w-auto' onClick={deleteCampaignWithId}>
         <Trash2 className="w-5 mr-3" />
-        <span>Delete</span>
+        <span>{dict.general.delete}</span>
       </Button>
     </main>
   );

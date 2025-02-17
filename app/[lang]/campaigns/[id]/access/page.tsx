@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/breadcrumb"
 import Button from "@/components/Button";
 import { Trash2 } from "lucide-react";
+import { getDictionary, Locale } from "@/app/[lang]/dictionaries";
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ id: string, lang: Locale }> }) {
     const params = await props.params;
+    const dict = await getDictionary(params.lang);
     const uID = await fetchUID();
     const campaignID = params.id;
     const campaign = await fetchCampaign(campaignID);
@@ -27,14 +29,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <main>
             <Breadcrumb>
                 <BreadcrumbList>
-                    <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+                    <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
                     <BreadcrumbSeparator />
-                    <BreadcrumbItem><BreadcrumbPage>Access</BreadcrumbPage></BreadcrumbItem>
+                    <BreadcrumbItem><BreadcrumbPage>{dict.access.access}</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <h1 className="text-text text-2xl mb-8 bg-banner banner">Campaign Users</h1>
+            <h1 className="text-text text-2xl mb-8 bg-banner banner">{dict.access.title}</h1>
             <ul>
                 {campaignUsers.sort((u1, u2) => {
                     if (u1.user_id === uID) return -1;
@@ -45,10 +47,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                     return (
                         <li key={user.user_id}>
                             <div className="flex gap-2 items-center rounded-lg py-2 px-3 justify-between h-16 mb-3 bg-bg dark:bg-dark-elevated-bg border-2 border-black shadow-light dark:shadow-dark">
-                                {user.User.username} {uID === user.user_id && '(You)'}
+                                {user.User.username} {uID === user.user_id && dict.access.you}
                                 {uID !== user.user_id &&
                                     <Button onClick={deleteUserById} className="w-auto">
-                                        <span className="sr-only">Delete</span>
+                                        <span className="sr-only">{dict.general.delete}</span>
                                         <Trash2 className="h-5 w-5" />
                                     </Button>
                                 }

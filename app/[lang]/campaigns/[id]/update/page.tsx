@@ -14,13 +14,15 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Campaign } from '@prisma/client';
+import { getDictionary, Locale } from '@/app/[lang]/dictionaries';
 
 
 
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ id: string, lang: Locale }> }) {
   const params = await props.params;
   const campaignID = params.id;
+  const dict = await getDictionary(params.lang);
 
   const campaign: Campaign = await fetchCampaign(campaignID);
   if (!campaign) {
@@ -33,20 +35,20 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <main>
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbPage>Update</BreadcrumbPage></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbPage>{dict.general.update}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <Form action={updateCampaignWithId} close={'/campaigns/' + campaignID}>
-        <h1 className="text-text text-2xl">Update Campaign</h1>
-        <FormItemInput name="name" label="Choose a campaign name" minLength={2} defaultValue={campaign.name} />
-        <FormItemTextArea name="description" label="Choose a campaign description" defaultValue={campaign.description} />
-        <FormItemInput name="password" label="Choose a campaign access password" defaultValue={campaign.password || ''} Icon={ShieldPlus} />
-        <Button type="submit" className="w-auto">Update Campaign</Button>
+        <h1 className="text-text text-2xl">{dict.update.title}</h1>
+        <FormItemInput name="name" label={dict.createCampaign.name} minLength={2} defaultValue={campaign.name} />
+        <FormItemTextArea name="description" label={dict.createCampaign.description} defaultValue={campaign.description} />
+        <FormItemInput name="password" label={dict.createCampaign.accessPassword} defaultValue={campaign.password || ''} Icon={ShieldPlus} />
+        <Button type="submit" className="w-auto">{dict.update.title}</Button>
       </Form>
     </main>
   );

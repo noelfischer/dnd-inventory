@@ -13,9 +13,12 @@ import {
 import Button from '@/components/Button';
 import { Trash2 } from 'lucide-react';
 import { Campaign } from '@prisma/client';
+import { getDictionary, Locale } from '@/app/[lang]/dictionaries';
 
-export default async function Page(props: { params: Promise<{ id: string, characterId: string }> }) {
+export default async function Page(props: { params: Promise<{ id: string, characterId: string, lang: Locale }> }) {
   const params = await props.params;
+  const dict = await getDictionary(params.lang);
+
   const campaignID = params.id;
   const characterID = params.characterId;
 
@@ -34,15 +37,15 @@ export default async function Page(props: { params: Promise<{ id: string, charac
     <main>
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/campaigns">Campaigns</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbPage>Delete {character.name}</BreadcrumbPage></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbPage>{dict.general.delete} {character.name}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="text-text text-2xl mb-6 bg-banner banner">
-        Delete Character</h1>
+        {dict.character.delete}</h1>
       <p className='font-semibold'>{character.name}</p>
       <p>{character.character_type}</p>
       <p>{character.description}</p>
@@ -50,7 +53,7 @@ export default async function Page(props: { params: Promise<{ id: string, charac
       <p>{character.species}</p>
       <Button className='mt-7 w-auto' onClick={deleteCharacterById}>
         <Trash2 className="w-4 mr-3" />
-        <span>Delete</span>
+        <span>{dict.general.delete}</span>
       </Button>
     </main>
   );

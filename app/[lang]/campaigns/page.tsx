@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ lang: Locale 
         {(username && username.length > 0) &&
           <>
             <Milestone />
-            <p className="mb-6 font-semibold username">{dict.campaigns.loggedInAs + username}</p>
+            <p className="mb-6 font-semibold username">{dict.campaigns.loggedInAs + " " + username}</p>
           </>
         }
       </div>

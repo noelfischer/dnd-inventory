@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { prisma } from './prisma';
 import { match } from '@formatjs/intl-localematcher'
+import { Locale } from '@/app/[lang]/dictionaries';
 
 export type keyValuePair = {
   key: string,
@@ -34,7 +35,7 @@ export function getUserFromDb(email: string) {
   });
 }
 
-export const getClasses = (lang: 'de' | 'en') => {
+export const getClasses = (lang: Locale) => {
   const classesDe: keyValuePair[] = [
     { key: 'bb', value: 'Barbar' },
     { key: 'ba', value: 'Barde' },
@@ -48,7 +49,7 @@ export const getClasses = (lang: 'de' | 'en') => {
     { key: 'sc', value: 'Schurke' },
     { key: 'wa', value: 'Waldläufer' },
     { key: 'za', value: 'Zauberer' },
-    { key: 'ar', value: 'Magieschmied / Artifizient' },
+    { key: 'ar', value: 'Magieschmied' },
     { key: 'pe', value: 'Tier' },
   ].sort((a, b) => a.value.localeCompare(b.value));
 
@@ -69,8 +70,52 @@ export const getClasses = (lang: 'de' | 'en') => {
     { key: 'pe', value: 'Pet' },
   ].sort((a, b) => a.value.localeCompare(b.value));
 
-  return lang === 'de' ? classesDe : classesEn;
-}
+  const classesFr: keyValuePair[] = [
+    { key: 'bb', value: 'Barbare' },
+    { key: 'ba', value: 'Barde' },
+    { key: 'dr', value: 'Druide' },
+    { key: 'he', value: 'Ensorceleur' }, // "Ensorceleur" is closer to Warlock in D&D context
+    { key: 'ka', value: 'Guerrier' },
+    { key: 'kl', value: 'Clerc' },
+    { key: 'ma', value: 'Magicien' },
+    { key: 'mo', value: 'Moine' },
+    { key: 'pa', value: 'Paladin' },
+    { key: 'sc', value: 'Roublard' }, // "Roublard" is the D&D term for Rogue
+    { key: 'wa', value: 'Rôdeur' }, // "Rôdeur" is the official term for Ranger
+    { key: 'za', value: 'Sorcier' }, // "Sorcier" is the D&D term for Sorcerer
+    { key: 'ar', value: 'Artificier' },
+    { key: 'pe', value: 'Familier' }, // "Familier" fits better than "Animal" for pets
+  ].sort((a, b) => a.value.localeCompare(b.value));
+
+  const classesIt: keyValuePair[] = [
+    { key: 'bb', value: 'Barbaro' },
+    { key: 'ba', value: 'Bardo' },
+    { key: 'dr', value: 'Druido' },
+    { key: 'he', value: 'Warlock' }, // No proper Italian equivalent, often left as Warlock
+    { key: 'ka', value: 'Guerriero' },
+    { key: 'kl', value: 'Chierico' },
+    { key: 'ma', value: 'Mago' },
+    { key: 'mo', value: 'Monaco' },
+    { key: 'pa', value: 'Paladino' },
+    { key: 'sc', value: 'Ladro' }, // "Ladro" is the official D&D term for Rogue
+    { key: 'wa', value: 'Ranger' }, // "Ranger" is the standard term in Italian D&D
+    { key: 'za', value: 'Stregone' }, // "Stregone" is the correct D&D translation for Sorcerer
+    { key: 'ar', value: 'Artefice' },
+    { key: 'pe', value: 'Famiglio' }, // "Famiglio" is the best term for a magical pet
+  ].sort((a, b) => a.value.localeCompare(b.value));
+
+  switch (lang) {
+    case 'de':
+      return classesDe;
+    case 'fr':
+      return classesFr;
+    case 'it':
+      return classesIt;
+    default:
+      return classesEn;
+  }
+};
+
 
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {

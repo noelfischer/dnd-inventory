@@ -1,104 +1,233 @@
 {
     "general": {
-        "campaings": "Kampagnen",
-        "create": "Erstellen",
-        "update": "Aktualisieren",
-        "delete": "Löschen",
-        "duplicate": "Duplizieren",
-        "or": "oder",
-        "logout": "Abmelden",
-        "createAccount": "Konto erstellen",
-        "actions": "Aktionen"
+        "campaings": "Campaigns",
+        "create": "Create",
+        "update": "Update",
+        "delete": "Delete",
+        "duplicate": "Duplicate",
+        "save": "Save",
+        "move": "Move",
+        "or": "or",
+        "logout": "Logout",
+        "createAccount": "Create Account",
+        "actions": "Actions",
+        "name": "Name",
+        "description": "Description",
+        "players": "Players",
+        "player": "Player",
+        "character": "Character"
     },
     "notFound": {
-        "title": "404 Nicht gefunden",
-        "description": "Die angeforderte Seite konnte nicht gefunden werden.",
-        "goBack": "Zurück"
+        "title": "404 Not Found",
+        "description": "Could not find the requested page.",
+        "goBack": "Go back"
     },
     "error": {
-        "title": "Etwas ist schiefgelaufen!",
-        "tryAgain": "Erneut versuchen",
-        "goBack": "Zurück zu Kampagnen"
+        "title": "Something went wrong!",
+        "tryAgain": "Try again",
+        "goBack": "Go Back to Campaigns"
     },
     "landingPage": {
-        "title": "D&D Inventar",
-        "description": "Behalte den Überblick über alles.",
-        "login": "Anmelden",
-        "goToCampaigns": "Zu den Kampagnen"
+        "title": "D&D Inventory",
+        "description": "Keep track of everything.",
+        "login": "Log in",
+        "goToCampaigns": "Go to Campaigns"
     },
     "login": {
-        "title": "Bitte melden Sie sich an, um fortzufahren.",
-        "google": "Mit Google fortfahren",
-        "email": "E-Mail",
-        "emailPlaceholder": "Geben Sie Ihre E-Mail-Adresse ein",
-        "password": "Passwort",
-        "passwordPlaceholder": "Geben Sie Ihr Passwort ein",
-        "login": "Anmelden",
-        "noAccount": "Noch kein Konto?"
+        "title": "Please log in to continue.",
+        "google": "Continue with Google",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "login": "Log in",
+        "noAccount": "Don't have an account?"
     },
     "signup": {
-        "title": "Konto erstellen",
-        "email": "E-Mail",
-        "emailPlaceholder": "Geben Sie Ihre E-Mail-Adresse ein",
-        "username": "Benutzername",
-        "usernamePlaceholder": "Wählen Sie einen Benutzernamen",
-        "password": "Passwort",
-        "passwordPlaceholder": "Wählen Sie ein Passwort",
-        "haveAccount": "Bereits ein Konto?"
+        "title": "Create an account",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "username": "Username",
+        "usernamePlaceholder": "Choose your username",
+        "password": "Password",
+        "passwordPlaceholder": "Choose your password",
+        "haveAccount": "Already have an account?"
     },
     "tour": {
-        "welcome": "Willkommen",
-        "last": "Tour beenden",
-        "next": "Weiter",
-        "back": "Zurück",
-        "skip": "Überspringen",
+        "welcome": "Welcome",
+        "last": "End tour",
+        "next": "Next",
+        "back": "Back",
+        "skip": "Skip",
         "t0": {
-            "content1": "Dies ist Ihre Kampagnenseite, auf der Sie Ihre Kampagnen verwalten können.",
-            "content2": "Hier sind Ihre Kampagnen, derzeit haben Sie keine.",
-            "content3": "Hier können Sie eine neue Kampagne erstellen.",
-            "content4": "Alternativ können Sie einer bestehenden Kampagne beitreten, indem Sie den Spielleiter nach einem Einladungslink fragen.",
-            "content5": "Zum Schluss können Sie hier den Dunkelmodus umschalten. Viel Spaß!"
+            "content1": "This is your campaigns page, where you can manage your campaigns.",
+            "content2": "These are your campaigns, currently you have none.",
+            "content3": "Here you can create a new campaign.",
+            "content4": "Alternatively you can join an existing campaign by requesting an invite link from the DM.",
+            "content5": "Lastly, you can toggle dark mode here. Enjoy!"
         },
         "t1": {
-            "content1": "Ihre erste Kampagne erstellen? Keine Sorge, es ist ganz einfach!",
-            "content2": "Zuerst können Sie Leute zu Ihrer Kampagne einladen. Klicken Sie hier, um den Einladungslink zu erhalten.",
-            "content3": "Personen, die Ihrer Kampagne beigetreten sind, können hier verwaltet werden.",
-            "content4": "Klicken Sie hier, um Ihre Kampagnendetails zu aktualisieren.",
-            "content5": "Erstellen Sie jetzt einen neuen Charakter. Sie können so viele erstellen, wie Sie möchten!"
+            "content1": "Building your first campaign? Don't worry, it's incredibly easy!",
+            "content2": "First, you can invite people to your campaign. Click here to get the invite link.",
+            "content3": "People who have joined your campaign can be managed here.",
+            "content4": "Click here to update your campaign details.",
+            "content5": "Now start by creating a new character. You can create as many as you like!"
         },
         "t2": {
-            "content1": "Dies ist einer Ihrer Charaktere. Sehen Sie sich an, was Sie damit tun können!",
-            "content2": "Besuchen Sie Ihr Charakter-Dashboard, um das Inventar, die Statistiken und mehr Ihres Charakters zu verwalten.",
-            "content3": "Klicken Sie hier, um die Details Ihres Charakters zu aktualisieren.",
-            "content4": "Klicken Sie hier, um Ihren Charakter zu löschen.",
-            "content5": "Hier können Sie Ihren Charakter duplizieren oder in eine andere Kampagne verschieben.",
-            "content6": "Jetzt, da Sie einen oder mehrere Charaktere haben, können Sie Ihr Gruppendashboard anzeigen, um alle Ihre Charaktere an einem Ort zu sehen."
+            "content1": "This is one of your characters. Check out what you can do with it!",
+            "content2": "Visit your character dashboard to view and manage your character's inventory, stats, and more.",
+            "content3": "Click here to update your character details.",
+            "content4": "Click here to delete your character.",
+            "content5": "Here you can duplicate or move your character to another campaign.",
+            "content6": "Now that you have one or more characters, you can view your party dashboard to see all your characters in one place."
         }
     },
     "campaigns": {
-        "loggedInAs": "Angemeldet als ",
-        "create": "Neue Kampagne erstellen"
+        "loggedInAs": "Logged in as",
+        "create": "Create a new Campaign"
     },
     "createCampaign": {
-        "title": "Kampagne erstellen",
-        "name": "Wählen Sie einen Kampagnennamen",
-        "description": "Wählen Sie eine Kampagnenbeschreibung (optional)",
-        "accessPassword": "Wählen Sie ein Zugangspasswort für die Kampagne (optional)",
-        "create": "Kampagne erstellen"
+        "title": "Create Campaign",
+        "name": "Choose a campaign name",
+        "description": "Choose a campaign description (optional)",
+        "accessPassword": "Choose a campaign access password (optional)",
+        "create": "Create Campaign"
     },
     "campaign": {
-        "descriptionLessCampaign": "Diese Kampagne hat keine Beschreibung.",
-        "players": "Spieler",
-        "enemies": "Feinde",
-        "pets": "Haustiere",
-        "viewPartyDashboard": "Gruppendashboard",
-        "createCharacter": "Neuen Charakter",
-        "update": "Kampagne aktualisieren",
-        "access": "Zugang verwalten",
-        "upload": "Charakter hochladen",
-        "viewDashboard": "Dashboard",
-        "moreOptions": "Weitere Optionen",
-        "changeCampaign": "Kampagne wechseln",
-        "downloadCharacter": "Charakter herunterladen"
+        "descriptionLessCampaign": "This campaign has no description.",
+        "enemies": "Enemies",
+        "pets": "Pets",
+        "viewPartyDashboard": "View Party Dashboard",
+        "createCharacter": "Create a new Character",
+        "update": "Update Campaign",
+        "access": "Handle Access",
+        "upload": "Upload Character",
+        "viewDashboard": "View Dashboard",
+        "moreOptions": "More Options",
+        "changeCampaign": "Change Campaign",
+        "downloadCharacter": "Download Character",
+        "invite": "Invite People to Campaign",
+        "inviteSuccess": "The Invite Link can now be copied!"
+    },
+    "uploadCharacter": {
+        "title": "Upload Character",
+        "name": "Choose a character name",
+        "description": "Upload a Character JSON file to this campaign.",
+        "description2": "(a character JSON file can be downloaded from any character in the campaign by clicking \"Download Character\")",
+        "invalidFileType": "Invalid file type. Please upload a JSON file.",
+        "invalidFormat": "Invalid JSON format",
+        "input": "Click to upload",
+        "drag": "or drag and drop"
+    },
+    "update": {
+        "title": "Update Campaign"
+    },
+    "join": {
+        "title": "Join the Campaign",
+        "join": "Join"
+    },
+    "delete": {
+        "title": "Delete Campaign"
+    },
+    "character": {
+        "create": "Create Character",
+        "update": "Update Character",
+        "name": "Choose a character name",
+        "enemy": "Enemy",
+        "pet": "Pet",
+        "url": "Portrait URL",
+        "description": "Choose a character description",
+        "owner": "Character owner",
+        "characterType": "Character Type",
+        "cclass": "Class",
+        "species": "Species",
+        "level": "Level",
+        "maxHitPoints": "Max Hit Points",
+        "armorClass": "Armor Class",
+        "strength": "Strength (0-20)",
+        "dexterity": "Dexterity",
+        "constitution": "Constitution",
+        "intelligence": "Intelligence",
+        "wisdom": "Wisdom",
+        "charisma": "Charisma",
+        "human": "Human",
+        "move": {
+            "title": "Move",
+            "description": "Do you want to move",
+            "description2": "to a different campaign?"
+        },
+        "delete": "Delete Character"
+    },
+    "access": {
+        "access": "Access",
+        "title": "Campaign Users",
+        "you": "(You)"
+    },
+    "dashboard": {
+        "inspiration": "Inspiration",
+        "notes": "Notes",
+        "notesPlaceholder": "Write down personal notes like quests, relationships, etc.",
+        "conditions": "Conditions",
+        "conditionsPlaceholder": "Write down conditions like poison, exhaustion, disadvantage, etc.",
+        "abilities": "Abilities",
+        "abilitiesPlaceholder": "Write down abilities, skills, etc.",
+        "ability": "Ability",
+        "level": "Level",
+        "triggerLongRest": "Trigger Long Rest",
+        "levelUp": "Level Up",
+        "navigation": {
+            "newDashboard": "New Dashboard",
+            "deleteDashboard": "Delete Dashboard",
+            "party": "Party",
+            "editLayout": "Edit Layout",
+            "element": {
+                "title": "Add Element",
+                "description": "Select the type of element you want to add to the dashboard.",
+                "noMore": "No more elements to add.",
+                "elementType": "Element Type",
+                "options": {
+                    "health": "Health",
+                    "inventory": "Inventory",
+                    "currency": "Coinage",
+                    "conditions": "Conditions",
+                    "levelup": "Level Up",
+                    "weight": "Weight",
+                    "notes": "Notes",
+                    "abilities": "Abilities",
+                    "spellslots": "Spell Slots",
+                    "inspiration": "Inspiration",
+                    "longrest": "Long Rest",
+                    "status": "Status"
+                }
+            }
+        },
+        "inventory": {
+            "equipped": "Equipped",
+            "onBody": "On Body",
+            "backpack": "Backpack",
+            "description": "Description",
+            "weight": "Weight",
+            "quantity": "Quantity",
+            "actions": "Actions",
+            "new": {
+                "title": "New Item",
+                "description": "Create a new item to add to your inventory.",
+                "category": {
+                    "title": "Category",
+                    "weapon": "Weapon",
+                    "armor": "Armor",
+                    "wearable": "Wearable",
+                    "tool": "Tool",
+                    "consumable": "Consumable",
+                    "miscellaneous": "Miscellaneous"
+                },
+                "slot": "Slot",
+                "magic": "Magic"
+            }
+        },
+        "platinum": "Platinum",
+        "gold": "Gold",
+        "silver": "Silver",
+        "copper": "Copper"
     }
 }

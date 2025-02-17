@@ -1,8 +1,11 @@
 'use client'
 
+import { useDictionary } from "@/app/[lang]/DictionaryProvider";
 import { useEffect, useState } from "react";
 
 const NameAndLevelClient = ({ name, cclass, il }: { name: string, cclass: string, il: number }) => {
+    const dictionary = useDictionary();
+
     const [level, setLevel] = useState(il);
 
     function updateLevel(e: any) {
@@ -18,7 +21,7 @@ const NameAndLevelClient = ({ name, cclass, il }: { name: string, cclass: string
 
     return (
         <div>
-            <h1 className='text-3xl'>{name}, {cclass}, Level {level}</h1>
+            <h1 className='text-3xl'>{name}, {cclass}, {dictionary.dashboard.level} {level}</h1>
         </div>
     );
 };

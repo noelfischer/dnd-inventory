@@ -174,7 +174,12 @@
         "ability": "Ability",
         "level": "Level",
         "triggerLongRest": "Trigger Long Rest",
-        "levelUp": "Level Up",
+        "levelUp": {
+            "title": "Level Up",
+            "description": "Level Up to Level",
+            "changeStats": "Change Stats",
+            "spellCapacity": "Spell Capacity"
+        },
         "navigation": {
             "newDashboard": "New Dashboard",
             "deleteDashboard": "Delete Dashboard",
@@ -205,10 +210,12 @@
             "equipped": "Equipped",
             "onBody": "On Body",
             "backpack": "Backpack",
+            "backbackLoad": "Backpack Load",
             "description": "Description",
             "weight": "Weight",
             "quantity": "Quantity",
             "actions": "Actions",
+            "edit": "Edit Item",
             "new": {
                 "title": "New Item",
                 "description": "Create a new item to add to your inventory.",

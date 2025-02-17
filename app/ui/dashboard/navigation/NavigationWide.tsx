@@ -9,6 +9,8 @@ import { useMemo, useState } from "react"
 import { Layouts } from "react-grid-layout"
 import AddElement, { AddableElement } from "./AddElement"
 import { keyValuePair } from "@/lib/utils"
+import { useDictionary } from "@/app/[lang]/DictionaryProvider"
+import { Dictionary } from "@/app/[lang]/dictionaries"
 
 type LinkText = {
   name: string
@@ -36,9 +38,10 @@ type Props = {
 }
 
 export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
+  const dictionary = useDictionary();
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
-  const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters, isPartyDashboard), [characters, layouts.lg]);
+  const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters, isPartyDashboard, dictionary), [characters, layouts.lg]);
   const [isPending, setIsPending] = useState(false);
 
   async function save() {
@@ -71,19 +74,19 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
     <div className={(editMode && "edit") + " bg-main  py-3 xl:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
       <div className="flex gap-6 flex-wrap content-between">
         {editMode ?
-          <div className="text-text flex text-lg opacity-50 mt-2"><ChevronLeft className="w-7 h-7" />Campaigns</div>
+          <div className="text-text flex text-lg opacity-50 mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaings}</div>
           :
-          <Link href='/campaigns' className="text-text flex text-lg mt-2"><ChevronLeft className="w-7 h-7" />Campaigns</Link>
+          <Link href='/campaigns' className="text-text flex text-lg mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaings}</Link>
         }
         <div className="flex gap-2 flex-wrap">
           {navLinks.map(({ name, links }) => (
             <Dropdown key={name} text={name === "Party" ? name : name.charAt(0).toUpperCase() + name.slice(1) + "s"} items={links} disabled={editMode} />
           ))}
           <Button className='w-auto min-w-[180px] flex justify-between mb-1' type="submit" disabled={isPending || editMode} onClick={() => dispatchServerFunction(newDashboard)}>
-            New Dashboard <Plus /></Button>
+            {dictionary.dashboard.navigation.newDashboard} <Plus /></Button>
           {ableToDeleteDashboard &&
             <Button className='w-auto min-w-[180px] flex justify-between px-3' disabled={isPending || editMode} onClick={() => dispatchServerFunction(deleteDashboard)}>
-              Delete Dashboard
+              {dictionary.dashboard.navigation.deleteDashboard}
               <Trash2 />
             </Button>
           }
@@ -94,10 +97,10 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
         {editMode ?
           <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={isPending} onClick={save}>
             {isPending && <span className="animate-spin mr-2"><LoaderCircle /></span>}
-            Save <PanelsLeftBottom />
+            {dictionary.general.save} <PanelsLeftBottom />
           </Button>
           :
-          <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>Edit Layout <PanelsLeftBottom /></Button>
+          <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout} <PanelsLeftBottom /></Button>
         }
         <AddElement addableElements={addableElements} addElementHandler={addElementHandlerCustom} disabled={isPending} />
       </div>
@@ -105,24 +108,24 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   )
 }
 
-function getAddableElements(layouts: Layouts, characters: keyValuePair[], isPartyDashboard: boolean): AddableElement[] {
+function getAddableElements(layouts: Layouts, characters: keyValuePair[], isPartyDashboard: boolean, dictionary: Dictionary): AddableElement[] {
   const elementOptions = [
-    { key: "name", value: "Name" },
-    { key: "health", value: "Health" },
-    { key: "inventory", value: "Inventory" },
-    { key: "currency", value: "Coinage" },
-    { key: "conditions", value: "Conditions" },
-    { key: "levelup", value: "Level Up" },
-    { key: "weight", value: "Weight" },
-    { key: "notes", value: "Notes" },
-    { key: "abilities", value: "Abilities" },
-    { key: "spellslots", value: "Spell Slots" },
-    { key: "inspiration", value: "Inspiration" },
-    { key: "longrest", value: "Long Rest" },
+    { key: "name", value: dictionary.general.name },
+    { key: "health", value: dictionary.dashboard.navigation.element.options.health },
+    { key: "inventory", value: dictionary.dashboard.navigation.element.options.inventory },
+    { key: "currency", value: dictionary.dashboard.navigation.element.options.currency },
+    { key: "conditions", value: dictionary.dashboard.navigation.element.options.conditions },
+    { key: "levelup", value: dictionary.dashboard.navigation.element.options.levelup },
+    { key: "weight", value: dictionary.dashboard.navigation.element.options.weight },
+    { key: "notes", value: dictionary.dashboard.navigation.element.options.notes },
+    { key: "abilities", value: dictionary.dashboard.navigation.element.options.abilities },
+    { key: "spellslots", value: dictionary.dashboard.navigation.element.options.spellslots },
+    { key: "inspiration", value: dictionary.dashboard.navigation.element.options.inspiration },
+    { key: "longrest", value: dictionary.dashboard.navigation.element.options.longrest },
   ].sort((a, b) => a.value.localeCompare(b.value));
 
   if (isPartyDashboard) {
-    elementOptions.unshift({ key: "status", value: "Status" });
+    elementOptions.unshift({ key: "status", value: dictionary.dashboard.navigation.element.options.status });
   }
 
   let addableElements: AddableElement[] = [];

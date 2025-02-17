@@ -3,9 +3,10 @@
 import OnLeaveTextArea from './helper/OnLeaveTextArea';
 import { BookUp2 } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
+import { Dictionary } from '@/app/[lang]/dictionaries';
 
 
-const Abilities = async ({ character_id }: { character_id: string }) => {
+const Abilities = async ({ character_id, dict }: { character_id: string, dict: Dictionary }) => {
     const characterInfo = await prisma.characterInfo.findFirst({ where: { character_id }, select: { abilities: true } });
     if (!characterInfo) return <></>;
 
@@ -19,9 +20,9 @@ const Abilities = async ({ character_id }: { character_id: string }) => {
 
     return (
         <div className="h-full">
-            <span className='flex items-center pt-3 ml-3'><BookUp2 className='h-7 w-7 mr-3' /><h2 className='text-2xl'>Abilities</h2></span>
+            <span className='flex items-center pt-3 ml-3'><BookUp2 className='h-7 w-7 mr-3' /><h2 className='text-2xl'>{dict.dashboard.abilities}</h2></span>
             <div className='pt-3' style={{ height: "calc(100% - 44px)" }}>
-                <OnLeaveTextArea initialValue={characterInfo.abilities || ""} onLeave={updateAbilities} className='h-full border-x-0 rounded-none' placeholder='Write down abilities, skills, etc.' />
+                <OnLeaveTextArea initialValue={characterInfo.abilities || ""} onLeave={updateAbilities} className='h-full border-x-0 rounded-none' placeholder={dict.dashboard.abilitiesPlaceholder} />
             </div>
 
         </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useDictionary } from "@/app/[lang]/DictionaryProvider";
 import OnLeaveInput from "../helper/OnLeaveInput";
 import { cn } from "@/lib/utils";
 import { Currency } from "@prisma/client";
@@ -16,6 +17,7 @@ interface Props {
 const CurrencyClient = ({ initial_currency, updatePlatinum, updateGold, updateSilver, updateCopper }: Props) => {
 
     const [currency, setCurrency] = useState<Currency>(initial_currency);
+    const dictionary = useDictionary()
 
     useEffect(() => {
         setCurrency(initial_currency);
@@ -70,10 +72,10 @@ const CurrencyClient = ({ initial_currency, updatePlatinum, updateGold, updateSi
     return (
         <div className="currency m-1">
             <ul className="flex flex-row gap-2 flex-wrap">
-                <ListItem value={currency.platin} label="Platinum" className='platinum' onLeave={onChangePlatinum} />
-                <ListItem value={currency.gold} label="Gold" className='gold' onLeave={onChangeGold} />
-                <ListItem value={currency.silver} label="Silver" className='silver' onLeave={onChangeSilver} />
-                <ListItem value={currency.copper} label="Copper" className='copper' onLeave={onChangeCopper} />
+                <ListItem value={currency.platin} label={dictionary.dashboard.platinum} className='platinum' onLeave={onChangePlatinum} />
+                <ListItem value={currency.gold} label={dictionary.dashboard.gold} className='gold' onLeave={onChangeGold} />
+                <ListItem value={currency.silver} label={dictionary.dashboard.silver} className='silver' onLeave={onChangeSilver} />
+                <ListItem value={currency.copper} label={dictionary.dashboard.copper} className='copper' onLeave={onChangeCopper} />
             </ul>
         </div>
     );

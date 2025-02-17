@@ -14,8 +14,11 @@ import { useState } from "react";
 import { SpellSlotWithoutCharacterID } from "../spellslots/helper";
 import { LevelUpCharacter } from "./LevelupServer";
 import OnLeaveInput from "../helper/OnLeaveInput";
+import { useDictionary } from "@/app/[lang]/DictionaryProvider";
 
 const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpCharacter, spellSlots: SpellSlotWithoutCharacterID[], levelup: (character: LevelUpCharacter, spell_slots: SpellSlotWithoutCharacterID[]) => Promise<void> }) => {
+    const dictionary = useDictionary();
+
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [newLevel, setNewLevel] = useState<number>(character.level + 1);
@@ -90,45 +93,45 @@ const LevelupClient = ({ character, spellSlots, levelup }: { character: LevelUpC
             before:absolute before:left-0 before:bottom-0 before:w-full before:h-0 hover:before:h-full 
             hover:text-white hover:font-bold hover:before:skew-y-0 hover:font-bold hover:scale-105 
             before:bg-green-500 before:transition-all before:duration-500 before:origin-bottom-left before:skew-y-6">
-                        <span className="relative z-10 h-full w-full group-hover:[text-shadow:_0_2px_0_rgb(0_0_0_/_40%)] delay-100 transition-all duration-300">Level Up</span>
+                        <span className="relative z-10 h-full w-full group-hover:[text-shadow:_0_2px_0_rgb(0_0_0_/_40%)] delay-100 transition-all duration-300">{dictionary.dashboard.levelUp.title}</span>
                     </button>
                 </DialogTrigger>
 
                 <DialogContent className="sm:max-w-[625px]">
                     <form action={handleSubmit}>
                         <DialogHeader>
-                            <DialogTitle className='text-text text-4xl'>Level Up to Level <OnLeaveInput className="dark:text-text dark:border-black text-4xl pb-10 border-b-[5px] mb-6" initialValue={newLevel.toString()} placeholder={newLevel.toString()} onLeave={onChangeNewLevel} />?</DialogTitle>
+                            <DialogTitle className='text-text text-4xl'>{dictionary.dashboard.levelUp.description} <OnLeaveInput className="dark:text-text dark:border-black text-4xl pb-10 border-b-[5px] mb-6" initialValue={newLevel.toString()} placeholder={newLevel.toString()} onLeave={onChangeNewLevel} />?</DialogTitle>
                         </DialogHeader>
                         <div className="grid gap-4 py-2">
-                            <h2 className="text-text text-md mt-5">Change stats</h2>
+                            <h2 className="text-text text-md mt-5">{dictionary.dashboard.levelUp.changeStats}</h2>
                             <div className="grid grid-cols-4 items-center gap-x-4">
-                                <FormItemInput autofocus name="max_hit_points" label="max hit points" type="number" max={9999} defaultValue={character.max_hit_points.toString()} />
-                                <FormItemInput name="armor_class" label="armor class" type="number" max={50} defaultValue={character.armor_class.toString()} />
-                                <FormItemInput name="strength" label="strength" type="number" defaultValue={character.strength.toString()} />
-                                <FormItemInput name="dexterity" label="dexterity" type="number" defaultValue={character.dexterity.toString()} />
-                                <FormItemInput name="constitution" label="constitution" type="number" defaultValue={character.constitution.toString()} />
-                                <FormItemInput name="intelligence" label="intelligence" type="number" defaultValue={character.intelligence.toString()} />
-                                <FormItemInput name="wisdom" label="wisdom" type="number" defaultValue={character.wisdom.toString()} />
-                                <FormItemInput name="charisma" label="charisma" type="number" defaultValue={character.charisma.toString()} />
+                                <FormItemInput autofocus name="max_hit_points" label={dictionary.character.maxHitPoints} type="number" max={9999} defaultValue={character.max_hit_points.toString()} />
+                                <FormItemInput name="armor_class" label={dictionary.character.armorClass} type="number" max={50} defaultValue={character.armor_class.toString()} />
+                                <FormItemInput name="strength" label={dictionary.character.strength} type="number" defaultValue={character.strength.toString()} />
+                                <FormItemInput name="dexterity" label={dictionary.character.dexterity} type="number" defaultValue={character.dexterity.toString()} />
+                                <FormItemInput name="constitution" label={dictionary.character.constitution} type="number" defaultValue={character.constitution.toString()} />
+                                <FormItemInput name="intelligence" label={dictionary.character.intelligence} type="number" defaultValue={character.intelligence.toString()} />
+                                <FormItemInput name="wisdom" label={dictionary.character.wisdom} type="number" defaultValue={character.wisdom.toString()} />
+                                <FormItemInput name="charisma" label={dictionary.character.charisma} type="number" defaultValue={character.charisma.toString()} />
                             </div>
-                            <h2 className="text-text text-md mt-6">Spell Capacity</h2>
+                            <h2 className="text-text text-md mt-6">{dictionary.dashboard.levelUp.spellCapacity}</h2>
                             <div className="grid grid-cols-6 items-center gap-x-2">
-                                <FormItemInput name="spell_slots_0" label="Ability" type="number" defaultValue={spellSlots[0].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_1" label="1. Level" type="number" defaultValue={spellSlots[1].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_2" label="2. Level" type="number" defaultValue={spellSlots[2].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_3" label="3. Level" type="number" defaultValue={spellSlots[3].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_4" label="4. Level" type="number" defaultValue={spellSlots[4].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_5" label="5. Level" type="number" defaultValue={spellSlots[5].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_6" label="6. Level" type="number" defaultValue={spellSlots[6].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_7" label="7. Level" type="number" defaultValue={spellSlots[7].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_8" label="8. Level" type="number" defaultValue={spellSlots[8].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_9" label="9. Level" type="number" defaultValue={spellSlots[9].total_casts.toString()} />
-                                <FormItemInput name="spell_slots_10" label="10. Level" type="number" defaultValue={spellSlots[10].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_0" label={dictionary.dashboard.ability} type="number" defaultValue={spellSlots[0].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_1" label={"1. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[1].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_2" label={"2. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[2].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_3" label={"3. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[3].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_4" label={"4. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[4].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_5" label={"5. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[5].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_6" label={"6. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[6].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_7" label={"7. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[7].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_8" label={"8. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[8].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_9" label={"9. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[9].total_casts.toString()} />
+                                <FormItemInput name="spell_slots_10" label={"10. " + dictionary.dashboard.level} type="number" defaultValue={spellSlots[10].total_casts.toString()} />
 
                             </div>
                         </div>
                         <DialogFooter className="mt-6">
-                            <Button type='submit'>Level Up</Button>
+                            <Button type='submit'>{dictionary.dashboard.levelUp.title}</Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>

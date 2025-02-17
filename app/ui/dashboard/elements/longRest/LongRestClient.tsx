@@ -1,11 +1,14 @@
 'use client'
 
+import { useDictionary } from "@/app/[lang]/DictionaryProvider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Lock, Sunset, Unlock } from "lucide-react";
 import { useState } from "react";
 
 const LongRestClient = ({ longRest }: { longRest: () => Promise<void>; }) => {
+    const dictionary = useDictionary();
+
     const [rightDisabled, setRightDisabled] = useState(true);
 
     function handleLeft() {
@@ -40,7 +43,7 @@ const LongRestClient = ({ longRest }: { longRest: () => Promise<void>; }) => {
                         )}
                         onClick={handleRight} size="lg" disabled={rightDisabled} variant="noShadow"
                     >
-                        <Sunset className=" mr-3 h-7 w-7" /> Trigger Long Rest
+                        <Sunset className=" mr-3 h-7 w-7" /> {dictionary.dashboard.triggerLongRest}
                     </Button>
                 </div>
             </div>

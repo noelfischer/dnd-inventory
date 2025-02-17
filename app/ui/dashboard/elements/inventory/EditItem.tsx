@@ -1,3 +1,4 @@
+import { useDictionary } from '@/app/[lang]/DictionaryProvider'
 import { FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,6 +22,7 @@ type Props = {
 }
 
 const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
+    const dictionary = useDictionary();
     const [open, setOpen] = useState(false);
 
     // This is a workaround to prevent the user from accidentally deleting an item
@@ -49,25 +51,30 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
             <DialogContent className="sm:max-w-[625px]">
                 <form action={handleSubmit}>
                     <DialogHeader>
-                        <DialogTitle className='text-text'>Edit Item</DialogTitle>
-                        <DialogDescription className='text-text'>
-                            Create a new item to add to your inventory.
-                        </DialogDescription>
+                        <DialogTitle className='text-text'>{dictionary.dashboard.inventory.edit}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <FormItemInput name="item_name" label="Name" className='col-span-4 w-full' defaultValue={item.item_name} minLength={2} />
-                            <FormItemInput name="description" label="Description" className='col-span-4 w-full' defaultValue={item.description} />
-                            <FormItemSelect name="category" label="Category" defaultValue={item.category} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'W', value: 'Weapon' }, { key: 'A', value: 'Armor' }, { key: 'B', value: 'Wearable' }, { key: 'T', value: 'Tool' }, { key: 'C', value: 'Consumable' }, { key: 'M', value: 'Miscellaneous' }]} />
-                            <FormItemSelect name="slot" label="Slot" defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'eq', value: 'Equipped' }, { key: 'bd', value: 'On Body' }, { key: 'bp', value: 'Backpack' }]} />
-                            <FormItemInput name="weight" label="Weight" type="number" className='col-span-1 w-full' min={0} max={500} defaultValue={item.weight.toString()} />
-                            <FormItemInput name="quantity" label="Quantity" type="number" className='col-span-1 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} autofocus />
-                            <FormItemCheckbox name="magic" label="Magic" defaultChecked={item.magic} className='col-span-2 w-full' />
+                            <FormItemInput name="item_name" label={dictionary.general.name} className='col-span-4 w-full' defaultValue={item.item_name} minLength={2} />
+                            <FormItemInput name="description" label={dictionary.general.description} className='col-span-4 w-full' defaultValue={item.description} />
+                            <FormItemSelect name="category" label={dictionary.dashboard.inventory.new.category.title} defaultValue={item.category} classNameLabel='text-text' className='col-span-2 w-full' options=
+                                {[
+                                    { key: 'W', value: dictionary.dashboard.inventory.new.category.weapon },
+                                    { key: 'A', value: dictionary.dashboard.inventory.new.category.armor },
+                                    { key: 'B', value: dictionary.dashboard.inventory.new.category.wearable },
+                                    { key: 'T', value: dictionary.dashboard.inventory.new.category.tool },
+                                    { key: 'C', value: dictionary.dashboard.inventory.new.category.consumable },
+                                    { key: 'M', value: dictionary.dashboard.inventory.new.category.miscellaneous }]
+                                } />
+                            <FormItemSelect name={dictionary.dashboard.inventory.new.slot} label="Slot" defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'eq', value: 'Equipped' }, { key: 'bd', value: 'On Body' }, { key: 'bp', value: 'Backpack' }]} />
+                            <FormItemInput name={dictionary.dashboard.inventory.weight} label="Weight" type="number" className='col-span-1 w-full' min={0} max={500} defaultValue={item.weight.toString()} />
+                            <FormItemInput name={dictionary.dashboard.inventory.quantity} label="Quantity" type="number" className='col-span-1 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} autofocus />
+                            <FormItemCheckbox name={dictionary.dashboard.inventory.new.magic} label="Magic" defaultChecked={item.magic} className='col-span-2 w-full' />
                         </div>
                     </div>
                     <DialogFooter className='sm:justify-between'>
-                        <Button type='button' className='mt-4 sm:mt-0' onPointerDown={() => setPointHasDown(true)} onClick={handleDelete}>Delete</Button>
-                        <Button type='submit' className='bg-main-accent'>Update</Button>
+                        <Button type='button' className='mt-4 sm:mt-0' onPointerDown={() => setPointHasDown(true)} onClick={handleDelete}>{dictionary.general.delete}</Button>
+                        <Button type='submit' className='bg-main-accent'>{dictionary.general.update}</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

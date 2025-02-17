@@ -5,7 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster"
 import '@/app/ui/global.css';
 import { getDictFromParams, Locale } from './dictionaries';
-import DictClient from './DictClient';
+import DictionaryProvider from './DictionaryProvider';
 
 
 export const metadata: Metadata = {
@@ -25,14 +25,16 @@ export async function generateStaticParams() {
   return [{ lang: 'en' }, { lang: 'de' }];
 }
 
-export default function RootLayout({ children, params }: { children: React.ReactNode, params: Promise<{ lang: Locale }> }) {
+export default async function RootLayout({ children, params }: { children: React.ReactNode, params: Promise<{ lang: Locale }> }) {
+  const dictionary = await getDictFromParams(params);
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <DictClient dictPromise={getDictFromParams(params)} params={params} />
       <body className={`${inter.className} antialiased bg-bg/50 dark:bg-dark-bg/70`}>
         <ThemeProvider attribute="class">
-          {children}
+          <DictionaryProvider dictionary={dictionary}>
+            {children}
+          </DictionaryProvider>
           <Toaster />
         </ThemeProvider>
       </body>

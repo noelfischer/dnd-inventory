@@ -9,9 +9,10 @@ import { InventoryItem } from '@prisma/client';
 import { createInventoryItem, formatInitialItemstoTableData, HandleRef, Item, Props, removeItemFromInventory, updateInventoryItem } from './helper';
 import { selectIcon } from './HelperComponents';
 import DraggableTables from './DraggableTables';
+import { useDictionary } from '@/app/[lang]/DictionaryProvider';
 
 const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, updateItem, deleteItem, updateIndex, updateBackpackCapacity }: Props) => {
-
+    const dictionary = useDictionary();
     const [tables, setTables] = useState<Item[]>(formatInitialItemstoTableData(initialItems));
     const [backpackCapacity, setBackpackCapacity] = useState<number>(initialBackpackCapacity);
 
@@ -51,11 +52,11 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
     const headerContent = () => {
         return (
             <>
-                <div className="px-3 col-span-2 sm:col-span-1">Name</div>
-                <div className='hidden sm:table-cell mr-3'>Description</div>
-                <div className='mr-3'>Weight</div>
-                <div>Quantity</div>
-                <div className="text-right px-3">Actions</div>
+                <div className="px-3 col-span-2 sm:col-span-1">{dictionary.general.name}</div>
+                <div className='hidden sm:table-cell mr-3'>{dictionary.general.description}</div>
+                <div className='mr-3'>{dictionary.dashboard.inventory.weight}</div>
+                <div>{dictionary.dashboard.inventory.quantity}</div>
+                <div className="text-right px-3">{dictionary.dashboard.inventory.actions}</div>
             </>
         )
     };
@@ -84,7 +85,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
         if (id === 'bp') {
             return (
                 <>
-                    <div className='px-3'>Backpack Load</div>
+                    <div className='px-3'>{dictionary.dashboard.inventory.backbackLoad}</div>
                     <div className="text-right col-span-4 px-3"><span className='pr-2'>{backpackFilled}</span> / <OnLeaveInput className='h-6 -mt-0.5' initialValue={backpackCapacity.toString()} onLeave={onChangeBackpackLoadCapacity} /><span className='mr-2'> lb. </span> | <span className='ml-3'>{isNaN(backpackPercentage) ? "0" : backpackPercentage} %</span></div>
                 </>
             );
@@ -101,6 +102,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
                 headerContent={headerContent}
                 renderRow={renderRow}
                 footerContent={footerContent}
+                dictionary={dictionary}
             />
 
             <NewItem className='w-auto m-4' createItem={handleCreate} />

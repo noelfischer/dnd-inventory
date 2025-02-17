@@ -21,6 +21,7 @@ import LevelupServer from '@/app/ui/dashboard/elements/levelup/LevelupServer';
 import { DashboardElement } from '@prisma/client';
 import NameAndLevelServer from '@/app/ui/dashboard/elements/nameAndLevel/NameAndLevelServer';
 import { keyValuePair } from '@/lib/utils';
+import { Dictionary, getDictionary, Locale } from '@/app/[lang]/dictionaries';
 
 export type GridElement = {
   i: string;
@@ -35,8 +36,9 @@ export type Component = {
   type: ReactNode;
 }
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ id: string, lang: Locale }> }) {
   const params = await props.params;
+  const dict = await getDictionary(params.lang);
   const dashboardID = params.id;
   const uID = await fetchUID();
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
@@ -65,11 +67,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   let layout;
   let componentList: Component[];
   if (dashboardLayout.length < 1 && characterID) {
-    layout = getLayoutTemplate(characterID).layout;
-    componentList = getLayoutTemplate(characterID).list;
+    layout = getLayoutTemplate(characterID, dict).layout;
+    componentList = getLayoutTemplate(characterID, dict).list;
   } else {
     layout = transformToLayout(dashboardLayout);
-    componentList = dashboardLayout.map(element => { return { i: element.element_id + ',' + element.element_type + ',' + element.character_id, type: componentMap(element.element_type, element.character_id) } })
+    componentList = dashboardLayout.map(element => { return { i: element.element_id + ',' + element.element_type + ',' + element.character_id, type: componentMap(element.element_type, element.character_id, dict) } })
 
   }
 
@@ -91,7 +93,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   );
 }
 
-function componentMap(type: string, character_id: string): ReactNode {
+function componentMap(type: string, character_id: string, dict: Dictionary): ReactNode {
   switch (type) {
     case 'name':
       return <NameAndLevelServer character_id={character_id} />;
@@ -100,21 +102,21 @@ function componentMap(type: string, character_id: string): ReactNode {
     case 'weight':
       return <WeightServer character_id={character_id} />;
     case 'notes':
-      return <Notes character_id={character_id} />;
+      return <Notes character_id={character_id} dict={dict} />;
     case 'inventory':
       return <InventoryServer character_id={character_id} />;
     case 'levelup':
       return <LevelupServer character_id={character_id} />;
     case 'abilities':
-      return <Abilities character_id={character_id} />;
+      return <Abilities character_id={character_id} dict={dict} />;
     case 'conditions':
-      return <Conditions character_id={character_id} />;
+      return <Conditions character_id={character_id} dict={dict} />;
     case 'currency':
       return <CurrencyServer character_id={character_id} />;
     case 'spellslots':
       return <SpellSlotsServer character_id={character_id} />;
     case 'inspiration':
-      return <Inspiration character_id={character_id} />;
+      return <Inspiration character_id={character_id} dict={dict} />;
     case 'longrest':
       return <LongRestServer character_id={character_id} />;
     case 'status':
@@ -158,7 +160,7 @@ function transformToLayout(dashboardLayout: DashboardElement[]): Layouts {
   return layout;
 }
 
-function getLayoutTemplate(characterID: string) {
+function getLayoutTemplate(characterID: string, dict: Dictionary) {
   const initial_layout: Layouts = {
     lg: [
       { i: '0000000000,name,' + characterID, x: 0, y: 0, w: 7, h: 1 },
@@ -180,13 +182,13 @@ function getLayoutTemplate(characterID: string) {
     { i: '0000000001,health,' + characterID, type: <HealthBarServer character_id={characterID} /> },
     { i: '0000000009,spellslots,' + characterID, type: <SpellSlotsServer character_id={characterID} /> },
     { i: '0000000002,weight,' + characterID, type: <WeightServer character_id={characterID} /> },
-    { i: '0000000003,notes,' + characterID, type: <Notes character_id={characterID} /> },
+    { i: '0000000003,notes,' + characterID, type: <Notes character_id={characterID} dict={dict} /> },
     { i: '0000000004,inventory,' + characterID, type: <InventoryServer character_id={characterID} /> },
     { i: '0000000005,levelup,' + characterID, type: <LevelupServer character_id={characterID} /> },
-    { i: '0000000006,abilities,' + characterID, type: <Abilities character_id={characterID} /> },
-    { i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} /> },
+    { i: '0000000006,abilities,' + characterID, type: <Abilities character_id={characterID} dict={dict} /> },
+    { i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} dict={dict} /> },
     { i: '00000000008,currency,' + characterID, type: <CurrencyServer character_id={characterID} /> },
-    { i: '00000000010,inspiration,' + characterID, type: <Inspiration character_id={characterID} /> },
+    { i: '00000000010,inspiration,' + characterID, type: <Inspiration character_id={characterID} dict={dict} /> },
     { i: '00000000011,longrest,' + characterID, type: <LongRestServer character_id={characterID} /> },
   ];
   return { layout: initial_layout, list: initial_componentList };

@@ -28,6 +28,7 @@ import { blockBoardPanningAttr } from './data-attributes';
 import { isSafari } from './is-safari';
 import { isShallowEqual } from './is-shallow-equal';
 import { SettingsContext } from './settings-context';
+import { cn } from '@/lib/utils';
 
 type TColumnState =
   | {
@@ -227,7 +228,7 @@ export function Column({ column }: { column: TColumn }) {
             <div className="font-bold leading-4">{column.title}</div>
           </div>
           <div
-            className="grid grid-cols-5 py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:var(--color-slate-600)_var(--color-slate-700)] [scrollbar-width:thin]"
+            className={cn("grid py-[1px] overflow-y-auto [overflow-anchor:none] [scrollbar-color:var(--color-slate-600)_var(--color-slate-700)] [scrollbar-width:thin]", column.cards.length <= 1 ? 'grid-cols-5' : '')}
             ref={scrollableRef}
           >
             {column.header()}

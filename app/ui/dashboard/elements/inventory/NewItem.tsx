@@ -41,8 +41,8 @@ const NewItem = ({ className, createItem }: { className?: string, createItem: (i
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <FormItemInput name="item_name" label={dictionary.general.name} className='col-span-4 w-full' minLength={2} />
-                            <FormItemInput name="description" label={dictionary.general.description} className='col-span-4 w-full' />
+                            <FormItemInput name="item_name" label={dictionary.general.name} placeholder={dictionary.general.name} className='col-span-4 w-full' minLength={2} />
+                            <FormItemInput name="description" label={dictionary.general.description} placeholder={dictionary.general.description} className='col-span-4 w-full' />
                             <FormItemSelect name="category" label={dictionary.dashboard.inventory.new.category.title} defaultValue='M' classNameLabel='text-text' className='col-span-2 w-full' options=
                                 {[
                                     { key: 'W', value: dictionary.dashboard.inventory.new.category.weapon },
@@ -52,10 +52,17 @@ const NewItem = ({ className, createItem }: { className?: string, createItem: (i
                                     { key: 'C', value: dictionary.dashboard.inventory.new.category.consumable },
                                     { key: 'M', value: dictionary.dashboard.inventory.new.category.miscellaneous }]
                                 } />
-                            <FormItemSelect name="slot" label={dictionary.dashboard.inventory.new.slot} defaultValue='eq' classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'eq', value: 'Equipped' }, { key: 'bd', value: 'On Body' }, { key: 'bp', value: 'Backpack' }]} />
-                            <FormItemInput name="weight" label={dictionary.dashboard.inventory.weight} type="number" className='col-span-1 w-full' min={0} max={500} defaultValue="1" />
-                            <FormItemInput name="quantity" label={dictionary.dashboard.inventory.quantity} type="number" className='col-span-1 w-full' min={0} max={1000} defaultValue="1" />
-                            <FormItemCheckbox name="magic" label={dictionary.dashboard.inventory.new.magic} defaultChecked={false} className='col-span-2 w-full' />
+                            <FormItemSelect name="slot" label={dictionary.dashboard.inventory.new.slot} defaultValue='eq' classNameLabel='text-text' className='col-span-2 w-full' options=
+                                {[
+                                    { key: 'eq', value: dictionary.dashboard.inventory.equipped },
+                                    { key: 'bd', value: dictionary.dashboard.inventory.onBody },
+                                    { key: 'bp', value: dictionary.dashboard.inventory.backpack }
+                                ]} />
+                            <div className="grid grid-cols-5 col-span-4 gap-4">
+                                <FormItemInput name="weight" label={dictionary.dashboard.inventory.weight} type="number" className='col-span-2 w-full' min={0} max={500} defaultValue="1" />
+                                <FormItemInput name="quantity" label={dictionary.dashboard.inventory.quantity} type="number" className='col-span-2 w-full' min={0} max={1000} defaultValue="1" />
+                                <FormItemCheckbox name="magic" label={dictionary.dashboard.inventory.new.magic} defaultChecked={false} className='col-span-1 w-full' />
+                            </div>
 
                         </div>
                     </div>

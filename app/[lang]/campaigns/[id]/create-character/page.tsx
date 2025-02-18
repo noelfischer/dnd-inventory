@@ -31,7 +31,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
     <main>
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaigns}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -42,9 +42,9 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
         <h1 className="text-text text-2xl mb-3">{dict.character.create}</h1>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <FormItemInput className='col-span-4' name="name" label={dict.character.name} minLength={2} />
+            <FormItemInput className='col-span-4' name="name" label={dict.character.name} minLength={2} placeholder={dict.general.name}/>
             <FormItemTextArea className='col-span-4' classNameTextArea='h-28' name="description" label={dict.general.description} placeholder={dict.character.description} />
-            <FormItemInput className='col-span-4' name="portrait_url" label={dict.character.url} type="url" Icon={Link} maxLength={255} />
+            <FormItemInput className='col-span-4' name="portrait_url" label={dict.character.url} placeholder={dict.character.url} type="url" Icon={Link} maxLength={255} />
             {isDM ?
               <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label={dict.character.characterType} classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: dict.general.player }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: dict.character.enemy }, { key: "Pet", value: dict.character.pet }]} defaultValue='Player' /> :
               <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label={dict.character.characterType} classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: dict.general.player }, { key: "Pet", value: dict.character.pet }]} defaultValue='Player' />}

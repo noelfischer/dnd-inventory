@@ -85,7 +85,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
         if (id === 'bp') {
             return (
                 <>
-                    <div className='px-3'>{dictionary.dashboard.inventory.backbackLoad}</div>
+                    <div className='px-3 whitespace-nowrap'>{dictionary.dashboard.inventory.backpackLoad}</div>
                     <div className="text-right col-span-4 px-3"><span className='pr-2'>{backpackFilled}</span> / <OnLeaveInput className='h-6 -mt-0.5' initialValue={backpackCapacity.toString()} onLeave={onChangeBackpackLoadCapacity} /><span className='mr-2'> lb. </span> | <span className='ml-3'>{isNaN(backpackPercentage) ? "0" : backpackPercentage} %</span></div>
                 </>
             );

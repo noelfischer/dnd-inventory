@@ -48,7 +48,7 @@ export default function AddElement({ addableElements, addElementHandler, disable
                 <SheetTrigger asChild>
                     <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={disabled || loading}>
                         {loading && <LoaderCircle className='animate-spin ml-2' />}
-                        {dictionary.dashboard.navigation.element.title}<Plus /></Button>
+                        {dictionary.dashboard.navigation.element.title}<Plus className="ml-2" /></Button>
                 </SheetTrigger>
                 <SheetContent>
                     <form action={formAction}>

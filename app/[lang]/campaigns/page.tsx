@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ lang: Locale 
           </>
         }
       </div>
-      <h1 className="text-text text-2xl mb-12 bg-banner banner">{dict.general.campaings}</h1>
+      <h1 className="text-text text-2xl mb-12 bg-banner banner">{dict.general.campaigns}</h1>
       <ul className="pb-3">
         {campaigns.map((campaign: Campaign) => {
           return (

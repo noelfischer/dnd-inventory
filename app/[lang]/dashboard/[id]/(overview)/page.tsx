@@ -96,7 +96,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
 function componentMap(type: string, character_id: string, dict: Dictionary): ReactNode {
   switch (type) {
     case 'name':
-      return <NameAndLevelServer character_id={character_id} />;
+      return <NameAndLevelServer character_id={character_id} lang={dict.lang as Locale} />;
     case 'health':
       return <HealthBarServer character_id={character_id} />;
     case 'weight':
@@ -178,7 +178,7 @@ function getLayoutTemplate(characterID: string, dict: Dictionary) {
     ],
   };
   const initial_componentList = [
-    { i: '0000000000,name,' + characterID, type: <NameAndLevelServer character_id={characterID} /> },
+    { i: '0000000000,name,' + characterID, type: <NameAndLevelServer character_id={characterID} lang={dict.lang as Locale} /> },
     { i: '0000000001,health,' + characterID, type: <HealthBarServer character_id={characterID} /> },
     { i: '0000000009,spellslots,' + characterID, type: <SpellSlotsServer character_id={characterID} /> },
     { i: '0000000002,weight,' + characterID, type: <WeightServer character_id={characterID} /> },

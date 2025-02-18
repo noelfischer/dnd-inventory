@@ -67,13 +67,13 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
     <div className={(editMode && "edit") + " bg-main  py-3 xl:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
       <div className="flex gap-6 flex-wrap content-between">
         {editMode ?
-          <div className="text-text flex text-lg opacity-50 mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaings}</div>
+          <div className="text-text flex text-lg opacity-50 mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaigns}</div>
           :
-          <Link href='/campaigns' className="text-text flex text-lg mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaings}</Link>
+          <Link href='/campaigns' className="text-text flex text-lg mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaigns}</Link>
         }
         <div className="flex gap-2 flex-wrap">
           {navLinks.map(({ name, links }) => (
-            <Dropdown key={name} text={name === "Party" ? name : name.charAt(0).toUpperCase() + name.slice(1) + "s"} items={links} disabled={editMode} />
+            <Dropdown key={name} text={name === "Party" ? dictionary.dashboard.navigation.party : dictionary.general.players} items={links} disabled={editMode} />
           ))}
           <Button className='w-auto min-w-[180px] flex justify-between mb-1' type="submit" disabled={isPending || editMode} onClick={() => dispatchServerFunction(newDashboard)}>
             {dictionary.dashboard.navigation.newDashboard} <Plus /></Button>
@@ -90,11 +90,11 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
         {editMode ?
           <Button className='min-w-[160px] flex justify-between bg-main-accent' disabled={isPending} onClick={save}>
             {isPending && <span className="animate-spin mr-2"><LoaderCircle /></span>}
-            <span>{dictionary.general.save} </span>
-            <PanelsLeftBottom />
+            <span>{dictionary.general.save}</span>
+            <PanelsLeftBottom className="ml-2" />
           </Button>
           :
-          <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout} <PanelsLeftBottom /></Button>
+          <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout}<PanelsLeftBottom className="ml-2" /></Button>
         }
         <AddElement addableElements={addableElements} addElementHandler={addElementHandler} disabled={isPending} />
       </div>

@@ -22,7 +22,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
         <main>
             <Breadcrumb>
                 <BreadcrumbList>
-                    <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
+                    <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaigns}</BreadcrumbLink></BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
                     <BreadcrumbSeparator />

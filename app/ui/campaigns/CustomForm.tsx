@@ -42,7 +42,7 @@ export const FormItemInput = ({ name, label, maxLength = 50, minLength = 0, defa
                 {label}
             </label>
             <div className="relative">
-                <Input type={type} min={min} max={max} defaultValue={(type === "number" && defaultValue === "") ? 0 : defaultValue} placeholder={placeholder ? placeholder : name.replaceAll("_", " ")} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0} autofocus={autofocus}
+                <Input type={type} min={min} max={max} defaultValue={(type === "number" && defaultValue === "") ? 0 : defaultValue} placeholder={placeholder ? placeholder : ''} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0} autofocus={autofocus}
                     className={cn("placeholder:text-gray-400 dark:placeholder:text-gray-500", Icon ? "pl-10" : "")} />
                 {Icon && <Icon className="absolute left-3 top-1/2 text-gray-500 peer-focus:text-gray-500 h-[18px] w-[18px] -translate-y-1/2" />}
             </div>
@@ -60,7 +60,8 @@ export const FormItemTextArea = ({ name, label, maxLength = 300, minLength = 0, 
                 {label}
             </label>
             <div className="relative">
-                <Textarea defaultValue={defaultValue} placeholder={placeholder ? placeholder : name} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0} className={cn(Icon ? "pl-10" : "", classNameTextArea)} />
+                <Textarea defaultValue={defaultValue} placeholder={placeholder ? placeholder : ''} id={name} name={name} maxLength={maxLength} minLength={minLength} required={minLength > 0}
+                    className={cn("placeholder:text-gray-400 dark:placeholder:text-gray-500", Icon ? "pl-10" : "", classNameTextArea)} />
                 {Icon && <Icon className="absolute left-3 top-1/4 text-gray-500 peer-focus:text-gray-500 h-[18px] w-[18px] -translate-y-1/2" />}
             </div>
         </div>
@@ -102,7 +103,7 @@ export const FormItemCheckbox = ({ name, label, defaultChecked, visible = true, 
     name: string, label: string, defaultChecked: boolean, visible?: boolean, className?: string
 }) => {
     return (
-        <div className={cn((visible ? "ml-1 mb-8" : "invisible max-h-0"), className)}>
+        <div className={cn((visible ? "px-2 mb-6" : "invisible max-h-0"), className)}>
             <label className="text-text mb-5 block text-sm font-medium">
                 {label}
             </label>

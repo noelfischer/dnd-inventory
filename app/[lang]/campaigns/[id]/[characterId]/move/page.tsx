@@ -35,7 +35,7 @@ export default async function Page(props: { params: Promise<{ id: string, charac
         <main>
             <Breadcrumb>
                 <BreadcrumbList>
-                    <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
+                    <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaigns}</BreadcrumbLink></BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -47,7 +47,7 @@ export default async function Page(props: { params: Promise<{ id: string, charac
             <p className='mb-4'>{dict.character.move.description} <b>{character.name}</b> {dict.character.move.description2}</p>
 
             <form action={moveCharacterById}>
-                <FormItemSelect name="new_campaign_id" label="Choose campaign" defaultValue={campaignID} className='w-max'
+                <FormItemSelect name="new_campaign_id" label={dict.general.campaign} defaultValue={campaignID} className='w-max'
                     options={campaigns.map(campaign => ({ key: campaign.campaign_id, value: campaign.name }))} />
                 <Button type="submit" className='mt-7 w-auto'>
                     <Package className="w-5 mr-3" />

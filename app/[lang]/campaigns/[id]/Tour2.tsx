@@ -5,12 +5,15 @@ import { useState, useEffect } from "react";
 import { ACTIONS, Placement } from "@/lib/definitions";
 import { Dictionary } from "../../dictionaries";
 
-
 const Joyride = dynamic(() => import("react-joyride"), { ssr: false });
 
 
 const Tour2 = ({ dict }: { dict: Dictionary }) => {
     const [run, setRun] = useState(false);
+    const [step, setStep] = useState(1);
+
+    console.log(step);
+
     useEffect(() => {
         if (typeof window !== "undefined" && !localStorage.getItem("hasSeenCharacterTour")) {
             setRun(true);
@@ -47,6 +50,9 @@ const Tour2 = ({ dict }: { dict: Dictionary }) => {
     const handleJoyrideCallback = (data: any) => {
         const { action } = data;
         console.log(data);
+        if (step != data.index + 1) {
+            setStep(data.index + 1);
+        }
         if (action === ACTIONS.CLOSE || action === ACTIONS.SKIP || action === ACTIONS.RESET) {
             localStorage.setItem("hasSeenCharacterTour", "true");
             setRun(false);
@@ -60,7 +66,7 @@ const Tour2 = ({ dict }: { dict: Dictionary }) => {
             continuous={true}
             showProgress={true}
             showSkipButton={true}
-            locale={{ last: dict.tour.last, skip: dict.tour.skip, next: dict.tour.next, back: dict.tour.back }}
+            locale={{ last: dict.tour.last, skip: dict.tour.skip, next: dict.tour.next, back: dict.tour.back, nextLabelWithProgress: `${dict.tour.next} (${dict.tour.step} ${step} ${dict.tour.of} ${steps.length})` }}
             callback={handleJoyrideCallback}
             run={run}
             styles={{

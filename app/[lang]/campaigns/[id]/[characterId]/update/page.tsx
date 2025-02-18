@@ -45,7 +45,7 @@ export default async function Page(props: { params: Promise<{ id: string, charac
     <main>
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaigns}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -57,11 +57,11 @@ export default async function Page(props: { params: Promise<{ id: string, charac
         <h1 className="text-2xl text-text">{dict.character.update}</h1>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <FormItemInput className={isDM ? 'col-span-2' : 'col-span-4'} name="name" label={dict.character.name} minLength={2} defaultValue={character.name} />
+            <FormItemInput className={isDM ? 'col-span-2' : 'col-span-4'} name="name" label={dict.character.name} minLength={2} defaultValue={character.name} placeholder={character.name} />
             <FormItemSelect className='col-span-2' name="user_id" label={dict.character.owner} defaultValue={character.user_id} classNameLabel='text-text'
               options={usersInCampaign.map(user => ({ key: user.user_id, value: user.User.username }))} visible={isDM} />
             <FormItemTextArea className='col-span-4' classNameTextArea='h-28' name="description" label={dict.general.description} placeholder={dict.character.description} defaultValue={character.description || ''} />
-            <FormItemInput className='col-span-4' name="portrait_url" label={dict.character.url} type="url" Icon={Link} defaultValue={character.portrait_url || ''} maxLength={255} />
+            <FormItemInput className='col-span-4' name="portrait_url" label={dict.character.url} placeholder={dict.character.url} type="url" Icon={Link} defaultValue={character.portrait_url || ''} maxLength={255} />
             {isDM ?
               <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label={dict.character.characterType} classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: dict.general.player }, { key: "NPC", value: "NPC" }, { key: "Enemy", value: dict.character.enemy }, { key: "Pet", value: dict.character.pet }]} defaultValue={character.character_type || ''} /> :
               <FormItemSelect className='col-span-2 sm:col-span-1' name="character_type" label={dict.character.characterType} classNameLabel='text-text' classNameSelect='h-12' options={[{ key: "Player", value: dict.general.player }, { key: "Pet", value: dict.character.pet }]} defaultValue={character.character_type || ''} />}

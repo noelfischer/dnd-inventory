@@ -35,7 +35,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
     <main>
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaings}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/campaigns">{dict.general.campaigns}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -45,9 +45,9 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
 
       <Form action={updateCampaignWithId} close={'/campaigns/' + campaignID}>
         <h1 className="text-text text-2xl">{dict.update.title}</h1>
-        <FormItemInput name="name" label={dict.createCampaign.name} minLength={2} defaultValue={campaign.name} />
-        <FormItemTextArea name="description" label={dict.createCampaign.description} defaultValue={campaign.description} />
-        <FormItemInput name="password" label={dict.createCampaign.accessPassword} defaultValue={campaign.password || ''} Icon={ShieldPlus} />
+        <FormItemInput name="name" label={dict.createCampaign.name} minLength={2} defaultValue={campaign.name} placeholder={dict.general.name} />
+        <FormItemTextArea name="description" label={dict.createCampaign.description} defaultValue={campaign.description} placeholder={dict.general.description} />
+        <FormItemInput name="password" label={dict.createCampaign.accessPassword} defaultValue={campaign.password || ''} Icon={ShieldPlus} placeholder={dict.general.password} />
         <Button type="submit" className="w-auto">{dict.update.title}</Button>
       </Form>
     </main>

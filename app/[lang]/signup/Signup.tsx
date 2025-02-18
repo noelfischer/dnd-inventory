@@ -33,7 +33,7 @@ const Signup = ({ dict }: { dict: Dictionary }) => {
             <div className='pb-1'>
               <FormItemInput name='email' label={dict.signup.email} type='email' placeholder={dict.signup.emailPlaceholder} className='mb-2' minLength={5} Icon={AtSign} />
               <FormItemInput name='username' label={dict.signup.username} type='text' placeholder={dict.signup.usernamePlaceholder} className='mb-2' minLength={3} Icon={CircleUserRound} />
-              <FormItemInput name='password' label={dict.signup.password} type='password' placeholder={dict.signup.passwordPlaceholder} className='mb-2' minLength={6} Icon={KeyRound} />
+              <FormItemInput name='password' label={dict.general.password} type='password' placeholder={dict.signup.passwordPlaceholder} className='mb-2' minLength={6} Icon={KeyRound} />
             </div>
             {errorMessage && (
               <div className='flex gap-3'>

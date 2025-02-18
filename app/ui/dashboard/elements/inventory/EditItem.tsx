@@ -55,8 +55,8 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <FormItemInput name="item_name" label={dictionary.general.name} className='col-span-4 w-full' defaultValue={item.item_name} minLength={2} />
-                            <FormItemInput name="description" label={dictionary.general.description} className='col-span-4 w-full' defaultValue={item.description} />
+                            <FormItemInput name="item_name" label={dictionary.general.name} className='col-span-4 w-full' defaultValue={item.item_name} placeholder={item.item_name || dictionary.general.description} minLength={2} />
+                            <FormItemInput name="description" label={dictionary.general.description} className='col-span-4 w-full' defaultValue={item.description} placeholder={item.description || dictionary.general.description} />
                             <FormItemSelect name="category" label={dictionary.dashboard.inventory.new.category.title} defaultValue={item.category} classNameLabel='text-text' className='col-span-2 w-full' options=
                                 {[
                                     { key: 'W', value: dictionary.dashboard.inventory.new.category.weapon },
@@ -66,10 +66,17 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                                     { key: 'C', value: dictionary.dashboard.inventory.new.category.consumable },
                                     { key: 'M', value: dictionary.dashboard.inventory.new.category.miscellaneous }]
                                 } />
-                            <FormItemSelect name={dictionary.dashboard.inventory.new.slot} label="Slot" defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options={[{ key: 'eq', value: 'Equipped' }, { key: 'bd', value: 'On Body' }, { key: 'bp', value: 'Backpack' }]} />
-                            <FormItemInput name={dictionary.dashboard.inventory.weight} label="Weight" type="number" className='col-span-1 w-full' min={0} max={500} defaultValue={item.weight.toString()} />
-                            <FormItemInput name={dictionary.dashboard.inventory.quantity} label="Quantity" type="number" className='col-span-1 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} autofocus />
-                            <FormItemCheckbox name={dictionary.dashboard.inventory.new.magic} label="Magic" defaultChecked={item.magic} className='col-span-2 w-full' />
+                            <FormItemSelect name={dictionary.dashboard.inventory.new.slot} label="Slot" defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options=
+                                {[
+                                    { key: 'eq', value: dictionary.dashboard.inventory.equipped },
+                                    { key: 'bd', value: dictionary.dashboard.inventory.onBody },
+                                    { key: 'bp', value: dictionary.dashboard.inventory.backpack }
+                                ]} />
+                            <div className="grid grid-cols-5 col-span-4 gap-4">
+                                <FormItemInput name={dictionary.dashboard.inventory.weight} label="Weight" type="number" className='col-span-2 w-full' min={0} max={500} defaultValue={item.weight.toString()} placeholder={item.weight.toString()} />
+                                <FormItemInput name={dictionary.dashboard.inventory.quantity} label="Quantity" type="number" className='col-span-2 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} placeholder={item.quantity.toString()} autofocus />
+                                <FormItemCheckbox name={dictionary.dashboard.inventory.new.magic} label="Magic" defaultChecked={item.magic} className='col-span-1 w-full' />
+                            </div>
                         </div>
                     </div>
                     <DialogFooter className='sm:justify-between'>

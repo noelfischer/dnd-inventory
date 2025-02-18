@@ -33,7 +33,7 @@ const Login = ({ dict }: { dict: Dictionary }) => {
 
             <div className='pb-1'>
               <FormItemInput name='email' label={dict.login.email} type='email' placeholder={dict.login.emailPlaceholder} minLength={5} Icon={AtSign} className='mb-2' />
-              <FormItemInput name='password' label={dict.login.password} type='password' placeholder={dict.login.passwordPlaceholder} minLength={6} Icon={KeyRound} className='mb-2' />
+              <FormItemInput name='password' label={dict.general.password} type='password' placeholder={dict.login.passwordPlaceholder} minLength={6} Icon={KeyRound} className='mb-2' />
             </div>
             {errorMessage && (
               <div className='flex gap-3'>

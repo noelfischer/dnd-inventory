@@ -224,7 +224,7 @@ export function Column({ column }: { column: TColumn }) {
         <div
           className={`flex max-h-full flex-col ${state.type === 'is-column-over' ? 'invisible' : ''}`}
         >
-          <div className="bg-main text-text flex flex-row items-center justify-between px-3 py-1.5" ref={headerRef}>
+          <div className="rounded-t-sm bg-main text-text flex flex-row items-center justify-between px-3 py-1.5" ref={headerRef}>
             <div className="font-bold leading-4">{column.title}</div>
           </div>
           <div

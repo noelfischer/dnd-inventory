@@ -31,10 +31,6 @@
     animation: l14 1.5s infinite;
 }
 
-.loader:before {
-    content: "Getting the dice ready...";
-}
-
 @keyframes l14 {
     80% {
         text-shadow: 0 0 0 var(--loader-shadow-color), 30ch 0 0 var(--loader-shadow-color);

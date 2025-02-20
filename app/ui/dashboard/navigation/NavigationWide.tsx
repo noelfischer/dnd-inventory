@@ -41,7 +41,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
   const dictionary = useDictionary();
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
-  const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters, isPartyDashboard, dictionary), [characters, layouts.lg]);
+  const addableElements: AddableElement[] = useMemo(() => getAddableElements(layouts, characters, isPartyDashboard, dictionary), [characters, layouts.lg, isPartyDashboard]);
   const [isPending, setIsPending] = useState(false);
 
   async function save() {

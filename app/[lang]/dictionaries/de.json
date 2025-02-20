@@ -20,6 +20,9 @@
         "player": "Spieler",
         "character": "Charakter"
     },
+    "loading": {
+        "phrase": "Ladezeit wird gewürfelt..."
+    },
     "notFound": {
         "title": "404 Nicht gefunden",
         "description": "Seite nicht gefunden.",
@@ -171,7 +174,7 @@
         "inspiration": "Inspiration",
         "notes": "Notizen",
         "notesPlaceholder": "Notizen zu Quests, Beziehungen usw.",
-        "conditions": "Gemütszustände",
+        "conditions": "Status Effekte",
         "conditionsPlaceholder": "Gifte, Erschöpfung, Nachteile usw.",
         "abilities": "Fähigkeiten",
         "abilitiesPlaceholder": "Fähigkeiten, Talente usw.",
@@ -183,6 +186,10 @@
             "description": "Auf Level aufsteigen: ",
             "changeStats": "Werte anpassen",
             "spellCapacity": "Zauberplätze"
+        },
+        "spellSlot": {
+            "available": "übrig",
+            "total": "Total"
         },
         "navigation": {
             "newDashboard": "Neues Dashboard",
@@ -198,7 +205,7 @@
                     "health": "Lebenspunkte",
                     "inventory": "Inventar",
                     "currency": "Währung",
-                    "conditions": "Gemütszustände",
+                    "conditions": "Statuseffekte",
                     "levelup": "Level Up",
                     "weight": "Gewicht",
                     "notes": "Notizen",

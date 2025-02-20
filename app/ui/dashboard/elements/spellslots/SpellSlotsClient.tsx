@@ -72,13 +72,13 @@ const SpellSlotsClient = ({ spell_slots, character_id, updateRemainingCasts, upd
                         <li key={index} className={"w-max border-2 border-black rounded-sm px-1.5 py-1.5 grow" + ((spellslot.casts_remaining / spellslot.total_casts) > 0 ? " bg-main-accent" : " bg-main/10 dark:bg-main/20")}>
                             <div className="text-lg text-text text-center border-b-2 border-black pb-1.5 z-10">
                                 {(spellslot.spell_level === 0 ? dictionary.dashboard.ability : createRomanNumeralSpan(spellslot.spell_level))} {" ("}
-                                <OnLeaveInput initialValue={spellslot.total_casts.toString()} placeholder="Total"
+                                <OnLeaveInput initialValue={spellslot.total_casts.toString()} placeholder={dictionary.dashboard.spellSlot.total}
                                     className="dark:text-text dark:border-black ml-[3px] mt-0 text-center placeholder:text-black/[.3] placeholder:font-medium placeholder:text-lg placeholder:text-center"
                                     onLeave={(value) => { updateLevelDescriptionClient(spellslot.spell_slot_id, parseInt(value)) }} />
                                 {")"}
                             </div>
                             <div className="text-2xl text-text text-center">
-                                <OnLeaveInput initialValue={spellslot.casts_remaining.toString()} placeholder="Remaining"
+                                <OnLeaveInput initialValue={spellslot.casts_remaining.toString()} placeholder={dictionary.dashboard.spellSlot.available}
                                     className="dark:text-text dark:border-black placeholder:text-black/[.3] placeholder:font-medium placeholder:text-xl placeholder:text-center"
                                     onLeave={(value) => { updateRemainingCastsClient(spellslot.spell_slot_id, parseInt(value)) }} />
 

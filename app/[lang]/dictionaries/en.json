@@ -20,6 +20,9 @@
         "player": "Player",
         "character": "Character"
     },
+    "loading": {
+        "phrase": "Getting the dice ready..."
+    },
     "notFound": {
         "title": "404 Not Found",
         "description": "Could not find the requested page.",
@@ -183,6 +186,10 @@
             "description": "Level Up to Level",
             "changeStats": "Change Stats",
             "spellCapacity": "Spell Capacity"
+        },
+        "spellSlot": {
+            "available": "Available",
+            "total": "Total"
         },
         "navigation": {
             "newDashboard": "New Dashboard",

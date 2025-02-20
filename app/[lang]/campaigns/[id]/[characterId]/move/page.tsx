@@ -39,7 +39,7 @@ export default async function Page(props: { params: Promise<{ id: string, charac
                     <BreadcrumbSeparator />
                     <BreadcrumbItem><BreadcrumbLink href={`/campaigns/${campaignID}`}>{campaign.name}</BreadcrumbLink></BreadcrumbItem>
                     <BreadcrumbSeparator />
-                    <BreadcrumbItem><BreadcrumbPage>{dict.general.move} {character.name}</BreadcrumbPage></BreadcrumbItem>
+                    <BreadcrumbItem><BreadcrumbPage>{dict.general.move} - {character.name}</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
             <h1 className="text-text text-2xl mb-6 bg-banner banner">{dict.character.move.title}</h1>

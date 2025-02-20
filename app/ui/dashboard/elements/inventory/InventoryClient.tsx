@@ -105,7 +105,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
                 dictionary={dictionary}
             />
 
-            <NewItem className='w-auto m-4' createItem={handleCreate} />
+            <NewItem className='w-auto ml-3 mt-4' createItem={handleCreate} />
         </div>
     );
 };

@@ -73,9 +73,9 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                                     { key: 'bp', value: dictionary.dashboard.inventory.backpack }
                                 ]} />
                             <div className="grid grid-cols-5 col-span-4 gap-4">
-                                <FormItemInput name={dictionary.dashboard.inventory.weight} label="Weight" type="number" className='col-span-2 w-full' min={0} max={500} defaultValue={item.weight.toString()} placeholder={item.weight.toString()} />
-                                <FormItemInput name={dictionary.dashboard.inventory.quantity} label="Quantity" type="number" className='col-span-2 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} placeholder={item.quantity.toString()} autofocus />
-                                <FormItemCheckbox name={dictionary.dashboard.inventory.new.magic} label="Magic" defaultChecked={item.magic} className='col-span-1 w-full' />
+                                <FormItemInput name="weight" label={dictionary.dashboard.inventory.weight} type="number" className='col-span-2 w-full' min={0} max={500} defaultValue={item.weight.toString()} placeholder={item.weight.toString()} />
+                                <FormItemInput name="quantity" label={dictionary.dashboard.inventory.quantity} type="number" className='col-span-2 w-full' min={0} max={1000} defaultValue={item.quantity.toString()} placeholder={item.quantity.toString()} autofocus />
+                                <FormItemCheckbox name="magic" label={dictionary.dashboard.inventory.new.magic} defaultChecked={item.magic} className='col-span-1 w-full' />
                             </div>
                         </div>
                     </div>

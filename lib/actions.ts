@@ -445,6 +445,14 @@ export async function importCharacter(campaign_id: string, character: ExportChar
         temp_hit_points: importedCharacter.temp_hit_points,
         load_capacity: importedCharacter.load_capacity,
         armor_class: importedCharacter.armor_class,
+        Dashboard: {
+          create: {
+            dashboard_id: nanoid(10),
+            campaign_id,
+            visibility: 'private',
+            name: `${importedCharacter.name}-Dashboard-1`,
+          }
+        },
         Currency: {
           create: {
             currency_id: nanoid(10),

@@ -131,7 +131,7 @@ const CharacterTypeGroup = ({ characters, campaign, uID, dashboards, type, typeS
 const CharacterCard = ({ character, campaign, uID, dashboardID, dict }: { character: SimpleCharacter, campaign: Campaign, uID: string, dashboardID: string, dict: Dictionary }) => {
   const duplicateCharacterById = duplicateCharacter.bind(null, character.character_id, campaign.campaign_id, character.name);
   const exportCharacterById = exportCharacter.bind(null, character.character_id);
-
+  console.log(dashboardID, character);
   return (
     <Card key={character.character_id} className="w-full sm:max-w-[270px] overflow-visible">
       <CardHeader>

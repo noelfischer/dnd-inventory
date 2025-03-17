@@ -16,7 +16,7 @@ import { useState } from 'react'
 
 type Props = {
     item: InventoryItem;
-    updateItem: (item: InventoryItem, formData: FormData) => void;
+    updateItem: (item: InventoryItem, formData: FormData) => Promise<void>;
     deleteItem: (item_id: string) => void;
     className?: string;
 }
@@ -30,7 +30,7 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
     const [pointHasDown, setPointHasDown] = useState(false);
 
     async function handleSubmit(formData: FormData) {
-        updateItem(item, formData);
+        await updateItem(item, formData);
         setOpen(false);
     }
 
@@ -66,7 +66,7 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                                     { key: 'C', value: dictionary.dashboard.inventory.new.category.consumable },
                                     { key: 'M', value: dictionary.dashboard.inventory.new.category.miscellaneous }]
                                 } />
-                            <FormItemSelect name={dictionary.dashboard.inventory.new.slot} label="Slot" defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options=
+                            <FormItemSelect name="slot" label={dictionary.dashboard.inventory.new.slot} defaultValue={item.slot} classNameLabel='text-text' className='col-span-2 w-full' options=
                                 {[
                                     { key: 'eq', value: dictionary.dashboard.inventory.equipped },
                                     { key: 'bd', value: dictionary.dashboard.inventory.onBody },

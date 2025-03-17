@@ -31,7 +31,7 @@ const InventoryClient = ({ initialItems, initialBackpackCapacity, createItem, up
     async function handleUpdate(item: InventoryItem, formData: FormData) {
         const [newTables, promise] = updateInventoryItem(item, formData, tables, updateItem);
         setTables([...newTables]);
-        await promise;
+        return promise;
     }
 
     async function handleDelete(itemid: string) {

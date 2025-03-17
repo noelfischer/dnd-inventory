@@ -1,10 +1,9 @@
 import { useDictionary } from '@/app/[lang]/DictionaryProvider'
-import { FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
+import { FormItemCheckbox, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -56,7 +55,7 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <FormItemInput name="item_name" label={dictionary.general.name} className='col-span-4 w-full' defaultValue={item.item_name} placeholder={item.item_name || dictionary.general.description} minLength={2} />
-                            <FormItemInput name="description" label={dictionary.general.description} className='col-span-4 w-full' defaultValue={item.description} placeholder={item.description || dictionary.general.description} />
+                            <FormItemTextArea name="description" label={dictionary.general.description} className='col-span-4 w-full' defaultValue={item.description} placeholder={item.description || dictionary.general.description} maxLength={199} />
                             <FormItemSelect name="category" label={dictionary.dashboard.inventory.new.category.title} defaultValue={item.category} classNameLabel='text-text' className='col-span-2 w-full' options=
                                 {[
                                     { key: 'W', value: dictionary.dashboard.inventory.new.category.weapon },

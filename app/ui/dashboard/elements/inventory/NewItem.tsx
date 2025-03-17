@@ -1,7 +1,7 @@
 'use client'
 
 import { useDictionary } from '@/app/[lang]/DictionaryProvider'
-import { FormItemCheckbox, FormItemInput, FormItemSelect } from '@/app/ui/campaigns/CustomForm'
+import { FormItemCheckbox, FormItemInput, FormItemSelect, FormItemTextArea } from '@/app/ui/campaigns/CustomForm'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
@@ -42,7 +42,7 @@ const NewItem = ({ className, createItem }: { className?: string, createItem: (i
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <FormItemInput name="item_name" label={dictionary.general.name} placeholder={dictionary.general.name} className='col-span-4 w-full' minLength={2} />
-                            <FormItemInput name="description" label={dictionary.general.description} placeholder={dictionary.general.description} className='col-span-4 w-full' />
+                            <FormItemTextArea name="description" label={dictionary.general.description} placeholder={dictionary.general.description} className='col-span-4 w-full' maxLength={199} />
                             <FormItemSelect name="category" label={dictionary.dashboard.inventory.new.category.title} defaultValue='M' classNameLabel='text-text' className='col-span-2 w-full' options=
                                 {[
                                     { key: 'W', value: dictionary.dashboard.inventory.new.category.weapon },

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Menu, PlusCircle, Trash2, Users, Shield, Skull, PawPrintIcon as Paw, ChevronLeft } from "lucide-react"
+import { Menu, PlusCircle, Trash2, Users, Skull, PawPrintIcon as Paw, ChevronLeft, ScrollText } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -9,6 +9,7 @@ import { CollapsibleSection } from "./CollapsibleSection"
 import { NavLink } from "../NavigationWide"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { Dictionary } from "@/app/[lang]/dictionaries"
 
 function switchIcon(title: string) {
   switch (title) {
@@ -17,7 +18,7 @@ function switchIcon(title: string) {
     case "Player":
       return Users
     case "NPC":
-      return Shield
+      return ScrollText
     case "Enemy":
       return Skull
     case "Pet":
@@ -27,23 +28,56 @@ function switchIcon(title: string) {
   }
 }
 
-function mapNavLinks(navLinks: NavLink[]) {
+function switchDictionary(title: string, dictionary: Dictionary) {
+  switch (title) {
+    case "Party":
+      return dictionary.dashboard.navigation.party
+    case "Player":
+      return dictionary.general.players
+    case "NPC":
+      return "NPCs"
+    case "Enemy":
+      return dictionary.campaign.enemies
+    case "Pet":
+      return dictionary.campaign.pets
+    default:
+      return dictionary.dashboard.navigation.party
+  }
+}
+
+function switchIndex(title: string) {
+  switch (title) {
+    case "Party":
+      return 0
+    case "Player":
+      return 1
+    case "Pet":
+      return 2
+    case "NPC":
+      return 3
+    case "Enemy":
+      return 4
+    default:
+      return 5
+  }
+}
+
+function mapNavLinks(navLinks: NavLink[], dictionary: Dictionary) {
   return navLinks.map((navLink) => {
     return {
-      title: navLink.name,
+      index: switchIndex(navLink.name),
+      title: switchDictionary(navLink.name, dictionary),
       icon: switchIcon(navLink.name),
       defaultOpen: (switchIcon(navLink.name) === Users),
       dashboards: navLink.links.map((link) => {
         return { id: link.id, name: link.name }
       }).sort((a, b) => a.name.localeCompare(b.name))
     }
-  }).sort((a, b) => {
-    const order = ["Party", "Player", "Pet", "Enemy", "NPC"];
-    return order.indexOf(a.title) - order.indexOf(b.title);
-  })
+  }).sort((a, b) => a.index - b.index)
 }
 
 type NavSidebarProps = {
+  dictionary: Dictionary
   dashboardID: string
   navLinks: NavLink[]
   addDashboard: () => void
@@ -52,7 +86,7 @@ type NavSidebarProps = {
   ableToOpen: boolean
 }
 
-export function NavSidebar({ dashboardID, navLinks, addDashboard, deleteDashboard, ableToDeleteDashboard, ableToOpen }: NavSidebarProps) {
+export function NavSidebar({ dictionary, dashboardID, navLinks, addDashboard, deleteDashboard, ableToDeleteDashboard, ableToOpen }: NavSidebarProps) {
   const [open, setOpen] = React.useState(false)
 
   function onOpenChange(open: boolean) {
@@ -64,7 +98,7 @@ export function NavSidebar({ dashboardID, navLinks, addDashboard, deleteDashboar
     }
   }
 
-  const characterTypes = mapNavLinks(navLinks);
+  const characterTypes = mapNavLinks(navLinks, dictionary);
 
   return (
     <div>
@@ -86,7 +120,7 @@ export function NavSidebar({ dashboardID, navLinks, addDashboard, deleteDashboar
                         <Button variant="ghost" className="w-full justify-start h-9 px-2 font-normal" asChild>
                           <Link href='/campaigns'>
                             <ChevronLeft className="h-6 w-6 mr-2" />
-                            <SheetTitle className="text-xl font-semibold">Campaigns</SheetTitle>
+                            <SheetTitle className="text-xl font-semibold">{dictionary.general.campaigns}</SheetTitle>
                           </Link>
                         </Button>
                       </div>
@@ -115,7 +149,7 @@ export function NavSidebar({ dashboardID, navLinks, addDashboard, deleteDashboar
                         className="w-full justify-start h-9 px-2 font-normal text-primary text-md"
                       >
                         <PlusCircle className="h-6 w-6 mr-3" />
-                        <span>New Dashboard</span>
+                        <span>{dictionary.dashboard.navigation.newDashboard}</span>
                       </Button>
                     </li>
                     {ableToDeleteDashboard &&
@@ -126,7 +160,7 @@ export function NavSidebar({ dashboardID, navLinks, addDashboard, deleteDashboar
                           className="w-full justify-start h-9 px-2 font-normal text-destructive text-md"
                         >
                           <Trash2 className="h-6 w-6 mr-3" />
-                          <span>Delete Dashboard</span>
+                          <span>{dictionary.dashboard.navigation.deleteDashboard}</span>
                         </Button>
                       </li>
                     }

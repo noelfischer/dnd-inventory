@@ -1,9 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import Dropdown from "@/components/Dropdown"
-import { ChevronLeft, LoaderCircle, PanelsLeftBottom, Plus, Trash2 } from "lucide-react"
-import Link from "next/link"
+import { LoaderCircle, PanelsLeftBottom } from "lucide-react"
 import "./styles.css"
 import { useMemo, useState } from "react"
 import { Layouts } from "react-grid-layout"
@@ -69,6 +67,7 @@ export const NavigationWide = ({ dashboardID, editMode, setEditMode, layouts, in
     <div className={(editMode && "edit") + " bg-main  py-3 xl:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
       <div className="flex flex-wrap content-between items-center">
         <NavSidebar
+          dictionary={dictionary}
           dashboardID={dashboardID}
           navLinks={navLinks}
           addDashboard={() => dispatchServerFunction(newDashboard)}

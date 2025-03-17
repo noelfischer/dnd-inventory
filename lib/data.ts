@@ -150,8 +150,8 @@ export async function fetchDashboardElementsByDashboard(dashboard_id: string): P
 export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<NavLink[]> {
   const campaign_id = await fetchCampaignIDByDashboard(dashboard_id);
 
-  const characterdata: DashboardWithCharacterType[] = await fetchCharacterNavLinks(campaign_id, dashboard_id);
-  const campaigndata: DashboardWithCharacterType[] = await fetchCampaignNavLinks(campaign_id, dashboard_id);
+  const characterdata: DashboardWithCharacterType[] = await fetchCharacterNavLinks(campaign_id);
+  const campaigndata: DashboardWithCharacterType[] = await fetchCampaignNavLinks(campaign_id);
 
   const data: DashboardWithCharacterType[] = [...characterdata, ...campaigndata];
 
@@ -160,7 +160,7 @@ export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<Na
   for (const dashboard of data) {
     const link = {
       name: dashboard.name,
-      link: `/dashboard/${dashboard.dashboard_id}`
+      id: dashboard.dashboard_id
     };
     const index = navLinks.findIndex(navLink => navLink.name === dashboard.character_type);
     if (index === -1) {
@@ -172,11 +172,10 @@ export async function fetchNavLinksByDashboard(dashboard_id: string): Promise<Na
   return navLinks;
 }
 
-async function fetchCharacterNavLinks(campaign_id: string, dashboard_id: string): Promise<DashboardWithCharacterType[]> {
+async function fetchCharacterNavLinks(campaign_id: string): Promise<DashboardWithCharacterType[]> {
   const results = await prisma.dashboard.findMany({
     where: {
       campaign_id,
-      dashboard_id: { not: dashboard_id },
       character_id: { not: null }
     },
     include: {
@@ -194,11 +193,10 @@ async function fetchCharacterNavLinks(campaign_id: string, dashboard_id: string)
   }));
 }
 
-async function fetchCampaignNavLinks(campaign_id: string, dashboard_id: string): Promise<DashboardWithCharacterType[]> {
+async function fetchCampaignNavLinks(campaign_id: string): Promise<DashboardWithCharacterType[]> {
   let dashboard: any = await prisma.dashboard.findMany({
     where: {
       campaign_id,
-      dashboard_id: { not: dashboard_id },
       character_id: null,
 
     },

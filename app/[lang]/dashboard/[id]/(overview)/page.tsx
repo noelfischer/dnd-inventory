@@ -41,13 +41,16 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
   const dict = await getDictionary(params.lang);
   const dashboardID = params.id;
   const uID = await fetchUID();
+
   const dashboardLayout: DashboardElement[] = await fetchDashboardElementsByDashboard(dashboardID);
   const character = await fetchCharacterByDashboard(dashboardID);
+  const campaignID = await fetchCampaignIDByDashboard(dashboardID);
+  const navLinks: NavLink[] = await fetchNavLinksByDashboard(dashboardID);
+
   const characterID = character ? character.character_id : null;
   const partyDashboard = !characterID;
   const characterName = character ? character.name : "Party";
-  const campaignID = await fetchCampaignIDByDashboard(dashboardID);
-  const navLinks: NavLink[] = await fetchNavLinksByDashboard(dashboardID);
+
   const ableToDeleteDashboard = (await fetchDashboardNumber(campaignID, characterID)) > 1;
   const isDM = await checkDMStatus(campaignID, uID);
   let characters = [];
@@ -79,6 +82,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
   return (
     <>
       <DashboardGridLayout
+        dashboardID={dashboardID}
         initialComponentList={componentList}
         initialLayout={layout}
         updateLayout={updateLayout}

@@ -11,10 +11,11 @@ import AddElement, { AddableElement } from "./AddElement"
 import { keyValuePair } from "@/lib/utils"
 import { useDictionary } from "@/app/[lang]/DictionaryProvider"
 import { Dictionary } from "@/app/[lang]/dictionaries"
+import { NavSidebar } from "./sidebar/NavSidebar"
 
 type LinkText = {
   name: string
-  link: string
+  id: string
 }
 
 export type NavLink = {
@@ -23,6 +24,7 @@ export type NavLink = {
 }
 
 type Props = {
+  dashboardID: string,
   editMode: boolean,
   setEditMode: (editMode: boolean) => void,
   layouts: Layouts,
@@ -37,7 +39,7 @@ type Props = {
   addElementHandler: (formData: FormData) => Promise<string>
 }
 
-export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
+export const NavigationWide = ({ dashboardID, editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
   const dictionary = useDictionary();
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
@@ -65,25 +67,15 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
 
   return (
     <div className={(editMode && "edit") + " bg-main  py-3 xl:py-1 mt-[-19px] -mx-7 items-stretch border-y-4 border-black pl-2 pr-5 flex place-items-center gap-2 sm:gap-6"}>
-      <div className="flex gap-6 flex-wrap content-between">
-        {editMode ?
-          <div className="text-text flex text-lg opacity-50 mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaigns}</div>
-          :
-          <Link href='/campaigns' className="text-text flex text-lg mt-2"><ChevronLeft className="w-7 h-7" />{dictionary.general.campaigns}</Link>
-        }
-        <div className="flex gap-2 flex-wrap">
-          {navLinks.map(({ name, links }) => (
-            <Dropdown key={name} text={name === "Party" ? dictionary.dashboard.navigation.party : dictionary.general.players} items={links} disabled={editMode} />
-          ))}
-          <Button className='w-auto min-w-[180px] flex justify-between mb-1' type="submit" disabled={isPending || editMode} onClick={() => dispatchServerFunction(newDashboard)}>
-            {dictionary.dashboard.navigation.newDashboard} <Plus /></Button>
-          {ableToDeleteDashboard &&
-            <Button className='w-auto min-w-[180px] flex justify-between px-3' disabled={isPending || editMode} onClick={() => dispatchServerFunction(deleteDashboard)}>
-              {dictionary.dashboard.navigation.deleteDashboard}
-              <Trash2 />
-            </Button>
-          }
-        </div>
+      <div className="flex flex-wrap content-between items-center">
+        <NavSidebar
+          dashboardID={dashboardID}
+          navLinks={navLinks}
+          addDashboard={() => dispatchServerFunction(newDashboard)}
+          deleteDashboard={() => dispatchServerFunction(deleteDashboard)}
+          ableToDeleteDashboard={ableToDeleteDashboard}
+          ableToOpen={!editMode}
+        />
       </div>
 
       <div className="ml-auto flex flex-wrap md:flex-nowrap items-start gap-2 h-min flex-row-reverse">
@@ -94,7 +86,7 @@ export const NavigationWide = ({ editMode, setEditMode, layouts, initialLayouts,
             <PanelsLeftBottom className="ml-2" />
           </Button>
           :
-          <Button className='min-w-[160px] flex justify-between bg-main-accent' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout}<PanelsLeftBottom className="ml-2" /></Button>
+          <Button className='min-w-[160px] flex justify-between bg-main-accent mb-[2px]' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout}<PanelsLeftBottom className="ml-2" /></Button>
         }
         <AddElement addableElements={addableElements} addElementHandler={addElementHandler} disabled={isPending} />
       </div>

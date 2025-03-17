@@ -10,6 +10,7 @@ import { X } from "lucide-react";
 import { keyValuePair } from "@/lib/utils";
 
 type Props = {
+    dashboardID: string,
     initialLayout: Layouts,
     initialComponentList: Component[],
     updateLayout: Function,
@@ -22,7 +23,7 @@ type Props = {
     addElementHandler: (formData: FormData) => Promise<string>
 }
 
-const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
+const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
 
     useEffect(() => {
         setLayouts(initialLayout);
@@ -75,6 +76,7 @@ const DashboardGridLayout = ({ initialLayout, initialComponentList, updateLayout
     return (
         <div>
             <NavigationWide
+                dashboardID={dashboardID}
                 editMode={editMode}
                 setEditMode={setEditMode}
                 layouts={layouts}

@@ -170,7 +170,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 className="rounded-lg border-2 border-black dark:border-gray-700"
                             />
                             <div className="absolute top-4 right-4 bg-[#FF6B6B] dark:bg-[#FF8E8E] text-white dark:text-[#1A1A2E] font-bold px-3 sm:px-4 py-1 sm:py-2 rounded-lg border-2 border-black dark:border-[#FF8E8E]/50 transform rotate-3 text-sm sm:text-base">
-                                Drag Me!
+                                Drag Around!
                             </div>
                             <div className="absolute bottom-8 sm:bottom-12 left-4 sm:left-8 bg-[#FFD166] dark:bg-[#FFD166] text-black dark:text-[#1A1A2E] font-bold px-3 sm:px-4 py-1 sm:py-2 rounded-lg border-2 border-black dark:border-[#FFD166]/50 transform -rotate-2 text-sm sm:text-base">
                                 Move Anywhere!
@@ -203,7 +203,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                     <span className="font-bold text-sm sm:text-base text-white dark:text-[#1A1A2E]">DM</span>
                                 </div>
                                 <div>
-                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">Dungeon Master Dave</p>
+                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">Dungeon Master Dani</p>
                                     <div className="flex">
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
@@ -246,7 +246,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                     <span className="font-bold text-sm sm:text-base text-white dark:text-[#1A1A2E]">BR</span>
                                 </div>
                                 <div>
-                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">Barbarian Rage</p>
+                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">Barbarian who likes bacon</p>
                                     <div className="flex">
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
@@ -257,7 +257,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                &quot;BIG HEALTH BAR GOOD. RAGE TRACKER GOOD. ME LIKE DRAG THINGS AROUND. VERY GOOD APP.&quot;
+                                &quot;BIG HEALTH BAR GOOD. ME LIKE DRAG THINGS AROUND. VERY GOOD APP.&quot;
                             </p>
                         </div>
                     </div>

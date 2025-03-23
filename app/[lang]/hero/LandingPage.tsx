@@ -78,11 +78,11 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                     {/* Stats Cards - Made smaller and less prominent */}
                     <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-[280px] sm:max-w-md mx-auto opacity-90">
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform rotate-1">
-                            <p className="text-2xl sm:text-3xl font-black text-[#FF6B6B] dark:text-[#FF8E8E]">10k+</p>
+                            <p className="text-2xl sm:text-3xl font-black text-[#FF6B6B] dark:text-[#FF8E8E]">{totalUsers}</p>
                             <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">Active Players</p>
                         </div>
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform -rotate-1">
-                            <p className="text-2xl sm:text-3xl font-black text-[#4ECDC4] dark:text-[#4ECDC4]">50k+</p>
+                            <p className="text-2xl sm:text-3xl font-black text-[#4ECDC4] dark:text-[#4ECDC4]">{totalCharacters}</p>
                             <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">Character Sheets</p>
                         </div>
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform rotate-1">
@@ -214,7 +214,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                            &quot;This app has completely changed how my players track their characters. No more shuffling papers!&quot;
+                                &quot;This app has completely changed how my players track their characters. No more shuffling papers!&quot;
                             </p>
                         </div>
 
@@ -235,7 +235,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                            &quot;Being able to arrange my spell slots and components exactly how I want them has made spellcasting so
+                                &quot;Being able to arrange my spell slots and components exactly how I want them has made spellcasting so
                                 much easier!&quot;
                             </p>
                         </div>
@@ -257,7 +257,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                            &quot;BIG HEALTH BAR GOOD. RAGE TRACKER GOOD. ME LIKE DRAG THINGS AROUND. VERY GOOD APP.&quot;
+                                &quot;BIG HEALTH BAR GOOD. RAGE TRACKER GOOD. ME LIKE DRAG THINGS AROUND. VERY GOOD APP.&quot;
                             </p>
                         </div>
                     </div>

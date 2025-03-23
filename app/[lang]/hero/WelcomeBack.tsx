@@ -25,7 +25,13 @@ export default function DashboardPage() {
                             <span className="text-black dark:text-white">DnDventory</span>
                         </div>
                     </div>
-                    <div className="w-5 sm:w-6"></div> {/* Empty div for flex spacing */}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs sm:text-sm border-2 border-black dark:border-[#FF6B6B] text-black dark:text-white hover:bg-[#FF6B6B]/10 dark:hover:bg-[#FF6B6B]/10 rounded-lg"
+                    >
+                        Log Out
+                    </Button>
                 </div>
             </header>
 

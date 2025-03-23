@@ -50,6 +50,14 @@ export async function fetchUsersByCampaign(campaign_id: string) {
   });
 }
 
+//Fetch total user and carachter count seperatly
+export async function fetchUserAndCharacterCount() {
+  const userCount = await prisma.campaignUser.count();
+  const characterCount = await prisma.character.count();
+
+  return { userCount, characterCount };
+}
+
 export async function fetchUsername(user_id: string): Promise<string> {
   const user = await prisma.user.findUnique({
     select: { username: true },

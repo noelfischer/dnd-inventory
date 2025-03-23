@@ -4,7 +4,6 @@ import Link from 'next/link';
 import ToggleDarkMode from '../ui/darkmode-toggle';
 import { auth } from '@/lib/auth';
 import { getDictFromParams, Locale } from './dictionaries';
-import WelcomeBack from './hero/WelcomeBack';
 import LandingPage from './hero/LandingPage';
 import { fetchUserAndCharacterCount } from '@/lib/data';
 
@@ -13,18 +12,19 @@ export default async function Page({ params }: { params: Promise<{ lang: Locale 
 
   const data = await auth();
   const isNotAuthenticated = !data;
-  let {userCount, characterCount} = await fetchUserAndCharacterCount();
-  if(!userCount || !characterCount) {
+  let { userCount, characterCount } = await fetchUserAndCharacterCount();
+  if (!userCount || !characterCount) {
     userCount = 724;
     characterCount = 1234;
   }
 
   if (isNotAuthenticated) {
-    return <LandingPage totalUsers={userCount} totalCharacters={characterCount}/>;
-  }
+    return <LandingPage totalUsers={userCount} totalCharacters={characterCount} />;
+  }/*
+  Not fully implemented yet
   else {
     return <WelcomeBack />;
-  }
+  }*/
 
   return (
     <main className="flex min-h-screen flex-col max-h-screen overflow-y-hidden">

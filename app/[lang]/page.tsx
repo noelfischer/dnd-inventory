@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: Promise<{ lang: Locale 
   }
 
   if (isNotAuthenticated) {
-    return <LandingPage totalUsers={userCount} totalCharacters={characterCount} />;
+    return <LandingPage totalUsers={userCount} totalCharacters={characterCount} dict={dict} />;
   }/*
   Not fully implemented yet
   else {
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ lang: Locale 
       <div className="flex grow flex-col md:flex-row h-full">
         <div className="flex flex-col justify-center gap-6 md:min-w-96 px-12 pt-10 pb-16 md:pb-32 md:w-2/5 md:px-20 md:bg-bg md:dark:bg-dark-elevated-bg">
           <p className={`text-xl md:text-3xl md:leading-normal`}>
-            <strong>{dict.landingPage.title}</strong>. {dict.landingPage.description}
+            <strong>{dict.landingPageOld.title}</strong>. {dict.landingPageOld.description}
           </p>
           {isNotAuthenticated ?
             <><Link
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ lang: Locale 
               className="unset"
             >
               <LinkButton>
-                <span>{dict.landingPage.login}</span> <ArrowRight className="w-5 md:w-6" />
+                <span>{dict.landingPageOld.login}</span> <ArrowRight className="w-5 md:w-6" />
               </LinkButton>
             </Link>
 
@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: Promise<{ lang: Locale 
               className="unset mt-4"
             >
               <LinkButton>
-                <span>{dict.landingPage.goToCampaigns}</span> <ArrowRight className="w-5 md:w-6" />
+                <span>{dict.landingPageOld.goToCampaigns}</span> <ArrowRight className="w-5 md:w-6" />
               </LinkButton>
             </Link>}
         </div>

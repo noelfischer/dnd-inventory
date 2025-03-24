@@ -3,13 +3,15 @@ import { Button } from "@/components/ui/button"
 import { Shield, Move, Scroll, Coins, Heart, Users, Dice6, Moon, Sun } from "lucide-react"
 import ToggleDarkMode from "@/app/ui/darkmode-toggle"
 import Link from "next/link"
+import { Dictionary } from "../dictionaries"
 
 type LandingPageProps = {
     totalUsers: number;
     totalCharacters: number;
+    dict: Dictionary;
 }
 
-export default function LandingPage({ totalUsers, totalCharacters }: LandingPageProps) {
+export default function LandingPage({ totalUsers, totalCharacters, dict }: LandingPageProps) {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#FBF8F1] dark:bg-[#1A1A2E] transition-colors duration-300">
@@ -23,22 +25,22 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
 
                 <div className="container max-w-4xl mx-auto text-center z-10">
                     <div className="inline-block mb-6 transform -rotate-3">
-                        <div className="flex items-center gap-2 sm:gap-3 text-3xl sm:text-4xl font-extrabold bg-[#FFD166] dark:bg-[#FFD166]/90 px-4 sm:px-6 py-2 sm:py-3 rounded-lg border-4 border-black dark:border-[#FFD166] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,209,102,0.3)]">
+                        <div className="flex items-center gap-2 sm:gap-3 text-3xl sm:text-4xl font-extrabold bg-[#FFD166] dark:bg-[#FFD166] px-4 sm:px-6 py-2 sm:py-3 rounded-lg border-4 border-black dark:border-[#FFD166]/90 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,209,102,0.3)]">
                             <Shield className="h-7 w-7 sm:h-10 sm:w-10 text-black dark:text-[#1A1A2E]" />
                             <span className="text-black dark:text-[#1A1A2E]">DnDventory</span>
                         </div>
                     </div>
 
                     <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mt-6 mb-5 sm:mb-6 text-black dark:text-white leading-tight">
-                        Dungeons & Dragons<br />
+                        {dict.landingPage.title1}<br />
                         <span className="text-[#FF6B6B] dark:text-[#FF8E8E] relative">
-                            But Organized
+                            {dict.landingPage.title2}
                             <span className="absolute bottom-0 left-0 w-full h-2 sm:h-3 bg-[#4ECDC4] dark:bg-[#4ECDC4]/70 -z-10 transform translate-y-2"></span>
                         </span>
                     </h1>
 
                     <p className="text-lg sm:text-xl md:text-2xl mb-8 sm:mb-12 max-w-2xl mx-auto text-black dark:text-gray-200">
-                        Track your health, spell slots, inventory, and notes in one place. <span className="hidden sm:inline">Rearrange everything to match your playstyle.</span>
+                        {dict.landingPage.description1} <span className="hidden sm:inline">{dict.landingPage.description2}</span>
                     </p>
 
                     {/* CTA Buttons with Individual Glow Effects */}
@@ -53,7 +55,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 variant="vanilla"
                                 className="relative text-lg sm:text-xl px-8 sm:px-16 py-4 sm:py-10 h-auto bg-[#FF6B6B] hover:bg-[#FF6B6B]/90 dark:bg-[#FF8E8E] dark:hover:bg-[#FF8E8E]/90 text-white dark:text-[#1A1A2E] rounded-xl border-4 border-black dark:border-[#FF8E8E] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,142,142,0.3)] transition-transform hover:-translate-y-1 w-full sm:w-auto sm:min-w-[220px]"
                             >
-                                Sign Up
+                                {dict.general.signup}
                             </Button>
                         </Link>
                         {/* Log In Button */}
@@ -68,7 +70,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                     variant="outline"
                                     className="relative text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-10 h-auto bg-white hover:bg-gray-100 dark:bg-[#2A2A42] dark:hover:bg-[#2A2A42]/90 text-black dark:text-white rounded-xl border-4 border-black dark:border-[#4ECDC4] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(78,205,196,0.3)] transition-transform hover:-translate-y-1 w-full"
                                 >
-                                    Log In
+                                    {dict.login.login}
                                 </Button>
                             </Link>
                         </div>
@@ -78,15 +80,15 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                     <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-[350px] sm:max-w-md mx-auto opacity-90">
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform rotate-1">
                             <p className="text-2xl sm:text-3xl font-black text-[#FF6B6B] dark:text-[#FF8E8E]">{totalUsers}</p>
-                            <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">Active Players</p>
+                            <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">{dict.landingPage.stats.activePlayers}</p>
                         </div>
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform -rotate-1">
                             <p className="text-2xl sm:text-3xl font-black text-[#4ECDC4] dark:text-[#4ECDC4]">{totalCharacters}</p>
-                            <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">Character Sheets</p>
+                            <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">{dict.landingPage.stats.characterSheets}</p>
                         </div>
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform rotate-1">
                             <p className="text-2xl sm:text-3xl font-black text-[#FFD166] dark:text-[#FFD166]">4.9</p>
-                            <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">User Rating</p>
+                            <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">{dict.landingPage.stats.userRating}</p>
                         </div>
                     </div>
                 </div>
@@ -111,18 +113,18 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                 <div className="container px-4 md:px-6 mx-auto">
                     <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8 sm:mb-12">
                         <div className="inline-block transform rotate-3 mb-2 sm:mb-4">
-                            <div className="bg-[#FFD166] dark:bg-[#FFD166]/90 px-3 sm:px-5 py-1 sm:py-2 rounded-lg border-3 sm:border-4 border-black dark:border-[#FFD166] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,209,102,0.3)] sm:dark:shadow-[5px_5px_0px_0px_rgba(255,209,102,0.3)]">
+                            <div className="bg-[#FFD166] dark:bg-[#FFD166] px-3 sm:px-5 py-1 sm:py-2 rounded-lg border-3 sm:border-4 border-black dark:border-[#FFD166]/90 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,209,102,0.3)] sm:dark:shadow-[5px_5px_0px_0px_rgba(255,209,102,0.3)]">
                                 <Move className="inline-block mr-1 h-4 w-4 sm:h-5 sm:w-5 text-black dark:text-[#1A1A2E]" />
                                 <span className="font-bold text-sm sm:text-base text-black dark:text-[#1A1A2E]">
-                                    DRAG & DROP EVERYTHING
+                                    {dict.landingPage.dragDrop.title}
                                 </span>
                             </div>
                         </div>
                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-black dark:text-white">
-                            Your Layout, Your Rules
+                            {dict.landingPage.dragDrop.subtitle}
                         </h2>
                         <p className="max-w-[700px] text-base sm:text-xl text-black dark:text-gray-200">
-                            Every component can be moved and arranged exactly how you want it.
+                            {dict.landingPage.dragDrop.description}
                         </p>
                     </div>
 
@@ -132,9 +134,9 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#FF6B6B] dark:bg-[#FF8E8E] rounded-lg border-3 sm:border-4 border-black dark:border-[#FF8E8E]/50 flex items-center justify-center mb-3 sm:mb-4">
                                 <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white dark:text-[#1A1A2E]" />
                             </div>
-                            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-black dark:text-white">Health Tracker</h3>
+                            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-black dark:text-white">{dict.landingPage.features.healthTracker.title}</h3>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                Drag your health bar anywhere on screen. Resize it to be as big or small as you want.
+                                {dict.landingPage.features.healthTracker.description}
                             </p>
                         </div>
 
@@ -142,9 +144,9 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#FFD166] dark:bg-[#FFD166] rounded-lg border-3 sm:border-4 border-black dark:border-[#FFD166]/50 flex items-center justify-center mb-3 sm:mb-4">
                                 <Scroll className="h-6 w-6 sm:h-8 sm:w-8 text-white dark:text-[#1A1A2E]" />
                             </div>
-                            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-black dark:text-white">Spell Slots</h3>
+                            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-black dark:text-white">{dict.landingPage.features.spellSlots.title}</h3>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                Keep your spell slots where you need them. Customize the layout to match your spellcasting style.
+                                {dict.landingPage.features.spellSlots.description}
                             </p>
                         </div>
 
@@ -152,9 +154,9 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#4ECDC4] dark:bg-[#4ECDC4] rounded-lg border-3 sm:border-4 border-black dark:border-[#4ECDC4]/50 flex items-center justify-center mb-3 sm:mb-4">
                                 <Coins className="h-6 w-6 sm:h-8 sm:w-8 text-white dark:text-[#1A1A2E]" />
                             </div>
-                            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-black dark:text-white">Inventory</h3>
+                            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-black dark:text-white">{dict.landingPage.features.inventory.title}</h3>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                Organize your items and coin pouch however you like. Everything is movable and resizable.
+                                {dict.landingPage.features.inventory.description}
                             </p>
                         </div>
                     </div>
@@ -169,10 +171,10 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 className="rounded-lg border-2 border-black dark:border-gray-700"
                             />
                             <div className="absolute top-4 right-4 bg-[#FF6B6B] dark:bg-[#FF8E8E] text-white dark:text-[#1A1A2E] font-bold px-3 sm:px-4 py-1 sm:py-2 rounded-lg border-2 border-black dark:border-[#FF8E8E]/50 transform rotate-3 text-sm sm:text-base">
-                                Drag Around!
+                                {dict.landingPage.appDemo.everythingCustomizable}
                             </div>
                             <div className="absolute bottom-8 sm:bottom-12 left-4 sm:left-8 bg-[#FFD166] dark:bg-[#FFD166] text-black dark:text-[#1A1A2E] font-bold px-3 sm:px-4 py-1 sm:py-2 rounded-lg border-2 border-black dark:border-[#FFD166]/50 transform -rotate-2 text-sm sm:text-base">
-                                Move Anywhere!
+                                {dict.landingPage.appDemo.multipleDashboards}
                             </div>
                         </div>
                     </div>
@@ -186,11 +188,11 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                         <div className="inline-block transform -rotate-2 mb-2 sm:mb-4">
                             <div className="bg-[#FF6B6B] dark:bg-[#FF8E8E] px-3 sm:px-5 py-1 sm:py-2 rounded-lg border-3 sm:border-4 border-black dark:border-[#FF8E8E]/50 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,142,142,0.3)] sm:dark:shadow-[5px_5px_0px_0px_rgba(255,142,142,0.3)]">
                                 <Users className="inline-block mr-1 h-4 w-4 sm:h-5 sm:w-5 text-white dark:text-[#1A1A2E]" />
-                                <span className="font-bold text-sm sm:text-base text-white dark:text-[#1A1A2E]">LOVED BY PLAYERS</span>
+                                <span className="font-bold text-sm sm:text-base text-white dark:text-[#1A1A2E]">{dict.landingPage.testimonials.title}</span>
                             </div>
                         </div>
                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-black dark:text-white mb-2 sm:mb-4">
-                            Join Thousands of Happy Adventurers
+                            {dict.landingPage.testimonials.subtitle}
                         </h2>
                     </div>
 
@@ -202,7 +204,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                     <span className="font-bold text-sm sm:text-base text-white dark:text-[#1A1A2E]">DM</span>
                                 </div>
                                 <div>
-                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">Dungeon Master Dani</p>
+                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">{dict.landingPage.testimonials.reviews.dm.name}</p>
                                     <div className="flex">
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
@@ -213,7 +215,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                &quot;This app has completely changed how my players track their characters. No more shuffling papers!&quot;
+                                &quot;{dict.landingPage.testimonials.reviews.dm.quote}&quot;
                             </p>
                         </div>
 
@@ -223,7 +225,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                     <span className="font-bold text-sm sm:text-base text-white dark:text-[#1A1A2E]">EW</span>
                                 </div>
                                 <div>
-                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">Elven Wizard</p>
+                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">{dict.landingPage.testimonials.reviews.wizard.name}</p>
                                     <div className="flex">
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
@@ -234,8 +236,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                &quot;Being able to arrange my spell slots and components exactly how I want them has made spellcasting so
-                                much easier!&quot;
+                                &quot;{dict.landingPage.testimonials.reviews.wizard.quote}&quot;
                             </p>
                         </div>
 
@@ -245,7 +246,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                     <span className="font-bold text-sm sm:text-base text-white dark:text-[#1A1A2E]">BR</span>
                                 </div>
                                 <div>
-                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">Barbarian who likes bacon</p>
+                                    <p className="font-bold text-sm sm:text-base text-black dark:text-white">{dict.landingPage.testimonials.reviews.barbarian.name}</p>
                                     <div className="flex">
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
                                         <Dice6 className="h-3 w-3 sm:h-4 sm:w-4 text-[#FFD166] dark:text-[#FFD166]" />
@@ -256,7 +257,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                &quot;BIG HEALTH BAR GOOD. ME LIKE DRAG THINGS AROUND. VERY GOOD APP.&quot;
+                                &quot;{dict.landingPage.testimonials.reviews.barbarian.quote}&quot;
                             </p>
                         </div>
                     </div>
@@ -271,7 +272,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 variant="vanilla"
                                 className="relative text-lg sm:text-xl px-8 sm:px-16 py-6 sm:py-8 h-auto bg-[#FF6B6B] hover:bg-[#FF6B6B]/90 dark:bg-[#FF8E8E] dark:hover:bg-[#FF8E8E]/90 text-white dark:text-[#1A1A2E] rounded-xl border-3 sm:border-4 border-black dark:border-[#FF8E8E] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,142,142,0.3)] sm:dark:shadow-[8px_8px_0px_0px_rgba(255,142,142,0.3)] transition-transform hover:-translate-y-1 w-full sm:w-auto sm:min-w-[220px]"
                             >
-                                Sign Up & Join Them
+                                {dict.landingPage.signUpAndJoin}
                             </Button>
                         </Link>
                     </div>
@@ -286,7 +287,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                             <span className="font-bold text-lg sm:text-xl">DnDventory</span>
                         </div>
                         <p className="text-center md:text-right text-xs sm:text-sm">
-                            Made with ❤️ for the D&D community • {new Date().getFullYear()}
+                            {dict.landingPage.footer.text} • {new Date().getFullYear()}
                         </p>
                     </div>
                 </div>

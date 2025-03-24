@@ -12,6 +12,7 @@
         "move": "Move",
         "or": "or",
         "logout": "Logout",
+        "signup": "Sign Up",
         "createAccount": "Create Account",
         "actions": "Actions",
         "name": "Name",
@@ -35,6 +36,62 @@
         "goBack": "Go Back to Campaigns"
     },
     "landingPage": {
+        "title1": "Dungeons & Dragons",
+        "title2": "But Organized",
+        "description1": "Track your health, spell slots, inventory, and notes in one place.",
+        "description2": "Rearrange everything to match your playstyle.",
+        "stats": {
+            "activePlayers": "Active Players",
+            "characterSheets": "Character Sheets",
+            "userRating": "User Rating"
+        },
+        "dragDrop": {
+            "title": "DRAG & DROP EVERYTHING",
+            "subtitle": "Your Layout, Your Rules",
+            "description": "Every component can be moved and arranged exactly how you want it."
+        },
+        "features": {
+            "healthTracker": {
+                "title": "Health Tracker",
+                "description": "Drag your health bar anywhere on screen. Resize it to be as big or small as you want."
+            },
+            "spellSlots": {
+                "title": "Spell Slots",
+                "description": "Keep your spell slots where you need them. Customize the layout to match your spellcasting style."
+            },
+            "inventory": {
+                "title": "Inventory",
+                "description": "Organize your items and coin pouch however you like. Everything is movable and resizable."
+            }
+        },
+        "appDemo": {
+            "everythingCustomizable": "Everything is customizable!",
+            "multipleDashboards": "Multiple Dashboards per character possible"
+        },
+        "testimonials": {
+            "title": "LOVED BY PLAYERS",
+            "subtitle": "Join Thousands of Happy Adventurers",
+            "reviews": {
+                "dm": {
+                    "name": "Dungeon Master Dani",
+                    "quote": "This app has completely changed how my players track their characters. No more shuffling papers!"
+                },
+                "wizard": {
+                    "name": "Elven Wizard",
+                    "quote": "Being able to arrange my spell slots and components exactly how I want them has made spellcasting so much easier!"
+                },
+                "barbarian": {
+                    "name": "Barbarian who likes bacon",
+                    "quote": "BIG HEALTH BAR GOOD. ME LIKE DRAG THINGS AROUND. VERY GOOD APP."
+                }
+            }
+        },
+        "signUpAndJoin": "Sign Up & Join Them",
+        "footer": {
+            "text": "Made with ❤️ for the D&D community"
+        }
+    },
+    "landingPageOld": {
         "title": "D&D Inventory",
         "description": "Keep track of everything.",
         "login": "Log in",

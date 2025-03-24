@@ -13,6 +13,7 @@
         "or": "oder",
         "logout": "Abmelden",
         "createAccount": "Konto erstellen",
+        "signup": "Registrieren",
         "actions": "Aktionen",
         "name": "Name",
         "description": "Beschreibung",
@@ -35,6 +36,62 @@
         "goBack": "Zurück zu Kampagnen"
     },
     "landingPage": {
+        "title1": "Dungeons & Dragons",
+        "title2": "Aber Organisiert",
+        "description1": "Verwalte deine Lebenspunkte, Zauberslots, dein Inventar und Notizen an einem Ort.",
+        "description2": "Ordne alles so an, so wie es zu deinem Spielstil passt.",
+        "stats": {
+            "activePlayers": "Aktive Spieler",
+            "characterSheets": "Charakterbögen",
+            "userRating": "Benutzerbewertung"
+        },
+        "dragDrop": {
+            "title": "ALLES PER DRAG & DROP",
+            "subtitle": "Dein Layout, Deine Regeln",
+            "description": "Jede Komponente kann genau so verschoben und angeordnet werden, wie du es möchtest."
+        },
+        "features": {
+            "healthTracker": {
+                "title": "Lebenspunkte-Tracker",
+                "description": "Ziehe deine Lebenspunkte-Anzeige überall auf dem Bildschirm hin. Ändere die Größe, wie du möchtest."
+            },
+            "spellSlots": {
+                "title": "Zauberslots",
+                "description": "Behalte deine Zauberslots dort, wo du sie brauchst. Passe das Layout deinem Zauberstil an."
+            },
+            "inventory": {
+                "title": "Inventar",
+                "description": "Organisiere deine Gegenstände und dein Münzbeutel so, wie es dir gefällt. Alles ist verschiebbar und skalierbar."
+            }
+        },
+        "appDemo": {
+            "everythingCustomizable": "Alles anpassbar!",
+            "multipleDashboards": "Mehrere Dashboards pro Charakter möglich"
+        },
+        "testimonials": {
+            "title": "GELIEBT VON SPIELERN",
+            "subtitle": "Schließe dich Tausenden glücklichen Abenteurern an",
+            "reviews": {
+                "dm": {
+                    "name": "Dungeon Master Dani",
+                    "quote": "Diese App hat völlig verändert, wie meine Spieler ihre Charaktere verwalten. Kein Papierchaos mehr!"
+                },
+                "wizard": {
+                    "name": "Elfenzauberer",
+                    "quote": "Meine Zauberslots und Komponenten genau dort zu haben, wo ich sie brauche, macht das Zaubern viel einfacher!"
+                },
+                "barbarian": {
+                    "name": "Barbar, der Speck mag",
+                    "quote": "GROSSE LEBENSPUNKTE-ANZEIGE GUT. ICH MAG DINGE HERUMZIEHEN. SEHR GUTE APP."
+                }
+            }
+        },
+        "signUpAndJoin": "Registriere dich und mach mit!",
+        "footer": {
+            "text": "Mit ❤️ für die D&D-Community gemacht"
+        }
+    },
+    "landingPageOld": {
         "title": "D&D Inventar",
         "description": "Alles im Überblick",
         "login": "Anmelden",

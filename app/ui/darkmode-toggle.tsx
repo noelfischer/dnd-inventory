@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { useTheme } from "next-themes";
 import { Label } from "@/components/ui/label"
 import { MoonStar, Sun } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const ToggleDarkMode = ({ singleBackground = false }: { singleBackground?: boolean }) => {
+const ToggleDarkMode = ({ singleBackground = false, className }: { singleBackground?: boolean, className?: string }) => {
     const { systemTheme, theme, setTheme } = useTheme();
     const [currentTheme, setCurrentTheme] = useState<string | undefined>('none');
     const [isSpinning, setIsSpinning] = useState(false);
@@ -22,7 +23,7 @@ const ToggleDarkMode = ({ singleBackground = false }: { singleBackground?: boole
     };
 
     return (
-        <div className="flex items-center space-x-2 absolute top-6 right-7 z-10">
+        <div className={cn("flex items-center space-x-2 absolute top-6 right-7 z-10", className)}>
             <button id="dark-mode" onClick={setDarkmode} className={"dark-mode w-7 h-7 rounded-full ease-out duration-100 cursor-pointer " + (isSpinning ? 'animate-spin-once' : '') + (singleBackground ? ' text-text' : '')}>
                 <MoonStar className={"absolute top-0 w-7 h-7 py-0.5 ease-out duration-100" + (currentTheme === "dark" ? " opacity-100" : " opacity-0")} />
                 <Sun className={"absolute top-0 w-7 h-7 ease-out duration-100" + (currentTheme === "light" ? " opacity-100" : " opacity-0")} />

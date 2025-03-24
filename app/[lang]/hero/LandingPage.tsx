@@ -13,9 +13,9 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
 
     return (
         <div className="flex min-h-screen flex-col bg-[#FBF8F1] dark:bg-[#1A1A2E] transition-colors duration-300">
-            <ToggleDarkMode />
+            <ToggleDarkMode className="hidden sm:flex" />
             {/* Hero Section - Full Screen Height */}
-            <section className="min-h-screen flex flex-col items-center justify-center relative px-4 py-20">
+            <section className="min-h-dvh flex flex-col items-center justify-center relative px-4 py-20">
                 {/* Decorative Elements - Hidden on very small screens */}
                 <div className="absolute top-20 left-10 w-20 h-20 bg-[#FF6B6B] dark:bg-[#FF6B6B]/70 rounded-full opacity-30 animate-bounce hidden sm:block"></div>
                 <div className="absolute bottom-40 right-20 w-32 h-32 bg-[#4ECDC4] dark:bg-[#4ECDC4]/70 rounded-full opacity-20 animate-pulse hidden sm:block"></div>
@@ -29,21 +29,20 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                         </div>
                     </div>
 
-                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 text-black dark:text-white leading-tight">
-                        Your D&D Inventory,<br />
+                    <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mt-6 mb-5 sm:mb-6 text-black dark:text-white leading-tight">
+                        Dungeons & Dragons<br />
                         <span className="text-[#FF6B6B] dark:text-[#FF8E8E] relative">
-                            Your Way
+                            But Organized
                             <span className="absolute bottom-0 left-0 w-full h-2 sm:h-3 bg-[#4ECDC4] dark:bg-[#4ECDC4]/70 -z-10 transform translate-y-2"></span>
                         </span>
                     </h1>
 
-                    <p className="text-lg sm:text-xl md:text-2xl mb-8 sm:mb-10 max-w-2xl mx-auto text-black dark:text-gray-200">
-                        Rearrange your character sheet however you want. Track health, spells, and inventory with drag-and-drop
-                        simplicity.
+                    <p className="text-lg sm:text-xl md:text-2xl mb-8 sm:mb-12 max-w-2xl mx-auto text-black dark:text-gray-200">
+                        Track your health, spell slots, inventory, and notes in one place. <span className="hidden sm:inline">Rearrange everything to match your playstyle.</span>
                     </p>
 
                     {/* CTA Buttons with Individual Glow Effects */}
-                    <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-12 sm:mb-20 px-2">
+                    <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-17 sm:mb-18 px-2">
                         {/* Sign Up Button */}
                         <Link
                             href="/signup"
@@ -52,7 +51,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                             <Button
                                 size="lg"
                                 variant="vanilla"
-                                className="relative text-lg sm:text-xl px-8 sm:px-16 py-6 sm:py-10 h-auto bg-[#FF6B6B] hover:bg-[#FF6B6B]/90 dark:bg-[#FF8E8E] dark:hover:bg-[#FF8E8E]/90 text-white dark:text-[#1A1A2E] rounded-xl border-4 border-black dark:border-[#FF8E8E] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,142,142,0.3)] transition-transform hover:-translate-y-1 w-full sm:w-auto sm:min-w-[220px]"
+                                className="relative text-lg sm:text-xl px-8 sm:px-16 py-4 sm:py-10 h-auto bg-[#FF6B6B] hover:bg-[#FF6B6B]/90 dark:bg-[#FF8E8E] dark:hover:bg-[#FF8E8E]/90 text-white dark:text-[#1A1A2E] rounded-xl border-4 border-black dark:border-[#FF8E8E] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,142,142,0.3)] transition-transform hover:-translate-y-1 w-full sm:w-auto sm:min-w-[220px]"
                             >
                                 Sign Up
                             </Button>
@@ -67,7 +66,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                                 <Button
                                     size="lg"
                                     variant="outline"
-                                    className="relative text-lg sm:text-xl px-8 sm:px-10 py-6 sm:py-10 h-auto bg-white hover:bg-gray-100 dark:bg-[#2A2A42] dark:hover:bg-[#2A2A42]/90 text-black dark:text-white rounded-xl border-4 border-black dark:border-[#4ECDC4] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(78,205,196,0.3)] transition-transform hover:-translate-y-1 w-full"
+                                    className="relative text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-10 h-auto bg-white hover:bg-gray-100 dark:bg-[#2A2A42] dark:hover:bg-[#2A2A42]/90 text-black dark:text-white rounded-xl border-4 border-black dark:border-[#4ECDC4] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(78,205,196,0.3)] transition-transform hover:-translate-y-1 w-full"
                                 >
                                     Log In
                                 </Button>
@@ -76,7 +75,7 @@ export default function LandingPage({ totalUsers, totalCharacters }: LandingPage
                     </div>
 
                     {/* Stats Cards - Made smaller and less prominent */}
-                    <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-[280px] sm:max-w-md mx-auto opacity-90">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-[350px] sm:max-w-md mx-auto opacity-90">
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform rotate-1">
                             <p className="text-2xl sm:text-3xl font-black text-[#FF6B6B] dark:text-[#FF8E8E]">{totalUsers}</p>
                             <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">Active Players</p>

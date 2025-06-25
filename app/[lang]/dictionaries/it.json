@@ -38,10 +38,11 @@
     "landingPage": {
         "title1": "Dungeons & Dragons",
         "title2": "But Organized",
+        "plaque": "Noël's D&D Inventory",
         "description1": "Track your health, spell slots, inventory, and notes in one place.",
         "description2": "Rearrange everything to match your playstyle.",
         "stats": {
-            "activePlayers": "Active Players",
+            "activePlayers": "Registered Players",
             "characterSheets": "Character Sheets",
             "userRating": "User Rating"
         },
@@ -70,7 +71,7 @@
         },
         "testimonials": {
             "title": "LOVED BY PLAYERS",
-            "subtitle": "Join Thousands of Happy Adventurers",
+            "subtitle": "Join Hundreds of Happy Adventurers",
             "reviews": {
                 "dm": {
                     "name": "Dungeon Master Dani",

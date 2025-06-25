@@ -38,10 +38,11 @@
     "landingPage": {
         "title1": "Dungeons & Dragons",
         "title2": "Aber Organisiert",
+        "plaque": "Noëls D&D Inventar",
         "description1": "Verwalte deine Lebenspunkte, Zauberslots, dein Inventar und Notizen an einem Ort.",
         "description2": "Ordne alles so an, so wie es zu deinem Spielstil passt.",
         "stats": {
-            "activePlayers": "Aktive Spieler",
+            "activePlayers": "Totale Spieler",
             "characterSheets": "Charakterbögen",
             "userRating": "Benutzerbewertung"
         },
@@ -70,7 +71,7 @@
         },
         "testimonials": {
             "title": "GELIEBT VON SPIELERN",
-            "subtitle": "Schließe dich Tausenden glücklichen Abenteurern an",
+            "subtitle": "Schließe dich Hunderten glücklichen Abenteurern an",
             "reviews": {
                 "dm": {
                     "name": "Dungeon Master Dani",

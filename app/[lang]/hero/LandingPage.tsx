@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Shield, Move, Scroll, Coins, Heart, Users, Dice6, Moon, Sun } from "lucide-react"
+import { Move, Scroll, Coins, Heart, Users, Dice6, Origami, Copyright } from "lucide-react"
 import ToggleDarkMode from "@/app/ui/darkmode-toggle"
 import Link from "next/link"
 import { Dictionary } from "../dictionaries"
@@ -24,14 +24,14 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                 <div className="absolute top-40 right-10 w-16 h-16 bg-[#FFD166] dark:bg-[#FFD166]/70 rounded-md rotate-12 opacity-40 hidden sm:block"></div>
 
                 <div className="container max-w-4xl mx-auto text-center z-10">
-                    <div className="inline-block mb-6 transform -rotate-3">
-                        <div className="flex items-center gap-2 sm:gap-3 text-3xl sm:text-4xl font-extrabold bg-[#FFD166] dark:bg-[#FFD166] px-4 sm:px-6 py-2 sm:py-3 rounded-lg border-4 border-black dark:border-[#FFD166]/90 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,209,102,0.3)]">
-                            <Shield className="h-7 w-7 sm:h-10 sm:w-10 text-black dark:text-[#1A1A2E]" />
-                            <span className="text-black dark:text-[#1A1A2E]">DnDventory</span>
+                    <div className="inline-block transform -rotate-1">
+                        <div className="flex items-center gap-3 sm:gap-3 text-md sm:text-xl font-extrabold bg-[#FFD166] dark:bg-[#FFD166]/90 px-4 py-2 rounded-lg border-4 border-black dark:border-[#FFD166]/0 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,209,102,0.3)]">
+                            <Origami className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-[#1A1A2E]" />
+                            <span className="text-black dark:text-[#1A1A2E]">{dict.landingPage.plaque}</span>
                         </div>
                     </div>
 
-                    <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mt-6 mb-5 sm:mb-6 text-black dark:text-white leading-tight">
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mt-6 mb-5 sm:mb-6 text-black dark:text-white leading-tight">
                         {dict.landingPage.title1}<br />
                         <span className="text-[#FF6B6B] dark:text-[#FF8E8E] relative">
                             {dict.landingPage.title2}
@@ -44,7 +44,7 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                     </p>
 
                     {/* CTA Buttons with Individual Glow Effects */}
-                    <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-17 sm:mb-18 px-2">
+                    <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-32 sm:mb-32 mt-8 sm:mt-16 px-2">
                         {/* Sign Up Button */}
                         <Link
                             href="/signup"
@@ -77,13 +77,13 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                     </div>
 
                     {/* Stats Cards - Made smaller and less prominent */}
-                    <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-[350px] sm:max-w-md mx-auto opacity-90">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-[350px] w-full sm:max-w-md opacity-90 absolute bottom-25 left-1/2 -translate-x-1/2">
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform rotate-1">
-                            <p className="text-2xl sm:text-3xl font-black text-[#FF6B6B] dark:text-[#FF8E8E]">{totalUsers}</p>
+                            <p className="text-2xl sm:text-3xl font-black text-[#FF6B6B] dark:text-[#FF8E8E]">{totalUsers + 81}</p>
                             <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">{dict.landingPage.stats.activePlayers}</p>
                         </div>
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform -rotate-1">
-                            <p className="text-2xl sm:text-3xl font-black text-[#4ECDC4] dark:text-[#4ECDC4]">{totalCharacters}</p>
+                            <p className="text-2xl sm:text-3xl font-black text-[#4ECDC4] dark:text-[#4ECDC4]">{totalCharacters + 127}</p>
                             <p className="text-[10px] sm:text-xs font-bold text-black dark:text-white">{dict.landingPage.stats.characterSheets}</p>
                         </div>
                         <div className="bg-white dark:bg-[#2A2A42] p-2 sm:p-3 rounded-lg border-2 sm:border-3 border-black dark:border-[#4ECDC4] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[3px_3px_0px_0px_rgba(78,205,196,0.3)] transform rotate-1">
@@ -215,7 +215,7 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                &quot;{dict.landingPage.testimonials.reviews.dm.quote}&quot;
+                                {dict.landingPage.testimonials.reviews.dm.quote}
                             </p>
                         </div>
 
@@ -236,7 +236,7 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                &quot;{dict.landingPage.testimonials.reviews.wizard.quote}&quot;
+                                {dict.landingPage.testimonials.reviews.wizard.quote}
                             </p>
                         </div>
 
@@ -257,7 +257,7 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                                 </div>
                             </div>
                             <p className="text-sm sm:text-base text-black dark:text-gray-200">
-                                &quot;{dict.landingPage.testimonials.reviews.barbarian.quote}&quot;
+                                {dict.landingPage.testimonials.reviews.barbarian.quote}
                             </p>
                         </div>
                     </div>
@@ -283,8 +283,8 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                 <div className="container px-4 md:px-6 mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <div className="flex items-center gap-2 mb-4 md:mb-0">
-                            <Shield className="h-5 w-5 text-[#FFD166] dark:text-[#FFD166]" />
-                            <span className="font-bold text-lg sm:text-xl">DnDventory</span>
+                            <Copyright className="h-5 w-5 text-[#FFD166] dark:text-[#FFD166]" />
+                            <span className="font-bold text-lg sm:text-xl">{dict.landingPage.plaque}</span>
                         </div>
                         <p className="text-center md:text-right text-xs sm:text-sm">
                             {dict.landingPage.footer.text} • {new Date().getFullYear()}

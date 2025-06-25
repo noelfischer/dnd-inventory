@@ -12,12 +12,14 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
 
     async function updateIndex(items: { item_id: string, i: number, slot: string }[]) {
         'use server'
-        for (let i = 0; i < items.length; i++) {
-            await prisma.inventoryItem.updateMany({
-                where: { item_id: items[i].item_id },
-                data: { i: i, slot: items[i].slot }
-            });
-        }
+        await Promise.all(
+            items.map((item, index) =>
+                prisma.inventoryItem.update({
+                    where: { item_id: item.item_id },
+                    data: { i: index, slot: item.slot }
+                })
+            )
+        );
     }
 
     async function createItem(item: InventoryItem): Promise<string> {
@@ -42,7 +44,28 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
     }
 
     async function updateItem(item: InventoryItem) {
-        'use server'
+        'use server';
+
+        // Fetch current item to compare slot
+        const existingItem = await prisma.inventoryItem.findUnique({
+            where: { item_id: item.item_id },
+            select: { slot: true, character_id: true }
+        });
+
+        const slotChanged = existingItem?.slot !== item.slot;
+
+        // If slot changed, get count of items in new slot for this character
+        let updatedI: number | undefined = undefined;
+        if (slotChanged) {
+            const count = await prisma.inventoryItem.count({
+                where: {
+                    character_id: item.character_id,
+                    slot: item.slot
+                }
+            });
+            updatedI = count; // index will be size of list (0-based or 1-based depending on logic)
+        }
+
         await prisma.inventoryItem.updateMany({
             where: { item_id: item.item_id },
             data: {
@@ -51,7 +74,9 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
                 weight: item.weight,
                 category: item.category,
                 magic: item.magic,
-                quantity: item.quantity
+                quantity: item.quantity,
+                slot: item.slot,
+                ...(slotChanged && updatedI !== undefined ? { i: updatedI } : {})
             }
         });
     }

@@ -47,8 +47,10 @@ const WeightClient = ({ max_weight, inventory_weight, coins_weight, updateTotalC
     }, []);
 
     function onChangeMaxWeight(weight: string) {
-        const weightNumber = parseInt(weight);
-        if (isNaN(weightNumber)) return;
+        let weightNumber = parseInt(weight);
+        if (isNaN(weightNumber)) {
+            weightNumber = 0;
+        };
         setMaxWeight(weightNumber);
         updateTotalCarriableWeight(weightNumber);
     }

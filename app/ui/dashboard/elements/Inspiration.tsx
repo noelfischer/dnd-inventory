@@ -12,8 +12,10 @@ const Inspiration = async ({ character_id, dict }: { character_id: string, dict:
 
     async function updateInspiration(inspiration: string) {
         'use server'
-        const inspirationNumber = parseInt(inspiration);
-        if (isNaN(inspirationNumber)) return;
+        let inspirationNumber = parseInt(inspiration);
+        if (isNaN(inspirationNumber)) {
+            inspirationNumber = 0;
+        };
         await prisma.character.updateMany({
             where: { character_id },
             data: { inspiration: inspirationNumber }

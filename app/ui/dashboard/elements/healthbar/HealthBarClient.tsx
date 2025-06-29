@@ -46,21 +46,27 @@ const HealthBarClient = ({ max_hit_points, current_hit_points, temp_hit_points, 
     const tempHealthPercentageHit = Math.max(0, (tempHitPoints / maxHitPoints) * 100);
 
     function onChangeCurrentHealth(health: string) {
-        const healthNumber = parseInt(health);
-        if (isNaN(healthNumber)) return;
+        let healthNumber = parseInt(health);
+        if (isNaN(healthNumber)) {
+            healthNumber = 0;
+        };
         setCurrentHitPoints(healthNumber);
         updateCurrentHealth(healthNumber);
     }
 
     function onChangeMaxHealth(health: string) {
-        const healthNumber = parseInt(health);
-        if (isNaN(healthNumber)) return;
+        let healthNumber = parseInt(health);
+        if (isNaN(healthNumber)) {
+            healthNumber = 0;
+        };
         setMaxHitPoints(healthNumber);
         updateMaxHealth(healthNumber);
     }
     function onChangeTempHealth(health: string) {
-        const healthNumber = parseInt(health);
-        if (isNaN(healthNumber)) return;
+        let healthNumber = parseInt(health);
+        if (isNaN(healthNumber)) {
+            healthNumber = 0;
+        };
         setTempHitPoints(healthNumber);
         updateTempHealth(healthNumber);
     }

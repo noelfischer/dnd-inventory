@@ -23,21 +23,26 @@ type Props = {
 const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
     const dictionary = useDictionary();
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // This is a workaround to prevent the user from accidentally deleting an item
     // More info https://github.com/shadcn-ui/ui/issues/1220#issuecomment-1731562088
     const [pointHasDown, setPointHasDown] = useState(false);
 
     async function handleSubmit(formData: FormData) {
+        setLoading(true);
         await updateItem(item, formData);
         setOpen(false);
+        setLoading(false);
     }
 
     async function handleDelete() {
         console.log('has down', pointHasDown);
         if (pointHasDown) {
-            deleteItem(item.item_id);
+            setLoading(true);
+            await deleteItem(item.item_id);
             setOpen(false);
+            setLoading(false);
         }
     }
 
@@ -79,8 +84,8 @@ const EditItem = ({ item, updateItem, deleteItem, className }: Props) => {
                         </div>
                     </div>
                     <DialogFooter className='sm:justify-between'>
-                        <Button type='button' className='mt-4 sm:mt-0' onPointerDown={() => setPointHasDown(true)} onClick={handleDelete}>{dictionary.general.delete}</Button>
-                        <Button type='submit' className='bg-main-accent'>{dictionary.general.update}</Button>
+                        <Button type='button' className='mt-4 sm:mt-0' onPointerDown={() => setPointHasDown(true)} onClick={handleDelete} disabled={loading}>{dictionary.general.delete}</Button>
+                        <Button type='submit' className='bg-main-accent' disabled={loading}>{dictionary.general.update}</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

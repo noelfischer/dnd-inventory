@@ -19,10 +19,13 @@ import { useState } from 'react'
 const NewItem = ({ className, createItem }: { className?: string, createItem: (item: FormData) => void }) => {
     const dictionary = useDictionary();
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     async function handleSubmit(formData: FormData) {
+        setLoading(true);
         await createItem(formData)
         setOpen(false);
+        setLoading(false);
     }
 
     return (
@@ -67,7 +70,7 @@ const NewItem = ({ className, createItem }: { className?: string, createItem: (i
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button type='submit'>{dictionary.general.create}</Button>
+                        <Button type='submit' disabled={loading}>{dictionary.general.create}</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

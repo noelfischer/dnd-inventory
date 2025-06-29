@@ -8,6 +8,7 @@ import './styles.css';
 import { NavigationWide, NavLink } from "./navigation/NavigationWide";
 import { X } from "lucide-react";
 import { keyValuePair } from "@/lib/utils";
+import { useDictionary } from "@/app/[lang]/DictionaryProvider";
 
 type Props = {
     dashboardID: string,
@@ -24,6 +25,7 @@ type Props = {
 }
 
 const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
+    const dictionary = useDictionary();
 
     useEffect(() => {
         setLayouts(initialLayout);
@@ -111,9 +113,9 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
                                 <X className="h-7 -mr-[3px] -mt-[5px]" strokeWidth={3} />
                             </div>
                             <div className="edit-item-desc edit-item-name">
-                                {component.name.charAt(0).toUpperCase() + component.name.slice(1)}
+                                {translateName(component.name)}
                             </div>
-                             <div className="edit-item-desc edit-item-owner">
+                            <div className="edit-item-desc edit-item-owner">
                                 {component.owner}
                             </div>
                         </div>
@@ -125,6 +127,26 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
             </ResponsiveReactGridLayout>
         </div>
     );
+
+
+    function translateName(element: string) {
+        switch (element) {
+            case "name": return dictionary.general.name;
+            case "health": return dictionary.dashboard.navigation.element.options.health;
+            case "inventory": return dictionary.dashboard.navigation.element.options.inventory;
+            case "currency": return dictionary.dashboard.navigation.element.options.currency;
+            case "conditions": return dictionary.dashboard.navigation.element.options.conditions;
+            case "levelup": return dictionary.dashboard.navigation.element.options.levelup;
+            case "weight": return dictionary.dashboard.navigation.element.options.weight;
+            case "notes": return dictionary.dashboard.navigation.element.options.notes;
+            case "abilities": return dictionary.dashboard.navigation.element.options.abilities;
+            case "spellslots": return dictionary.dashboard.navigation.element.options.spellslots;
+            case "inspiration": return dictionary.dashboard.navigation.element.options.inspiration;
+            case "longrest": return dictionary.dashboard.navigation.element.options.longrest;
+            case "status": return dictionary.dashboard.navigation.element.options.status;
+            default: return dictionary.general.name;
+        }
+    }
 };
 
 export default DashboardGridLayout;

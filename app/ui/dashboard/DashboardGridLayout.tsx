@@ -110,6 +110,12 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
                             <div className="remove" onClick={() => { removeElement(component.i) }} onTouchEnd={() => removeElement(component.i)} onMouseEnter={() => setDeleteHover(true)} onMouseLeave={() => setDeleteHover(false)}>
                                 <X className="h-7 -mr-[3px] -mt-[5px]" strokeWidth={3} />
                             </div>
+                            <div className="edit-item-desc edit-item-name">
+                                {component.name.charAt(0).toUpperCase() + component.name.slice(1)}
+                            </div>
+                             <div className="edit-item-desc edit-item-owner">
+                                {component.owner}
+                            </div>
                         </div>
                         <div>
                             {component.type}

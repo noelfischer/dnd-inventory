@@ -34,6 +34,8 @@ export type GridElement = {
 export type Component = {
   i: string;
   type: ReactNode;
+  name: string;
+  owner: string;
 }
 
 export default async function Page(props: { params: Promise<{ id: string, lang: Locale }> }) {
@@ -74,7 +76,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
     componentList = getLayoutTemplate(characterID, dict).list;
   } else {
     layout = transformToLayout(dashboardLayout);
-    componentList = dashboardLayout.map(element => { return { i: element.element_id + ',' + element.element_type + ',' + element.character_id, type: componentMap(element.element_type, element.character_id, dict) } })
+    componentList = dashboardLayout.map(element => { return { i: element.element_id + ',' + element.element_type + ',' + element.character_id, type: componentMap(element.element_type, element.character_id, dict), name: element.element_type, owner: (characters.find(s => s.character_id == element.character_id)?.name || "Hidden Character") } })
 
   }
 
@@ -182,18 +184,18 @@ function getLayoutTemplate(characterID: string, dict: Dictionary) {
     ],
   };
   const initial_componentList = [
-    { i: '0000000000,name,' + characterID, type: <NameAndLevelServer character_id={characterID} lang={dict.lang as Locale} /> },
-    { i: '0000000001,health,' + characterID, type: <HealthBarServer character_id={characterID} /> },
-    { i: '0000000009,spellslots,' + characterID, type: <SpellSlotsServer character_id={characterID} /> },
-    { i: '0000000002,weight,' + characterID, type: <WeightServer character_id={characterID} /> },
-    { i: '0000000003,notes,' + characterID, type: <Notes character_id={characterID} dict={dict} /> },
-    { i: '0000000004,inventory,' + characterID, type: <InventoryServer character_id={characterID} /> },
-    { i: '0000000005,levelup,' + characterID, type: <LevelupServer character_id={characterID} /> },
-    { i: '0000000006,abilities,' + characterID, type: <Abilities character_id={characterID} dict={dict} /> },
-    { i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} dict={dict} /> },
-    { i: '00000000008,currency,' + characterID, type: <CurrencyServer character_id={characterID} /> },
-    { i: '00000000010,inspiration,' + characterID, type: <Inspiration character_id={characterID} dict={dict} /> },
-    { i: '00000000011,longrest,' + characterID, type: <LongRestServer character_id={characterID} /> },
+    { owner: characterID, name: 'name', i: '0000000000,name,' + characterID, type: <NameAndLevelServer character_id={characterID} lang={dict.lang as Locale} /> },
+    { owner: characterID, name: 'health', i: '0000000001,health,' + characterID, type: <HealthBarServer character_id={characterID} /> },
+    { owner: characterID, name: 'spellslots', i: '0000000009,spellslots,' + characterID, type: <SpellSlotsServer character_id={characterID} /> },
+    { owner: characterID, name: 'weight', i: '0000000002,weight,' + characterID, type: <WeightServer character_id={characterID} /> },
+    { owner: characterID, name: 'notes', i: '0000000003,notes,' + characterID, type: <Notes character_id={characterID} dict={dict} /> },
+    { owner: characterID, name: 'inventory', i: '0000000004,inventory,' + characterID, type: <InventoryServer character_id={characterID} /> },
+    { owner: characterID, name: 'levelup', i: '0000000005,levelup,' + characterID, type: <LevelupServer character_id={characterID} /> },
+    { owner: characterID, name: 'abilities', i: '0000000006,abilities,' + characterID, type: <Abilities character_id={characterID} dict={dict} /> },
+    { owner: characterID, name: 'conditions', i: '0000000007,conditions,' + characterID, type: <Conditions character_id={characterID} dict={dict} /> },
+    { owner: characterID, name: 'currency', i: '00000000008,currency,' + characterID, type: <CurrencyServer character_id={characterID} /> },
+    { owner: characterID, name: 'inspiration', i: '00000000010,inspiration,' + characterID, type: <Inspiration character_id={characterID} dict={dict} /> },
+    { owner: characterID, name: 'longrest', i: '00000000011,longrest,' + characterID, type: <LongRestServer character_id={characterID} /> },
   ];
   return { layout: initial_layout, list: initial_componentList };
 }

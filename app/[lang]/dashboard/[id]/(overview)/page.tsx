@@ -93,6 +93,7 @@ export default async function Page(props: { params: Promise<{ id: string, lang: 
         deleteDashboard={deleteDashboard}
         characters={formatCharactersData(characters)}
         isPartyDashboard={partyDashboard}
+        defaultCharacterId={characterID || ""}
         addElementHandler={addDashBoardElement}
       />
     </>

@@ -34,10 +34,11 @@ type Props = {
   deleteDashboard: any,
   isPartyDashboard: boolean,
   characters: keyValuePair[],
+  defaultCharacterId: string,
   addElementHandler: (formData: FormData) => Promise<string>
 }
 
-export const NavigationWide = ({ dashboardID, editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
+export const NavigationWide = ({ dashboardID, editMode, setEditMode, layouts, initialLayouts, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, defaultCharacterId, addElementHandler }: Props) => {
   const dictionary = useDictionary();
   const updateLayoutWithData = updateLayout.bind(null, cleanLayout(layouts));
   const noChange: boolean = compareLayouts(layouts, initialLayouts);
@@ -87,7 +88,7 @@ export const NavigationWide = ({ dashboardID, editMode, setEditMode, layouts, in
           :
           <Button className='min-w-[160px] flex justify-between bg-main-accent mb-[2px]' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout}<PanelsLeftBottom className="ml-2" /></Button>
         }
-        <AddElement addableElements={addableElements} addElementHandler={addElementHandler} disabled={isPending} />
+        <AddElement addableElements={addableElements} addElementHandler={addElementHandler} defaultCharacterId={defaultCharacterId || characters[0].key} disabled={isPending} />
       </div>
     </div>
   )

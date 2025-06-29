@@ -23,11 +23,11 @@ export type AddableElement = {
     addableElements: keyValuePair[]
 }
 
-export default function AddElement({ addableElements, addElementHandler, disabled = false }: { addableElements: AddableElement[], addElementHandler: (formData: FormData) => Promise<string>, disabled?: boolean }) {
+export default function AddElement({ addableElements, defaultCharacterId, addElementHandler, disabled = false }: { addableElements: AddableElement[], defaultCharacterId: string, addElementHandler: (formData: FormData) => Promise<string>, disabled?: boolean }) {
     const dictionary = useDictionary();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-    const [selectedCharacter, setSelectedCharacter] = useState(addableElements[0]?.character.key);
+    const [selectedCharacter, setSelectedCharacter] = useState(defaultCharacterId);
     const elementSelect: keyValuePair[] = addableElements.find(addableElement => addableElement.character.key == selectedCharacter)?.addableElements || addableElements[0]?.addableElements || [];
 
     async function formAction(formData: FormData) {
@@ -41,6 +41,12 @@ export default function AddElement({ addableElements, addElementHandler, disable
         setLoading(false);
         setOpen(false);
     }, [loading, addableElements])
+
+    useEffect(() => {
+        if (selectedCharacter != defaultCharacterId) {
+            setSelectedCharacter(defaultCharacterId)
+        }
+    }, [open])
 
     return (
         <div>
@@ -60,7 +66,7 @@ export default function AddElement({ addableElements, addElementHandler, disable
                         </SheetHeader>
                         <div className="grid gap-4 py-4">
                             <CustomFormItemSelect label="Character" name="character" options={addableElements.map((e: AddableElement) => e.character)}
-                                defaultValue={addableElements[0]?.character.key} valueChange={(e) => { setSelectedCharacter(e) }} visible={addableElements.length > 1}
+                                defaultValue={defaultCharacterId} valueChange={(e) => { setSelectedCharacter(e) }} visible={addableElements.length > 1}
                             />
                             {elementSelect.length == 0 ? <p className="text-gray-500 px-2">{dictionary.dashboard.navigation.element.noMore}</p> :
                                 <FormItemSelect label="Element Type" name="element" options={elementSelect} defaultValue={elementSelect[0].key} classNameSelectContent="max-h-[500px]" />

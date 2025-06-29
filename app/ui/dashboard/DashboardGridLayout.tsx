@@ -21,10 +21,11 @@ type Props = {
     deleteDashboard: any,
     isPartyDashboard: boolean,
     characters: keyValuePair[],
+    defaultCharacterId: string,
     addElementHandler: (formData: FormData) => Promise<string>
 }
 
-const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, addElementHandler }: Props) => {
+const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList, updateLayout, navLinks, newDashboard, ableToDeleteDashboard, deleteDashboard, isPartyDashboard, characters, defaultCharacterId, addElementHandler }: Props) => {
     const dictionary = useDictionary();
 
     useEffect(() => {
@@ -90,6 +91,7 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
                 deleteDashboard={deleteDashboard}
                 isPartyDashboard={isPartyDashboard}
                 characters={characters}
+                defaultCharacterId={defaultCharacterId}
                 addElementHandler={addElementHandler}
             />
             <ResponsiveReactGridLayout

@@ -46,26 +46,6 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
     async function updateItem(item: InventoryItem) {
         'use server';
 
-        // Fetch current item to compare slot
-        const existingItem = await prisma.inventoryItem.findUnique({
-            where: { item_id: item.item_id },
-            select: { slot: true, character_id: true }
-        });
-
-        const slotChanged = existingItem?.slot !== item.slot;
-
-        // If slot changed, get count of items in new slot for this character
-        let updatedI: number | undefined = undefined;
-        if (slotChanged) {
-            const count = await prisma.inventoryItem.count({
-                where: {
-                    character_id: item.character_id,
-                    slot: item.slot
-                }
-            });
-            updatedI = count; // index will be size of list (0-based or 1-based depending on logic)
-        }
-
         await prisma.inventoryItem.updateMany({
             where: { item_id: item.item_id },
             data: {
@@ -76,7 +56,7 @@ const InventoryServer = async ({ character_id }: { character_id: string }) => {
                 magic: item.magic,
                 quantity: item.quantity,
                 slot: item.slot,
-                ...(slotChanged && updatedI !== undefined ? { i: updatedI } : {})
+                i: item.i
             }
         });
     }

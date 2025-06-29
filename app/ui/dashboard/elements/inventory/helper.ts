@@ -112,7 +112,7 @@ export function updateInventoryItem(item: InventoryItem, formData: FormData, tab
                 if (row.slot !== newItem.slot) {
                     const newTable = tables.find(table => table.name === newItem.slot);
                     if (newTable) {
-                        newItem.i = newTable.rows.length;
+                        newItem.i = newTable.rows.length + 1;
                         newTable.rows.push(newItem);
                         table.rows.splice(index, 1);
                     }

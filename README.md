@@ -1,5 +1,31 @@
-## Next.js App Router Course - Starter
+# DND Inventory
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+This is an app that allows you to create and manage your inventory. It is built using Next.js, React, and Tailwind CSS.
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
+## Features
+
+- Create and manage your inventory
+- Drag and drop items in dashboards using react-grid-layout
+- fully responsive design thanks to react-grid-layout
+- inventory using library pragmatic-drag-and-drop
+
+## Getting Started
+
+To get started, follow these steps (pnpm):
+
+1. Clone the repository: `git clone https://github.com/noelfischer/dnd-inventory.git`
+2. Install dependencies: `pnpm i`
+3. Create a .env file in the root directory
+
+## Running the app
+
+1. Run the development server: `pnpm dev`
+2. Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
+
+## Deployment
+
+The app is automatically deployed to Vercel when a new commit is pushed to the main branch.
+
+## Contributing
+
+Contributions are welcome! If you find a bug or have a suggestion, please open an issue or submit a pull request.

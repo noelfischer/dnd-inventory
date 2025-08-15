@@ -1,7 +1,7 @@
 'use client'
 
 import { Component } from "@/app/[lang]/dashboard/[id]/(overview)/page";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import './styles.css';
@@ -9,6 +9,7 @@ import { NavigationWide, NavLink } from "./navigation/NavigationWide";
 import { X } from "lucide-react";
 import { keyValuePair } from "@/lib/utils";
 import { useDictionary } from "@/app/[lang]/DictionaryProvider";
+import { isMobile } from "react-device-detect";
 
 type Props = {
     dashboardID: string,
@@ -38,6 +39,14 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
     const [deleteHover, setDeleteHover] = useState<boolean>(false);
     const [componentList, setComponentList] = useState<Component[]>(initialComponentList);
 
+    // For mobile scrolling during drag
+    // Related to mobile drag-scroll bug: https://github.com/react-grid-layout/react-grid-layout/issues/1868
+    const scrollRef = useRef<NodeJS.Timeout | null>(null);
+    const [scroll, setScroll] = useState<"up" | "down" | null>(null);
+    const BASE_SCROLL_THRESHOLD = 150; // normal elements
+    const MIN_SCROLL_THRESHOLD = 40; // very large elements
+    const SCROLL_SPEED = 5; // px per frame
+
     const cols: { [key: string]: number } = { lg: 12, md: 10, sm: 5, xs: 3, xxs: 1 }
 
     const onLayoutChange = (layout: Layout[], allLayouts: Layouts) => {
@@ -48,6 +57,90 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
 
     const onBreakpointChange = (breakpoint: string, cols: number) => {
         // Handle breakpoint change if needed
+    };
+
+
+    // For mobile scrolling during drag, kind of a hacky solution, since it is not part of the react-grid-layout API
+    // Related to mobile drag-scroll bug: https://github.com/react-grid-layout/react-grid-layout/issues/1868
+    // This includes functions handleDragAndScroll, handleDrag, and onDragStop
+    const handleDragAndScroll = (direction?: "up" | "down") => {
+        setScroll((current) => {
+            const scrollRoot = document.scrollingElement || document.documentElement;
+            const dir = direction || current;
+            if (!dir) return current;
+
+            if (dir === "up") {
+                scrollRoot.scrollBy({ top: -SCROLL_SPEED });
+            } else if (dir === "down") {
+                scrollRoot.scrollBy({ top: SCROLL_SPEED });
+            }
+
+            const canScrollUp = scrollRoot.scrollTop > 0;
+            const canScrollDown =
+                scrollRoot.scrollHeight - window.innerHeight - scrollRoot.scrollTop > 0;
+
+            if ((dir === "up" && canScrollUp) || (dir === "down" && canScrollDown)) {
+                requestAnimationFrame(() => handleDragAndScroll());
+            }
+
+            return dir;
+        });
+    };
+
+    const handleDrag = (
+        layout: Layout[],
+        oldItem: Layout,
+        newItem: Layout,
+        placeholder: Layout,
+        event: MouseEvent | TouchEvent,
+        element: HTMLElement,
+    ) => {
+        const { top, bottom, height } = element.getBoundingClientRect();
+        let viewportHeight = window.innerHeight;
+
+        if (isMobile) {
+            let threshold = BASE_SCROLL_THRESHOLD;
+            if (height > viewportHeight * 0.8) {
+                // The larger the element, the closer it must be to an edge to scroll
+                threshold = MIN_SCROLL_THRESHOLD;
+                viewportHeight = height * 1.4; // Adjust viewport height for large elements
+            }
+
+            const distanceFromBottom = viewportHeight - bottom;
+            const distanceFromTop = top;
+
+            console.log("distanceFromBottom", distanceFromBottom, "distanceFromTop", distanceFromTop, "threshold", threshold);
+
+            let newDirection: "up" | "down" | null = null;
+
+            if (distanceFromBottom < threshold && distanceFromTop < threshold) {
+                // Both edges triggered → pick the smaller distance
+                if (distanceFromBottom < distanceFromTop) {
+                    newDirection = "down";
+                } else {
+                    newDirection = "up";
+                }
+            } else if (distanceFromBottom < threshold) {
+                newDirection = "down";
+            } else if (distanceFromTop < threshold) {
+                newDirection = "up";
+            }
+
+            if (newDirection && newDirection !== scroll) {
+                setScroll(newDirection);
+                requestAnimationFrame(() => handleDragAndScroll(newDirection));
+            } else if (!newDirection && scroll) {
+                setScroll(null); // stop scrolling
+            }
+        }
+    };
+
+    const onDragStop = () => {
+        setScroll(null);
+        if (scrollRef.current) {
+            clearTimeout(scrollRef.current);
+            scrollRef.current = null;
+        }
     };
 
     const adjustLayouts = (layouts: Layouts, cols: { [key: string]: number }): Layouts => {
@@ -100,6 +193,8 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
                 cols={cols}
                 onLayoutChange={onLayoutChange}
                 onBreakpointChange={onBreakpointChange}
+                onDrag={handleDrag} // added mobile scroll handler
+                onDragStop={onDragStop} // added mobile scroll handler
                 rowHeight={42}
                 isDraggable={editMode && !deleteHover}
                 isResizable={editMode}

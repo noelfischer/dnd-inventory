@@ -54,6 +54,17 @@ export const NavigationWide = ({ dashboardID, editMode, setEditMode, layouts, in
   };
 
 
+  // when the user hasn't made any changes yet, the client contains mock elements, which are not saved in the database
+  // so we need to save the layout to the database before the user adds a new element
+  async function addElement(formData: FormData) {
+    // mock elements always contain 00000000 as the character id
+    console.log("layouts.lg", layouts.lg);
+    if (layouts.lg.some(layout => layout.i.startsWith("00000000"))) {
+      await dispatchServerFunction(updateLayoutWithData);
+    }
+    return addElementHandler(formData);
+  };
+
   async function dispatchServerFunction(serverFunction: Function) {
     setIsPending(true);
     try {
@@ -88,7 +99,7 @@ export const NavigationWide = ({ dashboardID, editMode, setEditMode, layouts, in
           :
           <Button className='min-w-[160px] flex justify-between bg-main-accent mb-[2px]' onClick={() => setEditMode(true)}>{dictionary.dashboard.navigation.editLayout}<PanelsLeftBottom className="ml-2" /></Button>
         }
-        <AddElement addableElements={addableElements} addElementHandler={addElementHandler} defaultCharacterId={defaultCharacterId || characters[0].key} disabled={isPending} />
+        <AddElement addableElements={addableElements} addElementHandler={addElement} defaultCharacterId={defaultCharacterId || characters[0].key} disabled={isPending} />
       </div>
     </div>
   )

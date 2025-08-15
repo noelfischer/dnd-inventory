@@ -43,9 +43,11 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
     // Related to mobile drag-scroll bug: https://github.com/react-grid-layout/react-grid-layout/issues/1868
     const scrollRef = useRef<NodeJS.Timeout | null>(null);
     const [scroll, setScroll] = useState<"up" | "down" | null>(null);
-    const BASE_SCROLL_THRESHOLD = 150; // normal elements
-    const MIN_SCROLL_THRESHOLD = 40; // very large elements
-    const SCROLL_SPEED = 5; // px per frame
+    const [dragStartDistances, setDragStartDistances] = useState<{ top: number; bottom: number } | null>(null);
+    const BASE_SCROLL_THRESHOLD = 80; // normal elements
+    const MIN_SCROLL_THRESHOLD = 30; // very large elements
+    const SCROLL_SPEED = 7; // px per frame
+    const ACTIVATION_DISTANCE = 50; // px user must move after dragStart before scroll kicks in
 
     const cols: { [key: string]: number } = { lg: 12, md: 10, sm: 5, xs: 3, xxs: 1 }
 
@@ -62,7 +64,26 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
 
     // For mobile scrolling during drag, kind of a hacky solution, since it is not part of the react-grid-layout API
     // Related to mobile drag-scroll bug: https://github.com/react-grid-layout/react-grid-layout/issues/1868
-    // This includes functions handleDragAndScroll, handleDrag, and onDragStop
+    // This includes functions handleDragStart, handleDragAndScroll, handleDrag, and onDragStop
+    const handleDragStart = (
+        _layout: Layout[],
+        _oldItem: Layout,
+        _newItem: Layout,
+        _placeholder: Layout,
+        _event: MouseEvent | TouchEvent,
+        element: HTMLElement
+    ) => {
+        const { top, bottom } = element.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        if (isMobile) {
+            // Save initial distances
+            setDragStartDistances({
+                top: top,
+                bottom: viewportHeight - bottom
+            });
+        }
+    };
+
     const handleDragAndScroll = (direction?: "up" | "down") => {
         setScroll((current) => {
             const scrollRoot = document.scrollingElement || document.documentElement;
@@ -88,12 +109,12 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
     };
 
     const handleDrag = (
-        layout: Layout[],
-        oldItem: Layout,
-        newItem: Layout,
-        placeholder: Layout,
-        event: MouseEvent | TouchEvent,
-        element: HTMLElement,
+        _layout: Layout[],
+        _oldItem: Layout,
+        _newItem: Layout,
+        _placeholder: Layout,
+        _event: MouseEvent | TouchEvent,
+        element: HTMLElement
     ) => {
         const { top, bottom, height } = element.getBoundingClientRect();
         let viewportHeight = window.innerHeight;
@@ -101,20 +122,15 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
         if (isMobile) {
             let threshold = BASE_SCROLL_THRESHOLD;
             if (height > viewportHeight * 0.8) {
-                // The larger the element, the closer it must be to an edge to scroll
                 threshold = MIN_SCROLL_THRESHOLD;
-                viewportHeight = height * 1.4; // Adjust viewport height for large elements
+                viewportHeight = height * 1.4;
             }
 
             const distanceFromBottom = viewportHeight - bottom;
             const distanceFromTop = top;
-
-            console.log("distanceFromBottom", distanceFromBottom, "distanceFromTop", distanceFromTop, "threshold", threshold);
-
             let newDirection: "up" | "down" | null = null;
 
             if (distanceFromBottom < threshold && distanceFromTop < threshold) {
-                // Both edges triggered → pick the smaller distance
                 if (distanceFromBottom < distanceFromTop) {
                     newDirection = "down";
                 } else {
@@ -126,14 +142,23 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
                 newDirection = "up";
             }
 
+            if (dragStartDistances && newDirection === "up") {
+                // Still within "safe" zone → don't scroll yet
+                if (distanceFromTop >= dragStartDistances.top - ACTIVATION_DISTANCE) {
+                    newDirection = null;
+                }
+
+            }
+
             if (newDirection && newDirection !== scroll) {
                 setScroll(newDirection);
                 requestAnimationFrame(() => handleDragAndScroll(newDirection));
             } else if (!newDirection && scroll) {
-                setScroll(null); // stop scrolling
+                setScroll(null);
             }
         }
     };
+
 
     const onDragStop = () => {
         setScroll(null);
@@ -193,6 +218,7 @@ const DashboardGridLayout = ({ dashboardID, initialLayout, initialComponentList,
                 cols={cols}
                 onLayoutChange={onLayoutChange}
                 onBreakpointChange={onBreakpointChange}
+                onDragStart={handleDragStart}
                 onDrag={handleDrag} // added mobile scroll handler
                 onDragStop={onDragStop} // added mobile scroll handler
                 rowHeight={42}

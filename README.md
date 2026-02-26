@@ -1,6 +1,8 @@
 # DND Inventory
 
-This is an app that allows you to create and manage your inventory. It is built using Next.js, React, and Tailwind CSS.
+This app was and is built for me and my friends weekly D&D session. You can try it out for free on https://dnd-inventory.vercel.app/
+
+It is built using Next.js, React, and Tailwind CSS.
 
 ## Features
 

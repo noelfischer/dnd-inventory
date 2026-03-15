@@ -144,8 +144,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_e2e }}
+    environment: Preview
     timeout-minutes: 20
     env:
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
       E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
       E2E_BASE_URL: http://127.0.0.1:3000

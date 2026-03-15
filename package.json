@@ -85,5 +85,6 @@
   },
   "engines": {
     "node": "20.x"
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

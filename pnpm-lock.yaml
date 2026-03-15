@@ -4,29 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  micromatch@<4.0.8: '>=4.0.8'
-  '@babel/runtime@<7.26.10': '>=7.26.10'
-  brace-expansion@>=1.0.0 <=1.1.11: '>=1.1.12'
-  brace-expansion@>=2.0.0 <=2.0.1: '>=2.0.2'
-  next@>=15.0.0 <15.2.2: '>=15.2.2'
-  '@eslint/plugin-kit@<0.3.4': '>=0.3.4'
-  next@>=15.0.0 <=15.4.4: '>=15.4.5'
-  next@>=15.0.0-canary.0 <15.4.7: '>=15.4.7'
-  next-auth@>=5.0.0-beta.0 <5.0.0-beta.30: '>=5.0.0-beta.30'
-  next@>=15.1.1-canary.0 <15.1.10: '>=15.1.10'
-  next@>=10.0.0 <15.5.10: '>=15.5.10'
-  next@>=15.1.1-canary.0 <15.1.12: '>=15.1.12'
-  js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'
-  minimatch@<3.1.3: '>=3.1.3'
-  minimatch@>=9.0.0 <9.0.6: '>=9.0.6'
-  minimatch@>=9.0.0 <9.0.7: '>=9.0.7'
-  minimatch@<3.1.4: '>=3.1.4'
-  minimatch@3>brace-expansion: 1.1.12
-  next@>=15.0.0 <15.2.3: '>=15.2.3'
-  ajv@<6.14.0: '>=6.14.0'
-  flatted@<3.4.0: '>=3.4.0'
-
 importers:
 
   .:
@@ -113,7 +90,7 @@ importers:
         specifier: ^16.1.6
         version: 16.1.6(@babel/core@7.29.0)(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
       next-auth:
-        specifier: '>=5.0.0-beta.30'
+        specifier: 5.0.0-beta.30
         version: 5.0.0-beta.30(next@16.1.6(@babel/core@7.29.0)(react-dom@19.0.1(react@19.0.1))(react@19.0.1))(react@19.0.1)
       next-themes:
         specifier: ^0.4.4
@@ -1869,6 +1846,9 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+  ajv@6.12.6:
+    resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
+
   ajv@6.14.0:
     resolution: {integrity: sha512-IWrosm/yrn43eiKqkfkHis7QioDleaXQHdDVPKg0FSwwd/DuvyX79TZnFOnYpB7dcsFAMmtFztZuXPDvSePkFw==}
 
@@ -3114,7 +3094,7 @@ packages:
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
-      next: '>=15.2.3'
+      next: ^14.0.0-0 || ^15.0.0 || ^16.0.0
       nodemailer: ^7.0.7
       react: ^18.2.0 || ^19.0.0
     peerDependenciesMeta:
@@ -4294,7 +4274,7 @@ snapshots:
       ignore: 5.3.1
       import-fresh: 3.3.1
       js-yaml: 4.1.1
-      minimatch: 10.2.4
+      minimatch: 3.1.5
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -4490,7 +4470,7 @@ snapshots:
   '@microsoft/tsdoc-config@0.16.2':
     dependencies:
       '@microsoft/tsdoc': 0.14.2
-      ajv: 6.14.0
+      ajv: 6.12.6
       jju: 1.4.0
       resolve: 1.19.0
 
@@ -5568,6 +5548,13 @@ snapshots:
 
   acorn@8.16.0: {}
 
+  ajv@6.12.6:
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-json-stable-stringify: 2.1.0
+      json-schema-traverse: 0.4.1
+      uri-js: 4.4.1
+
   ajv@6.14.0:
     dependencies:
       fast-deep-equal: 3.1.3
@@ -6241,7 +6228,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 10.2.4
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -6270,7 +6257,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 10.2.4
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -6308,7 +6295,7 @@ snapshots:
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
       language-tags: 1.0.9
-      minimatch: 10.2.4
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
@@ -6347,7 +6334,7 @@ snapshots:
       estraverse: 5.3.0
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
-      minimatch: 10.2.4
+      minimatch: 3.1.5
       object.entries: 1.1.8
       object.fromentries: 2.0.8
       object.values: 1.2.1

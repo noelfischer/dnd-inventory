@@ -177,7 +177,7 @@ export function handleFileUpload(file: File): Promise<any> {
   })
 }
 
-export function getLocale(acceptLanguage: string, locales: string[]) {
+export function getLocale(acceptLanguage: string | null | undefined, locales: string[]) {
   const languages = formatAcceptLanguage(acceptLanguage)
   const defaultLocale = 'en'
   const language = match(languages, locales, defaultLocale)
@@ -187,6 +187,7 @@ export function getLocale(acceptLanguage: string, locales: string[]) {
 // Formats accepts-language header like this: da, en-gb;q=0.8, en;q=0.7 
 // into an array like this ['da', 'en-gb', 'en']
 // This function does not handle sorting the q values, since modern browsers send the most preferred language first
-function formatAcceptLanguage(acceptLanguage: string): string[] {
+function formatAcceptLanguage(acceptLanguage: string | null | undefined): string[] {
+  if (!acceptLanguage) return [];
   return acceptLanguage.split(',').map((lang) => lang.split(';')[0].trim());
 }

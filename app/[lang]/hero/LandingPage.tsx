@@ -164,7 +164,7 @@ export default function LandingPage({ totalUsers, totalCharacters, dict }: Landi
                     <div className="mt-8 sm:mt-16 relative">
                         <div className="bg-white dark:bg-[#2A2A42] p-3 sm:p-4 rounded-xl border-3 sm:border-4 border-black dark:border-[#4ECDC4] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(78,205,196,0.3)] sm:dark:shadow-[12px_12px_0px_0px_rgba(78,205,196,0.3)] overflow-hidden">
                             <Image
-                                src="/dashboard.png?height=1444&width=2008"
+                                src="/dashboard.png"
                                 width={2008}
                                 height={1444}
                                 alt="App demo showing rearrangeable components"

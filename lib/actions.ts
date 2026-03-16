@@ -242,7 +242,7 @@ export async function createCharacter(campaign_id: string, formData: FormData) {
       },
     });
   } catch (e) {
-    console.error('Failed to create character:', e, "Input: \n", "Campaign ID: ", campaign_id, "\n", "Name: ", name);
+    console.error('Failed to create character:', e, "Input: \n", "Campaign ID: ", campaign_id, "\n", "Name: ", data.name);
     return { message: 'Database Error: Failed to Create Character.' };
   }
   revalidatePath(`/campaigns/${campaign_id}`);

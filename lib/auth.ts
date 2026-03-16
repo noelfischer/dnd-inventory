@@ -31,8 +31,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const { email, password } = await signInSchema.parseAsync(credentials)
           user = await getUserFromDb(email);
 
-          if (!validatePassword(password, user?.Credential[0].password_hash)) {
-            throw new Error("Invalid credentials.")
+          if (!(await validatePassword(password, user?.Credential[0].password_hash))) {
+            return null
           }
           console.log("user", user)
           // return JSON object with the user data
@@ -42,6 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             // Return `null` to indicate that the credentials are invalid
             return null
           }
+          return null
         }
       },
     }),

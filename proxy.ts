@@ -4,7 +4,7 @@ import { getLocale } from "./lib/utils";
 
 let locales = ['en', 'de', 'fr', 'it']
 
-export async function middleware(req: any) {
+export async function proxy(req: any) {
   const isAuthenticated = !!(await auth()); // Check if the user is logged in
 
   //get pathname minus the locale

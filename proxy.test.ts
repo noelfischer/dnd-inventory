@@ -29,7 +29,7 @@ vi.mock("next/server", () => ({
     },
 }));
 
-import { localeMiddleware, middleware } from "./middleware";
+import { localeMiddleware, proxy } from "./proxy";
 
 function buildRequest(pathname: string, options?: { cookieLocale?: string | null; acceptLanguage?: string }) {
     return {
@@ -66,7 +66,7 @@ describe("middleware", () => {
         authMock.mockResolvedValue(null);
         const req = buildRequest("/en/campaigns");
 
-        await middleware(req);
+        await proxy(req);
 
         expect(redirectMock).toHaveBeenCalledTimes(1);
         expect((redirectMock.mock.calls[0][0] as URL).toString()).toBe("https://example.com/en/login");
@@ -76,7 +76,7 @@ describe("middleware", () => {
         authMock.mockResolvedValue({ user: { email: "player@example.com" } });
         const req = buildRequest("/de/dashboard");
 
-        await middleware(req);
+        await proxy(req);
 
         expect(nextMock).toHaveBeenCalledTimes(1);
         const response = nextMock.mock.results[0]?.value as { cookies: { set: ReturnType<typeof vi.fn> } };

@@ -14,6 +14,20 @@ interface Props {
     updateCopper: (value: number) => void;
 }
 
+const ListItem = ({ value, label, onLeave, className }: { value: number, label: string, onLeave: (value: string) => void, className?: string }) => {
+    return (
+        <li key={label} className='text-text w-1/2 min-w-28 w-32 grow'>
+            <div className={cn('rounded-md m-0 border-2 border-black dark:border-black shadow-light dark:shadow-dark', className)}>
+                <div className={cn((className === "platinum" || className == "gold" ? 'card-shine-effect' : ''), "rounded-md transition-all bg-main/70 hover:bg-main/0 focus-within:bg-main/0")}>
+                    <div className='text-center pt-[10px]'>{label}</div>
+                    <div className='border-b-2 border-black mt-[11px] mb-5'></div>
+                    <div className='flex justify-center'><OnLeaveInput className='dark:text-text dark:border-black text-3xl pb-9 border-b-[4px] mb-8' onLeave={onLeave} initialValue={value.toString()} /></div>
+                </div>
+            </div>
+        </li>
+    );
+}
+
 const CurrencyClient = ({ initial_currency, updatePlatinum, updateGold, updateSilver, updateCopper }: Props) => {
 
     const [currency, setCurrency] = useState<Currency>(initial_currency);
@@ -54,20 +68,6 @@ const CurrencyClient = ({ initial_currency, updatePlatinum, updateGold, updateSi
         if (amount) updateCopper(amount);
     }
 
-
-    const ListItem = ({ value, label, onLeave, className }: { value: number, label: string, onLeave: (value: string) => void, className?: string }) => {
-        return (
-            <li key={label} className='text-text w-1/2 min-w-28 w-32 grow'>
-                <div className={cn('rounded-md m-0 border-2 border-black dark:border-black shadow-light dark:shadow-dark', className)}>
-                    <div className={cn((className === "platinum" || className == "gold" ? 'card-shine-effect' : ''), "rounded-md transition-all bg-main/70 hover:bg-main/0 focus-within:bg-main/0")}>
-                        <div className='text-center pt-[10px]'>{label}</div>
-                        <div className='border-b-2 border-black mt-[11px] mb-5'></div>
-                        <div className='flex justify-center'><OnLeaveInput className='dark:text-text dark:border-black text-3xl pb-9 border-b-[4px] mb-8' onLeave={onLeave} initialValue={value.toString()} /></div>
-                    </div>
-                </div>
-            </li>
-        );
-    }
 
     return (
         <div className="currency">
